@@ -14,9 +14,9 @@ services:
     container_name: demo_db
     restart: unless-stopped
     environment:
-      POSTGRES_DB:       demo          # Database name created automatically
+      POSTGRES_DB:       letsMoveDB          # Database name created automatically
       POSTGRES_USER:     postgres      # Superuser name
-      POSTGRES_PASSWORD: postgres      # Superuser password (never do this in production!)
+      POSTGRES_PASSWORD: ${PASSWORD_DB}      # Superuser password (never do this in production!)
     ports:
       - "5432:5432"                    # host_port:container_port  →  accessible from your machine
     volumes:

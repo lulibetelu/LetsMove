@@ -20,7 +20,7 @@ model User{
   username String @unique
   email String @unique
   password String
-  biography String
+  biography String?
   preferences Preference[] @ignore
   userLocations UserLocation[] @ignore
 }
