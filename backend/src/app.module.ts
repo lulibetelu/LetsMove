@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RegisterModule } from './register/register.module';
 import { ConfigModule } from '@nestjs/config';
+import { LoginModule } from './login/login.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    LoginModule,
   ],
   controllers: [AppController],
   providers: [AppService],
