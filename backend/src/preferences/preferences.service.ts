@@ -1,31 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { PreferencesDto } from './dto/preferences.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { UserRepositoryService } from '../repository/user.repository.service';
+import { SportRepositoryService } from '../repository/sport.repository.service';
 
 @Injectable()
 export class PreferencesService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private userRepository: UserRepositoryService,
+    private sportRepository: SportRepositoryService,
+  ) {}
 
   async preferences(preferencesDto: PreferencesDto) {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        username: preferencesDto.username,
-      },
-      select: { id: true },
-    });
+    const user = await this.userRepository.findByUsername(
+      preferencesDto.username,
+    );
 
     if (!user) {
       throw new Error('El usuario no existe'); // Si usas NestJS, mejor lanzar un NotFoundException
     }
 
-    const sportsFound = await this.prismaService.sport.findMany({
-      where: {
-        name: {
-          in: preferencesDto.sports,
-        },
-      },
-      select: { id: true },
-    });
+    const sportsFound = await this.sportRepository.findManyByName(
+      preferencesDto.sports,
+    );
 
     const preferences = sportsFound.map((sport) => ({
       // en user prisma no devuelve user = 1, sino user = { id: 1}

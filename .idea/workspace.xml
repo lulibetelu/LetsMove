@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="c9fff977-d50a-4b14-b41f-47322d0edda7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/preferences/preferences.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/preferences/preferences.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/preferences/preferences.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/preferences/preferences.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/preferences/preferences.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/preferences/preferences.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +92,7 @@
       <workItem from="1774042849373" duration="6657000" />
       <workItem from="1774126429293" duration="11137000" />
       <workItem from="1774269818707" duration="2379000" />
-      <workItem from="1774616466163" duration="6591000" />
+      <workItem from="1774616466163" duration="8537000" />
     </task>
     <servers />
   </component>
