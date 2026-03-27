@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="c9fff977-d50a-4b14-b41f-47322d0edda7" name="Changes" comment="" />
+    <list default="true" id="c9fff977-d50a-4b14-b41f-47322d0edda7" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,12 +58,14 @@
     "nodejs_package_manager_path": "npm",
     "prettierjs.PrettierConfiguration.Package": "C:\\Users\\lubet\\projects\\LetsMove\\backend\\node_modules\\prettier",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "ts.external.directory.path": "/Users/tomasbregoli/projects/laboratorio_1/LetsMove/backend/node_modules/typescript/lib",
+    "ts.external.directory.path": "C:\\Users\\lubet\\projects\\LetsMove\\frontend\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\lubet\projects\LetsMove\backend" />
+      <recent name="C:\Users\lubet\projects\LetsMove" />
       <recent name="$PROJECT_DIR$/backend" />
       <recent name="$PROJECT_DIR$" />
     </key>
@@ -82,7 +89,7 @@
       <workItem from="1774042849373" duration="6657000" />
       <workItem from="1774126429293" duration="11137000" />
       <workItem from="1774269818707" duration="2379000" />
-      <workItem from="1774616466163" duration="335000" />
+      <workItem from="1774616466163" duration="1267000" />
     </task>
     <servers />
   </component>
