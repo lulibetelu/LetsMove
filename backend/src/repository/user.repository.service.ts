@@ -9,8 +9,21 @@ export class UserRepositoryService {
       where: {
         username: username,
       },
-      select: { id: true },
+    });
+  }
+  async findById(userId: number) {
+    return this.prismaService.user.findUnique({
+      where: {
+        id: userId,
+      },
     });
   }
 
+  async findByEmail(userEmail: string) {
+    return this.prismaService.user.findUnique({
+      where: {
+        email: userEmail,
+      },
+    });
+  }
 }

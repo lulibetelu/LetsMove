@@ -11,7 +11,20 @@ export class SportRepositoryService {
           in: sports,
         },
       },
-      select: { id: true },
+    });
+  }
+  async findOneByName(sport: string){
+    return this.prismaService.sport.findUnique({
+      where: {
+        name: sport,
+      },
+    });
+  }
+  async findOneById(sportId: number){
+    return this.prismaService.sport.findUnique({
+      where: {
+        id: sportId,
+      },
     });
   }
 }
