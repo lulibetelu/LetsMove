@@ -13,6 +13,8 @@ export class PreferencesService {
   ) {}
 
   async preferences(preferencesDto: PreferencesDto) {
+    // una vez que validemos el token con el guard directamente nos pasaria el user.id, por lo
+    // que no haria falta hacer esto
     const user = await this.userRepository.findByUsername(
       preferencesDto.username,
     );
