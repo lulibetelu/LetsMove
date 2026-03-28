@@ -19,6 +19,8 @@ class PreferencesDto {
 exports.PreferencesDto = PreferencesDto;
 __decorate([
     (0, class_validator_1.IsDefined)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], PreferencesDto.prototype, "username", void 0);
 __decorate([
