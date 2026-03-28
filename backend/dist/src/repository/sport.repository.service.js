@@ -9,35 +9,41 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginService = void 0;
+exports.SportRepositoryService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
-const jwt_1 = require("@nestjs/jwt");
-let LoginService = class LoginService {
+let SportRepositoryService = class SportRepositoryService {
     prismaService;
-    jwtService;
-    constructor(prismaService, jwtService) {
+    constructor(prismaService) {
         this.prismaService = prismaService;
-        this.jwtService = jwtService;
     }
-    async login(email, pass) {
-        const user = await this.prismaService.user.findUnique({
-            where: { email: email },
+    async findManyByName(sports) {
+        return this.prismaService.sport.findMany({
+            where: {
+                name: {
+                    in: sports,
+                },
+            },
         });
-        console.log(user);
-        if (!user || user.password !== pass) {
-            throw new common_1.UnauthorizedException('Llegue aca!');
-        }
-        const payload = { sub: user.id, email: user.email };
-        return {
-            access_token: await this.jwtService.signAsync(payload),
-        };
+    }
+    async findOneByName(sport) {
+        return this.prismaService.sport.findUnique({
+            where: {
+                name: sport,
+            },
+        });
+    }
+    async findOneById(sportId) {
+        return this.prismaService.sport.findUnique({
+            where: {
+                id: sportId,
+            },
+        });
     }
 };
-exports.LoginService = LoginService;
-exports.LoginService = LoginService = __decorate([
+exports.SportRepositoryService = SportRepositoryService;
+exports.SportRepositoryService = SportRepositoryService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        jwt_1.JwtService])
-], LoginService);
-//# sourceMappingURL=login.service.js.map
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+], SportRepositoryService);
+//# sourceMappingURL=sport.repository.service.js.map

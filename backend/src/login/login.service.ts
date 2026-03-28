@@ -12,8 +12,10 @@ export class LoginService {
     const user = await this.prismaService.user.findUnique({
       where: { email: email },
     });
-    if (user?.password !== pass) {
-      throw new UnauthorizedException();
+
+    console.log(user);
+    if (!user || user.password !== pass) {
+      throw new UnauthorizedException('Llegue aca!');
     }
     const payload = { sub: user.id, email: user.email };
 

@@ -9,35 +9,37 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginService = void 0;
+exports.AuthGuard = void 0;
 const common_1 = require("@nestjs/common");
-const prisma_service_1 = require("../prisma/prisma.service");
 const jwt_1 = require("@nestjs/jwt");
-let LoginService = class LoginService {
-    prismaService;
+let AuthGuard = class AuthGuard {
     jwtService;
-    constructor(prismaService, jwtService) {
-        this.prismaService = prismaService;
+    constructor(jwtService) {
         this.jwtService = jwtService;
     }
-    async login(email, pass) {
-        const user = await this.prismaService.user.findUnique({
-            where: { email: email },
-        });
-        console.log(user);
-        if (!user || user.password !== pass) {
-            throw new common_1.UnauthorizedException('Llegue aca!');
+    async canActivate(context) {
+        const request = context.switchToHttp().getRequest();
+        const token = this.extractTokenFromHeader(request);
+        if (!token) {
+            throw new common_1.UnauthorizedException("There is no token");
         }
-        const payload = { sub: user.id, email: user.email };
-        return {
-            access_token: await this.jwtService.signAsync(payload),
-        };
+        try {
+            const payload = await this.jwtService.verifyAsync(token);
+            request['user'] = payload;
+        }
+        catch {
+            throw new common_1.UnauthorizedException("Error in payload");
+        }
+        return true;
+    }
+    extractTokenFromHeader(request) {
+        const [type, token] = request.headers.authorization?.split(' ') ?? [];
+        return type === 'Bearer' ? token : undefined;
     }
 };
-exports.LoginService = LoginService;
-exports.LoginService = LoginService = __decorate([
+exports.AuthGuard = AuthGuard;
+exports.AuthGuard = AuthGuard = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        jwt_1.JwtService])
-], LoginService);
-//# sourceMappingURL=login.service.js.map
+    __metadata("design:paramtypes", [jwt_1.JwtService])
+], AuthGuard);
+//# sourceMappingURL=auth.guard.js.map

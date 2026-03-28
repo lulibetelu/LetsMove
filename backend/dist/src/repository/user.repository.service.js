@@ -9,35 +9,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginService = void 0;
+exports.UserRepositoryService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
-const jwt_1 = require("@nestjs/jwt");
-let LoginService = class LoginService {
+let UserRepositoryService = class UserRepositoryService {
     prismaService;
-    jwtService;
-    constructor(prismaService, jwtService) {
+    constructor(prismaService) {
         this.prismaService = prismaService;
-        this.jwtService = jwtService;
     }
-    async login(email, pass) {
-        const user = await this.prismaService.user.findUnique({
-            where: { email: email },
+    async findByUsername(username) {
+        return this.prismaService.user.findUnique({
+            where: {
+                username: username,
+            },
         });
-        console.log(user);
-        if (!user || user.password !== pass) {
-            throw new common_1.UnauthorizedException('Llegue aca!');
-        }
-        const payload = { sub: user.id, email: user.email };
-        return {
-            access_token: await this.jwtService.signAsync(payload),
-        };
+    }
+    async findById(userId) {
+        return this.prismaService.user.findUnique({
+            where: {
+                id: userId,
+            },
+        });
+    }
+    async findByEmail(userEmail) {
+        return this.prismaService.user.findUnique({
+            where: {
+                email: userEmail,
+            },
+        });
     }
 };
-exports.LoginService = LoginService;
-exports.LoginService = LoginService = __decorate([
+exports.UserRepositoryService = UserRepositoryService;
+exports.UserRepositoryService = UserRepositoryService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        jwt_1.JwtService])
-], LoginService);
-//# sourceMappingURL=login.service.js.map
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+], UserRepositoryService);
+//# sourceMappingURL=user.repository.service.js.map

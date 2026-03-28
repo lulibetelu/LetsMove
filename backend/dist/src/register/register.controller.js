@@ -23,6 +23,7 @@ let RegisterController = class RegisterController {
         this.registerService = registerService;
     }
     create(createRegisterDto) {
+        console.log(createRegisterDto);
         return this.registerService.create(createRegisterDto);
     }
     findAll() {
