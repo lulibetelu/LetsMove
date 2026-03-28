@@ -9,21 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginDto = void 0;
+exports.PreferencesDto = void 0;
 const class_validator_1 = require("class-validator");
-class LoginDto {
-    email;
-    password;
+class PreferencesDto {
+    username;
+    sports;
+    level;
 }
-exports.LoginDto = LoginDto;
+exports.PreferencesDto = PreferencesDto;
 __decorate([
-    (0, class_validator_1.IsEmail)(),
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsDefined)(),
     __metadata("design:type", String)
-], LoginDto.prototype, "email", void 0);
+], PreferencesDto.prototype, "username", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.ArrayMinSize)(2),
+    __metadata("design:type", Array)
+], PreferencesDto.prototype, "sports", void 0);
+__decorate([
+    (0, class_validator_1.IsIn)(['Principiante', 'Intermedio', 'Experto', 'Profesional']),
     __metadata("design:type", String)
-], LoginDto.prototype, "password", void 0);
-//# sourceMappingURL=login.dto.js.map
+], PreferencesDto.prototype, "level", void 0);
+//# sourceMappingURL=preferences.dto.js.map
