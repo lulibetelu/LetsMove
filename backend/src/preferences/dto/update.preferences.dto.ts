@@ -1,4 +1,22 @@
-import { CreatePreferencesDto } from './create.preferences.dto';
-import { PartialType } from '@nestjs/mapped-types';
+import {
+  ArrayNotEmpty,
+  IsDefined,
+  IsIn,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
-export class UpdatePreferencesDto extends PartialType(CreatePreferencesDto) {}
+export class UpdatePreferencesDto {
+  @IsDefined()
+  @IsString()
+  @IsNotEmpty()
+  username: string;
+
+  @ArrayNotEmpty()
+  sports: string[];
+
+  @IsOptional()
+  @IsIn(['Principiante', 'Intermedio', 'Experto', 'Profesional'])
+  level: string;
+}

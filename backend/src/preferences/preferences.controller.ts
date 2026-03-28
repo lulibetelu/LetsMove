@@ -8,13 +8,12 @@ export class PreferencesController {
   constructor(private preferencesService: PreferencesService) {}
 
   @Post('create')
-  preferences(@Body() preferencesDto: CreatePreferencesDto){
-    return this.preferencesService.preferences(preferencesDto);
+  preferences(@Body() preferencesDto: CreatePreferencesDto) {
+    return this.preferencesService.createPreferences(preferencesDto);
   }
 
   @Delete('update')
-  deletePreference(@Body() updatePreferencesDto: UpdatePreferencesDto){
-
+  deletePreference(@Body() updatePreferencesDto: UpdatePreferencesDto) {
+    return this.preferencesService.deletePreference(updatePreferencesDto);
   }
-
 }

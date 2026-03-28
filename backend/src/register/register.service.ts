@@ -10,6 +10,7 @@ export class RegisterService {
     private prismaService: PrismaService,
     private userRepositoryService: UserRepositoryService,
   ) {}
+
   async create(registerDto: RegisterDto): Promise<RegisterDto> {
     return this.userRepositoryService.createUser(registerDto);
   }

@@ -38,6 +38,8 @@ model Preference{
   user User @relation(fields: [userId], references: [id])
   userId Int
   level String
+  //hace que la combinacion user-sport sea unica
+  @@unique([userId, sportId])
 }
 
 model UserLocation{
