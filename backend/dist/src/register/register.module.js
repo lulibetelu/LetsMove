@@ -10,14 +10,16 @@ exports.RegisterModule = void 0;
 const common_1 = require("@nestjs/common");
 const register_service_1 = require("./register.service");
 const register_controller_1 = require("./register.controller");
-const prisma_service_1 = require("../prisma/prisma.service");
+const user_repository_module_1 = require("../repository/user/user.repository.module");
+const prisma_module_1 = require("../prisma/prisma.module");
 let RegisterModule = class RegisterModule {
 };
 exports.RegisterModule = RegisterModule;
 exports.RegisterModule = RegisterModule = __decorate([
     (0, common_1.Module)({
+        imports: [user_repository_module_1.UserRepositoryModule, prisma_module_1.PrismaModule],
         controllers: [register_controller_1.RegisterController],
-        providers: [register_service_1.RegisterService, prisma_service_1.PrismaService],
+        providers: [register_service_1.RegisterService],
         exports: [register_service_1.RegisterService],
     })
 ], RegisterModule);
