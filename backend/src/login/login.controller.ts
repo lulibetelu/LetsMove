@@ -8,7 +8,6 @@ export class LoginController {
   constructor(private loginService: LoginService) {}
   @Post()
   signIn(@Body() loginDto: LoginDto) {
-    console.log(loginDto);
     return this.loginService.login(loginDto.email, loginDto.password);
   }
 

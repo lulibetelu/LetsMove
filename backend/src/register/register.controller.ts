@@ -17,7 +17,6 @@ export class RegisterController {
 
   @Post()
   create(@Body() createRegisterDto: RegisterDto) {
-    console.log(createRegisterDto);
     return this.registerService.create(createRegisterDto);
   }
 

@@ -13,7 +13,6 @@ export class LoginService {
       where: { email: email },
     });
 
-    console.log(user);
     if (!user || user.password !== pass) {
       throw new UnauthorizedException('Llegue aca!');
     }
