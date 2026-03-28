@@ -1,16 +1,20 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Delete } from '@nestjs/common';
 import { PreferencesService } from './preferences.service';
-import { PreferencesDto } from './dto/preferences.dto';
+import { CreatePreferencesDto } from './dto/create.preferences.dto';
+import { UpdatePreferencesDto } from './dto/update.preferences.dto';
 
 @Controller('preferences')
 export class PreferencesController {
   constructor(private preferencesService: PreferencesService) {}
 
   @Post('create')
-  preferences(@Body() createPreferencesDto: PreferencesDto){
-    return this.preferencesService.preferences(createPreferencesDto);
+  preferences(@Body() preferencesDto: CreatePreferencesDto){
+    return this.preferencesService.preferences(preferencesDto);
   }
 
-  // @Post('change')
-  // modify(@Body()  )
+  @Delete('update')
+  deletePreference(@Body() updatePreferencesDto: UpdatePreferencesDto){
+
+  }
+
 }

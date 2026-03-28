@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PreferencesDto } from './dto/preferences.dto';
+import { CreatePreferencesDto } from './dto/create.preferences.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserRepositoryService } from '../repository/user/user.repository.service';
 import { SportRepositoryService } from '../repository/sport/sport.repository.service';
@@ -12,7 +12,7 @@ export class PreferencesService {
     private sportRepository: SportRepositoryService,
   ) {}
 
-  async preferences(preferencesDto: PreferencesDto) {
+  async preferences(preferencesDto: CreatePreferencesDto) {
     // una vez que validemos el token con el guard directamente nos pasaria el user.id, por lo
     // que no haria falta hacer esto
     const user = await this.userRepository.findByUsername(

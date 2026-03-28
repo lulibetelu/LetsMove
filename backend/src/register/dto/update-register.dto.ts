@@ -1,5 +1,4 @@
+import { CreatePreferencesDto } from '../../preferences/dto/create.preferences.dto';
 import { PartialType } from '@nestjs/mapped-types';
-import { RegisterDto } from './register.dto';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-export class UpdateRegisterDto extends PartialType(RegisterDto) {}
+export class UpdateRegisterDto extends PartialType(CreatePreferencesDto) {}

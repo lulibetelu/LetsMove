@@ -1,6 +1,12 @@
-import { ArrayMinSize, IsDefined, IsIn, IsNotEmpty, IsString } from 'class-validator';
+import {
+  ArrayMinSize,
+  IsDefined,
+  IsIn,
+  IsNotEmpty,
+  IsString,
+} from 'class-validator';
 
-export class PreferencesDto {
+export class CreatePreferencesDto {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
