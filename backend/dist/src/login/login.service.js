@@ -13,20 +13,20 @@ exports.LoginService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const jwt_1 = require("@nestjs/jwt");
+const user_repository_service_1 = require("../repository/user/user.repository.service");
 let LoginService = class LoginService {
     prismaService;
     jwtService;
-    constructor(prismaService, jwtService) {
+    userRepositoryService;
+    constructor(prismaService, jwtService, userRepositoryService) {
         this.prismaService = prismaService;
         this.jwtService = jwtService;
+        this.userRepositoryService = userRepositoryService;
     }
     async login(email, pass) {
-        const user = await this.prismaService.user.findUnique({
-            where: { email: email },
-        });
-        console.log(user);
-        if (!user || user.password !== pass) {
-            throw new common_1.UnauthorizedException('Llegue aca!');
+        const user = await this.userRepositoryService.findByEmail(email);
+        if (user?.password !== pass) {
+            throw new common_1.UnauthorizedException();
         }
         const payload = { sub: user.id, email: user.email };
         return {
@@ -38,6 +38,7 @@ exports.LoginService = LoginService;
 exports.LoginService = LoginService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        user_repository_service_1.UserRepositoryService])
 ], LoginService);
 //# sourceMappingURL=login.service.js.map

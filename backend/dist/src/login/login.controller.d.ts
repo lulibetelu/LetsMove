@@ -6,5 +6,4 @@ export declare class LoginController {
     signIn(loginDto: LoginDto): Promise<{
         access_token: string;
     }>;
-    testThing(): string;
 }

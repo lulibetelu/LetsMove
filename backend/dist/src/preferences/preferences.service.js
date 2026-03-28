@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PreferencesService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
-const user_repository_service_1 = require("../repository/user.repository.service");
-const sport_repository_service_1 = require("../repository/sport.repository.service");
+const user_repository_service_1 = require("../repository/user/user.repository.service");
+const sport_repository_service_1 = require("../repository/sport/sport.repository.service");
 let PreferencesService = class PreferencesService {
     prismaService;
     userRepository;

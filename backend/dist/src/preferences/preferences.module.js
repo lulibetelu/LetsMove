@@ -11,8 +11,8 @@ const common_1 = require("@nestjs/common");
 const preferences_controller_1 = require("./preferences.controller");
 const preferences_service_1 = require("./preferences.service");
 const prisma_service_1 = require("../prisma/prisma.service");
-const user_repository_service_1 = require("../repository/user.repository.service");
-const sport_repository_service_1 = require("../repository/sport.repository.service");
+const user_repository_service_1 = require("../repository/user/user.repository.service");
+const sport_repository_service_1 = require("../repository/sport/sport.repository.service");
 let PreferencesModule = class PreferencesModule {
 };
 exports.PreferencesModule = PreferencesModule;

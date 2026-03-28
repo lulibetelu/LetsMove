@@ -19,22 +19,18 @@ export declare class RegisterController {
         password: string;
         biography: string | null;
     } | null>;
-    update(id: string, updateRegisterDto: UpdateRegisterDto): import("../../generated/prisma/models").Prisma__UserClient<{
+    update(id: string, updateRegisterDto: UpdateRegisterDto): Promise<{
         id: number;
         username: string;
         email: string;
         password: string;
         biography: string | null;
-    }, never, import("@prisma/client/runtime/client").DefaultArgs, {
-        omit: import("../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
-    remove(id: string): import("../../generated/prisma/models").Prisma__UserClient<{
+    remove(id: string): Promise<{
         id: number;
         username: string;
         email: string;
         password: string;
         biography: string | null;
-    }, never, import("@prisma/client/runtime/client").DefaultArgs, {
-        omit: import("../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
 }

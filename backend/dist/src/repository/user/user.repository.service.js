@@ -9,41 +9,58 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SportRepositoryService = void 0;
+exports.UserRepositoryService = void 0;
 const common_1 = require("@nestjs/common");
-const prisma_service_1 = require("../prisma/prisma.service");
-let SportRepositoryService = class SportRepositoryService {
+const prisma_service_1 = require("../../prisma/prisma.service");
+let UserRepositoryService = class UserRepositoryService {
     prismaService;
     constructor(prismaService) {
         this.prismaService = prismaService;
     }
-    async findManyByName(sports) {
-        return this.prismaService.sport.findMany({
+    async findByUsername(username) {
+        return this.prismaService.user.findUnique({
             where: {
-                name: {
-                    in: sports,
-                },
+                username: username,
             },
         });
     }
-    async findOneByName(sport) {
-        return this.prismaService.sport.findUnique({
+    async findById(userId) {
+        return this.prismaService.user.findUnique({
             where: {
-                name: sport,
+                id: userId,
             },
         });
     }
-    async findOneById(sportId) {
-        return this.prismaService.sport.findUnique({
+    async findByEmail(userEmail) {
+        return this.prismaService.user.findUnique({
             where: {
-                id: sportId,
+                email: userEmail,
             },
+        });
+    }
+    async createUser(registerDto) {
+        return this.prismaService.user.create({
+            data: registerDto,
+        });
+    }
+    async findAll() {
+        return this.prismaService.user.findMany();
+    }
+    async update(id, updateRegisterDto) {
+        return this.prismaService.user.update({
+            where: { id: id },
+            data: updateRegisterDto,
+        });
+    }
+    async removeById(id) {
+        return this.prismaService.user.delete({
+            where: { id: id },
         });
     }
 };
-exports.SportRepositoryService = SportRepositoryService;
-exports.SportRepositoryService = SportRepositoryService = __decorate([
+exports.UserRepositoryService = UserRepositoryService;
+exports.UserRepositoryService = UserRepositoryService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
-], SportRepositoryService);
-//# sourceMappingURL=sport.repository.service.js.map
+], UserRepositoryService);
+//# sourceMappingURL=user.repository.service.js.map

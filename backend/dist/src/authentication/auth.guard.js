@@ -21,14 +21,14 @@ let AuthGuard = class AuthGuard {
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
         if (!token) {
-            throw new common_1.UnauthorizedException("There is no token");
+            throw new common_1.UnauthorizedException('Invalid token');
         }
         try {
             const payload = await this.jwtService.verifyAsync(token);
             request['user'] = payload;
         }
         catch {
-            throw new common_1.UnauthorizedException("Error in payload");
+            throw new common_1.UnauthorizedException('Invalid token');
         }
         return true;
     }

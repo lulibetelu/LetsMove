@@ -16,18 +16,13 @@ exports.LoginController = void 0;
 const common_1 = require("@nestjs/common");
 const login_service_1 = require("./login.service");
 const login_dto_1 = require("./dto/login.dto");
-const auth_guard_1 = require("../authentication/auth.guard");
 let LoginController = class LoginController {
     loginService;
     constructor(loginService) {
         this.loginService = loginService;
     }
     signIn(loginDto) {
-        console.log(loginDto);
         return this.loginService.login(loginDto.email, loginDto.password);
-    }
-    testThing() {
-        return "You've accessed the secret";
     }
 };
 exports.LoginController = LoginController;
@@ -38,13 +33,6 @@ __decorate([
     __metadata("design:paramtypes", [login_dto_1.LoginDto]),
     __metadata("design:returntype", void 0)
 ], LoginController.prototype, "signIn", null);
-__decorate([
-    (0, common_1.Get)(),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], LoginController.prototype, "testThing", null);
 exports.LoginController = LoginController = __decorate([
     (0, common_1.Controller)('login'),
     __metadata("design:paramtypes", [login_service_1.LoginService])

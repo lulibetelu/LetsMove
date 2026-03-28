@@ -1,7 +1,6 @@
-import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { LoginDto } from './dto/login.dto';
-import { AuthGuard } from '../authentication/auth.guard';
 
 @Controller('login')
 export class LoginController {
@@ -9,11 +8,5 @@ export class LoginController {
   @Post()
   signIn(@Body() loginDto: LoginDto) {
     return this.loginService.login(loginDto.email, loginDto.password);
-  }
-
-  @Get()
-  @UseGuards(AuthGuard)
-  testThing() {
-    return "You've accessed the secret";
   }
 }

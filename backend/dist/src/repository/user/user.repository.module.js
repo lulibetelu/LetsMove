@@ -6,21 +6,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginModule = void 0;
+exports.UserRepositoryModule = void 0;
 const common_1 = require("@nestjs/common");
-const login_controller_1 = require("./login.controller");
-const login_service_1 = require("./login.service");
-const prisma_service_1 = require("../prisma/prisma.service");
-const user_repository_module_1 = require("../repository/user/user.repository.module");
-let LoginModule = class LoginModule {
+const user_repository_service_1 = require("./user.repository.service");
+const prisma_module_1 = require("../../prisma/prisma.module");
+let UserRepositoryModule = class UserRepositoryModule {
 };
-exports.LoginModule = LoginModule;
-exports.LoginModule = LoginModule = __decorate([
+exports.UserRepositoryModule = UserRepositoryModule;
+exports.UserRepositoryModule = UserRepositoryModule = __decorate([
     (0, common_1.Module)({
-        imports: [user_repository_module_1.UserRepositoryModule],
-        controllers: [login_controller_1.LoginController],
-        providers: [login_service_1.LoginService, prisma_service_1.PrismaService],
-        exports: [login_service_1.LoginService],
+        imports: [prisma_module_1.PrismaModule],
+        providers: [user_repository_service_1.UserRepositoryService],
+        exports: [user_repository_service_1.UserRepositoryService],
     })
-], LoginModule);
-//# sourceMappingURL=login.module.js.map
+], UserRepositoryModule);
+//# sourceMappingURL=user.repository.module.js.map

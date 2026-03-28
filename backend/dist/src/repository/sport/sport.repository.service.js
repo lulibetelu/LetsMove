@@ -9,39 +9,41 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserRepositoryService = void 0;
+exports.SportRepositoryService = void 0;
 const common_1 = require("@nestjs/common");
-const prisma_service_1 = require("../prisma/prisma.service");
-let UserRepositoryService = class UserRepositoryService {
+const prisma_service_1 = require("../../prisma/prisma.service");
+let SportRepositoryService = class SportRepositoryService {
     prismaService;
     constructor(prismaService) {
         this.prismaService = prismaService;
     }
-    async findByUsername(username) {
-        return this.prismaService.user.findUnique({
+    async findManyByName(sports) {
+        return this.prismaService.sport.findMany({
             where: {
-                username: username,
+                name: {
+                    in: sports,
+                },
             },
         });
     }
-    async findById(userId) {
-        return this.prismaService.user.findUnique({
+    async findOneByName(sport) {
+        return this.prismaService.sport.findUnique({
             where: {
-                id: userId,
+                name: sport,
             },
         });
     }
-    async findByEmail(userEmail) {
-        return this.prismaService.user.findUnique({
+    async findOneById(sportId) {
+        return this.prismaService.sport.findUnique({
             where: {
-                email: userEmail,
+                id: sportId,
             },
         });
     }
 };
-exports.UserRepositoryService = UserRepositoryService;
-exports.UserRepositoryService = UserRepositoryService = __decorate([
+exports.SportRepositoryService = SportRepositoryService;
+exports.SportRepositoryService = SportRepositoryService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
-], UserRepositoryService);
-//# sourceMappingURL=user.repository.service.js.map
+], SportRepositoryService);
+//# sourceMappingURL=sport.repository.service.js.map
