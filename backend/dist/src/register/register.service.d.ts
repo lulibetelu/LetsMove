@@ -1,9 +1,11 @@
 import { UpdateRegisterDto } from './dto/update-register.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
+import { UserRepositoryService } from '../repository/user/user.repository.service';
 export declare class RegisterService {
     private prismaService;
-    constructor(prismaService: PrismaService);
+    private userRepositoryService;
+    constructor(prismaService: PrismaService, userRepositoryService: UserRepositoryService);
     create(registerDto: RegisterDto): Promise<RegisterDto>;
     findAll(): Promise<{
         id: number;
@@ -19,22 +21,18 @@ export declare class RegisterService {
         password: string;
         biography: string | null;
     } | null>;
-    update(id: number, updateRegisterDto: UpdateRegisterDto): import("../../generated/prisma/models").Prisma__UserClient<{
+    update(id: number, updateRegisterDto: UpdateRegisterDto): Promise<{
         id: number;
         username: string;
         email: string;
         password: string;
         biography: string | null;
-    }, never, import("@prisma/client/runtime/client").DefaultArgs, {
-        omit: import("../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
-    remove(id: number): import("../../generated/prisma/models").Prisma__UserClient<{
+    remove(id: number): Promise<{
         id: number;
         username: string;
         email: string;
         password: string;
         biography: string | null;
-    }, never, import("@prisma/client/runtime/client").DefaultArgs, {
-        omit: import("../../generated/prisma/internal/prismaNamespace").GlobalOmitConfig | undefined;
     }>;
 }

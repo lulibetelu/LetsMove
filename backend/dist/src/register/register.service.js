@@ -12,39 +12,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RegisterService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const user_repository_service_1 = require("../repository/user/user.repository.service");
 let RegisterService = class RegisterService {
     prismaService;
-    constructor(prismaService) {
+    userRepositoryService;
+    constructor(prismaService, userRepositoryService) {
         this.prismaService = prismaService;
+        this.userRepositoryService = userRepositoryService;
     }
     async create(registerDto) {
-        return this.prismaService.user.create({
-            data: registerDto,
-        });
+        return this.userRepositoryService.createUser(registerDto);
     }
     async findAll() {
-        return this.prismaService.user.findMany();
+        return this.userRepositoryService.findAll();
     }
     async findOne(id) {
-        return this.prismaService.user.findUnique({
-            where: { id: id },
-        });
+        return this.userRepositoryService.findById(id);
     }
     update(id, updateRegisterDto) {
-        return this.prismaService.user.update({
-            where: { id: id },
-            data: updateRegisterDto,
-        });
+        return this.userRepositoryService.update(id, updateRegisterDto);
     }
     remove(id) {
-        return this.prismaService.user.delete({
-            where: { id: id },
-        });
+        return this.userRepositoryService.removeById(id);
     }
 };
 exports.RegisterService = RegisterService;
 exports.RegisterService = RegisterService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        user_repository_service_1.UserRepositoryService])
 ], RegisterService);
 //# sourceMappingURL=register.service.js.map

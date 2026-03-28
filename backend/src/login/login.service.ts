@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
-import { UserRepositoryService } from '../repository/user.repository.service';
+import { UserRepositoryService } from '../repository/user/user.repository.service';
 
 @Injectable()
 export class LoginService {
