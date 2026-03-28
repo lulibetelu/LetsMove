@@ -1,4 +1,4 @@
-import { ArrayMinSize, IsDefined } from 'class-validator';
+import { ArrayMinSize, IsDefined, IsIn } from 'class-validator';
 
 export class PreferencesDto {
   @IsDefined()
@@ -6,5 +6,7 @@ export class PreferencesDto {
 
   @ArrayMinSize(2)
   sports: string[];
+
+  @IsIn(['Principiante', 'Intermedio', 'Experto', 'Profesional'])
   level: string;
 }
