@@ -1,6 +1,7 @@
 import {useNavigate} from 'react-router-dom'
 import {useState} from "react";
-
+import {createUser} from '../api/user.ts'
+import type {RegisterCredentials} from "../types/userTypes.ts";
 export default function RegisterPage(){
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -8,11 +9,13 @@ export default function RegisterPage(){
 
     const navigate = useNavigate();
 
-    const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = (event) => {
+    const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
 
-        //logic to make the http request. I have to invesitgate this
-        console.log(username, email, password)
+        const credentials: RegisterCredentials = {username, email, password};
+        const user  = await createUser(credentials)
+        console.log(user);
+
         navigate("/interests");
     };
 
