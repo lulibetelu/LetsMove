@@ -24,8 +24,10 @@ export class PreferenceRepositoryService {
   async findParticularPreference(userId: number, sportId: number) {
     return this.prismaService.preference.findUnique({
       where: {
-        userId: userId,
-        sportId: sportId,
+        userId_sportId: {
+          userId: userId,
+          sportId: sportId,
+        },
       },
     });
   }
