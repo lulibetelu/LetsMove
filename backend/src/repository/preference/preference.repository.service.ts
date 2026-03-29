@@ -12,7 +12,7 @@ export class PreferenceRepositoryService {
       },
     });
   }
-  
+
   async findBySportId(sportId: number) {
     return this.prismaService.preference.findMany({
       where: {
