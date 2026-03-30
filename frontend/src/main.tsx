@@ -7,6 +7,7 @@ import {
 import RegisterPage from "./pages/RegisterPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import ChooseInterestsPage from "./pages/ChooseInterestsPage.tsx";
+import TestPage from "./pages/TestPage.tsx";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
     {
         path: "/interests",
         element: <ChooseInterestsPage></ChooseInterestsPage>
+    },
+    {
+        path: "/test",
+        element: <TestPage></TestPage>
     }
 ]);
 

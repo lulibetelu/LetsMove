@@ -1,11 +1,20 @@
 import {useState} from "react";
+import type {LoginCredentials} from "../types/userTypes.ts";
+import {loginUser} from "../api/user.ts";
+import {useNavigate} from "react-router-dom";
 
 export default function LoginPage(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit= (event) => {
-        const credentials:
+    const handleSubmit:React.SubmitEventHandler= async (event) => {
+        event.preventDefault()
+        const credentials: LoginCredentials = {email, password}
+        const token = await loginUser(credentials);
+        localStorage.setItem('token', token)
+        navigate("/test");
+
     }
 
     return (
