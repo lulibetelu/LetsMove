@@ -7,14 +7,16 @@ export default function RegisterPage(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+
     const navigate = useNavigate();
 
     const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
+        //Prevents the page from reloading on submit
         event.preventDefault();
 
         const credentials: RegisterCredentials = {username, email, password};
-        const user  = await createUser(credentials)
-        console.log(user);
+        const userResponse  = await createUser(credentials);
+        console.log(userResponse);
 
         navigate("/interests");
     };

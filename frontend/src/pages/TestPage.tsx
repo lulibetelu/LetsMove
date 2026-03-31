@@ -1,3 +1,7 @@
+import CredentialError from "../components/CredentialError.tsx";
+
+
+
 export default function TestPage(){
-    return <h1>{localStorage.getItem('token')}</h1>
+    return <CredentialError message='Invalid email or password'/>
 }

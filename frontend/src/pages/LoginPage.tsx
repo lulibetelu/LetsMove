@@ -1,7 +1,7 @@
 import {useState} from "react";
 import type {LoginCredentials} from "../types/userTypes.ts";
 import {loginUser} from "../api/user.ts";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 export default function LoginPage(){
     const [email, setEmail] = useState('');
@@ -53,7 +53,13 @@ export default function LoginPage(){
                     Login
                 </button>
 
+                <div className='flex flex-row items-center justify-center'>
+                    <p>Don't have an account?</p>
+                    <Link to='/register' className='text-center text-primary p-2'>Register</Link>
+                </div>
             </form>
+
+
         </div>
     );
 }

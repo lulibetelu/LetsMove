@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage.tsx";
 import ChooseInterestsPage from "./pages/ChooseInterestsPage.tsx";
 import TestPage from "./pages/TestPage.tsx";
 
+//define a partir de donde le pegué en la URL qué componente va a renderizar react
 const router = createBrowserRouter([
     {
         path: "/register",
@@ -16,15 +17,15 @@ const router = createBrowserRouter([
     },
     {
         path: "/login",
-        element: <LoginPage></LoginPage>
+        element: <LoginPage/>
     },
     {
         path: "/interests",
-        element: <ChooseInterestsPage></ChooseInterestsPage>
+        element: <ChooseInterestsPage/>
     },
     {
         path: "/test",
-        element: <TestPage></TestPage>
+        element: <TestPage/>
     }
 ]);
 
