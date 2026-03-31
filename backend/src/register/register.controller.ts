@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { RegisterService } from './register.service';
 import { RegisterDto } from './dto/register.dto';
-import { UpdateRegisterDto } from './dto/update-register.dto';
+import { UpdateRegisterDto } from './dto/update.register.dto';
 
 @Controller('register')
 export class RegisterController {
