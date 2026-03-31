@@ -1,17 +1,6 @@
-import {
-  ArrayMinSize,
-  IsDefined,
-  IsIn,
-  IsNotEmpty,
-  IsString,
-} from 'class-validator';
+import { ArrayMinSize, IsIn } from 'class-validator';
 
 export class CreatePreferencesDto {
-  @IsDefined()
-  @IsString()
-  @IsNotEmpty()
-  username: string;
-
   @ArrayMinSize(2)
   sports: string[];
 

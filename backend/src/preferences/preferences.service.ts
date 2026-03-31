@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePreferencesDto } from './dto/create.preferences.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { UserRepositoryService } from '../repository/user/user.repository.service';
 import { SportRepositoryService } from '../repository/sport/sport.repository.service';
 import { DeletePreferencesDto } from './dto/delete.preferences.dto';
 import { PreferenceRepositoryService } from '../repository/preference/preference.repository.service';
@@ -11,29 +10,21 @@ import { ModifyPreferenceDto } from './dto/modify.preference.dto';
 export class PreferencesService {
   constructor(
     private prismaService: PrismaService,
-    private userRepository: UserRepositoryService,
     private sportRepository: SportRepositoryService,
     private preferencesRepository: PreferenceRepositoryService,
   ) {}
 
-  async createPreferences(preferencesDto: CreatePreferencesDto) {
-    // una vez que validemos el token con el guard directamente nos pasaria el user.id, por lo
-    // que no haria falta hacer esto
-    const user = await this.userRepository.findByUsername(
-      preferencesDto.username,
-    );
-
-    if (!user) {
-      throw new Error('El usuario no existe'); // Si usas NestJS, mejor lanzar un NotFoundException
-    }
-
+  async createPreferences(
+    userId: number,
+    preferencesDto: CreatePreferencesDto,
+  ) {
     const sportsFound = await this.sportRepository.findManyByName(
       preferencesDto.sports,
     );
 
     const preferences = sportsFound.map((sport) => ({
       // en user prisma no devuelve user = 1, sino user = { id: 1}
-      userId: user.id,
+      userId: userId,
       sportId: sport.id,
       level: preferencesDto.level,
     }));
@@ -45,35 +36,31 @@ export class PreferencesService {
     });
   }
 
-  async deletePreferences(updatePreferencesDto: DeletePreferencesDto) {
-    const user = await this.userRepository.findByUsername(
-      updatePreferencesDto.username,
-    );
-
-    if (!user) {
-      throw new Error('El usuario no existe'); // Si usas NestJS, mejor lanzar un NotFoundException
-    }
-
+  async deletePreferences(
+    userId: number,
+    updatePreferencesDto: DeletePreferencesDto,
+  ) {
     const sportsFound = await this.sportRepository.findManyByName(
       updatePreferencesDto.sports,
     );
 
     const sportsId = sportsFound.map((sport) => sport.id);
 
-    return this.preferencesRepository.deleteMany(user.id, sportsId);
+    return this.preferencesRepository.deleteMany(userId, sportsId);
   }
 
-  async modifyPreference(modifyPreferenceDto: ModifyPreferenceDto){
-    const user = await this.userRepository.findByUsername(
-      modifyPreferenceDto.username,
-    );
-
+  async modifyPreference(
+    userId: number,
+    modifyPreferenceDto: ModifyPreferenceDto,
+  ) {
     const sport = await this.sportRepository.findOneByName(
       modifyPreferenceDto.sport,
     );
 
+    if (!sport) throw new NotFoundException();
+
     return this.preferencesRepository.modify(
-      user.id,
+      userId,
       sport.id,
       modifyPreferenceDto.level,
     );

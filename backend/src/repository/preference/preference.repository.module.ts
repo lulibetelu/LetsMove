@@ -7,4 +7,4 @@ import { PreferenceRepositoryService } from './preference.repository.service';
   providers: [PreferenceRepositoryService],
   exports: [PreferenceRepositoryService],
 })
-export class UserRepositoryModule {}
+export class PreferenceRepositoryModule {}
