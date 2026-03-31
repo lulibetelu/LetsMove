@@ -5,6 +5,7 @@ import { UserRepositoryService } from '../repository/user/user.repository.servic
 import { SportRepositoryService } from '../repository/sport/sport.repository.service';
 import { DeletePreferencesDto } from './dto/delete.preferences.dto';
 import { PreferenceRepositoryService } from '../repository/preference/preference.repository.service';
+import { ModifyPreferenceDto } from './dto/modify.preference.dto';
 
 @Injectable()
 export class PreferencesService {
@@ -62,19 +63,19 @@ export class PreferencesService {
     return this.preferencesRepository.deleteMany(user.id, sportsId);
   }
 
-  async modifyPreference(updatePreferencesDto: DeletePreferencesDto){
+  async modifyPreference(modifyPreferenceDto: ModifyPreferenceDto){
     const user = await this.userRepository.findByUsername(
-      updatePreferencesDto.username,
+      modifyPreferenceDto.username,
     );
 
     const sport = await this.sportRepository.findOneByName(
-      updatePreferencesDto.sports,
+      modifyPreferenceDto.sport,
     );
-    
-    return this.preferencesRepository.modify(user.id, sport.id, )
-    
-    
-    
-    
+
+    return this.preferencesRepository.modify(
+      user.id,
+      sport.id,
+      modifyPreferenceDto.level,
+    );
   }
 }

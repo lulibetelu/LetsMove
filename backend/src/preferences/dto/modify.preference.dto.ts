@@ -1,6 +1,6 @@
 import { IsDefined, IsIn, IsNotEmpty, IsString } from 'class-validator';
 
-export class ModifyPreferencesDto {
+export class ModifyPreferenceDto {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
