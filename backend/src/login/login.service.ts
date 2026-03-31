@@ -6,7 +6,6 @@ import { UserRepositoryService } from '../repository/user/user.repository.servic
 @Injectable()
 export class LoginService {
   constructor(
-    private prismaService: PrismaService,
     private jwtService: JwtService,
     private userRepositoryService: UserRepositoryService,
   ) {}

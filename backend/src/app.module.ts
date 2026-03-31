@@ -5,6 +5,7 @@ import { RegisterModule } from './register/register.module';
 import { ConfigModule } from '@nestjs/config';
 import { LoginModule } from './login/login.module';
 import { AuthModule } from './authentication/auth.module';
+import { PreferencesModule } from './preferences/preferences.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AuthModule } from './authentication/auth.module';
     }),
     LoginModule,
     AuthModule,
+    PreferencesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
