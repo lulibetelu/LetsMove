@@ -16,7 +16,7 @@ export class PreferencesController {
     @Req() req: Request,
     @Body() createPreferencesDto: CreatePreferencesDto,
   ) {
-    const userId = req.user.id;
+    const userId = req.user.sub;
     return this.preferencesService.createPreferences(
       userId,
       createPreferencesDto,
@@ -29,7 +29,7 @@ export class PreferencesController {
     @Req() req: Request,
     @Body() deletePreferencesDto: DeletePreferencesDto,
   ) {
-    const userId = req.user.id;
+    const userId = req.user.sub;
     return this.preferencesService.deletePreferences(
       userId,
       deletePreferencesDto,
@@ -42,7 +42,7 @@ export class PreferencesController {
     @Req() req: Request,
     @Body() modifyPreferencesDto: ModifyPreferenceDto,
   ) {
-    const userId = req.user.id;
+    const userId = req.user.sub;
     return this.preferencesService.modifyPreference(
       userId,
       modifyPreferencesDto,
