@@ -13,14 +13,14 @@ export class SportRepositoryService {
       },
     });
   }
-  async findOneByName(sport: string){
+  async findOneByName(sport: string) {
     return this.prismaService.sport.findUnique({
       where: {
         name: sport,
       },
     });
   }
-  async findOneById(sportId: number){
+  async findOneById(sportId: number) {
     return this.prismaService.sport.findUnique({
       where: {
         id: sportId,

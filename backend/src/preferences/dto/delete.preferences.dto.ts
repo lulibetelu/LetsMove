@@ -1,13 +1,11 @@
 import {
   ArrayNotEmpty,
   IsDefined,
-  IsIn,
   IsNotEmpty,
-  IsOptional,
   IsString,
 } from 'class-validator';
 
-export class UpdatePreferencesDto {
+export class DeletePreferencesDto {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
@@ -15,8 +13,4 @@ export class UpdatePreferencesDto {
 
   @ArrayNotEmpty()
   sports: string[];
-
-  @IsOptional()
-  @IsIn(['Principiante', 'Intermedio', 'Experto', 'Profesional'])
-  level: string;
 }

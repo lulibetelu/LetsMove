@@ -3,7 +3,8 @@ import { CreatePreferencesDto } from './dto/create.preferences.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserRepositoryService } from '../repository/user/user.repository.service';
 import { SportRepositoryService } from '../repository/sport/sport.repository.service';
-import { UpdatePreferencesDto } from './dto/update.preferences.dto';
+import { DeletePreferencesDto } from './dto/delete.preferences.dto';
+import { PreferenceRepositoryService } from '../repository/preference/preference.repository.service';
 
 @Injectable()
 export class PreferencesService {
@@ -11,6 +12,7 @@ export class PreferencesService {
     private prismaService: PrismaService,
     private userRepository: UserRepositoryService,
     private sportRepository: SportRepositoryService,
+    private preferencesRepository: PreferenceRepositoryService,
   ) {}
 
   async createPreferences(preferencesDto: CreatePreferencesDto) {
@@ -42,7 +44,7 @@ export class PreferencesService {
     });
   }
 
-  async deletePreference(updatePreferencesDto: UpdatePreferencesDto) {
+  async deletePreferences(updatePreferencesDto: DeletePreferencesDto) {
     const user = await this.userRepository.findByUsername(
       updatePreferencesDto.username,
     );
@@ -55,6 +57,24 @@ export class PreferencesService {
       updatePreferencesDto.sports,
     );
 
+    const sportsId = sportsFound.map((sport) => sport.id);
+
+    return this.preferencesRepository.deleteMany(user.id, sportsId);
+  }
+
+  async modifyPreference(updatePreferencesDto: DeletePreferencesDto){
+    const user = await this.userRepository.findByUsername(
+      updatePreferencesDto.username,
+    );
+
+    const sport = await this.sportRepository.findOneByName(
+      updatePreferencesDto.sports,
+    );
+    
+    return this.preferencesRepository.modify(user.id, sport.id, )
+    
+    
+    
     
   }
 }
