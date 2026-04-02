@@ -26,6 +26,5 @@ export async function loginUser(credentials: LoginCredentials){
     });
     if (!response.ok) throw new Error(`Failed to login user: ${response.status}`)
     const data: LoginResponse =  await response.json();
-    console.log(data)
     return data.access_token;
 }
