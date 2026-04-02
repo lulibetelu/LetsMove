@@ -2,23 +2,27 @@ import {useNavigate} from 'react-router-dom'
 import {useState} from "react";
 import {createUser} from '../api/user.ts'
 import type {RegisterCredentials} from "../types/userTypes.ts";
+import CredentialError from "../components/CredentialError.tsx";
 export default function RegisterPage(){
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
+    const [errorHasBeenThrown, setError] = useState(false);
 
     const navigate = useNavigate();
 
     const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
         //Prevents the page from reloading on submit
         event.preventDefault();
+        try {
+            const credentials: RegisterCredentials = {username, email, password};
+            const userResponse = await createUser(credentials);
+            console.log(userResponse)
+            navigate("/interests");
+        } catch {
+            setError(true);
+        }
 
-        const credentials: RegisterCredentials = {username, email, password};
-        const userResponse  = await createUser(credentials);
-        console.log(userResponse);
-
-        navigate("/interests");
     };
 
     return (
@@ -69,7 +73,12 @@ export default function RegisterPage(){
                     Register
                 </button>
 
+                <div>
+                    {errorHasBeenThrown && <CredentialError message='Invalid credentials'/>}
+                </div>
+
             </form>
+
         </div>
     );
 
