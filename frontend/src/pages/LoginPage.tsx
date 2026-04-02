@@ -2,18 +2,24 @@ import {useState} from "react";
 import type {LoginCredentials} from "../types/userTypes.ts";
 import {loginUser} from "../api/user.ts";
 import {Link, useNavigate} from "react-router-dom";
+import CredentialError from "../components/CredentialError.tsx";
 
 export default function LoginPage(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-
+    const [errorHasBeenThrown, setError] = useState(false);
     const handleSubmit:React.SubmitEventHandler= async (event) => {
         event.preventDefault()
         const credentials: LoginCredentials = {email, password}
-        const token = await loginUser(credentials);
-        localStorage.setItem('token', token)
-        navigate("/test");
+        try {
+            const token = await loginUser(credentials);
+            localStorage.setItem('token', token)
+        } catch {
+            setError(true);
+        }
+        //aca seria un redirect a home page no?
+        //navigate("/test");
 
     }
 
@@ -56,6 +62,10 @@ export default function LoginPage(){
                 <div className='flex flex-row items-center justify-center'>
                     <p>Don't have an account?</p>
                     <Link to='/register' className='text-center text-primary p-2'>Register</Link>
+                </div>
+
+                <div>
+                    {errorHasBeenThrown && <CredentialError message='Invalid email or password'/>}
                 </div>
             </form>
 
