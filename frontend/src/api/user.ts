@@ -1,5 +1,6 @@
 import type {LoginCredentials, RegisterCredentials} from "../types/userTypes.ts";
 
+// hay que poner esta variable en el env
 const API_URL = 'http://localhost:3000/';
 
 interface LoginResponse{
