@@ -39,39 +39,28 @@ export default function RegisterPage(){
 
                 <h2 className="text-2xl font-bold text-center">Register</h2>
 
-                <CustomInput
-                    label = 'Username'
-                    input = {{
+                <CustomInput label = 'Username' input = {{
                         type: 'text',
                         placeHolder: 'your username',
                         value: username,
                         onChange: (e) => {setUsername(e.target.value)}
-                    }}
-                ></CustomInput>
+                    }}></CustomInput>
 
-                <CustomInput
-                    label = 'Email'
-                    input = {{
+                <CustomInput label = 'Email' input = {{
                         type: 'email',
                         placeHolder: 'your email',
                         value: email,
                         onChange: (e) => {setEmail(e.target.value)}
-                    }}
-                ></CustomInput>
+                    }}></CustomInput>
 
-                <CustomInput
-                    label = 'Password'
-                    input = {{
+                <CustomInput label = 'Password' input = {{
                         type: 'password',
                         placeHolder: 'your password',
                         value: password,
                         onChange: (e) => {setPassword(e.target.value)}
-                    }}
-                ></CustomInput>
+                    }}></CustomInput>
 
-                <button type="submit" className="btn btn-primary mt-2">
-                    Register
-                </button>
+                <button type="submit" className="btn btn-primary mt-2"> Register </button>
 
                 <div>
                     {errorHasBeenThrown && <CredentialError message='Invalid credentials'/>}
