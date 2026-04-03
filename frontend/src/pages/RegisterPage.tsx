@@ -1,8 +1,9 @@
 import {useNavigate} from 'react-router-dom'
 import {useState} from "react";
-import {createUser} from '../api/user.ts'
-import type {RegisterCredentials} from "../types/userTypes.ts";
+import {createUser, loginUser} from '../api/user.ts'
+import type {LoginCredentials, RegisterCredentials} from "../types/userTypes.ts";
 import CredentialError from "../components/CredentialError.tsx";
+
 export default function RegisterPage(){
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -17,7 +18,13 @@ export default function RegisterPage(){
         try {
             const credentials: RegisterCredentials = {username, email, password};
             const userResponse = await createUser(credentials);
-            console.log(userResponse)
+            console.log("USER RESPONSE " + userResponse.message)
+
+            // para que el usuario no tenga que logearse dsp de haberse registrado
+            const loginCredentials: LoginCredentials = {email, password};
+            const token = await loginUser(loginCredentials);
+            localStorage.setItem('token', token)
+
             navigate("/interests");
         } catch {
             setError(true);
