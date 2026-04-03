@@ -3,12 +3,14 @@ import type {LoginCredentials} from "../types/userTypes.ts";
 import {loginUser} from "../api/user.ts";
 import {Link} from "react-router-dom";
 import CredentialError from "../components/CredentialError.tsx";
+import CustomInput from "../components/CustomInput.tsx";
 
 export default function LoginPage(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    //const navigate = useNavigate();
     const [errorHasBeenThrown, setError] = useState(false);
+
+    //const navigate = useNavigate();
     const handleSubmit:React.SubmitEventHandler= async (event) => {
         event.preventDefault()
         const credentials: LoginCredentials = {email, password}
@@ -20,7 +22,6 @@ export default function LoginPage(){
         }
         //aca seria un redirect a home page no?
         //navigate("/test");
-
     }
 
     return (
@@ -29,35 +30,21 @@ export default function LoginPage(){
 
                 <h2 className="text-2xl font-bold text-center">Login</h2>
 
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Email</span>
-                    </label>
-                    <input
-                        type="email"
-                        placeholder="your email"
-                        className="input input-bordered"
-                        value={email}
-                        onChange={(e) => (setEmail(e.target.value))}
-                    />
-                </div>
+                <CustomInput label = 'Email' input = {{
+                        type: 'email',
+                        placeHolder: 'your email',
+                        value: email,
+                        onChange: (e) => {setEmail(e.target.value)}
+                    }}></CustomInput>
 
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Password</span>
-                    </label>
-                    <input
-                        type="password"
-                        placeholder="your password"
-                        className="input input-bordered"
-                        value={password}
-                        onChange={(e) => (setPassword(e.target.value))}
-                    />
-                </div>
+                <CustomInput label = 'Password' input = {{
+                        type: 'password',
+                        placeHolder: 'your password',
+                        value: password,
+                        onChange: (e) => {setPassword(e.target.value)}
+                    }}></CustomInput>
 
-                <button className="btn btn-primary mt-2">
-                    Login
-                </button>
+                <button className="btn btn-primary mt-2"> Login </button>
 
                 <div className='flex flex-row items-center justify-center'>
                     <p>Don't have an account?</p>
