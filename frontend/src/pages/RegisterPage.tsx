@@ -3,6 +3,7 @@ import {useState} from "react";
 import {createUser, loginUser} from '../api/user.ts'
 import type {LoginCredentials, RegisterCredentials} from "../types/userTypes.ts";
 import CredentialError from "../components/CredentialError.tsx";
+import CustomInput from "../components/CustomInput.tsx";
 
 export default function RegisterPage(){
     const [username, setUsername] = useState('');
@@ -38,44 +39,36 @@ export default function RegisterPage(){
 
                 <h2 className="text-2xl font-bold text-center">Register</h2>
 
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Username</span>
-                    </label>
-                    <input
-                        type="text"
-                        placeholder="your username"
-                        className="input input-bordered"
-                        value={username}
-                        onChange={(e) => {setUsername(e.target.value)}}
-                    />
-                </div>
+                <CustomInput
+                    label = 'Username'
+                    input = {{
+                        type: 'text',
+                        placeHolder: 'your username',
+                        value: username,
+                        onChange: (e) => {setUsername(e.target.value)}
+                    }}
+                ></CustomInput>
 
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Email</span>
-                    </label>
-                    <input
-                        type="email"
-                        placeholder="your email"
-                        className="input input-bordered"
-                        value={email}
-                        onChange={(e) => {setEmail(e.target.value)}}
-                    />
-                </div>
+                <CustomInput
+                    label = 'Email'
+                    input = {{
+                        type: 'email',
+                        placeHolder: 'your email',
+                        value: email,
+                        onChange: (e) => {setEmail(e.target.value)}
+                    }}
+                ></CustomInput>
 
-                <div className="form-control">
-                    <label className="label">
-                        <span className="label-text">Password</span>
-                    </label>
-                    <input
-                        type="password"
-                        placeholder="your password"
-                        className="input input-bordered"
-                        value={password}
-                        onChange={(e) => {setPassword(e.target.value)}}
-                    />
-                </div>
+                <CustomInput
+                    label = 'Password'
+                    input = {{
+                        type: 'password',
+                        placeHolder: 'your password',
+                        value: password,
+                        onChange: (e) => {setPassword(e.target.value)}
+                    }}
+                ></CustomInput>
+
                 <button type="submit" className="btn btn-primary mt-2">
                     Register
                 </button>

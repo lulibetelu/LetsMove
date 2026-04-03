@@ -1,3 +1,5 @@
+import type {ChangeEventHandler} from "react";
+
 export interface User{
     id: number,
     username: string,
@@ -14,4 +16,16 @@ export interface RegisterCredentials{
 export interface LoginCredentials{
     email: string,
     password: string,
+}
+
+export interface InputProps {
+    type: string,
+    placeHolder: string,
+    value: string,
+    onChange: ChangeEventHandler<HTMLInputElement>,
+}
+
+export interface CustomInputProps {
+    label: string,
+    input: InputProps,
 }
