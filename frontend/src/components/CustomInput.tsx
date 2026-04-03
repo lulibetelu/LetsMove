@@ -1,4 +1,4 @@
-import type {CustomInputProps} from "../types/userTypes.ts";
+import type {CustomInputProps} from "../types/CustomInputTypes.ts";
 
 export default function CustomInput({ label, input} : CustomInputProps) {
     return (
