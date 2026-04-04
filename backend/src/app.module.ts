@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { LoginModule } from './login/login.module';
 import { AuthModule } from './authentication/auth.module';
 import { PreferencesModule } from './preferences/preferences.module';
+import { PostsModule } from './posts/posts.module';
 import { SportsModule } from './sports/sports.module';
 
 @Module({
@@ -17,6 +18,7 @@ import { SportsModule } from './sports/sports.module';
     LoginModule,
     AuthModule,
     PreferencesModule,
+    PostsModule,
     SportsModule,
   ],
   controllers: [AppController],

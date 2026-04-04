@@ -14,10 +14,7 @@ export class PreferencesService {
     private preferencesRepository: PreferenceRepositoryService,
   ) {}
 
-  async createPreferences(
-    userId: number,
-    preferencesDto: CreatePreferencesDto,
-  ) {
+  async create(userId: number, preferencesDto: CreatePreferencesDto) {
     const sportsFound = await this.sportRepository.findManyByName(
       preferencesDto.sports,
     );
@@ -36,10 +33,7 @@ export class PreferencesService {
     });
   }
 
-  async deletePreferences(
-    userId: number,
-    updatePreferencesDto: DeletePreferencesDto,
-  ) {
+  async delete(userId: number, updatePreferencesDto: DeletePreferencesDto) {
     const sportsFound = await this.sportRepository.findManyByName(
       updatePreferencesDto.sports,
     );
@@ -49,17 +43,14 @@ export class PreferencesService {
     return this.preferencesRepository.deleteMany(userId, sportsId);
   }
 
-  async modifyPreference(
-    userId: number,
-    modifyPreferenceDto: ModifyPreferenceDto,
-  ) {
+  async update(userId: number, modifyPreferenceDto: ModifyPreferenceDto) {
     const sport = await this.sportRepository.findOneByName(
       modifyPreferenceDto.sport,
     );
 
     if (!sport) throw new NotFoundException();
 
-    return this.preferencesRepository.modify(
+    return this.preferencesRepository.update(
       userId,
       sport.id,
       modifyPreferenceDto.level,

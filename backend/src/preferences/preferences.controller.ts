@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Delete, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Delete,
+  UseGuards,
+  Req,
+  Patch,
+} from '@nestjs/common';
 import type { Request } from 'express';
 import { PreferencesService } from './preferences.service';
 import { CreatePreferencesDto } from './dto/create.preferences.dto';
@@ -12,40 +20,31 @@ export class PreferencesController {
 
   @UseGuards(AuthGuard)
   @Post('create')
-  createPreferences(
+  create(
     @Req() req: Request,
     @Body() createPreferencesDto: CreatePreferencesDto,
   ) {
     const userId = req.user.sub;
-    return this.preferencesService.createPreferences(
-      userId,
-      createPreferencesDto,
-    );
+    return this.preferencesService.create(userId, createPreferencesDto);
   }
 
   @UseGuards(AuthGuard)
   @Delete('update')
-  deletePreference(
+  delete(
     @Req() req: Request,
     @Body() deletePreferencesDto: DeletePreferencesDto,
   ) {
     const userId = req.user.sub;
-    return this.preferencesService.deletePreferences(
-      userId,
-      deletePreferencesDto,
-    );
+    return this.preferencesService.delete(userId, deletePreferencesDto);
   }
 
   @UseGuards(AuthGuard)
-  @Post('update')
-  modifyPreference(
+  @Patch('update')
+  update(
     @Req() req: Request,
     @Body() modifyPreferencesDto: ModifyPreferenceDto,
   ) {
     const userId = req.user.sub;
-    return this.preferencesService.modifyPreference(
-      userId,
-      modifyPreferencesDto,
-    );
+    return this.preferencesService.update(userId, modifyPreferencesDto);
   }
 }
