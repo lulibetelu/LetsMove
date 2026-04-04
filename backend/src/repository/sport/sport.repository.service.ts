@@ -27,4 +27,7 @@ export class SportRepositoryService {
       },
     });
   }
+  async findAll() {
+    return this.prismaService.sport.findMany();
+  }
 }

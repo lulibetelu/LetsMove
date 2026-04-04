@@ -17,8 +17,6 @@ export async function createUser(credentials: RegisterCredentials){
     return response.json();
 }
 
-
-
 export async function loginUser(credentials: LoginCredentials){
     const response = await fetch(API_URL + 'login', {
         method: 'POST',
