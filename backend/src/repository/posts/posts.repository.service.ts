@@ -25,10 +25,9 @@ export class PostsRepositoryService {
     });
   }
 
-  async delete(userId: number, postId: number) {
+  async delete(postId: number) {
     return this.prismaService.post.delete({
       where: {
-        userId: userId,
         id: postId,
       },
     });

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostsRepositoryService } from '../repository/posts/posts.repository.service';
 
@@ -19,6 +19,10 @@ export class PostsService {
   }
 
   async remove(userId: number, postId: number) {
-    return this.postsRepository.delete(userId, postId);
+    const post = await this.postsRepository.findUnique(postId);
+    if (!post) throw new NotFoundException();
+    const idUser = post.userId;
+    if (idUser != userId) throw new UnauthorizedException();
+    return this.postsRepository.delete(postId);
   }
 }
