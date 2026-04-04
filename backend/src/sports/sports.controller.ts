@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { SportsService } from './sports.service';
 
-@Controller()
+@Controller('sports')
 export class SportsController {
   constructor(private sportsService: SportsService) {}
   @Get()
