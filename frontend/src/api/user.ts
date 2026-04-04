@@ -1,14 +1,11 @@
 import type {LoginCredentials, RegisterCredentials} from "../types/userTypes.ts";
-
-// hay que poner esta variable en el env
-const API_URL = 'http://localhost:3000/';
-
+const url = import.meta.env.VITE_API_URL;
 interface LoginResponse{
     access_token: string
 }
 
 export async function createUser(credentials: RegisterCredentials){
-    const response = await fetch(API_URL + 'register', {
+    const response = await fetch(url + 'register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify(credentials)
@@ -18,7 +15,7 @@ export async function createUser(credentials: RegisterCredentials){
 }
 
 export async function loginUser(credentials: LoginCredentials){
-    const response = await fetch(API_URL + 'login', {
+    const response = await fetch(url + 'login', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(credentials)
