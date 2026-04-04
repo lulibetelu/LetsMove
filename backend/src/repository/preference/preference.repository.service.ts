@@ -24,7 +24,7 @@ export class PreferenceRepositoryService {
   }
 
   //trae una combinacion user-sport
-  async findParticularPreference(userId: number, sportId: number) {
+  async findUnique(userId: number, sportId: number) {
     return this.prismaService.preference.findUnique({
       where: {
         userId_sportId: {
@@ -47,7 +47,7 @@ export class PreferenceRepositoryService {
     });
   }
 
-  async modify(userId: number, sportId: number, newLevel: string) {
+  async update(userId: number, sportId: number, newLevel: string) {
     return this.prismaService.preference.update({
       where: {
         userId_sportId: {
