@@ -64,7 +64,7 @@ model Location{
 model Post{
   id Int @default(autoincrement()) @id
   content String
-  createdAt DateTime
+  createdAt DateTime @default(now())
   user User @relation(fields: [userId], references: [id])
   userId Int
   postsLiked PostLiked[] @ignore

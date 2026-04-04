@@ -1,26 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import { PostsRepositoryService } from '../repository/posts/posts.repository.service';
 
 @Injectable()
 export class PostsService {
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+  constructor(private postsRepository: PostsRepositoryService) {}
+
+  async create(userId: number, createPostDto: CreatePostDto) {
+    return this.postsRepository.create(userId, createPostDto);
   }
 
-  findAll() {
-    return `This action returns all posts`;
+  async findAll() {
+    return this.postsRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOne(postId: number) {
+    return this.postsRepository.findUnique(postId);
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async remove(userId: number, postId: number) {
+    return this.postsRepository.delete(userId, postId);
   }
 }
