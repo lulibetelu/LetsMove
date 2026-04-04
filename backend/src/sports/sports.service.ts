@@ -3,8 +3,8 @@ import { SportRepositoryService } from '../repository/sport/sport.repository.ser
 
 @Injectable()
 export class SportsService {
-  constructor(private sportsRepocitory: SportRepositoryService) {}
+  constructor(private sportsRepository: SportRepositoryService) {}
   async getSports() {
-    return this.sportsRepocitory.findAll();
+    return this.sportsRepository.findAll();
   }
 }
