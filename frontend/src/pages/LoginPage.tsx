@@ -1,7 +1,7 @@
 import {useState} from "react";
 import type {LoginCredentials} from "../types/userTypes.ts";
 import {loginUser} from "../api/user.ts";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import CredentialError from "../components/CredentialError.tsx";
 import CustomInput from "../components/CustomInput.tsx";
 
@@ -10,13 +10,14 @@ export default function LoginPage(){
     const [password, setPassword] = useState('');
     const [errorHasBeenThrown, setError] = useState(false);
 
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
     const handleSubmit:React.SubmitEventHandler= async (event) => {
         event.preventDefault()
         const credentials: LoginCredentials = {email, password}
         try {
             const token = await loginUser(credentials);
             localStorage.setItem('token', token)
+            navigate("/posts")
         } catch {
             setError(true);
         }

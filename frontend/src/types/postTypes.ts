@@ -1,3 +1,4 @@
-export interface Post{
+export interface PostTypes {
+    userId: number,
     content: string,
 }
