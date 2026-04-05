@@ -30,6 +30,13 @@ export class PostsRepositoryService {
   async findUnique(postId: number) {
     return this.prismaService.post.findUnique({
       where: { id: postId },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
     });
   }
 
