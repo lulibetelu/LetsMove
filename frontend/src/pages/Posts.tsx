@@ -20,9 +20,11 @@ export default function Posts() {
     },[]);
 
     return(
-        <div>
+        <div className="">
             {posts.map((p) => (
+                <div className="max-w-xl">
                 <Post userId={p.userId} content={p.content}/>
+                </div>
             ))}
 
         </div>
