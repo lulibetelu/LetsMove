@@ -23,7 +23,7 @@ export default function Posts() {
         <div className="">
             {posts.map((p) => (
                 <div className="max-w-xl">
-                <Post userId={p.userId} content={p.content}/>
+                <Post user={p.user} content={p.content} id={p.id} userId={p.userId}/>
                 </div>
             ))}
 
