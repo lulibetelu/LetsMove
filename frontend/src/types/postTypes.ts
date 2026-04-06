@@ -1,4 +1,4 @@
-export interface PostTypes {
+export interface PostType {
     id:number,
     userId: number,
     content: string,
@@ -6,3 +6,5 @@ export interface PostTypes {
         username: string,
     }
 }
+
+export type PostTypes = PostType;
