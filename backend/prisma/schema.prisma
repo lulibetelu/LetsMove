@@ -4,10 +4,11 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  //output   = "../generated/prisma"
   //added because of nest-prisma documentation (v7 prisma version)
   moduleFormat    = "cjs"
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -23,7 +24,7 @@ model User{
   biography String?
   preferences Preference[] @ignore
   userLocations UserLocation[] @ignore
-  posts Post[] @ignore
+  posts Post[]
   postsLiked PostLiked[] @ignore
   postsDisliked PostDisliked[] @ignore
 }

@@ -16,12 +16,27 @@ export class PostsRepositoryService {
   }
 
   async findAll() {
-    return this.prismaService.post.findMany();
+    return this.prismaService.post.findMany({
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
   }
 
   async findUnique(postId: number) {
     return this.prismaService.post.findUnique({
       where: { id: postId },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
     });
   }
 
