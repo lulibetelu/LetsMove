@@ -20,10 +20,10 @@ export default function Posts() {
     },[]);
 
     return(
-        <div className="">
+        <div className="flex flex-col items-center justify-center">
             {posts.map((p) => (
-                <div className="max-w-xl">
-                <Post user={p.user} content={p.content} id={p.id} userId={p.userId}/>
+                <div className="max-w-xl w-full">
+                <Post user={p.user} content={p.content} userId={p.userId}/>
                 </div>
             ))}
 
