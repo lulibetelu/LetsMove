@@ -3,12 +3,12 @@ const url = import.meta.env.VITE_API_URL;
 export async function create(content: string){
     const token = localStorage.getItem('token');
     const response = await fetch(url + 'posts' , {
-        method: 'Post',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(content)
+        body: JSON.stringify({content})
     });
     if (!response.ok) throw new Error(`Failed to create post: ${response.status}`);
     return response.json();
@@ -17,7 +17,7 @@ export async function create(content: string){
 export async function findAll(){
     const token = localStorage.getItem('token');
     const response = await fetch(url + 'posts' , {
-        method: 'Get',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -30,7 +30,7 @@ export async function findAll(){
 export async function findOne(postId: number){
     const token = localStorage.getItem('token');
     const response = await fetch(url + 'posts/' + postId , {
-        method: 'Get',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -42,8 +42,8 @@ export async function findOne(postId: number){
 
 export async function remove(postId: number){
     const token = localStorage.getItem('token');
-    const response = await fetch(url + 'posts' + postId , {
-        method: 'Delete',
+    const response = await fetch(url + 'posts/' + postId , {
+        method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
