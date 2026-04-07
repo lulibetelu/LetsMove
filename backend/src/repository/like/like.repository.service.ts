@@ -6,7 +6,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class LikeRepositoryService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(userId: number, createLikeDto: CreateLikeDto){
+  async create(userId: number, createLikeDto: CreateLikeDto) {
     return this.prismaService.postLiked.create({
       data: {
         ...createLikeDto,
@@ -15,14 +15,14 @@ export class LikeRepositoryService {
       },
     });
   }
-  async findAll(userId: number){
+  async findAll(userId: number) {
     return this.prismaService.postLiked.findMany({
       where: {
         userId: userId,
       },
     });
   }
-  async findUnique(userId: number, postId: number){
+  async findUnique(userId: number, postId: number) {
     return this.prismaService.postLiked.findUnique({
       where: {
         postId_userId: {
