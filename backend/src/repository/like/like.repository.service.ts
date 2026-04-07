@@ -32,7 +32,7 @@ export class LikeRepositoryService {
       },
     });
   }
-  async delete(userId: number, postId: number){
+  async delete(userId: number, postId: number) {
     return this.prismaService.postLiked.delete({
       where: {
         postId_userId: {

@@ -4,7 +4,9 @@ export interface PostType {
     content: string,
     user: {
         username: string,
-    }
+    },
+    isLiked: boolean,
+    isDisliked: boolean
 }
 
 export type PostTypes = PostType;

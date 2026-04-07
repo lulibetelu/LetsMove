@@ -26,8 +26,9 @@ export class PostsController {
 
   @UseGuards(AuthGuard)
   @Get()
-  findAll() {
-    return this.postsService.findAll();
+  findAll(@Req() req: Request) {
+    const userId = req.user.sub;
+    return this.postsService.findAll(userId);
   }
 
   @UseGuards(AuthGuard)

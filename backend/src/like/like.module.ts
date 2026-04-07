@@ -7,5 +7,6 @@ import { LikeRepositoryModule } from '../repository/like/like.repository.module'
   imports: [LikeRepositoryModule],
   controllers: [LikeController],
   providers: [LikeService],
+  exports: [LikeService],
 })
 export class LikeModule {}
