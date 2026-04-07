@@ -31,17 +31,17 @@ export class LikeController {
     return this.likeService.findAll(userId);
   }
 
-  @Get(':id')
+  @Get('/post/:id')
   @UseGuards(AuthGuard)
-  findOne(@Req() req: Request, @Param('id') id: string) {
+  findOne(@Req() req: Request, @Param('id') postId: string) {
     const userId = req.user.sub;
-    return this.likeService.findOne(userId, +id);
+    return this.likeService.findOne(userId, +postId);
   }
 
-  @Delete(':id')
+  @Delete('/post/:id')
   @UseGuards(AuthGuard)
-  remove(@Req() req: Request, @Param('id') id: string) {
+  remove(@Req() req: Request, @Param('id') postId: string) {
     const userId = req.user.sub;
-    return this.likeService.remove(userId, +id);
+    return this.likeService.remove(userId, +postId);
   }
 }
