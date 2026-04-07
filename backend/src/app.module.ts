@@ -8,6 +8,7 @@ import { AuthModule } from './authentication/auth.module';
 import { PreferencesModule } from './preferences/preferences.module';
 import { PostsModule } from './posts/posts.module';
 import { SportsModule } from './sports/sports.module';
+import { DislikeModule } from './dislike/dislike.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { SportsModule } from './sports/sports.module';
     PreferencesModule,
     PostsModule,
     SportsModule,
+    DislikeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
