@@ -18,6 +18,6 @@ export class DislikeService {
   }
 
   remove(userId: number, postId: number) {
-    return this.dislikeRepositoryService.removePost(userId, postId);
+    return this.dislikeRepositoryService.removeDislike(userId, postId);
   }
 }

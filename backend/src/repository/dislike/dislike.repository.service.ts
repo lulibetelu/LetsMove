@@ -31,7 +31,7 @@ export class DislikeRepositoryService {
     });
   }
 
-  async removePost(userId: number, postId: number){
+  async removeDislike(userId: number, postId: number) {
     return this.prismaService.postDisliked.delete({
       where: {
         postId_userId: {

@@ -7,6 +7,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { DislikeService } from './dislike.service';
 import { CreateDislikeDto } from './dto/create-dislike.dto';
@@ -33,16 +34,16 @@ export class DislikeController {
 
   @Get('post/:id')
   @UseGuards(AuthGuard)
-  findOne(@Req() request: Request, @Param('id') postId: string) {
+  findOne(@Req() request: Request, @Param('id', ParseIntPipe) postId: number) {
     //si pincha, ojo aca con el number.
     const userId: number = request.user.sub;
-    return this.dislikeService.findOne(userId, +postId);
+    return this.dislikeService.findOne(userId, postId);
   }
 
   @Delete('post/:id')
   @UseGuards(AuthGuard)
-  remove(@Req() request: Request, @Param('id') postId: string) {
+  remove(@Req() request: Request, @Param('id', ParseIntPipe) postId: number) {
     const userId = request.user.sub;
-    return this.dislikeService.remove(userId, +postId);
+    return this.dislikeService.remove(userId, postId);
   }
 }
