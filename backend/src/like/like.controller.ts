@@ -7,6 +7,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { LikeService } from './like.service';
 import { CreateLikeDto } from './dto/create-like.dto';
@@ -33,15 +34,15 @@ export class LikeController {
 
   @Get('/post/:id')
   @UseGuards(AuthGuard)
-  findOne(@Req() req: Request, @Param('id') postId: string) {
+  findOne(@Req() req: Request, @Param('id', ParseIntPipe) postId: number) {
     const userId = req.user.sub;
-    return this.likeService.findOne(userId, +postId);
+    return this.likeService.findOne(userId, postId);
   }
 
   @Delete('/post/:id')
   @UseGuards(AuthGuard)
-  remove(@Req() req: Request, @Param('id') postId: string) {
+  remove(@Req() req: Request, @Param('id', ParseIntPipe) postId: number) {
     const userId = req.user.sub;
-    return this.likeService.remove(userId, +postId);
+    return this.likeService.remove(userId, postId);
   }
 }
