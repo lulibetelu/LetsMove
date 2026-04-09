@@ -8,6 +8,7 @@ import { AuthModule } from './authentication/auth.module';
 import { PreferencesModule } from './preferences/preferences.module';
 import { PostsModule } from './posts/posts.module';
 import { SportsModule } from './sports/sports.module';
+import { LikeModule } from './like/like.module';
 import { DislikeModule } from './dislike/dislike.module';
 
 @Module({
@@ -21,6 +22,7 @@ import { DislikeModule } from './dislike/dislike.module';
     PreferencesModule,
     PostsModule,
     SportsModule,
+    LikeModule,
     DislikeModule,
   ],
   controllers: [AppController],
