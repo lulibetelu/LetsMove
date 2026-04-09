@@ -7,6 +7,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -33,13 +34,13 @@ export class PostsController {
 
   @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.postsService.findOne(id);
   }
 
   @UseGuards(AuthGuard)
   @Delete(':id')
-  remove(@Req() req: Request, @Param('id') id: string) {
+  remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
     const userId = req.user.sub;
     return this.postsService.remove(userId, +id);
   }
