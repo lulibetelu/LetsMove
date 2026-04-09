@@ -45,6 +45,6 @@ export async function remove(postId: number){
             'Authorization': `Bearer ${token}`
         },
     })
-    if (!response.ok) throw new Error(`Failed to delete post ${postId}: ${response.status}`);
+    if (!response.ok) throw new Error(`Failed to delete like from post ${postId}: ${response.status}`);
     return response.json();
 }
