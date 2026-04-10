@@ -1,5 +1,5 @@
 const url = import.meta.env.VITE_API_URL;
-export async function create(postId: number){
+export async function createLike(postId: number){
     const token = localStorage.getItem('token');
     const response = await fetch(url + 'like', {
         method: 'POST',
@@ -36,7 +36,7 @@ export async function findUnique(postId: number) {
     if (!response.ok) throw new Error(`Failed to load like from post ${postId}: ${response.status}`)
     return response.json();
 }
-export async function remove(postId: number){
+export async function removeLike(postId: number){
     const token = localStorage.getItem('token');
     const response = await fetch(url + 'like/post/' + postId, {
         method: 'DELETE',
