@@ -1,17 +1,20 @@
 import {useEffect, useState} from "react";
 import {findAll} from "../api/post.ts";
-import type {PostTypes} from "../types/postTypes.ts"
+import type {PostType} from "../types/postTypes.ts"
 import Post from "../components/Post.tsx"
+import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
 
 export default function Posts() {
-    const [posts, setPosts] = useState<PostTypes[]>([]);
+    const [posts, setPosts] = useState<PostType[]>([]);
     //const [error, setError] = useState(false);
+    const [cursor, setCursor] = useState<number|undefined>();
 
     useEffect(() => {
         async function loadPosts() {
             try {
-                const postsList: PostTypes[] = await findAll();
-                setPosts(postsList);
+                const findAllTypes: FindAllPostsTypes = await findAll(cursor);
+                setPosts(findAllTypes.formattedPosts);
+                setCursor(findAllTypes.newCursor);
             } catch {
                 //setError(true);
             }

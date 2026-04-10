@@ -15,7 +15,7 @@ export class PostsRepositoryService {
     });
   }
 
-  async findAll(currentUserId: number, lastPostId: number) {
+  async findAll(currentUserId: number, lastPostId?: number) {
     return this.prismaService.post.findMany({
       orderBy: { createdAt: 'desc' },
       // take toma de a 20 posteos, cursor le dice que te traiga 20 posts a partir de un post en particular

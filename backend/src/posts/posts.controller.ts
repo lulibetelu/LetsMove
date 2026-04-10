@@ -30,7 +30,7 @@ export class PostsController {
   @Get()
   findAll(
     @Req() req: Request,
-    @Query('cursor', ParseIntPipe) lastPostId: number,
+    @Query('cursor', new ParseIntPipe({ optional: true })) lastPostId?: number,
   ) {
     const userId = req.user.sub;
     return this.postsService.findAll(userId, lastPostId);

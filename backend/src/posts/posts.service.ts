@@ -15,7 +15,7 @@ export class PostsService {
     return this.postsRepository.create(userId, createPostDto);
   }
 
-  async findAll(currentUserId: number, lastPostId: number) {
+  async findAll(currentUserId: number, lastPostId?: number) {
     const posts = await this.postsRepository.findAll(currentUserId, lastPostId);
 
     const formattedPosts = posts.map((post) => {
