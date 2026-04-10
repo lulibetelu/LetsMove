@@ -9,4 +9,3 @@ export interface PostType {
     isDisliked: boolean
 }
 
-export type PostTypes = PostType;

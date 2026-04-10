@@ -14,9 +14,10 @@ export async function create(content: string){
     return response.json();
 }
 
-export async function findAll(){
+export async function findAll(cursor?: number){
     const token = localStorage.getItem('token');
-    const response = await fetch(url + 'posts' , {
+    const completeUrl = cursor? url + 'posts?cursor=' + cursor : url + 'posts';
+    const response = await fetch( completeUrl , {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
