@@ -5,9 +5,8 @@ import {
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostsRepositoryService } from '../repository/posts/posts.repository.service';
-import { GetPostDto } from './dto/get-post-dto';
 import { LikeService } from '../like/like.service';
-import { Post } from './entities/post.entity';
+import { GetPostDto } from './dto/get-post-dto';
 
 @Injectable()
 export class PostsService {
@@ -20,23 +19,16 @@ export class PostsService {
     return this.postsRepository.create(userId, createPostDto);
   }
 
-  async findAll(userId: number) {
-    // esto es suuper ineficiente, lo ideal seria hacer una query mas compleja que haga esto
-    const posts = await this.postsRepository.findAll();
+  async findAll(currentUserId: number) {
+    const posts = await this.postsRepository.findAll(currentUserId);
 
-    const likedPosts = await this.likeService.findAll(userId);
-    const likedPostsId = likedPosts.map((p) => {
-      return p.postId;
-    });
-
-    const dislikedPosts: number[] = [];
-
-    return posts.map((p: Post) => {
-      if (likedPostsId.includes(p.id)) return new GetPostDto(p, true, false);
-
-      if (dislikedPosts.includes(p.id)) return new GetPostDto(p, false, true);
-
-      return new GetPostDto(p, false, false);
+    return posts.map((post) => {
+      const { postsLiked, postsDisliked, ...postData } = post;
+      return new GetPostDto(
+        postData,
+        postsLiked.length === 1,
+        postsDisliked.length === 1,
+      );
     });
   }
 
