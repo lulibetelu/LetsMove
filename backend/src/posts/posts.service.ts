@@ -5,24 +5,20 @@ import {
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostsRepositoryService } from '../repository/posts/posts.repository.service';
-import { LikeService } from '../like/like.service';
 import { GetPostDto } from './dto/get-post-dto';
 
 @Injectable()
 export class PostsService {
-  constructor(
-    private postsRepository: PostsRepositoryService,
-    private likeService: LikeService,
-  ) {}
+  constructor(private postsRepository: PostsRepositoryService) {}
 
   async create(userId: number, createPostDto: CreatePostDto) {
     return this.postsRepository.create(userId, createPostDto);
   }
 
-  async findAll(currentUserId: number) {
-    const posts = await this.postsRepository.findAll(currentUserId);
+  async findAll(currentUserId: number, lastPostId: number) {
+    const posts = await this.postsRepository.findAll(currentUserId, lastPostId);
 
-    return posts.map((post) => {
+    const formattedPosts = posts.map((post) => {
       const { postsLiked, postsDisliked, ...postData } = post;
       return new GetPostDto(
         postData,
@@ -30,6 +26,8 @@ export class PostsService {
         postsDisliked.length === 1,
       );
     });
+    const newCursor = formattedPosts[formattedPosts.length - 1]?.id;
+    return { formattedPosts, newCursor };
   }
 
   async findOne(postId: number) {

@@ -8,6 +8,7 @@ import {
   UseGuards,
   Req,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -27,9 +28,12 @@ export class PostsController {
 
   @UseGuards(AuthGuard)
   @Get()
-  findAll(@Req() req: Request) {
+  findAll(
+    @Req() req: Request,
+    @Query('cursor', ParseIntPipe) lastPostId: number,
+  ) {
     const userId = req.user.sub;
-    return this.postsService.findAll(userId);
+    return this.postsService.findAll(userId, lastPostId);
   }
 
   @UseGuards(AuthGuard)

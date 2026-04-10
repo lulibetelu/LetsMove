@@ -21,8 +21,7 @@ export class PostsRepositoryService {
       // take toma de a 20 posteos, cursor le dice que te traiga 20 posts a partir de un post en particular
       // y skip porque el cursor automaticamente incluye el post del id que le pasas
       take: 50,
-      cursor: { id: lastPostId },
-      skip: 1,
+      ...(lastPostId ? { cursor: { id: lastPostId }, skip: 1 } : {}),
       include: {
         user: {
           select: {
@@ -30,7 +29,7 @@ export class PostsRepositoryService {
           },
         },
         postsLiked: {
-          where: { id: currentUserId },
+          where: { userId: currentUserId },
           select: { id: true },
         },
         postsDisliked: {
