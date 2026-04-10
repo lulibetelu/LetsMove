@@ -1,6 +1,6 @@
 import {Image, CircleUserRound} from 'lucide-react';
 
-export default function NewPost(){
+export default function NewPost({ onClose }: { onClose: () => void }){
     return (
         <dialog className="modal modal-open backdrop-blur-sm">
             <div className="modal-box bg-base-100 p-0 overflow-hidden max-w-lg w-full">
@@ -31,8 +31,12 @@ export default function NewPost(){
                     >
                         Post
                     </button>
+
                 </div>
             </div>
+            <form method="dialog" className="modal-backdrop">
+                <button onClick={onClose}>Cerrar</button>
+            </form>
         </dialog>
     );
 }

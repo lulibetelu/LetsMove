@@ -74,7 +74,7 @@ export default function Posts() {
             </div>
 
             <button className="btn btn-neutral fixed bottom-10 right-10 z-50 shadow-2xl btn-circle btn-lg" onClick={()=> setCreatePost(true) }><Plus/></button>
-            {createPost && <NewPost/>}
+            {createPost && <NewPost onClose={() => setCreatePost(false)}/>}
         </div>
     );
 }
