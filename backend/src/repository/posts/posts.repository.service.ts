@@ -33,7 +33,7 @@ export class PostsRepositoryService {
           select: { id: true },
         },
         postsDisliked: {
-          where: { id: currentUserId },
+          where: { userId: currentUserId },
           select: { id: true },
         },
       },
