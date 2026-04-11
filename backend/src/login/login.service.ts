@@ -15,7 +15,11 @@ export class LoginService {
     }
     // payload ~= token, sub = subject
     // se crea el token con el id y el email del user
-    const payload = { sub: user.id, email: user.email };
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      username: user.username,
+    };
     console.log(payload);
 
     // payload + secret key = token
