@@ -13,11 +13,10 @@ export default function NewPost({ onClose }: { onClose: () => void}){
         //Prevents the page from reloading on submit
         event.preventDefault();
         try {
-            debugger
             const postCredentials: NewPostCredential = {content};
             const createPost = await create(postCredentials);
             console.log("CREATE POST: " + createPost.message);
-
+            onClose();
         } catch {
             // setError(true);
         }

@@ -61,7 +61,6 @@ export default function Posts() {
     }, [cursor, posts]);
 
 
-
     return(
         <div>
             <div className="flex flex-col items-center justify-center">
