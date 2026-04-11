@@ -13,6 +13,7 @@ export default function NewPost({ onClose }: { onClose: () => void}){
         //Prevents the page from reloading on submit
         event.preventDefault();
         try {
+            debugger
             const postCredentials: NewPostCredential = {content};
             const createPost = await create(postCredentials);
             console.log("CREATE POST: " + createPost.message);
@@ -25,6 +26,7 @@ export default function NewPost({ onClose }: { onClose: () => void}){
     return (
         <dialog className="modal modal-open backdrop-blur-sm">
             <form method="dialog" className="modal-box bg-base-100 p-0 overflow-hidden max-w-lg w-full" onSubmit={handleSubmit}>
+
                 <div className="p-4 flex gap-4">
                     <div className="avatar placeholder">
                         <div className="w-12 h-12 rounded-full bg-base-300 text-base-content/70 flex items-center justify-center">
@@ -34,9 +36,10 @@ export default function NewPost({ onClose }: { onClose: () => void}){
                     <div>
                         {username}
                     </div>
-
                 </div>
+
                 <input
+                    name="content"
                     type="text"
                     className="textarea textarea-ghost w-full text-lg resize-none focus:outline-none focus:bg-transparent"
                     placeholder="What do you want to talk about?"
@@ -46,6 +49,7 @@ export default function NewPost({ onClose }: { onClose: () => void}){
                 ></input>
 
                 <div className="flex justify-between items-center w-full p-3 border-t border-base-200 bg-base-50">
+
                     <div className="flex gap-2">
                         <button
                             type="button"

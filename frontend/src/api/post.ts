@@ -10,7 +10,7 @@ export async function create(postCredentials: NewPostCredential){
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({postCredentials: postCredentials})
+        body: JSON.stringify(postCredentials)
     });
     if (!response.ok) throw new Error(`Failed to create post: ${response.status}`);
     return response.json();
