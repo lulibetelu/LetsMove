@@ -8,4 +8,7 @@ export interface PostType {
     isLiked: boolean,
     isDisliked: boolean
 }
+export interface NewPostCredential {
+    content: string,
+}
 

@@ -60,6 +60,8 @@ export default function Posts() {
         };
     }, [cursor, posts]);
 
+
+
     return(
         <div>
             <div className="flex flex-col items-center justify-center">
@@ -74,7 +76,7 @@ export default function Posts() {
             </div>
 
             <button className="btn btn-neutral fixed bottom-10 right-10 z-50 shadow-2xl btn-circle btn-lg" onClick={()=> setCreatePost(true) }><Plus/></button>
-            {createPost && <NewPost onClose={() => setCreatePost(false)}/>}
+            {createPost && <NewPost onClose={() => setCreatePost(false)} />}
         </div>
     );
 }
