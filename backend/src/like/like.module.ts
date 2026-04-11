@@ -1,11 +1,11 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { LikeService } from './like.service';
 import { LikeController } from './like.controller';
 import { LikeRepositoryModule } from '../repository/like/like.repository.module';
-import { DislikeModule } from '../dislike/dislike.module';
+import { PostActionValidatorModule } from '../post-action-validator/post-action-validator.module';
 
 @Module({
-  imports: [LikeRepositoryModule, DislikeModule],
+  imports: [LikeRepositoryModule, forwardRef(() => PostActionValidatorModule)],
   controllers: [LikeController],
   providers: [LikeService],
   exports: [LikeService],

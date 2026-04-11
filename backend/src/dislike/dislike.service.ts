@@ -18,11 +18,6 @@ export class DislikeService {
   }
 
   remove(userId: number, postId: number) {
-    try {
-      return this.dislikeRepositoryService.removeDislike(userId, postId);
-    } catch {
-      //Might be better another type of error
-      throw new Error('Dislike not found');
-    }
+    return this.dislikeRepositoryService.removeDislike(userId, postId);
   }
 }
