@@ -7,5 +7,6 @@ import { DislikeRepositoryModule } from '../repository/dislike/dislike.repositor
   imports: [DislikeRepositoryModule],
   controllers: [DislikeController],
   providers: [DislikeService],
+  exports: [DislikeService],
 })
 export class DislikeModule {}

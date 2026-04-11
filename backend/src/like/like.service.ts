@@ -1,10 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLikeDto } from './dto/create-like.dto';
 import { LikeRepositoryService } from '../repository/like/like.repository.service';
+import { DislikeService } from '../dislike/dislike.service';
 
 @Injectable()
 export class LikeService {
-  constructor(private likeRepository: LikeRepositoryService) {}
+  constructor(
+    private likeRepository: LikeRepositoryService,
+    private dislikeService: DislikeService,
+  ) {}
 
   async create(userId: number, createLikeDto: CreateLikeDto) {
     try {
@@ -28,5 +32,12 @@ export class LikeService {
     } catch {
       throw new NotFoundException("tried to delete like that didn't exist");
     }
+  }
+
+  async validateCreation(userId: number, postId: number): Promise<boolean> {
+    const dislike = await this.dislikeService.findOne(userId, postId);
+    if (dislike === null) return true;
+
+    return false;
   }
 }

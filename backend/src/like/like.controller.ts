@@ -8,6 +8,7 @@ import {
   UseGuards,
   Req,
   ParseIntPipe,
+  ConflictException,
 } from '@nestjs/common';
 import { LikeService } from './like.service';
 import { CreateLikeDto } from './dto/create-like.dto';
@@ -20,9 +21,19 @@ export class LikeController {
 
   @Post()
   @UseGuards(AuthGuard)
-  create(@Req() req: Request, @Body() createLikeDto: CreateLikeDto) {
+  async create(@Req() req: Request, @Body() createLikeDto: CreateLikeDto) {
     const userId = req.user.sub;
-    return this.likeService.create(userId, createLikeDto);
+    //  Here we validate that the user didn't dislike the post. Why would you like and dislike a post?\
+    const canCreateLike: boolean = await this.likeService.validateCreation(
+      userId,
+      createLikeDto.postId,
+    );
+
+    if (canCreateLike) {
+      return this.likeService.create(userId, createLikeDto);
+    } else {
+      throw new ConflictException('Cannot like post. Is disliked');
+    }
   }
 
   @Get()
