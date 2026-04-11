@@ -1,5 +1,6 @@
 import {ThumbsDown} from "lucide-react";
 import {useState} from "react";
+import {createDislike, removeDislike} from "../api/dislike.ts";
 
 interface Props{
     postId: number,
@@ -10,8 +11,8 @@ export default function Dislike(props: Props){
     const [isDisliked, setDislike] = useState(props.initialIsDisliked);
 
     const handleClick = () => {
-        // if (!isDisliked) createDislike();
-        // else removeDislike();
+        if (!isDisliked) createDislike(props.postId);
+        else removeDislike(props.postId);
         setDislike(!isDisliked);
     }
     return (

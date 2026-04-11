@@ -42,6 +42,7 @@ export class DislikeController {
 
   @Delete('post/:id')
   @UseGuards(AuthGuard)
+  //Consideration: this method is handling postId differently than create
   remove(@Req() request: Request, @Param('id', ParseIntPipe) postId: number) {
     const userId = request.user.sub;
     return this.dislikeService.remove(userId, postId);
