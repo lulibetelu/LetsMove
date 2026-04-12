@@ -7,17 +7,19 @@ export default function Like({postId, initialIsLiked} : {postId: number, initial
     const [isLiked, setLike] = useState(initialIsLiked);
     return(
         <button type="button" className="cursor-pointer" onClick={async () => {
-            let actionValidatorResponse: ActionValidatorResponse;
-            if (!isLiked){
-                 actionValidatorResponse = await createLike(postId);
+            try {
+                let actionValidatorResponse: ActionValidatorResponse;
+                if (!isLiked){
+                     actionValidatorResponse = await createLike(postId);
 
-            }else {
-                 actionValidatorResponse = await  removeLike(postId);
+                }else {
+                     actionValidatorResponse = await  removeLike(postId);
+                }
+
+                if (!actionValidatorResponse.error) setLike(!isLiked);
+            } catch (error) {
+                console.error("Failed to update like status", error);
             }
-
-            if (!actionValidatorResponse.error) setLike(!isLiked);
-
-
         }}>
             {isLiked? <ThumbsUp fill="#605dff" color="#605dff" /> : <ThumbsUp />}
         </button>
