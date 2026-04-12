@@ -1,6 +1,8 @@
+import type {ActionValidatorResponse} from "../types/actionValidatorResponse.ts";
+
 const url = import.meta.env.VITE_API_URL;
 
-export async function createDislike(postId: number){
+export async function createDislike(postId: number): Promise<ActionValidatorResponse>{
     const token = localStorage.getItem('token');
     const response =  await fetch(url + "dislike", {
         method: 'POST',
@@ -11,9 +13,7 @@ export async function createDislike(postId: number){
         body: JSON.stringify({postId}),
     });
 
-    if (!response.ok) throw new Error(`Failed to dislike post ${postId}: ${response.status}`)
-
-    return response.json();
+    return {error: !response.ok}
 }
 
 export async function removeDislike(postId: number){

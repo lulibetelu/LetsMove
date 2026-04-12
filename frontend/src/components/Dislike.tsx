@@ -1,6 +1,7 @@
 import {ThumbsDown} from "lucide-react";
 import {useState} from "react";
 import {createDislike, removeDislike} from "../api/dislike.ts";
+import type {ActionValidatorResponse} from "../types/actionValidatorResponse.ts";
 
 interface Props{
     postId: number,
@@ -10,10 +11,15 @@ interface Props{
 export default function Dislike(props: Props){
     const [isDisliked, setDislike] = useState(props.initialIsDisliked);
 
-    const handleClick = () => {
-        if (!isDisliked) createDislike(props.postId);
-        else removeDislike(props.postId);
-        setDislike(!isDisliked);
+    const handleClick = async () => {
+        let actionValidatorResponse: ActionValidatorResponse;
+        if (!isDisliked) {
+            actionValidatorResponse = await createDislike(props.postId);
+        }
+        else {
+            actionValidatorResponse = await removeDislike(props.postId);
+        }
+        if (!actionValidatorResponse.error) setDislike(!isDisliked);
     }
     return (
         <button type="button" className="cursor-pointer" onClick={handleClick}>
