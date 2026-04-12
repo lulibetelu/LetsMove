@@ -9,13 +9,13 @@ export class PostActionValidatorService {
     private likeService: LikeService,
   ) {}
 
-  validateDislikeCreation(userId: number, postId: number) {
-    const like = this.likeService.findOne(userId, postId);
+  async validateDislikeCreation(userId: number, postId: number) {
+    const like = await this.likeService.findOne(userId, postId);
     return like === null;
   }
 
-  validateLikeCreation(userId: number, postId: number): boolean {
-    const dislike = this.dislikeService.findOne(userId, postId);
+  async validateLikeCreation(userId: number, postId: number): Promise<boolean> {
+    const dislike = await this.dislikeService.findOne(userId, postId);
     return dislike === null;
   }
 }

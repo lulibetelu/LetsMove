@@ -27,11 +27,11 @@ export class LikeController {
 
   @Post()
   @UseGuards(AuthGuard)
-  create(@Req() req: Request, @Body() createLikeDto: CreateLikeDto) {
+  async create(@Req() req: Request, @Body() createLikeDto: CreateLikeDto) {
     const userId = req.user.sub;
     //  Here we validate that the user didn't dislike the post. Why would you like and dislike a post?\
     const canCreateLike: boolean =
-      this.postActionValidator.validateLikeCreation(
+      await this.postActionValidator.validateLikeCreation(
         userId,
         createLikeDto.postId,
       );
