@@ -1,5 +1,7 @@
+import type {ActionValidatorResponse} from "../types/actionValidatorResponse.ts";
+
 const url = import.meta.env.VITE_API_URL;
-export async function create(postId: number){
+export async function createLike(postId: number):Promise<ActionValidatorResponse>{
     const token = localStorage.getItem('token');
     const response = await fetch(url + 'like', {
         method: 'POST',
@@ -9,8 +11,7 @@ export async function create(postId: number){
         },
         body: JSON.stringify({postId})
     })
-    if(!response.ok) throw new Error(`Failed to like post ${postId}: ${response.status}`);
-    return response.json();
+    return {error: !response.ok};
 }
 export async function findAll(){
     const token = localStorage.getItem('token');
@@ -36,7 +37,7 @@ export async function findUnique(postId: number) {
     if (!response.ok) throw new Error(`Failed to load like from post ${postId}: ${response.status}`)
     return response.json();
 }
-export async function remove(postId: number){
+export async function removeLike(postId: number){
     const token = localStorage.getItem('token');
     const response = await fetch(url + 'like/post/' + postId, {
         method: 'DELETE',
@@ -45,6 +46,5 @@ export async function remove(postId: number){
             'Authorization': `Bearer ${token}`
         },
     })
-    if (!response.ok) throw new Error(`Failed to delete like from post ${postId}: ${response.status}`);
-    return response.json();
+    return {error: !response.ok}
 }

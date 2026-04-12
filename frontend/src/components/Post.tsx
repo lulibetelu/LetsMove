@@ -1,7 +1,8 @@
 import type { PostType } from '../types/postTypes'
 import { Link } from 'react-router-dom';
-import {CircleUserRound, MessageCircle, ThumbsDown} from 'lucide-react';
+import {CircleUserRound, MessageCircle} from 'lucide-react';
 import Like from "./Like.tsx";
+import Dislike from "./Dislike.tsx";
 export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked } : PostType){
     return (
         <article className="flex w-full flex-col p-4 border border-base-300 hover:bg-base-200/50 transition-colors duration-200 cursor-pointer">
@@ -13,7 +14,7 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
             <hr className="my-2 border-gray-50"/>
             <div className="flex items-center gap-2">
                 <Like postId={id} initialIsLiked={isLiked}/>
-                <button type="button"> <ThumbsDown /> </button>
+                <Dislike postId={id} initialIsDisliked={isDisliked}/>
                 <button type="button"> <MessageCircle /> </button>
             </div>
         </article>
