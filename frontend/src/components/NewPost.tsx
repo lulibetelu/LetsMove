@@ -4,7 +4,7 @@ import {create} from "../api/post.ts";
 import {useState} from "react";
 import {getUsernameFromToken} from "../api/user.ts";
 
-export default function NewPost({ onClose }: { onClose: () => void}){
+export default function NewPost({ onClose, onPostCreated }: { onClose: () => void, onPostCreated: () => void}){
     const [content, setContent] = useState("");
 
     const username = getUsernameFromToken();
@@ -17,6 +17,7 @@ export default function NewPost({ onClose }: { onClose: () => void}){
             const createPost = await create(postCredentials);
             console.log("CREATE POST: " + createPost.message);
             onClose();
+            onPostCreated();
         } catch {
             // setError(true);
         }
@@ -24,7 +25,7 @@ export default function NewPost({ onClose }: { onClose: () => void}){
     };
     return (
         <dialog className="modal modal-open backdrop-blur-sm">
-            <form method="dialog" className="modal-box bg-base-100 p-0 overflow-hidden max-w-lg w-full" onSubmit={handleSubmit}>
+            <form className="modal-box bg-base-100 p-0 overflow-hidden max-w-lg w-full" onSubmit={handleSubmit}>
 
                 <div className="p-4 flex gap-4">
                     <div className="avatar placeholder">

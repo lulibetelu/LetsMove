@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {findAll} from "../api/post.ts";
 import type {PostType} from "../types/postTypes.ts"
 import Post from "../components/Post.tsx"
@@ -13,18 +13,20 @@ export default function Posts() {
     const [cursor, setCursor] = useState<number|undefined>();
     const [createPost, setCreatePost] = useState(false);
 
-    useEffect(() => {
-        async function loadPosts() {
-            try {
-                const findAllTypes: FindAllPostsTypes = await findAll();
-                setPosts(findAllTypes.formattedPosts);
-                setCursor(findAllTypes.newCursor);
-            } catch {
-                //setError(true);
-            }
+    const loadPosts = useCallback(async () => {
+        try {
+            const findAllTypes: FindAllPostsTypes = await findAll();
+            setPosts(findAllTypes.formattedPosts);
+            setCursor(findAllTypes.newCursor);
+        } catch {
+            //setError(true);
         }
+    }, []);
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/exhaustive-state-in-effect
         loadPosts();
-    },[]);
+    },[loadPosts]);
 
     async function loadMorePosts() {
         if (!cursor) return;
@@ -75,7 +77,7 @@ export default function Posts() {
             </div>
 
             <button className="btn btn-neutral fixed bottom-10 right-10 z-50 shadow-2xl btn-circle btn-lg" onClick={()=> setCreatePost(true) }><Plus/></button>
-            {createPost && <NewPost onClose={() => setCreatePost(false)} />}
+            {createPost && <NewPost onClose={() => setCreatePost(false)} onPostCreated={() => loadPosts()} />}
         </div>
     );
 }
