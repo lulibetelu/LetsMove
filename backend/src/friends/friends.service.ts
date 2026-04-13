@@ -7,16 +7,16 @@ import { FriendsRepositoryService } from '../repository/friends/friends.reposito
 export class FriendsService {
   constructor(private friendsRepository: FriendsRepositoryService) {}
 
-  create(userId: number, createFriendDto: CreateFriendDto) {
-    const exitsFriend1 = this.friendsRepository.findUnique(
+  async create(userId: number, createFriendDto: CreateFriendDto) {
+    const exitsFriend1 = await this.friendsRepository.findUnique(
       userId,
       createFriendDto.friendId,
     );
-    const exitsFriend2 = this.friendsRepository.findUnique(
+    const exitsFriend2 = await this.friendsRepository.findUnique(
       createFriendDto.friendId,
       userId,
     );
-    if (exitsFriend1 != null || exitsFriend2 != null) {
+    if (exitsFriend1.length != 0 || exitsFriend2.length != 0) {
       throw new Error('Friendship already exists');
     }
     return this.friendsRepository.create(userId, createFriendDto);
