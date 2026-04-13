@@ -22,21 +22,21 @@ export class FriendsService {
     return this.friendsRepository.create(userId, createFriendDto);
   }
 
-  findAll(userId: number) {
+  async findAll(userId: number) {
     return this.friendsRepository.findAll(userId);
   }
 
-  findOne(userId: number, friendId: number) {
+  async findOne(userId: number, friendId: number) {
     const try1 = this.friendsRepository.findUnique(userId, friendId);
     if (try1 != null) return try1;
     return this.friendsRepository.findUnique(friendId, userId);
   }
 
-  update(userId: number, updateFriendDto: UpdateFriendDto) {
+  async update(userId: number, updateFriendDto: UpdateFriendDto) {
     return this.friendsRepository.update(userId, updateFriendDto);
   }
 
-  remove(userId: number, friendId: number) {
+  async remove(userId: number, friendId: number) {
     return this.friendsRepository.remove(userId, friendId);
   }
 }
