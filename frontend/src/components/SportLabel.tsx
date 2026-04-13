@@ -2,6 +2,7 @@ import {useState} from "react";
 
 interface Props{
     sportName: string
+    onChange?: (sport: string, level: string) => void;
 }
 
 export default function SportLabel(props: Props){
@@ -9,9 +10,9 @@ export default function SportLabel(props: Props){
     const buttonContent: string[] = ["", "Principiante", "Intermedio", "Experto"]
     const [styleIndex, setStyleIndex] = useState(0);
     const handleClick = () => {
-        if (styleIndex === 3) setStyleIndex(0);
-        else setStyleIndex(styleIndex + 1);
-
+        const next = styleIndex === 3 ? 0 : styleIndex + 1;
+        setStyleIndex(next);
+        props.onChange?.(props.sportName, buttonContent[next])
     }
 
     return (

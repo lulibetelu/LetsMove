@@ -1,12 +1,15 @@
-import {useNavigate} from "react-router-dom";
+import {data, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import type {sport} from "../types/sportType.ts";
 import {findAllSports} from "../api/sport.ts";
 import SportLabel from "../components/SportLabel.tsx";
+import type {CreatePreferencesDto} from "backend/dist/src/preferences/dto/create.preferences.dto.ts";
+import {createPreferences} from "../api/preferences.ts";
 
 export default function ChooseInterestsPage(){
     const navigate = useNavigate()
     const [sports, setSports] = useState<sport[]>([]);
+    const [selections, setSelections] = useState<Record<string, string>>({});
 
     useEffect(() => {
         async function loadSports() {
@@ -19,6 +22,21 @@ export default function ChooseInterestsPage(){
         }
         loadSports();
     },[]);
+
+    const handleChange = (sport:string, level:string) => {
+        setSelections(prev => ({...prev, [sport]: level}));
+    }
+
+    const handleSubmit = () => {
+        const selectionsToObjects = Object.entries(selections).map(([sport, level]) => ({
+            sport,
+            level
+        }))
+
+        const dataRequest: CreatePreferencesDto = {sports: selectionsToObjects}
+        createPreferences(dataRequest);
+        navigate("/posts");
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-base-200">
@@ -35,12 +53,12 @@ export default function ChooseInterestsPage(){
 
                 <div className="grid grid-cols-3 gap-3">
                     {sports.map(sport => (
-                        <SportLabel key={sport.id} sportName={sport.name}/>
+                        <SportLabel key={sport.id} sportName={sport.name} onChange={handleChange}/>
 
                     ))}
                 </div>
 
-                <button className="btn btn-primary">
+                <button className="btn btn-primary" onClick={handleSubmit}>
                     Continue
                 </button>
 
