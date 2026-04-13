@@ -42,7 +42,7 @@ export class FriendsController {
     return this.friendsService.findOne(userId, friendId);
   }
 
-  @Patch(':id')
+  @Patch()
   @UseGuards(AuthGuard)
   // aceptas o rechazas solicitud
   update(@Req() req: Request, @Body() updateFriendDto: UpdateFriendDto) {
