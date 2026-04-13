@@ -1,5 +1,5 @@
 import {Image, CircleUserRound} from 'lucide-react';
-import type {NewPostCredential} from "../types/postTypes.ts";
+import type {NewPostCredentials} from "../types/postTypes.ts";
 import {create} from "../api/post.ts";
 import {useState} from "react";
 import {getUsernameFromToken} from "../api/user.ts";
@@ -13,7 +13,7 @@ export default function NewPost({ onClose, onPostCreated }: { onClose: () => voi
         //Prevents the page from reloading on submit
         event.preventDefault();
         try {
-            const postCredentials: NewPostCredential = {content};
+            const postCredentials: NewPostCredentials = {content};
             const createPost = await create(postCredentials);
             console.log("CREATE POST:", createPost);
             onClose();
