@@ -1,6 +1,8 @@
+import type {NewPostCredential} from "../types/postTypes.ts";
+
 const url = import.meta.env.VITE_API_URL;
 
-export async function create(content: string){
+export async function create(postCredentials: NewPostCredential){
     const token = localStorage.getItem('token');
     const response = await fetch(url + 'posts' , {
         method: 'POST',
@@ -8,7 +10,7 @@ export async function create(content: string){
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({content})
+        body: JSON.stringify(postCredentials)
     });
     if (!response.ok) throw new Error(`Failed to create post: ${response.status}`);
     return response.json();

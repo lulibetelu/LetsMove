@@ -24,3 +24,13 @@ export async function loginUser(credentials: LoginCredentials){
     const data: LoginResponse =  await response.json();
     return data.access_token;
 }
+
+export function getUsernameFromToken(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    console.log(payload);
+    return payload.username ?? null;
+}
+
