@@ -11,6 +11,7 @@ import { SportsModule } from './sports/sports.module';
 import { LikeModule } from './like/like.module';
 import { DislikeModule } from './dislike/dislike.module';
 import { PostActionValidatorModule } from './post-action-validator/post-action-validator.module';
+import { FriendsModule } from './friends/friends.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { PostActionValidatorModule } from './post-action-validator/post-action-v
     LikeModule,
     DislikeModule,
     PostActionValidatorModule,
+    FriendsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
