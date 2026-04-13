@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { ExportSportDto } from '../../sports/dto/export-sport.dto';
 @Injectable()
 export class SportRepositoryService {
   constructor(private prismaService: PrismaService) {}
@@ -27,7 +28,17 @@ export class SportRepositoryService {
       },
     });
   }
-  async findAll() {
-    return this.prismaService.sport.findMany();
+  findAll() {
+    //return this.prismaService.sport.findMany();
+    //return ['Futbol', 'Tenis', 'Padel', 'Rugby', 'Baloncesto', 'Voley'];
+    const sports: ExportSportDto[] = [
+      { sportId: 1, name: 'Futbol' },
+      { sportId: 2, name: 'Basquetbol' },
+      { sportId: 3, name: 'Tenis' },
+      { sportId: 4, name: 'Padel' },
+      { sportId: 5, name: 'Rugby' },
+      { sportId: 6, name: 'Voley' },
+    ];
+    return sports;
   }
 }

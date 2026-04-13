@@ -4,7 +4,7 @@ import { SportRepositoryService } from '../repository/sport/sport.repository.ser
 @Injectable()
 export class SportsService {
   constructor(private sportsRepository: SportRepositoryService) {}
-  async getSports() {
-    return this.sportsRepository.findAll();
+  getSports() {
+    return { sports: this.sportsRepository.findAll() };
   }
 }
