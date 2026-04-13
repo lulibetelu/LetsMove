@@ -20,7 +20,6 @@ export class LoginService {
       email: user.email,
       username: user.username,
     };
-    console.log(payload);
 
     // payload + secret key = token
     // luego el cliente recibe el token, lo guarda y lo manda al header
