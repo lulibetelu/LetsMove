@@ -73,6 +73,7 @@ export default function Posts() {
                                 </div>
                                 <input
                                     type="text"
+                                    aria-label="Search posts"
                                     placeholder="search"
                                     className="input input-bordered w-full rounded-full pl-12 h-10 bg-base-200/50 focus:bg-base-100 transition-colors"
                                 />
