@@ -1,8 +1,8 @@
-import type {NewPostCredential} from "../types/postTypes.ts";
+import type {NewPostCredentials} from "../types/postTypes.ts";
 
 const url = import.meta.env.VITE_API_URL;
 
-export async function create(postCredentials: NewPostCredential){
+export async function create(postCredentials: NewPostCredentials){
     const token = localStorage.getItem('token');
     const response = await fetch(url + 'posts' , {
         method: 'POST',
