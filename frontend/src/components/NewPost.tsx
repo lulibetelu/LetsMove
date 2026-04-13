@@ -15,7 +15,7 @@ export default function NewPost({ onClose, onPostCreated }: { onClose: () => voi
         try {
             const postCredentials: NewPostCredential = {content};
             const createPost = await create(postCredentials);
-            console.log("CREATE POST: " + createPost.message);
+            console.log("CREATE POST:", createPost);
             onClose();
             onPostCreated();
         } catch {
@@ -38,15 +38,15 @@ export default function NewPost({ onClose, onPostCreated }: { onClose: () => voi
                     </div>
                 </div>
 
-                <input
+                <textarea
                     name="content"
-                    type="text"
+                    aria-label="Post content"
                     className="textarea textarea-ghost w-full text-lg resize-none focus:outline-none focus:bg-transparent"
                     placeholder="What do you want to talk about?"
                     onChange ={(e) => {
                         setContent(e.target.value)
                     }}
-                ></input>
+                ></textarea>
 
                 <div className="flex justify-between items-center w-full p-3 border-t border-base-200 bg-base-50">
 

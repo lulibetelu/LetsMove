@@ -76,7 +76,7 @@ export default function Posts() {
                 )}
             </div>
 
-            <button className="btn btn-neutral fixed bottom-10 right-10 z-50 shadow-2xl btn-circle btn-lg" onClick={()=> setCreatePost(true) }><Plus/></button>
+            <button aria-label="Create post" className="btn btn-neutral fixed bottom-10 right-10 z-50 shadow-2xl btn-circle btn-lg" onClick={()=> setCreatePost(true) }><Plus/></button>
             {createPost && <NewPost onClose={() => setCreatePost(false)} onPostCreated={() => loadPosts()} />}
         </div>
     );
