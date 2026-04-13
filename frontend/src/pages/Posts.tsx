@@ -62,11 +62,11 @@ export default function Posts() {
     }, [cursor, posts]);
 
     return(
-        <div className="min-h-screen bg-base-100 flex">
+        <div className="min-h-screen bg-base-100 flex px-5 py-4">
             <Sidebar onPostCreated={() => loadPosts()} />
                 <main className="flex-1 ml-20 flex justify-center">
                     <div className="w-full max-w-2xl border-x border-base-300 min-h-screen relative pb-24">
-                        <header className="sticky top-0 z-40 bg-base-100/90 backdrop-blur-md px-4 py-4 flex justify-center border-b border-base-300">
+                        <header className="sticky top-0 z-40 bg-base-100/90 backdrop-blur-md px-4 py-5 flex justify-center border-b border-base-300">
                             <div className="w-full max-w-md relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                     <Search size={18} className="text-base-content/50" />

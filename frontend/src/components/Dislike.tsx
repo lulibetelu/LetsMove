@@ -22,8 +22,14 @@ export default function Dislike(props: Props){
         if (!actionValidatorResponse.error) setDislike(!isDisliked);
     }
     return (
-        <button type="button" className="cursor-pointer" onClick={handleClick}>
-            {isDisliked? <ThumbsDown fill="#605dff" color="#605dff" /> : <ThumbsDown/>}
+        <button
+            type="button"
+            className={`flex cursor-pointer items-center gap-1 transition-colors hover:text-primary ${isDisliked ? 'text-primary' : 'text-base-content/70'}`}
+            aria-label={isDisliked ? "Quitar no me gusta" : "No me gusta"} onClick={handleClick}>
+            <ThumbsDown
+                size={20}
+                strokeWidth={1.5}
+                fill={isDisliked ? "currentColor" : "none"} />
         </button>
     )
 }

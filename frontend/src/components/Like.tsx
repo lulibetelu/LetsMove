@@ -6,7 +6,11 @@ import type {ActionValidatorResponse} from "../types/actionValidatorResponse.ts"
 export default function Like({postId, initialIsLiked} : {postId: number, initialIsLiked: boolean}){
     const [isLiked, setLike] = useState(initialIsLiked);
     return(
-        <button type="button" className="cursor-pointer" onClick={async () => {
+        <button
+            type="button"
+            className={`flex cursor-pointer items-center gap-1 transition-colors hover:text-primary ${isLiked ? 'text-primary' : 'text-base-content/70'}`}
+            aria-label={isLiked ? "Quitar me gusta" : "Me gusta"}
+            onClick={async () => {
             try {
                 let actionValidatorResponse: ActionValidatorResponse;
                 if (!isLiked){
@@ -15,13 +19,16 @@ export default function Like({postId, initialIsLiked} : {postId: number, initial
                 }else {
                      actionValidatorResponse = await  removeLike(postId);
                 }
-
                 if (!actionValidatorResponse.error) setLike(!isLiked);
             } catch (error) {
                 console.error("Failed to update like status", error);
             }
         }}>
-            {isLiked? <ThumbsUp fill="#605dff" color="#605dff" /> : <ThumbsUp />}
+            <ThumbsUp
+                size={20}
+                strokeWidth={1.5}
+                fill={isLiked ? "currentColor" : "none"}
+            />
         </button>
     )
 }
