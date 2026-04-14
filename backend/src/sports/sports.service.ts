@@ -5,6 +5,6 @@ import { SportRepositoryService } from '../repository/sport/sport.repository.ser
 export class SportsService {
   constructor(private sportsRepository: SportRepositoryService) {}
   async getSports() {
-    return this.sportsRepository.findAll();
+    return { sports: await this.sportsRepository.findAll() };
   }
 }
