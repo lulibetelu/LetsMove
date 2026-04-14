@@ -7,7 +7,7 @@ interface Props{
 
 export default function SportLabel(props: Props){
     const buttonStyle:string[] = ["btn btn-outline", "btn btn-outline bg-green-500","btn btn-outline bg-green-600", "btn btn-outline bg-green-800" ];
-    const buttonContent: string[] = ["", "Principiante", "Intermedio", "Experto"]
+    const buttonContent: string[] = ["", "beginner", "intermediate", "expert"]
     const [styleIndex, setStyleIndex] = useState(0);
     const handleClick = () => {
         const next = styleIndex === 3 ? 0 : styleIndex + 1;
