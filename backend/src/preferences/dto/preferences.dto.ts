@@ -6,7 +6,7 @@ export class SportPreferenceDto {
   @IsDefined()
   sport: string;
 
-  @IsIn(['Principiante', 'Intermedio', 'Experto'])
+  @IsIn(['beginner', 'intermiediate', 'expert'])
   @IsString()
   @IsNotEmpty()
   @IsDefined()
