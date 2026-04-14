@@ -1,4 +1,4 @@
 export class ExportSportDto {
-  sportId: number;
+  id: number;
   name: string;
 }
