@@ -1,4 +1,4 @@
-import {data, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import type {sport} from "../types/sportType.ts";
 import {findAllSports} from "../api/sport.ts";
