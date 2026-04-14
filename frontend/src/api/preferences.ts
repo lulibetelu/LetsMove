@@ -1,4 +1,4 @@
-import type {CreatePreferencesDto} from "backend/dist/src/preferences/dto/create.preferences.dto.ts";
+import type {CreatePreferencesDto} from "backend/src/preferences/dto/create.preferences.dto.ts";
 const url = import.meta.env.VITE_API_URL;
 
 export async function createPreferences(createPreferencesDto: CreatePreferencesDto){
