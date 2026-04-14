@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import type {sport} from "../types/sportType.ts";
 import {findAllSports} from "../api/sport.ts";
 import SportLabel from "../components/SportLabel.tsx";
-import type {CreatePreferencesDto} from "backend/dist/src/preferences/dto/create.preferences.dto.ts";
+import type {CreatePreferencesDto} from "backend/src/preferences/dto/create.preferences.dto.ts";
 import {createPreferences} from "../api/preferences.ts";
 
 export default function ChooseInterestsPage(){
