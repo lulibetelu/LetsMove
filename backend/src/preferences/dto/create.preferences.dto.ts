@@ -1,5 +1,5 @@
 import { SportPreferenceDto } from './preferences.dto';
-import { ValidateNested } from 'class-validator';
+import { ArrayMinSize, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreatePreferencesDto {
@@ -7,5 +7,7 @@ export class CreatePreferencesDto {
   @ValidateNested({ each: true })
   //Makes an instance out of each object inside the array.
   @Type(() => SportPreferenceDto)
+  @IsArray()
+  @ArrayMinSize(2)
   sports: SportPreferenceDto[];
 }
