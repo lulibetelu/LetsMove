@@ -1,9 +1,28 @@
 import { Home, CalendarDays, Users, User, Settings, Plus } from 'lucide-react';
-import {useState} from "react";
+import {useCallback, useState} from "react";
 import NewPost from "./NewPost.tsx";
+import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
+import {findAll} from "../api/post.ts";
+import type {PostType} from "../types/postTypes.ts";
 
-export default function Sidebar({onPostCreated} : {onPostCreated: () => void}) {
+export default function Sidebar() {
     const [createPost, setCreatePost] = useState(false);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [posts, setPosts] = useState<PostType[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [cursor, setCursor] = useState<number|undefined>();
+
+    const loadPosts = useCallback(async () => {
+        try {
+            const findAllTypes: FindAllPostsTypes = await findAll();
+            setPosts(findAllTypes.formattedPosts);
+            setCursor(findAllTypes.newCursor);
+        } catch {
+            //setError(true);
+        }
+    }, []);
+
     return (
         <aside className="fixed left-0 top-0 h-screen w-20 border-r border-base-300 bg-base-100 flex flex-col items-center py-6 z-50">
             <nav className="flex flex-col gap-6 flex-1 mt-4">
@@ -36,7 +55,7 @@ export default function Sidebar({onPostCreated} : {onPostCreated: () => void}) {
                     onClick={()=> setCreatePost(true) }>
                     <Plus/>
                 </button>
-                {createPost && <NewPost onClose={() => setCreatePost(false)} onPostCreated={onPostCreated} />}
+                {createPost && <NewPost onClose={() => setCreatePost(false)} onPostCreated={loadPosts} />}
             </div>
         </aside>
     );
