@@ -24,7 +24,14 @@ export default function ChooseInterestsPage(){
     },[]);
 
     const handleChange = (sport:string, level:string) => {
-        setSelections(prev => ({...prev, [sport]: level}));
+        setSelections(prev => {
+            if (level === ""){
+
+                const {[sport]: _removed, ...rest} = prev;
+                return rest;
+            }
+            return {...prev, [sport]: level}
+    });
     }
 
     const handleSubmit = () => {
@@ -34,6 +41,7 @@ export default function ChooseInterestsPage(){
         }))
 
         const dataRequest: CreatePreferencesDto = {sports: selectionsToObjects}
+        console.log(dataRequest);
         createPreferences(dataRequest);
         navigate("/posts");
     }
