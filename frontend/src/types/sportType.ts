@@ -1,4 +1,4 @@
-export interface sport{
+export interface Sport{
     id: number
     name: string
 }
