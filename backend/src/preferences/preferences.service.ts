@@ -5,6 +5,7 @@ import { SportRepositoryService } from '../repository/sport/sport.repository.ser
 import { DeletePreferencesDto } from './dto/delete.preferences.dto';
 import { PreferenceRepositoryService } from '../repository/preference/preference.repository.service';
 import { ModifyPreferenceDto } from './dto/modify.preference.dto';
+import { PreferenceEntity } from './entity/preference.entity';
 
 @Injectable()
 export class PreferencesService {
@@ -15,15 +16,20 @@ export class PreferencesService {
   ) {}
 
   async create(userId: number, preferencesDto: CreatePreferencesDto) {
-    const sportsFound = await this.sportRepository.findManyByName(
-      preferencesDto.sports,
+    const preferencesSportList: string[] = preferencesDto.sports.map(
+      (preference) => preference.sport,
     );
 
-    const preferences = sportsFound.map((sport) => ({
+    const sportsFound =
+      await this.sportRepository.findManyByName(preferencesSportList);
+
+    const preferences: PreferenceEntity[] = sportsFound.map(({ name, id }) => (
+      {
       // en user prisma no devuelve user = 1, sino user = { id: 1}
       userId: userId,
-      sportId: sport.id,
-      level: preferencesDto.level,
+      sportId: id,
+      level: preferencesDto.sports.find((element) => element.sport === name)!
+        .level,
     }));
 
     //esta funcion es la unica que usa prismaService, probablemente habria que sacarla de aca
