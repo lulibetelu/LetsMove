@@ -50,4 +50,8 @@ export class FriendsService {
   async remove(userId: number, receiver: number) {
     return this.friendsRepository.remove(userId, receiver);
   }
+
+  async findAllRequested(userId: number) {
+    return this.friendsRepository.findAllRequested(userId);
+  }
 }

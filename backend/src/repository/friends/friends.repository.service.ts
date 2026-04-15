@@ -56,4 +56,14 @@ export class FriendsRepositoryService {
       },
     });
   }
+
+  async findAllRequested(userId: number){
+    //Esto esta hecho bajo la logica de que en la campanita solo quiero ver las requests que me mandaron, no las que yo hice
+    return this.prismaService.friends.findMany({
+      where: {
+        receiver: userId,
+        state: 'Requested',
+      },
+    });
+  }
 }

@@ -35,7 +35,7 @@ export class FriendsController {
     return this.friendsService.findAll(userId);
   }
 
-  @Get(':id')
+  @Get('requests/:id')
   @UseGuards(AuthGuard)
   findOne(@Req() req: Request, @Param('id', ParseIntPipe) friendId: number) {
     const userId = req.user.sub;
@@ -50,11 +50,18 @@ export class FriendsController {
     return this.friendsService.update(userId, updateFriendDto);
   }
 
-  @Delete(':id')
+  @Delete('requests/:id')
   @UseGuards(AuthGuard)
   // sos amigo y lo sacas
   remove(@Req() req: Request, @Param('id', ParseIntPipe) friendId: number) {
     const userId = req.user.sub;
     return this.friendsService.remove(userId, friendId);
+  }
+  //tuve que cambiar paths. No se si tienen mucho sentido.
+  @Get('requests')
+  @UseGuards(AuthGuard)
+  findAllRequested(@Req() req: Request) {
+    const userId = req.user.sub;
+    return this.friendsService.findAllRequested(userId);
   }
 }
