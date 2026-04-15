@@ -7,39 +7,38 @@ import { UpdateFriendDto } from '../../friends/dto/update-friend.dto';
 export class FriendsRepositoryService {
   constructor(private prismaService: PrismaService) {}
   async create(userId: number, createFriendDto: CreateFriendDto) {
-    return  this.prismaService.friends.create({
+    return this.prismaService.friends.create({
       data: {
-        userId1: userId,
-        userId2: createFriendDto.friendId,
+        sender: userId,
+        receiver: createFriendDto.receiverId,
         state: 'Requested',
       },
     });
   }
   async findAll(userId: number) {
-    return  this.prismaService.friends.findMany({
+    return this.prismaService.friends.findMany({
       where: {
-        OR: [{ userId1: userId }, { userId2: userId }],
+        receiver: userId,
       },
     });
   }
   // a pesar de que sea un findUnique uso findMany porque cuando creo una amistad me fijo que no exista otra
   // asi que no puede pasar que me devuelva dos tuplas
   async findUnique(userId: number, friendId: number) {
-    return  this.prismaService.friends.findMany({
+    return this.prismaService.friends.findMany({
       where: {
-        OR: [
-          { userId1: userId, userId2: friendId },
-          { userId2: userId, userId1: friendId },
-        ],
+        //Saque el or donde van los IDs al reves. El checkeo del create medio que ya me da tuplas única
+        sender: userId,
+        receiver: friendId,
       },
     });
   }
-  async update(userId: number, updateFriendDto: UpdateFriendDto){
-    return  this.prismaService.friends.updateMany({
+  async update(userId: number, updateFriendDto: UpdateFriendDto) {
+    return this.prismaService.friends.updateMany({
       where: {
         OR: [
-          { userId1: userId, userId2: updateFriendDto.friendId },
-          { userId2: userId, userId1: updateFriendDto.friendId },
+          { sender: userId, receiver: updateFriendDto.friendId },
+          { receiver: userId, sender: updateFriendDto.friendId },
         ],
       },
       data: {
@@ -48,11 +47,11 @@ export class FriendsRepositoryService {
     });
   }
   async remove(userId: number, friendId: number) {
-    return  this.prismaService.friends.deleteMany({
+    return this.prismaService.friends.deleteMany({
       where: {
         OR: [
-          { userId1: userId, userId2: friendId },
-          { userId2: userId, userId1: friendId },
+          { sender: userId, receiver: friendId },
+          { receiver: userId, sender: friendId },
         ],
       },
     });

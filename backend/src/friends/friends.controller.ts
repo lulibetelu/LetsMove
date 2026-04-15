@@ -23,8 +23,8 @@ export class FriendsController {
   @Post()
   @UseGuards(AuthGuard)
   create(@Req() req: Request, @Body() createFriendDto: CreateFriendDto) {
-    const userId = req.user.sub;
-    return this.friendsService.create(userId, createFriendDto);
+    const senderId = req.user.sub;
+    return this.friendsService.create(senderId, createFriendDto);
   }
 
   @Get()
