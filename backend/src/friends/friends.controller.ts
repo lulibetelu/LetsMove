@@ -60,7 +60,7 @@ export class FriendsController {
   //tuve que cambiar paths. No se si tienen mucho sentido.
   @Get('requests')
   @UseGuards(AuthGuard)
-  findAllRequested(@Req() req: Request) {
+  async findAllRequested(@Req() req: Request) {
     const userId = req.user.sub;
     return this.friendsService.findAllRequested(userId);
   }

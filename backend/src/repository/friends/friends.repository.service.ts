@@ -57,13 +57,30 @@ export class FriendsRepositoryService {
     });
   }
 
-  async findAllRequested(userId: number){
+  async findAllRequested(userId: number) {
     //Esto esta hecho bajo la logica de que en la campanita solo quiero ver las requests que me mandaron, no las que yo hice
-    return this.prismaService.friends.findMany({
+    const friendRequests = await this.prismaService.friends.findMany({
       where: {
         receiver: userId,
         state: 'Requested',
       },
     });
+    const senderIds = friendRequests.map(
+      (friendRequest) => friendRequest.sender,
+    );
+
+    const users = await this.prismaService.user.findMany({
+      where: {
+        id: { in: senderIds },
+      },
+      select: { id: true, username: true },
+    });
+
+    const userMap = Object.fromEntries(users.map((u) => [u.id, u.username]));
+
+    return friendRequests.map((friendRequest) => ({
+      ...friendRequest,
+      senderUsername: userMap[friendRequest.sender],
+    }));
   }
 }
