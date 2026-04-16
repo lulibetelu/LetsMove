@@ -3,7 +3,7 @@ import Sidebar from "../components/Sidebar.tsx"
 import Posts from "../components/Posts.tsx";
 
 
-export default function HomePage() {
+export default function Homepage() {
     return(
         <div className="min-h-screen bg-base-100 flex">
             <Sidebar />
@@ -22,7 +22,7 @@ export default function HomePage() {
                                 />
                             </div>
                         </header>
-                        <Posts/>
+                        <Posts userId={null}/>
                     </div>
                 </main>
         </div>

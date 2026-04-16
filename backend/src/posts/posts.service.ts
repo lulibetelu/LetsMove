@@ -41,4 +41,21 @@ export class PostsService {
     if (idUser != userId) throw new UnauthorizedException();
     return this.postsRepository.delete(postId);
   }
+
+  async findPostsFromUser(userId: number, lastPostId?: number) {
+    const posts = await this.postsRepository.findPostsFromUser(
+      userId,
+      lastPostId,
+    );
+    const formattedPosts = posts.map((post) => {
+      const { postsLiked, postsDisliked, ...postData } = post;
+      return new GetPostDto(
+        postData,
+        postsLiked.length === 1,
+        postsDisliked.length === 1,
+      );
+    });
+    const newCursor = formattedPosts[formattedPosts.length - 1]?.id;
+    return { formattedPosts, newCursor };
+  }
 }

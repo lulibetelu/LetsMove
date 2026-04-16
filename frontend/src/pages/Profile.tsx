@@ -1,15 +1,9 @@
 import { MapPin, CalendarDays, Users, Edit3, UserCircle, Activity } from 'lucide-react';
-import Post from "../components/Post.tsx";
-import {useCallback, useEffect, useRef, useState} from "react";
-import type {PostType} from "../types/postTypes.ts";
-import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
-import {findAll} from "../api/post.ts";
-// Asumo que tenés el componente Post.tsx en la misma carpeta o cerca
-// import Post from './Post';
+import Posts from "../components/Posts.tsx";
+import { useParams } from "react-router-dom";
 
 export default function Profile() {
-
-
+    const { id } = useParams();
     // Datos mockeados para que veas el diseño
     const mockFriends = [
         { id: 1, name: "Friend One", location: "Escobar, Buenos Aires" },
@@ -68,19 +62,7 @@ export default function Profile() {
                     <h2 className="text-xl font-bold mb-4 px-4 lg:px-0 flex items-center gap-2">
                         Activity
                     </h2>
-                    {/* Acá iría un map de tus posteos reales. Pongo divs mockeados simulando tus HomePage */}
-                    <div className="flex flex-col">
-                        {posts.map((p) => (
-                            <div key={p.id} className="w-full border-b-2 border-base-content/10 hover:bg-base-200/30 transition-colors">
-                                <Post user={p.user} content={p.content} id={p.id} userId={p.userId} isLiked={p.isLiked} isDisliked={p.isDisliked}/>
-                            </div>
-                        ))}
-                        {cursor && (
-                            <div ref={observerRef} className="h-20 w-full flex items-center justify-center">
-                                <span className="loading loading-spinner loading-md text-primary"></span>
-                            </div>
-                        )}
-                    </div>
+                    <Posts userId={+id!}/>
                 </div>
 
                 {/* Columna Derecha: Amigos y Eventos (Ocupa 1 espacio) */}

@@ -1,32 +1,45 @@
 import {useCallback, useEffect, useRef, useState} from "react";
 import type {PostType} from "../types/postTypes.ts";
 import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
-import {findAll} from "../api/post.ts";
+import {findAll, findPostsFromUser} from "../api/post.ts";
 import Post from "./Post.tsx";
 
-export default function Posts() {
+export default function Posts({userId}: {userId: number|null}) {
     const [posts, setPosts] = useState<PostType[]>([]);
     const [cursor, setCursor] = useState<number|undefined>();
 
     const loadPosts = useCallback(async () => {
         try {
-            const findAllTypes: FindAllPostsTypes = await findAll();
+            let findAllTypes: FindAllPostsTypes;
+            if (userId === null) {
+                 findAllTypes = await findAll();
+            }
+            else {
+                findAllTypes = await findPostsFromUser(userId);
+            }
             setPosts(findAllTypes.formattedPosts);
             setCursor(findAllTypes.newCursor);
         } catch {
             //setError(true);
         }
-    }, []);
+    }, [userId]);
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        loadPosts();
-    },[loadPosts]);
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            loadPosts();
+        }
+    );
 
     async function loadMorePosts() {
         if (!cursor) return;
         try {
-            const response= await findAll(cursor);
+            let response;
+            if (userId === null) {
+                response = await findAll(cursor);
+            }
+            else {
+                response = await findPostsFromUser(userId, cursor);
+            }
             setPosts((prevPosts) => [...prevPosts, ...response.formattedPosts]);
             setCursor(response.newCursor);
         } catch {
@@ -59,7 +72,8 @@ export default function Posts() {
 
     return (
         <div className="flex flex-col">
-            {posts.map((p) => (
+
+            {posts && posts.map((p) => (
                 <div key={p.id} className="w-full border-b-2 border-base-content/10 hover:bg-base-200/30 transition-colors">
                     <Post user={p.user} content={p.content} id={p.id} userId={p.userId} isLiked={p.isLiked} isDisliked={p.isDisliked}/>
                 </div>

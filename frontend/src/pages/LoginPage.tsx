@@ -17,7 +17,7 @@ export default function LoginPage(){
         try {
             const token = await loginUser(credentials);
             localStorage.setItem('token', token)
-            navigate("/posts")
+            navigate("/homepage")
         } catch {
             setError(true);
         }

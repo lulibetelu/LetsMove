@@ -8,7 +8,7 @@ import RegisterPage from "./pages/RegisterPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import ChooseInterestsPage from "./pages/ChooseInterestsPage.tsx";
 import TestPage from "./pages/TestPage.tsx";
-import HomePage from "./pages/HomePage.tsx";
+import Homepage from './pages/Homepage.tsx';
 import Profile from "./pages/Profile.tsx";
 
 //define a partir de donde le pegué en la URL qué componente va a renderizar react
@@ -30,11 +30,11 @@ const router = createBrowserRouter([
         element: <TestPage/>
     },
     {
-        path: "/homePage",
-        element: <HomePage/>
+        path: "/homepage",
+        element: <Homepage/>
     },
     {
-        path: "/profile",
+        path: "/profile/:id",
         element: <Profile/>
     }
 ]);

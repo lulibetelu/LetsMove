@@ -8,7 +8,7 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
         <article className="flex w-full flex-col px-5 py-4">
             <div className="flex items-center gap-3 mb-2">
                 <div className="text-base-content/70 flex items-center"><CircleUserRound size={20} strokeWidth={1.5} /></div>
-                <div> <Link to={`/user/${userId}`} className="font-semibold hover:underline" >{username}</Link> </div>
+                <div> <Link to={`/profile/${userId}`} className="font-semibold hover:underline" >{username}</Link> </div>
             </div>
             <div className="mb-3">
                 <p className="break-words whitespace-pre-wrap text-base-content/90">
