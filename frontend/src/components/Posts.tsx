@@ -24,20 +24,18 @@ export default function Posts({userId}: {userId: number|null}) {
         }
     }, [userId]);
 
-    useEffect(() => {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            loadPosts();
-        }
-    );
 
-    async function loadMorePosts() {
+    useEffect(() => {
+        loadPosts().then();
+    }, [loadPosts]);
+
+    const loadMorePosts = useCallback(async () => {
         if (!cursor) return;
         try {
             let response;
             if (userId === null) {
                 response = await findAll(cursor);
-            }
-            else {
+            } else {
                 response = await findPostsFromUser(userId, cursor);
             }
             setPosts((prevPosts) => [...prevPosts, ...response.formattedPosts]);
@@ -45,7 +43,7 @@ export default function Posts({userId}: {userId: number|null}) {
         } catch {
             //set error
         }
-    }
+    }, [cursor, userId]);
 
     const observerRef = useRef<HTMLDivElement>(null);
 
@@ -64,11 +62,9 @@ export default function Posts({userId}: {userId: number|null}) {
         }
 
         return () => {
-            if (observerRef.current) {
-                observer.unobserve(observerRef.current);
-            }
+            observer.disconnect();
         };
-    }, [cursor, posts]);
+    }, [cursor, loadMorePosts]);
 
     return (
         <div className="flex flex-col">
