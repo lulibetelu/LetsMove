@@ -27,9 +27,10 @@ export class FriendsRepositoryService {
   async findUnique(userId: number, friendId: number) {
     return this.prismaService.friends.findMany({
       where: {
-        //Saque el or donde van los IDs al reves. El checkeo del create medio que ya me da tuplas única
-        sender: userId,
-        receiver: friendId,
+        OR: [
+          { sender: userId, receiver: friendId },
+          { receiver: userId, sender: friendId },
+        ],
       },
     });
   }
