@@ -1,7 +1,7 @@
 import {MapPin, CalendarDays, Users, Edit3, UserCircle, Activity, UserPlus, Hourglass, X} from 'lucide-react';
 import Posts from "../components/Posts.tsx";
 import { useParams } from "react-router-dom";
-import {UseUsername} from "../components/UseUsername.tsx";
+import {useUsername} from "../hooks/UseUsername.tsx";
 import {useCallback, useEffect, useState} from "react";
 import type {PostType} from "../types/postTypes.ts";
 import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
@@ -11,7 +11,7 @@ import type { Friend } from '../types/userTypes.ts';
 
 export default function Profile() {
     const { id } = useParams();
-    const { username, loading } = UseUsername(+id!);
+    const { username, loading } = useUsername(+id!);
 
     const [posts, setPosts] = useState<PostType[]>([]);
     const [cursor, setCursor] = useState<number | undefined>();

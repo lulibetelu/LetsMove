@@ -2,13 +2,13 @@ import {Image, CircleUserRound} from 'lucide-react';
 import type {NewPostCredentials} from "../types/postTypes.ts";
 import {create} from "../api/post.ts";
 import {useState} from "react";
-import {UseUsername} from "./UseUsername.tsx";
+import {useUsername} from "../hooks/UseUsername.tsx";
 
 
 export default function NewPost({ onClose, onPostCreated }: { onClose: () => void, onPostCreated: () => void}){
     const [content, setContent] = useState("");
 
-    const { username, loading } = UseUsername();
+    const { username, loading } = useUsername();
 
     const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
