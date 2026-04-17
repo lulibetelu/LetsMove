@@ -13,10 +13,13 @@ export class FriendsService {
       senderId,
       createFriendDto.receiverId,
     );
-    if (exitsFriendship.length != 0) {
+    if (exitsFriendship.length === 1) {
       throw new BadRequestException('Friendship already exists');
+    } else if (exitsFriendship.length === 0) {
+      return this.friendsRepository.create(senderId, createFriendDto);
+    } else {
+      throw new Error();
     }
-    return this.friendsRepository.create(senderId, createFriendDto);
   }
 
   async findAll(userId: number) {
