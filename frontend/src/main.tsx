@@ -50,6 +50,10 @@ const router = createBrowserRouter([
     {
         path: "/error",
         element: <ErrorPage/>
+    },
+    {
+        path: "*",
+        element: <Navigate to="/error" replace />
     }
 ]);
 //Estoy muy cansado como para pensar como verificar que ese logeado.
