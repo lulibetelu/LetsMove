@@ -9,15 +9,11 @@ export class FriendsService {
 
   async create(senderId: number, createFriendDto: CreateFriendDto) {
     //Con el OR de la query en repository, los dos ifs te traian cosas
-    const exitsFriend1 = await this.friendsRepository.findUnique(
+    const exitsFriendship = await this.friendsRepository.findUnique(
       senderId,
       createFriendDto.receiverId,
     );
-    const exitsFriend2 = await this.friendsRepository.findUnique(
-      createFriendDto.receiverId,
-      senderId,
-    );
-    if (exitsFriend1.length != 0 || exitsFriend2.length != 0) {
+    if (exitsFriendship.length != 0) {
       throw new BadRequestException('Friendship already exists');
     }
     return this.friendsRepository.create(senderId, createFriendDto);
