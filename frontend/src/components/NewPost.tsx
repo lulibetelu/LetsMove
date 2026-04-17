@@ -11,7 +11,6 @@ export default function NewPost({ onClose, onPostCreated }: { onClose: () => voi
     const { username, loading } = UseUsername();
 
     const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
-        //Prevents the page from reloading on submit
         event.preventDefault();
         try {
             const postCredentials: NewPostCredentials = {content};

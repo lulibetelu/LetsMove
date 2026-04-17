@@ -1,4 +1,4 @@
-import {MapPin, CalendarDays, Users, Edit3, UserCircle, Activity, UserPlus} from 'lucide-react';
+import {MapPin, CalendarDays, Users, Edit3, UserCircle, Activity, UserPlus, Hourglass, X} from 'lucide-react';
 import Posts from "../components/Posts.tsx";
 import { useParams } from "react-router-dom";
 import {UseUsername} from "../components/UseUsername.ts";
@@ -6,6 +6,7 @@ import {useCallback, useState} from "react";
 import type {PostType} from "../types/postTypes.ts";
 import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
 import {findPostsFromUser} from "../api/post.ts";
+import {createFriendRequest, removeFriend} from "../api/friend.ts";
 
 export default function Profile() {
     const { id } = useParams();
@@ -13,6 +14,8 @@ export default function Profile() {
 
     const [posts, setPosts] = useState<PostType[]>([]);
     const [cursor, setCursor] = useState<number | undefined>();
+
+    const [friendAdded, setFriendAdded] = useState<boolean>(false);
 
     const loadPosts = useCallback(async () => {
         try {
@@ -23,6 +26,16 @@ export default function Profile() {
             //setError(true);
         }
     }, [id]);
+
+    const handleClick = async () => {
+        if (friendAdded) {
+            await removeFriend(+id!);      // era amigo → remover
+        } else {
+            await createFriendRequest(+id!); // no era amigo → agregar
+        }
+        setFriendAdded(!friendAdded);
+    }
+
 
     // Datos mockeados para que veas el diseño
     const mockFriends = [
@@ -35,10 +48,8 @@ export default function Profile() {
         // Contenedor principal sin bordes laterales, usando el max-width para que no se estire infinito en monitores gigantes
         <div className="w-full max-w-5xl mx-auto text-base-content pb-10">
 
-            {/* 1. Header del Perfil */}
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6 p-6 md:p-8 border-b-8 border-base-200">
 
-                {/* Avatar con anillo verde oliva */}
                 <div className="avatar">
                     <div className="w-24 md:w-32 rounded-full ring ring-[#8A9A5B] ring-offset-base-100 ring-offset-4">
                         {/* Si tenés imagen usás <img />, por ahora va un ícono gigante */}
@@ -48,14 +59,36 @@ export default function Profile() {
                     </div>
                 </div>
 
-                {/* Info del usuario */}
                 <div className="flex-1 space-y-3 mt-2 md:mt-0">
                     <div className="flex items-center gap-4">
+
+                        {/*username*/}
                         <h1 className="text-3xl font-bold">{loading? 'loading' : username}</h1>
+
+                        {/*botones de amistad y edicion*/}
                         <div className="flex items-center gap-2">
-                            <button className="btn btn-xs bg-[#8A9A5B] hover:bg-[#728249] text-base-100 border-none transition-colors">
-                                <UserPlus size={16} className="mr-1" /> Add Friend
-                            </button>
+                            {friendAdded ? (
+                                <button
+                                    className="btn btn-xs btn-outline border-base-content/30 text-base-content/70 group hover:bg-error hover:border-error hover:text-white transition-all w-25"
+                                    onClick={handleClick}
+                                >
+                                    <span className="flex items-center group-hover:hidden">
+                                        <Hourglass size={16} className="mr-1" /> Pending
+                                    </span>
+
+                                    {/* Estado Cancel: oculto por defecto, se muestra al hacer hover */}
+                                    <span className="hidden items-center group-hover:flex">
+                                        <X size={16} className="mr-1" /> Cancel
+                                    </span>
+                                </button>
+                            ) : (
+                                <button
+                                    className="btn btn-xs bg-[#8A9A5B] hover:bg-[#728249] text-base-100 border-[#8A9A5B] hover:border-[#728249] transition-all w-25"
+                                    onClick={handleClick}
+                                >
+                                    <UserPlus size={16} className="mr-1" /> Add Friend
+                                </button>
+                            )}
                             <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors">
                                 <Edit3 size={14} className="mr-1" /> edit profile
                             </button>
