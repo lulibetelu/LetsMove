@@ -28,8 +28,8 @@ export class FriendsService {
   }
 
   async findOne(sender: number, receiver: number) {
-    const try1 = this.friendsRepository.findUnique(sender, receiver);
-    if (try1 != null) return try1;
+    const try1 = await this.friendsRepository.findUnique(sender, receiver);
+    if (try1.length > 0) return try1;
     return this.friendsRepository.findUnique(receiver, sender);
   }
 

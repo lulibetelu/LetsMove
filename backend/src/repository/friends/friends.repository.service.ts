@@ -18,7 +18,7 @@ export class FriendsRepositoryService {
   async findAll(userId: number) {
     return this.prismaService.friends.findMany({
       where: {
-        receiver: userId,
+        OR: [{ sender: userId }, { receiver: userId }],
       },
     });
   }
