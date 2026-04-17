@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
-    createBrowserRouter,
+    createBrowserRouter, Navigate,
     RouterProvider
 } from 'react-router-dom';
 import RegisterPage from "./pages/RegisterPage.tsx";
@@ -9,9 +9,14 @@ import LoginPage from "./pages/LoginPage.tsx";
 import ChooseInterestsPage from "./pages/ChooseInterestsPage.tsx";
 import TestPage from "./pages/TestPage.tsx";
 import Posts from "./pages/Posts.tsx";
+import NotificationsPage from "./pages/NotificationsPage.tsx";
 
 //define a partir de donde le pegué en la URL qué componente va a renderizar react
 const router = createBrowserRouter([
+    {
+      path: "/",
+      element: isLoggedIn() ? <Navigate to={"/posts"}/> : <Navigate to={"/login"}/>,
+    },
     {
         path: "/register",
         element: <RegisterPage/>,
@@ -30,9 +35,22 @@ const router = createBrowserRouter([
     },
     {
         path: "/posts",
-        element: <Posts/>
+        element: <Posts/>,
+    },
+    {
+        path: "/notifications",
+        element: <NotificationsPage></NotificationsPage>
     }
 ]);
+//Estoy muy cansado como para pensar como verificar que ese logeado.
+function isLoggedIn(): boolean {
+    try {
+        const token = localStorage.getItem('token');
+        return token !== null && token.trim() !== '';
+    } catch {
+        return false;
+    }
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
