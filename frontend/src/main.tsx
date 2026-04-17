@@ -44,10 +44,12 @@ const router = createBrowserRouter([
 ]);
 //Estoy muy cansado como para pensar como verificar que ese logeado.
 function isLoggedIn(): boolean {
-    /*const token = localStorage.getItem('token');
-    console.log(token);
-    return token !== null;*/
-    return false;
+    try {
+        const token = localStorage.getItem('token');
+        return token !== null && token.trim() !== '';
+    } catch {
+        return false;
+    }
 }
 
 createRoot(document.getElementById('root')!).render(

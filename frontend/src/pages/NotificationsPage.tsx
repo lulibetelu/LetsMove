@@ -31,8 +31,6 @@ export default function NotificationsPage(){
         return rejectFriendRequest(senderId);
     }
 
-    console.log(friendRequests);
-
     if (loading) return <span className="font-bold text-[#6B8E23]">Loading...</span>
 
     return (
