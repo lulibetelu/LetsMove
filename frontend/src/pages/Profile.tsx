@@ -1,7 +1,7 @@
 import {MapPin, CalendarDays, Users, Edit3, UserCircle, Activity, UserPlus, Hourglass, X} from 'lucide-react';
 import Posts from "../components/Posts.tsx";
 import { useParams } from "react-router-dom";
-import {UseUsername} from "../components/UseUsername.ts";
+import {UseUsername} from "../components/UseUsername.tsx";
 import {useCallback, useEffect, useState} from "react";
 import type {PostType} from "../types/postTypes.ts";
 import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
@@ -15,7 +15,6 @@ export default function Profile() {
 
     const [posts, setPosts] = useState<PostType[]>([]);
     const [cursor, setCursor] = useState<number | undefined>();
-
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
 
@@ -27,9 +26,11 @@ export default function Profile() {
             .then((data: Friend[]) => {
                 // some recorre el array data y devuelve true si algun elemento es true
                 const hasRequested: boolean = data.some(f => f.state === 'Requested');
+                console.log("has requested: " + hasRequested);
                 setFriendReq(hasRequested);
 
                 const isFriend: boolean = data.some(f => f.state === 'Accepted');
+                console.log("is friend: " + isFriend);
                 setFriendAdded(isFriend);
             });
     }, [id]);
@@ -44,13 +45,21 @@ export default function Profile() {
         }
     }, [id]);
 
-    const handleClick = async () => {
+    const handleClickRequest = async () => {
         if (friendReq) {
-            await removeFriend(+id!);      // era amigo → remover
+            const remove = await removeFriend(+id!);      // era amigo → remover
+            console.log("handle click request remove resopnse:" + remove.message);
         } else {
-            await createFriendRequest(+id!); // no era amigo → agregar
+            const create = await createFriendRequest(+id!); // no era amigo → agregar
+            console.log("handle click request create resopnse:" + create.message);
         }
         setFriendReq(!friendReq);
+    }
+    const handleClickFriend = async () => {
+        if (friendAdded) {
+            await removeFriend(+id!);
+            setFriendAdded(false);
+        }
     }
 
 
@@ -84,28 +93,42 @@ export default function Profile() {
 
                         {/*botones de amistad y edicion*/}
                         <div className="flex items-center gap-2">
-                            {friendReq ? (
-                                <button
-                                    className="btn btn-xs btn-outline border-base-content/30 text-base-content/70 group hover:bg-error hover:border-error hover:text-white transition-all w-25"
-                                    onClick={handleClick}
-                                >
-                                    <span className="flex items-center group-hover:hidden">
-                                        <Hourglass size={16} className="mr-1" /> Pending
-                                    </span>
+                            {/*la logica de esto es asi:
+                                    1. somos amigos? si si, el usuario que navega puede eliminar la amistad
+                                                     si no, el usuario no puede hacer que sean amigos, asi que no hace nada
+                                    2. te mande request? si si, se pone en pending y gris y si pasas por arriba te permite cancelar la request
+                                                         si no, el boton esta en verda y aparece Add friend
+                            */}
 
-                                    {/* Estado Cancel: oculto por defecto, se muestra al hacer hover */}
-                                    <span className="hidden items-center group-hover:flex">
-                                        <X size={16} className="mr-1" /> Cancel
-                                    </span>
-                                </button>
-                            ) : (
+                            {friendAdded? (
                                 <button
                                     className="btn btn-xs bg-[#8A9A5B] hover:bg-[#728249] text-base-100 border-[#8A9A5B] hover:border-[#728249] transition-all w-25"
-                                    onClick={handleClick}
+                                    onClick={handleClickFriend}
                                 >
-                                    <UserPlus size={16} className="mr-1" /> Add Friend
+                                    <UserPlus size={16} className="mr-1" /> Friend!
                                 </button>
-                            )}
+                                ) : (friendReq ? (
+                                    <button
+                                        className="btn btn-xs btn-outline border-base-content/30 text-base-content/70 group hover:bg-error hover:border-error hover:text-white transition-all w-25"
+                                        onClick={handleClickRequest}
+                                    >
+                                        <span className="flex items-center group-hover:hidden">
+                                            <Hourglass size={16} className="mr-1" /> Pending
+                                        </span>
+
+                                        {/* Estado Cancel: oculto por defecto, se muestra al hacer hover */}
+                                        <span className="hidden items-center group-hover:flex">
+                                            <X size={16} className="mr-1" /> Cancel
+                                        </span>
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="btn btn-xs bg-[#8A9A5B] hover:bg-[#728249] text-base-100 border-[#8A9A5B] hover:border-[#728249] transition-all w-25"
+                                        onClick={handleClickRequest}
+                                    >
+                                        <UserPlus size={16} className="mr-1" /> Add Friend
+                                    </button>
+                                ))}
                             <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors">
                                 <Edit3 size={14} className="mr-1" /> edit profile
                             </button>

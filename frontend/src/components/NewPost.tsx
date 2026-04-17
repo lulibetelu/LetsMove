@@ -2,7 +2,7 @@ import {Image, CircleUserRound} from 'lucide-react';
 import type {NewPostCredentials} from "../types/postTypes.ts";
 import {create} from "../api/post.ts";
 import {useState} from "react";
-import {UseUsername} from "./UseUsername.ts";
+import {UseUsername} from "./UseUsername.tsx";
 
 
 export default function NewPost({ onClose, onPostCreated }: { onClose: () => void, onPostCreated: () => void}){
