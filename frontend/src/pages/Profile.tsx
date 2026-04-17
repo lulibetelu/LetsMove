@@ -6,7 +6,7 @@ import {useCallback, useEffect, useState} from "react";
 import type {PostType} from "../types/postTypes.ts";
 import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
 import {findPostsFromUser} from "../api/post.ts";
-import {createFriendRequest, removeFriend} from "../api/friend.ts";
+import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend.ts";
 import type { Friend } from '../types/userTypes.ts';
 
 export default function Profile() {
@@ -19,8 +19,7 @@ export default function Profile() {
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
 
     useEffect(() => {
-        fetch(`/api/friendship/${id}`)
-            .then(res => res.json())
+        findUniqueFriend(+id!)
             // data es un array de Friend[] porque como la amistad es bidireccional hay que checkear la relacion
             // user1,user2 y user2,user1 y eso genera algunos quilombos, pero en realidad esto solo devuelve un elemento
             .then((data: Friend[]) => {

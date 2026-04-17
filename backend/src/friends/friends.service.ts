@@ -27,9 +27,7 @@ export class FriendsService {
   }
 
   async findOne(sender: number, receiver: number) {
-    const try1 = await this.friendsRepository.findUnique(sender, receiver);
-    if (try1.length > 0) return try1;
-    return this.friendsRepository.findUnique(receiver, sender);
+    return this.friendsRepository.findUnique(sender, receiver);
   }
 
   async update(userId: number, updateFriendDto: UpdateFriendDto) {

@@ -65,7 +65,7 @@ export async function rejectFriendRequest(friendId: number){
 
 export async function findUniqueFriend(receiverId: number) {
     const token = localStorage.getItem('token');
-    const response = await fetch(url + 'friends/' + receiverId, {
+    const response = await fetch(url + 'friends/requests/' + receiverId, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export async function findUniqueFriend(receiverId: number) {
 
 export async function removeFriend(receiverId: number){
     const token = localStorage.getItem('token');
-    const response = await fetch(url + 'friends/' + receiverId, {
+    const response = await fetch(url + 'friends/requests/' + receiverId, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
