@@ -9,9 +9,9 @@ export async function createFriendRequest(receiverId: number){
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({friendId: receiverId})
+        body: JSON.stringify({receiverId})
     })
-    if (!response.ok) throw new Error();
+    if (!response.ok) throw new Error(`Failed to create request to user ${receiverId}: ${response.status}`);
     return response.json();
 }
 export async function findAllFriendRequests(): Promise<FriendRequestType[]>{
