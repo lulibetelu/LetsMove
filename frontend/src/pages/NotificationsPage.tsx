@@ -34,6 +34,11 @@ export default function NotificationsPage(){
     if (loading) return <span className="font-bold text-[#6B8E23]">Loading...</span>
 
     return (
-        friendRequests.map(friendRequest => <FriendRequest key={friendRequest.id} senderId={friendRequest.sender} username={friendRequest.senderUsername} onChange={handleChange}/>)
+        <div>
+            <h1>Notifications</h1>
+            {friendRequests.map(friendRequest =>
+                <FriendRequest key={friendRequest.id} senderId={friendRequest.sender} username={friendRequest.senderUsername} onChange={handleChange}/>
+            )}
+        </div>
     )
 }

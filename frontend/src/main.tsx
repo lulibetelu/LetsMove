@@ -10,14 +10,13 @@ import ChooseInterestsPage from "./pages/ChooseInterestsPage.tsx";
 import TestPage from "./pages/TestPage.tsx";
 import Homepage from './pages/Homepage.tsx';
 import Profile from "./pages/Profile.tsx";
-import Posts from "./pages/Posts.tsx";
 import NotificationsPage from "./pages/NotificationsPage.tsx";
 
 //define a partir de donde le pegué en la URL qué componente va a renderizar react
 const router = createBrowserRouter([
     {
       path: "/",
-      element: isLoggedIn() ? <Navigate to={"/posts"}/> : <Navigate to={"/login"}/>,
+      element: isLoggedIn() ? <Navigate to={"/homepage"}/> : <Navigate to={"/login"}/>,
     },
     {
         path: "/register",
