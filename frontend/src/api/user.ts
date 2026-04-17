@@ -34,7 +34,7 @@ export async function getUsernameFromId(id?: number): Promise<string | null> {
         return payload.username ?? null;
     }
     else {
-        const response = await fetch(url + '/register/' + id, {
+        const response = await fetch(url + 'register/' + id, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

@@ -36,7 +36,7 @@ export default function NewPost({ onClose, onPostCreated }: { onClose: () => voi
                         </div>
                     </div>
                     <div>
-                        {username}
+                        {loading? 'loading' : username}
                     </div>
                 </div>
 

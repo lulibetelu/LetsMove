@@ -2,10 +2,27 @@ import { MapPin, CalendarDays, Users, Edit3, UserCircle, Activity } from 'lucide
 import Posts from "../components/Posts.tsx";
 import { useParams } from "react-router-dom";
 import {UseUsername} from "../components/UseUsername.ts";
+import {useCallback, useState} from "react";
+import type {PostType} from "../types/postTypes.ts";
+import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
+import {findPostsFromUser} from "../api/post.ts";
 
 export default function Profile() {
     const { id } = useParams();
     const { username, loading } = UseUsername(+id!);
+
+    const [posts, setPosts] = useState<PostType[]>([]);
+    const [cursor, setCursor] = useState<number | undefined>();
+
+    const loadPosts = useCallback(async () => {
+        try {
+            const findAllTypes: FindAllPostsTypes = await findPostsFromUser(+id!);
+            setPosts(findAllTypes.formattedPosts);
+            setCursor(findAllTypes.newCursor);
+        } catch {
+            //setError(true);
+        }
+    }, [id]);
 
     // Datos mockeados para que veas el diseño
     const mockFriends = [
@@ -34,7 +51,7 @@ export default function Profile() {
                 {/* Info del usuario */}
                 <div className="flex-1 space-y-3 mt-2 md:mt-0">
                     <div className="flex items-center gap-4">
-                        <h1 className="text-3xl font-bold">{username}</h1>
+                        <h1 className="text-3xl font-bold">{loading? 'loading' : username}</h1>
                         <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors">
                             <Edit3 size={14} className="mr-1" /> edit profile
                         </button>
@@ -65,7 +82,7 @@ export default function Profile() {
                     <h2 className="text-xl font-bold mb-4 px-4 lg:px-0 flex items-center gap-2">
                         Activity
                     </h2>
-                    <Posts userId={+id!}/>
+                    <Posts userId={+id!} posts={posts} cursor={cursor} loadPosts={loadPosts} setCursor={setCursor} setPosts={setPosts} />
                 </div>
 
                 {/* Columna Derecha: Amigos y Eventos (Ocupa 1 espacio) */}
