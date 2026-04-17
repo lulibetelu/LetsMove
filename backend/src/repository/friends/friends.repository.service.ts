@@ -9,8 +9,8 @@ export class FriendsRepositoryService {
   async create(userId: number, createFriendDto: CreateFriendDto) {
     return this.prismaService.friends.create({
       data: {
-        userId1: userId,
-        userId2: createFriendDto.friendId,
+        sender: userId,
+        receiver: createFriendDto.receiverId,
         state: 'Requested',
       },
     });
@@ -18,7 +18,7 @@ export class FriendsRepositoryService {
   async findAll(userId: number) {
     return this.prismaService.friends.findMany({
       where: {
-        OR: [{ userId1: userId }, { userId2: userId }],
+        OR: [{ sender: userId }, { receiver: userId }],
       },
     });
   }
@@ -28,18 +28,18 @@ export class FriendsRepositoryService {
     return this.prismaService.friends.findMany({
       where: {
         OR: [
-          { userId1: userId, userId2: friendId },
-          { userId2: userId, userId1: friendId },
+          { sender: userId, receiver: friendId },
+          { receiver: userId, sender: friendId },
         ],
       },
     });
   }
-  async update(userId: number, updateFriendDto: UpdateFriendDto){
+  async update(userId: number, updateFriendDto: UpdateFriendDto) {
     return this.prismaService.friends.updateMany({
       where: {
         OR: [
-          { userId1: userId, userId2: updateFriendDto.friendId },
-          { userId2: userId, userId1: updateFriendDto.friendId },
+          { sender: userId, receiver: updateFriendDto.friendId },
+          { receiver: userId, sender: updateFriendDto.friendId },
         ],
       },
       data: {
@@ -48,13 +48,40 @@ export class FriendsRepositoryService {
     });
   }
   async remove(userId: number, friendId: number) {
-    return  this.prismaService.friends.deleteMany({
+    return this.prismaService.friends.deleteMany({
       where: {
         OR: [
-          { userId1: userId, userId2: friendId },
-          { userId2: userId, userId1: friendId },
+          { sender: userId, receiver: friendId },
+          { receiver: userId, sender: friendId },
         ],
       },
     });
+  }
+
+  async findAllRequested(userId: number) {
+    //Esto esta hecho bajo la logica de que en la campanita solo quiero ver las requests que me mandaron, no las que yo hice
+    const friendRequests = await this.prismaService.friends.findMany({
+      where: {
+        receiver: userId,
+        state: 'Requested',
+      },
+    });
+    const senderIds = friendRequests.map(
+      (friendRequest) => friendRequest.sender,
+    );
+
+    const users = await this.prismaService.user.findMany({
+      where: {
+        id: { in: senderIds },
+      },
+      select: { id: true, username: true },
+    });
+
+    const userMap = Object.fromEntries(users.map((u) => [u.id, u.username]));
+
+    return friendRequests.map((friendRequest) => ({
+      ...friendRequest,
+      senderUsername: userMap[friendRequest.sender],
+    }));
   }
 }

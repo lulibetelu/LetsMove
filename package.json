@@ -14,6 +14,7 @@
 
     "dev:backend": "npm run start:dev -w backend",
     "dev:frontend": "npm run dev -w frontend",
-    "dev:all": "npm run dev:backend & npm run dev:frontend"
+    "dev:all": "npm run dev:backend & npm run dev:frontend",
+    "prisma:seed": "npm run prisma:seed -w backend"
   }
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { ExportSportDto } from '../../sports/dto/export-sport.dto';
 @Injectable()
 export class SportRepositoryService {
   constructor(private prismaService: PrismaService) {}
@@ -27,7 +28,7 @@ export class SportRepositoryService {
       },
     });
   }
-  async findAll() {
+  findAll() {
     return this.prismaService.sport.findMany();
   }
 }
