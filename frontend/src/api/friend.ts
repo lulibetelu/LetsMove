@@ -47,6 +47,6 @@ export async function rejectFriendRequest(friendId: number){
         },
         body: JSON.stringify(datos),
     });
-    if (!response.ok) throw new Error('Could not accept friend request.')
+    if (!response.ok) throw new Error(`Could not reject friend request. Status: ${response.status}`)
     return response.json();
 }

@@ -28,10 +28,10 @@ export default function FriendRequest(props: FriendRequestProps) {
 
             {/* Actions */}
             <div className="flex items-center gap-2">
-                <button className="btn btn-ghost btn-circle hover:bg-success/20" onClick={handleAcceptClick}>
+                <button type="button" className="btn btn-ghost btn-circle hover:bg-success/20" onClick={handleAcceptClick}>
                     <Check size={20} className="text-success"/>
                 </button>
-                <button className="btn btn-ghost btn-circle hover:bg-error/20" onClick={handleRejectClick}>
+                <button type="button" className="btn btn-ghost btn-circle hover:bg-error/20" onClick={handleRejectClick}>
                     <X size={20} className="text-error"/>
                 </button>
             </div>
