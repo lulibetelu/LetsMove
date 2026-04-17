@@ -2,7 +2,7 @@ import {useNavigate} from 'react-router-dom'
 import {useState} from "react";
 import {createUser, loginUser} from '../api/user.ts'
 import type {LoginCredentials, RegisterCredentials} from "../types/userTypes.ts";
-import CredentialError from "../components/CredentialError.tsx";
+import PopUpError from "../components/PopUpError.tsx";
 import CustomInput from "../components/CustomInput.tsx";
 
 export default function RegisterPage(){
@@ -63,7 +63,7 @@ export default function RegisterPage(){
                 <button type="submit" className="btn btn-primary mt-2"> Register </button>
 
                 <div>
-                    {errorHasBeenThrown && <CredentialError message='Invalid credentials'/>}
+                    {errorHasBeenThrown && <PopUpError message='Invalid credentials'/>}
                 </div>
 
             </form>

@@ -1,7 +1,4 @@
-import CredentialError from "../components/CredentialError.tsx";
-
-
-
+import PopUpError from "../components/PopUpError.tsx";
 export default function TestPage(){
-    return <CredentialError message='Invalid email or password'/>
+    return <PopUpError message='Invalid email or password'/>
 }

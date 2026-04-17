@@ -5,11 +5,13 @@ import {useCallback, useState} from "react";
 import type {PostType} from "../types/postTypes.ts";
 import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
 import {findAll} from "../api/post.ts";
+import PopUpError from "../components/PopUpError.tsx";
 
 
 export default function Homepage() {
     const [posts, setPosts] = useState<PostType[]>([]);
     const [cursor, setCursor] = useState<number|undefined>();
+    const [error, setError] = useState<boolean>(false);
 
     const loadPosts = useCallback(async () => {
         try {
@@ -17,7 +19,7 @@ export default function Homepage() {
             setPosts(findAllTypes.formattedPosts);
             setCursor(findAllTypes.newCursor);
         } catch {
-            //setError(true);
+            setError(true);
         }
     }, []);
 
@@ -40,6 +42,9 @@ export default function Homepage() {
                             </div>
                         </header>
                         <Posts userId={null} posts={posts} cursor={cursor} loadPosts={loadPosts} setCursor={setCursor} setPosts={setPosts}/>
+                        <div>
+                            {error && <PopUpError message='Failed to load posts, please try again later'/>}
+                        </div>
                     </div>
                 </main>
         </div>

@@ -2,7 +2,7 @@ import {useState} from "react";
 import type {LoginCredentials} from "../types/userTypes.ts";
 import {loginUser} from "../api/user.ts";
 import {Link, useNavigate} from "react-router-dom";
-import CredentialError from "../components/CredentialError.tsx";
+import PopUpError from "../components/PopUpError.tsx";
 import CustomInput from "../components/CustomInput.tsx";
 
 export default function LoginPage(){
@@ -21,8 +21,6 @@ export default function LoginPage(){
         } catch {
             setError(true);
         }
-        //aca seria un redirect a home page no?
-        //navigate("/test");
     }
 
     return (
@@ -53,7 +51,7 @@ export default function LoginPage(){
                 </div>
 
                 <div>
-                    {errorHasBeenThrown && <CredentialError message='Invalid email or password'/>}
+                    {errorHasBeenThrown && <PopUpError message='Invalid email or password'/>}
                 </div>
             </form>
 

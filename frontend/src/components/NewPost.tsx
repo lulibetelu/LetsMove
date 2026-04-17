@@ -3,10 +3,13 @@ import type {NewPostCredentials} from "../types/postTypes.ts";
 import {create} from "../api/post.ts";
 import {useState} from "react";
 import {useUsername} from "../hooks/UseUsername.tsx";
+import PopUpError from "./PopUpError.tsx";
 
 
 export default function NewPost({ onClose, onPostCreated }: { onClose: () => void, onPostCreated: () => void}){
-    const [content, setContent] = useState("");
+    const [content, setContent] = useState<string>("");
+    const [error, setError] = useState<boolean>(false);
+
     const { username, loading } = useUsername();
 
     const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
@@ -18,7 +21,7 @@ export default function NewPost({ onClose, onPostCreated }: { onClose: () => voi
             onClose();
             onPostCreated();
         } catch {
-            // setError(true);
+            setError(true);
         }
 
     };
@@ -64,6 +67,9 @@ export default function NewPost({ onClose, onPostCreated }: { onClose: () => voi
                     >
                         Post
                     </button>
+                </div>
+                <div>
+                    {error && <PopUpError message='Failed to create post'/>}
                 </div>
             </form>
             <form method="dialog" className="modal-backdrop">

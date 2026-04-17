@@ -1,15 +1,18 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import type {sport} from "../types/sportType.ts";
+import type {Sport} from "../types/sportType.ts";
 import {findAllSports} from "../api/sport.ts";
 import SportLabel from "../components/SportLabel.tsx";
 import type {CreatePreferencesDto} from "backend/src/preferences/dto/create.preferences.dto.ts";
 import {createPreferences} from "../api/preferences.ts";
+import PopUpError from "../components/PopUpError.tsx";
 
 export default function ChooseInterestsPage(){
     const navigate = useNavigate()
-    const [sports, setSports] = useState<sport[]>([]);
+
+    const [sports, setSports] = useState<Sport[]>([]);
     const [selections, setSelections] = useState<Record<string, string>>({});
+    const [error, setError] = useState<boolean>(false);
 
     useEffect(() => {
         async function loadSports() {
@@ -17,7 +20,7 @@ export default function ChooseInterestsPage(){
                 const sportsResponse= await findAllSports();
                 setSports(sportsResponse.sports);
             } catch {
-                //setError(true);
+                setError(true);
             }
         }
         loadSports();
@@ -48,6 +51,10 @@ export default function ChooseInterestsPage(){
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-base-200">
+
+            <div>
+                {error && <PopUpError message='Failed to load sports, please try again later'/>}
+            </div>
 
             <div className="card w-[600px] bg-base-100 shadow-xl p-6 flex flex-col gap-6">
 
