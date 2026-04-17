@@ -42,8 +42,13 @@ export class PostsService {
     return this.postsRepository.delete(postId);
   }
 
-  async findPostsFromUser(currentUserId: number, userId: number, lastPostId?: number) {
+  async findPostsFromUser(
+    currentUserId: number,
+    userId: number,
+    lastPostId?: number,
+  ) {
     const posts = await this.postsRepository.findPostsFromUser(
+      currentUserId,
       userId,
       lastPostId,
     );

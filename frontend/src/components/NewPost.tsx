@@ -7,7 +7,6 @@ import {useUsername} from "../hooks/UseUsername.tsx";
 
 export default function NewPost({ onClose, onPostCreated }: { onClose: () => void, onPostCreated: () => void}){
     const [content, setContent] = useState("");
-
     const { username, loading } = useUsername();
 
     const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {

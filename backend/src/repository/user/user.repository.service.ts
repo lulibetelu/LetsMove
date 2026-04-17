@@ -40,6 +40,8 @@ export class UserRepositoryService {
         id: true,
         username: true,
         biography: true,
+        password: true,
+        email: true,
       },
     });
   }

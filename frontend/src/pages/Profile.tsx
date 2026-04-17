@@ -1,6 +1,6 @@
 import {MapPin, CalendarDays, Users, Edit3, UserCircle, Activity, UserPlus, Hourglass, X} from 'lucide-react';
 import Posts from "../components/Posts.tsx";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useUsername} from "../hooks/UseUsername.tsx";
 import {useCallback, useEffect, useState} from "react";
 import type {PostType} from "../types/postTypes.ts";
@@ -10,8 +10,11 @@ import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend
 import type { Friend } from '../types/userTypes.ts';
 
 export default function Profile() {
+    const navigate = useNavigate();
     const { id } = useParams();
-    const { username, loading } = useUsername(+id!);
+    const numericId = Number(id);
+    const isValid = !isNaN(numericId);
+    const { username, loading } = useUsername(numericId);
 
     const [posts, setPosts] = useState<PostType[]>([]);
     const [cursor, setCursor] = useState<number | undefined>();
@@ -19,7 +22,7 @@ export default function Profile() {
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
 
     useEffect(() => {
-        findUniqueFriend(+id!)
+        findUniqueFriend(numericId)
             // data es un array de Friend[] porque como la amistad es bidireccional hay que checkear la relacion
             // user1,user2 y user2,user1 y eso genera algunos quilombos, pero en realidad esto solo devuelve un elemento
             .then((data: Friend[]) => {
@@ -32,31 +35,31 @@ export default function Profile() {
                 console.log("is friend: " + isFriend);
                 setFriendAdded(isFriend);
             });
-    }, [id]);
+    }, [numericId]);
 
     const loadPosts = useCallback(async () => {
         try {
-            const findAllTypes: FindAllPostsTypes = await findPostsFromUser(+id!);
+            const findAllTypes: FindAllPostsTypes = await findPostsFromUser(numericId);
             setPosts(findAllTypes.formattedPosts);
             setCursor(findAllTypes.newCursor);
         } catch {
             //setError(true);
         }
-    }, [id]);
+    }, [numericId]);
 
     const handleClickRequest = async () => {
         if (friendReq) {
-            const remove = await removeFriend(+id!);      // era amigo → remover
+            const remove = await removeFriend(numericId);      // era amigo → remover
             console.log("handle click request remove resopnse:" + remove.message);
         } else {
-            const create = await createFriendRequest(+id!); // no era amigo → agregar
+            const create = await createFriendRequest(numericId); // no era amigo → agregar
             console.log("handle click request create resopnse:" + create.message);
         }
         setFriendReq(!friendReq);
     }
     const handleClickFriend = async () => {
         if (friendAdded) {
-            await removeFriend(+id!);
+            await removeFriend(numericId);
             setFriendAdded(false);
         }
     }
@@ -68,6 +71,16 @@ export default function Profile() {
         { id: 2, name: "Friend Two", location: "Pilar, Buenos Aires" },
         { id: 3, name: "Friend Three", location: "Pilar, Buenos Aires" },
     ];
+
+    if (!isValid) {
+        navigate("/error", {
+            state: {
+                title: "",
+                message: "",
+            }
+        });
+        return null;
+    }
 
     return (
         // Contenedor principal sin bordes laterales, usando el max-width para que no se estire infinito en monitores gigantes
@@ -115,7 +128,6 @@ export default function Profile() {
                                             <Hourglass size={16} className="mr-1" /> Pending
                                         </span>
 
-                                        {/* Estado Cancel: oculto por defecto, se muestra al hacer hover */}
                                         <span className="hidden items-center group-hover:flex">
                                             <X size={16} className="mr-1" /> Cancel
                                         </span>
@@ -159,7 +171,7 @@ export default function Profile() {
                     <h2 className="text-xl font-bold mb-4 px-4 lg:px-0 flex items-center gap-2">
                         Activity
                     </h2>
-                    <Posts userId={+id!} posts={posts} cursor={cursor} loadPosts={loadPosts} setCursor={setCursor} setPosts={setPosts} />
+                    <Posts userId={numericId} posts={posts} cursor={cursor} loadPosts={loadPosts} setCursor={setCursor} setPosts={setPosts} />
                 </div>
 
                 {/* Columna Derecha: Amigos y Eventos (Ocupa 1 espacio) */}
