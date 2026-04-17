@@ -17,3 +17,9 @@ export interface LoginCredentials{
     password: string,
 }
 
+export interface Friend {
+    userId1: number,
+    userId2: number,
+    state: string,
+}
+

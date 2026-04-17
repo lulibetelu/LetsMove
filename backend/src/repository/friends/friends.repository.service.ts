@@ -7,7 +7,7 @@ import { UpdateFriendDto } from '../../friends/dto/update-friend.dto';
 export class FriendsRepositoryService {
   constructor(private prismaService: PrismaService) {}
   async create(userId: number, createFriendDto: CreateFriendDto) {
-    return  this.prismaService.friends.create({
+    return this.prismaService.friends.create({
       data: {
         userId1: userId,
         userId2: createFriendDto.friendId,
@@ -16,7 +16,7 @@ export class FriendsRepositoryService {
     });
   }
   async findAll(userId: number) {
-    return  this.prismaService.friends.findMany({
+    return this.prismaService.friends.findMany({
       where: {
         OR: [{ userId1: userId }, { userId2: userId }],
       },
@@ -25,7 +25,7 @@ export class FriendsRepositoryService {
   // a pesar de que sea un findUnique uso findMany porque cuando creo una amistad me fijo que no exista otra
   // asi que no puede pasar que me devuelva dos tuplas
   async findUnique(userId: number, friendId: number) {
-    return  this.prismaService.friends.findMany({
+    return this.prismaService.friends.findMany({
       where: {
         OR: [
           { userId1: userId, userId2: friendId },
@@ -35,7 +35,7 @@ export class FriendsRepositoryService {
     });
   }
   async update(userId: number, updateFriendDto: UpdateFriendDto){
-    return  this.prismaService.friends.updateMany({
+    return this.prismaService.friends.updateMany({
       where: {
         OR: [
           { userId1: userId, userId2: updateFriendDto.friendId },

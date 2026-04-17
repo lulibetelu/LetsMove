@@ -2,11 +2,12 @@ import {MapPin, CalendarDays, Users, Edit3, UserCircle, Activity, UserPlus, Hour
 import Posts from "../components/Posts.tsx";
 import { useParams } from "react-router-dom";
 import {UseUsername} from "../components/UseUsername.ts";
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import type {PostType} from "../types/postTypes.ts";
 import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
 import {findPostsFromUser} from "../api/post.ts";
 import {createFriendRequest, removeFriend} from "../api/friend.ts";
+import type { Friend } from '../types/userTypes.ts';
 
 export default function Profile() {
     const { id } = useParams();
@@ -15,7 +16,23 @@ export default function Profile() {
     const [posts, setPosts] = useState<PostType[]>([]);
     const [cursor, setCursor] = useState<number | undefined>();
 
+    const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
+
+    useEffect(() => {
+        fetch(`/api/friendship/${id}`)
+            .then(res => res.json())
+            // data es un array de Friend[] porque como la amistad es bidireccional hay que checkear la relacion
+            // user1,user2 y user2,user1 y eso genera algunos quilombos, pero en realidad esto solo devuelve un elemento
+            .then((data: Friend[]) => {
+                // some recorre el array data y devuelve true si algun elemento es true
+                const hasRequested: boolean = data.some(f => f.state === 'Requested');
+                setFriendReq(hasRequested);
+
+                const isFriend: boolean = data.some(f => f.state === 'Accepted');
+                setFriendAdded(isFriend);
+            });
+    }, [id]);
 
     const loadPosts = useCallback(async () => {
         try {
@@ -28,12 +45,12 @@ export default function Profile() {
     }, [id]);
 
     const handleClick = async () => {
-        if (friendAdded) {
+        if (friendReq) {
             await removeFriend(+id!);      // era amigo → remover
         } else {
             await createFriendRequest(+id!); // no era amigo → agregar
         }
-        setFriendAdded(!friendAdded);
+        setFriendReq(!friendReq);
     }
 
 
@@ -67,7 +84,7 @@ export default function Profile() {
 
                         {/*botones de amistad y edicion*/}
                         <div className="flex items-center gap-2">
-                            {friendAdded ? (
+                            {friendReq ? (
                                 <button
                                     className="btn btn-xs btn-outline border-base-content/30 text-base-content/70 group hover:bg-error hover:border-error hover:text-white transition-all w-25"
                                     onClick={handleClick}
