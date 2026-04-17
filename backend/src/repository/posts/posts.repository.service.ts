@@ -61,7 +61,11 @@ export class PostsRepositoryService {
     });
   }
 
-  async findPostsFromUser(userId: number, lastPostId?: number) {
+  async findPostsFromUser(
+    currentUserId: number,
+    userId: number,
+    lastPostId?: number,
+  ) {
     return this.prismaService.post.findMany({
       orderBy: { createdAt: 'desc' },
       // take toma de a 20 posteos, cursor le dice que te traiga 20 posts a partir de un post en particular
@@ -78,11 +82,11 @@ export class PostsRepositoryService {
           },
         },
         postsLiked: {
-          where: { userId: userId },
+          where: { userId: currentUserId },
           select: { id: true },
         },
         postsDisliked: {
-          where: { userId: userId },
+          where: { userId: currentUserId },
           select: { id: true },
         },
       },
