@@ -46,7 +46,7 @@ export class PostsController {
   @Delete(':id')
   remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
     const userId = req.user.sub;
-    return this.postsService.remove(userId, +id);
+    return this.postsService.remove(userId, id);
   }
 
   @UseGuards(AuthGuard)

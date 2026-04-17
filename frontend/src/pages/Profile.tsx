@@ -20,6 +20,7 @@ export default function Profile() {
     const [cursor, setCursor] = useState<number | undefined>();
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
+    const [error, setError] = useState<boolean>(false)
 
     useEffect(() => {
         findUniqueFriend(numericId)
@@ -28,11 +29,9 @@ export default function Profile() {
             .then((data: Friend[]) => {
                 // some recorre el array data y devuelve true si algun elemento es true
                 const hasRequested: boolean = data.some(f => f.state === 'Requested');
-                console.log("has requested: " + hasRequested);
                 setFriendReq(hasRequested);
 
                 const isFriend: boolean = data.some(f => f.state === 'Accepted');
-                console.log("is friend: " + isFriend);
                 setFriendAdded(isFriend);
             });
     }, [numericId]);
@@ -43,7 +42,7 @@ export default function Profile() {
             setPosts(findAllTypes.formattedPosts);
             setCursor(findAllTypes.newCursor);
         } catch {
-            //setError(true);
+            setError(true);
         }
     }, [numericId]);
 
@@ -77,6 +76,15 @@ export default function Profile() {
             state: {
                 title: "",
                 message: "",
+            }
+        });
+        return null;
+    }
+    else if (error) {
+        navigate("/error", {
+            state: {
+                title: "",
+                message: "El usuario ingresado no existe",
             }
         });
         return null;
