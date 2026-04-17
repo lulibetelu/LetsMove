@@ -1,4 +1,4 @@
-import { MapPin, CalendarDays, Users, Edit3, UserCircle, Activity } from 'lucide-react';
+import {MapPin, CalendarDays, Users, Edit3, UserCircle, Activity, UserPlus} from 'lucide-react';
 import Posts from "../components/Posts.tsx";
 import { useParams } from "react-router-dom";
 import {UseUsername} from "../components/UseUsername.ts";
@@ -52,9 +52,14 @@ export default function Profile() {
                 <div className="flex-1 space-y-3 mt-2 md:mt-0">
                     <div className="flex items-center gap-4">
                         <h1 className="text-3xl font-bold">{loading? 'loading' : username}</h1>
-                        <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors">
-                            <Edit3 size={14} className="mr-1" /> edit profile
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button className="btn btn-xs bg-[#8A9A5B] hover:bg-[#728249] text-base-100 border-none transition-colors">
+                                <UserPlus size={16} className="mr-1" /> Add Friend
+                            </button>
+                            <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors">
+                                <Edit3 size={14} className="mr-1" /> edit profile
+                            </button>
+                        </div>
                     </div>
 
                     <div className="space-y-1 text-sm text-base-content/80">
