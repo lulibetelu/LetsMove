@@ -1,12 +1,29 @@
 import {Search} from 'lucide-react';
 import Sidebar from "../components/Sidebar.tsx"
 import Posts from "../components/Posts.tsx";
+import {useCallback, useState} from "react";
+import type {PostType} from "../types/postTypes.ts";
+import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
+import {findAll} from "../api/post.ts";
 
 
 export default function Homepage() {
+    const [posts, setPosts] = useState<PostType[]>([]);
+    const [cursor, setCursor] = useState<number|undefined>();
+
+    const loadPosts = useCallback(async () => {
+        try {
+            const findAllTypes: FindAllPostsTypes = await findAll();
+            setPosts(findAllTypes.formattedPosts);
+            setCursor(findAllTypes.newCursor);
+        } catch {
+            //setError(true);
+        }
+    }, []);
+
     return(
         <div className="min-h-screen bg-base-100 flex">
-            <Sidebar />
+            <Sidebar onPostCreated={loadPosts}/>
                 <main className="flex-1 ml-20 flex justify-center">
                     <div className="w-full max-w-2xl min-h-screen relative pb-24">
                         <header className="sticky top-0 z-40 bg-base-100/90 backdrop-blur-md px-4 py-5 flex justify-center border-b-2 border-base-content/10">
@@ -22,7 +39,7 @@ export default function Homepage() {
                                 />
                             </div>
                         </header>
-                        <Posts userId={null}/>
+                        <Posts userId={null} posts={posts} cursor={cursor} loadPosts={loadPosts} setCursor={setCursor} setPosts={setPosts}/>
                     </div>
                 </main>
         </div>

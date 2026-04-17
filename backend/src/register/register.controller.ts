@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { RegisterService } from './register.service';
 import { RegisterDto } from './dto/register.dto';
@@ -26,8 +27,8 @@ export class RegisterController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.registerService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.registerService.findOne(id);
   }
 
   @Patch(':id')

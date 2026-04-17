@@ -2,12 +2,13 @@ import {Image, CircleUserRound} from 'lucide-react';
 import type {NewPostCredentials} from "../types/postTypes.ts";
 import {create} from "../api/post.ts";
 import {useState} from "react";
-import {getUsernameFromToken} from "../api/user.ts";
+import {UseUsername} from "./UseUsername.ts";
+
 
 export default function NewPost({ onClose, onPostCreated }: { onClose: () => void, onPostCreated: () => void}){
     const [content, setContent] = useState("");
 
-    const username = getUsernameFromToken();
+    const { username, loading } = UseUsername();
 
     const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
         //Prevents the page from reloading on submit
@@ -23,6 +24,7 @@ export default function NewPost({ onClose, onPostCreated }: { onClose: () => voi
         }
 
     };
+
     return (
         <dialog className="modal modal-open backdrop-blur-sm">
             <form className="modal-box bg-base-100 p-0 overflow-hidden max-w-lg w-full" onSubmit={handleSubmit}>

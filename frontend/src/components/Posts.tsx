@@ -1,30 +1,19 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef} from "react";
 import type {PostType} from "../types/postTypes.ts";
 import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
 import {findAll, findPostsFromUser} from "../api/post.ts";
 import Post from "./Post.tsx";
 
-export default function Posts({userId}: {userId: number|null}) {
-    const [posts, setPosts] = useState<PostType[]>([]);
-    const [cursor, setCursor] = useState<number|undefined>();
+interface PostsProps {
+    userId: number | null;
+    posts: PostType[];
+    cursor: number | undefined;
+    loadPosts: () => Promise<void>;
+    setCursor: (cursor: number | undefined) => void;
+    setPosts: (posts: PostType[] | ((prev: PostType[]) => PostType[])) => void;
+}
 
-    const loadPosts = useCallback(async () => {
-        try {
-            let findAllTypes: FindAllPostsTypes;
-            if (userId === null) {
-                 findAllTypes = await findAll();
-            }
-            else {
-                findAllTypes = await findPostsFromUser(userId);
-            }
-            setPosts(findAllTypes.formattedPosts);
-            setCursor(findAllTypes.newCursor);
-        } catch {
-            //setError(true);
-        }
-    }, [userId]);
-
-
+export default function Posts({userId, posts, cursor, loadPosts, setCursor, setPosts}: PostsProps) {
     useEffect(() => {
         loadPosts().then();
     }, [loadPosts]);
@@ -32,7 +21,7 @@ export default function Posts({userId}: {userId: number|null}) {
     const loadMorePosts = useCallback(async () => {
         if (!cursor) return;
         try {
-            let response;
+            let response: FindAllPostsTypes;
             if (userId === null) {
                 response = await findAll(cursor);
             } else {
@@ -43,7 +32,7 @@ export default function Posts({userId}: {userId: number|null}) {
         } catch {
             //set error
         }
-    }, [cursor, userId]);
+    }, [cursor, setCursor, setPosts, userId]);
 
     const observerRef = useRef<HTMLDivElement>(null);
 
@@ -68,7 +57,6 @@ export default function Posts({userId}: {userId: number|null}) {
 
     return (
         <div className="flex flex-col">
-
             {posts && posts.map((p) => (
                 <div key={p.id} className="w-full border-b-2 border-base-content/10 hover:bg-base-200/30 transition-colors">
                     <Post user={p.user} content={p.content} id={p.id} userId={p.userId} isLiked={p.isLiked} isDisliked={p.isDisliked}/>
