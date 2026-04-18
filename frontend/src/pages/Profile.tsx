@@ -7,7 +7,7 @@ import type {PostType} from "../types/postTypes.ts";
 import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
 import {findPostsFromUser} from "../api/post.ts";
 import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend.ts";
-import type { Friend } from '../types/userTypes.ts';
+import type { FriendRequestType } from '../types/friendRequestType.ts';
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -20,13 +20,14 @@ export default function Profile() {
     const [cursor, setCursor] = useState<number | undefined>();
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
-    const [error, setError] = useState<boolean>(false)
+
+    const [error, setError] = useState<boolean>(false);
 
     useEffect(() => {
         findUniqueFriend(numericId)
             // data es un array de Friend[] porque como la amistad es bidireccional hay que checkear la relacion
             // user1,user2 y user2,user1 y eso genera algunos quilombos, pero en realidad esto solo devuelve un elemento
-            .then((data: Friend[]) => {
+            .then((data: FriendRequestType[]) => {
                 // some recorre el array data y devuelve true si algun elemento es true
                 const hasRequested: boolean = data.some(f => f.state === 'Requested');
                 setFriendReq(hasRequested);
@@ -48,11 +49,9 @@ export default function Profile() {
 
     const handleClickRequest = async () => {
         if (friendReq) {
-            const remove = await removeFriend(numericId);      // era amigo → remover
-            console.log("handle click request remove resopnse:" + remove.message);
+            await removeFriend(numericId);
         } else {
-            const create = await createFriendRequest(numericId); // no era amigo → agregar
-            console.log("handle click request create resopnse:" + create.message);
+            await createFriendRequest(numericId);
         }
         setFriendReq(!friendReq);
     }

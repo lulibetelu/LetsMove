@@ -46,7 +46,7 @@ export default function ChooseInterestsPage(){
         const dataRequest: CreatePreferencesDto = {sports: selectionsToObjects}
         console.log(dataRequest);
         createPreferences(dataRequest);
-        navigate("/posts");
+        navigate("/homepage");
     }
 
     return (
