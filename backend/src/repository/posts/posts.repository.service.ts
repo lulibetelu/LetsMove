@@ -7,12 +7,21 @@ export class PostsRepositoryService {
   constructor(private prismaService: PrismaService) {}
 
   async create(userId: number, createPostDto: CreatePostDto) {
-    return this.prismaService.post.create({
+    const newPost = await this.prismaService.post.create({
       data: {
-        ...createPostDto,
+        content: createPostDto.content,
         userId: userId,
       },
     });
+
+    await this.prismaService.postSport.createMany({
+      data: createPostDto.sports.map((sportId) => ({
+        postId: newPost.id,
+        sportId,
+      })),
+    });
+
+    return newPost;
   }
 
   async findAll(currentUserId: number, lastPostId?: number) {
@@ -54,11 +63,19 @@ export class PostsRepositoryService {
   }
 
   async delete(postId: number) {
-    return this.prismaService.post.delete({
+    const deletedPost = await this.prismaService.post.delete({
       where: {
         id: postId,
       },
     });
+
+    await this.prismaService.postSport.deleteMany({
+      where: {
+        postId: postId,
+      },
+    });
+
+    return deletedPost;
   }
 
   async findPostsFromUser(

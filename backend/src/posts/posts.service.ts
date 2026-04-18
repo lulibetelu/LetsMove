@@ -16,7 +16,8 @@ export class PostsService {
   ) {}
 
   async create(userId: number, createPostDto: CreatePostDto) {
-    return this.postsRepository.create(userId, createPostDto);
+
+    return await this.postsRepository.create(userId, createPostDto);
   }
 
   async findAll(currentUserId: number, lastPostId?: number) {

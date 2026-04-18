@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
@@ -6,7 +6,7 @@ export class CreatePostDto {
   content: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsNumber()
   @IsArray()
-  sports: string[];
+  sports: number[];
 }
