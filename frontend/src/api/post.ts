@@ -55,3 +55,17 @@ export async function remove(postId: number){
     if (!response.ok) throw new Error(`Failed to delete post with id ${postId}: ${response.status}`);
     return response.json();
 }
+
+export async function findPostsFromUser(userId: number, cursor?: number){
+    const token = localStorage.getItem('token');
+    const completeUrl = cursor? url + 'posts/user/' + userId + '?cursor=' + cursor : url + 'posts/user/' + userId;
+    const response = await fetch(completeUrl , {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    if (!response.ok) throw new Error(`Failed to load post from user ${userId}: ${response.status}`);
+    return response.json();
+}

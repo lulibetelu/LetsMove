@@ -2,15 +2,17 @@ import {Image, CircleUserRound} from 'lucide-react';
 import type {NewPostCredentials} from "../types/postTypes.ts";
 import {create} from "../api/post.ts";
 import {useState} from "react";
-import {getUsernameFromToken} from "../api/user.ts";
+import {useUsername} from "../hooks/UseUsername.tsx";
+import PopUpError from "./PopUpError.tsx";
+
 
 export default function NewPost({ onClose, onPostCreated }: { onClose: () => void, onPostCreated: () => void}){
-    const [content, setContent] = useState("");
+    const [content, setContent] = useState<string>("");
+    const [error, setError] = useState<boolean>(false);
 
-    const username = getUsernameFromToken();
+    const { username, loading } = useUsername();
 
     const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
-        //Prevents the page from reloading on submit
         event.preventDefault();
         try {
             const postCredentials: NewPostCredentials = {content};
@@ -19,10 +21,11 @@ export default function NewPost({ onClose, onPostCreated }: { onClose: () => voi
             onClose();
             onPostCreated();
         } catch {
-            // setError(true);
+            setError(true);
         }
 
     };
+
     return (
         <dialog className="modal modal-open backdrop-blur-sm">
             <form className="modal-box bg-base-100 p-0 overflow-hidden max-w-lg w-full" onSubmit={handleSubmit}>
@@ -34,7 +37,7 @@ export default function NewPost({ onClose, onPostCreated }: { onClose: () => voi
                         </div>
                     </div>
                     <div>
-                        {username}
+                        {loading? 'loading' : username}
                     </div>
                 </div>
 
@@ -64,6 +67,9 @@ export default function NewPost({ onClose, onPostCreated }: { onClose: () => voi
                     >
                         Post
                     </button>
+                </div>
+                <div>
+                    {error && <PopUpError message='Failed to create post'/>}
                 </div>
             </form>
             <form method="dialog" className="modal-backdrop">

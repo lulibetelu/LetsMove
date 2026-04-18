@@ -11,12 +11,22 @@ export class UserRepositoryService {
       where: {
         username: username,
       },
+      select: {
+        id: true,
+        username: true,
+        biography: true,
+      },
     });
   }
   async findById(userId: number) {
     return this.prismaService.user.findUnique({
       where: {
         id: userId,
+      },
+      select: {
+        id: true,
+        username: true,
+        biography: true,
       },
     });
   }
@@ -26,29 +36,57 @@ export class UserRepositoryService {
       where: {
         email: userEmail,
       },
+      select: {
+        id: true,
+        username: true,
+        biography: true,
+        password: true,
+        email: true,
+      },
     });
   }
 
   async createUser(registerDto: RegisterDto) {
     return this.prismaService.user.create({
       data: registerDto,
+      select: {
+        id: true,
+        username: true,
+        biography: true,
+      },
     });
   }
 
   async findAll() {
-    return this.prismaService.user.findMany();
-  }
-
-  async update(id: number, updateRegisterDto: UpdateRegisterDto){
-    return this.prismaService.user.update({
-      where: { id: id },
-      data: updateRegisterDto,
+    return this.prismaService.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        biography: true,
+      },
     });
   }
 
-  async removeById(id: number){
+  async update(id: number, updateRegisterDto: UpdateRegisterDto) {
+    return this.prismaService.user.update({
+      where: { id: id },
+      data: updateRegisterDto,
+      select: {
+        id: true,
+        username: true,
+        biography: true,
+      },
+    });
+  }
+
+  async removeById(id: number) {
     return this.prismaService.user.delete({
       where: { id: id },
+      select: {
+        id: true,
+        username: true,
+        biography: true,
+      },
     });
   }
 }

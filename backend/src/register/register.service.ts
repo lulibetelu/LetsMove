@@ -7,7 +7,7 @@ import { UserRepositoryService } from '../repository/user/user.repository.servic
 export class RegisterService {
   constructor(private userRepositoryService: UserRepositoryService) {}
 
-  async create(registerDto: RegisterDto): Promise<RegisterDto> {
+  async create(registerDto: RegisterDto) {
     return this.userRepositoryService.createUser(registerDto);
   }
 

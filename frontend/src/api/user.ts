@@ -1,4 +1,4 @@
-import type {LoginCredentials, RegisterCredentials} from "../types/userTypes.ts";
+import type {LoginCredentials, RegisterCredentials, User} from "../types/userTypes.ts";
 const url = import.meta.env.VITE_API_URL;
 interface LoginResponse{
     access_token: string
@@ -25,12 +25,24 @@ export async function loginUser(credentials: LoginCredentials){
     return data.access_token;
 }
 
-export function getUsernameFromToken(): string | null {
-    const token = localStorage.getItem('token');
-    if (!token) return null;
-
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    console.log(payload);
-    return payload.username ?? null;
+export async function getUsernameFromId(id?: number): Promise<string | null> {
+    if (!id) {
+        const token = localStorage.getItem('token');
+        if (!token) return null;
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log(payload);
+        return payload.username ?? null;
+    }
+    else {
+        const response = await fetch(url + 'register/' + id, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (!response.ok) throw new Error(`Couldn't get username from ${id} : ${response.status}`)
+        const user: User = await response.json();
+        return user.username;
+    }
 }
 

@@ -8,14 +8,16 @@ import RegisterPage from "./pages/RegisterPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import ChooseInterestsPage from "./pages/ChooseInterestsPage.tsx";
 import TestPage from "./pages/TestPage.tsx";
-import Posts from "./pages/Posts.tsx";
+import Homepage from './pages/Homepage.tsx';
+import Profile from "./pages/Profile.tsx";
 import NotificationsPage from "./pages/NotificationsPage.tsx";
+import ErrorPage from "./pages/ErrorPage.tsx";
 
 //define a partir de donde le pegué en la URL qué componente va a renderizar react
 const router = createBrowserRouter([
     {
       path: "/",
-      element: isLoggedIn() ? <Navigate to={"/posts"}/> : <Navigate to={"/login"}/>,
+      element: isLoggedIn() ? <Navigate to={"/homepage"}/> : <Navigate to={"/login"}/>,
     },
     {
         path: "/register",
@@ -34,13 +36,21 @@ const router = createBrowserRouter([
         element: <TestPage/>
     },
     {
-        path: "/posts",
-        element: <Posts/>,
+        path: "/homepage",
+        element: <Homepage/>
+    },
+    {
+        path: "/profile/:id",
+        element: <Profile/>
     },
     {
         path: "/notifications",
-        element: <NotificationsPage></NotificationsPage>
-    }
+        element: <NotificationsPage/>
+    },
+    {
+        path: "/error",
+        element: <ErrorPage/>
+    },
 ]);
 //Estoy muy cansado como para pensar como verificar que ese logeado.
 function isLoggedIn(): boolean {

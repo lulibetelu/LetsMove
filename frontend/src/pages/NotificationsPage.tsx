@@ -2,7 +2,7 @@ import FriendRequest from "../components/FriendRequest.tsx";
 import type {FriendRequestType} from "../types/friendRequestType.ts";
 import {useEffect, useState} from "react";
 import {acceptFriendRequest, findAllFriendRequests, rejectFriendRequest} from "../api/friend.ts";
-import CredentialError from "../components/CredentialError.tsx";
+import PopUpError from "../components/PopUpError.tsx";
 
 export default function NotificationsPage(){
     const [friendRequests, setFriendRequests] = useState<FriendRequestType[]>([]);
@@ -16,7 +16,7 @@ export default function NotificationsPage(){
                 const apiFriendRequests: FriendRequestType[] = await findAllFriendRequests();
                 setFriendRequests(apiFriendRequests);
             } catch{
-                return <CredentialError message="Something went wrong Could not reach requests"/>
+                return <PopUpError message="Something went wrong Could not reach requests"/>
             } finally {
                 setLoading(false);
             }
@@ -34,6 +34,11 @@ export default function NotificationsPage(){
     if (loading) return <span className="font-bold text-[#6B8E23]">Loading...</span>
 
     return (
-        friendRequests.map(friendRequest => <FriendRequest key={friendRequest.id} senderId={friendRequest.sender} username={friendRequest.senderUsername} onChange={handleChange}/>)
+        <div>
+            <h1>Notifications</h1>
+            {friendRequests.map(friendRequest =>
+                <FriendRequest key={friendRequest.id} senderId={friendRequest.sender} username={friendRequest.senderUsername} onChange={handleChange}/>
+            )}
+        </div>
     )
 }

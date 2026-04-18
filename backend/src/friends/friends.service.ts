@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateFriendDto } from './dto/create-friend.dto';
 import { UpdateFriendDto } from './dto/update-friend.dto';
 import { FriendsRepositoryService } from '../repository/friends/friends.repository.service';
@@ -27,9 +31,12 @@ export class FriendsService {
   }
 
   async findOne(sender: number, receiver: number) {
-    const try1 = await this.friendsRepository.findUnique(sender, receiver);
-    if (try1.length > 0) return try1;
-    return this.friendsRepository.findUnique(receiver, sender);
+    const friendship = await this.friendsRepository.findUnique(
+      sender,
+      receiver,
+    );
+    if (friendship.length === 0) throw new NotFoundException("Friendship doesn't exist");
+    return friendship;
   }
 
   async update(userId: number, updateFriendDto: UpdateFriendDto) {
@@ -47,7 +54,16 @@ export class FriendsService {
   }
 
   async remove(userId: number, receiver: number) {
-    return this.friendsRepository.remove(userId, receiver);
+    const friendshipRemoved = await this.friendsRepository.remove(
+      userId,
+      receiver,
+    );
+    if (!friendshipRemoved) {
+      throw new NotFoundException(
+        "Tried to remove friendship that didn't exist",
+      );
+    }
+    return friendshipRemoved;
   }
 
   async findAllRequested(userId: number) {

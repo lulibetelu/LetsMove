@@ -1,9 +1,9 @@
-import {Home, CalendarDays, Users, User, Settings, Plus, Bell} from 'lucide-react';
+import { Home, CalendarDays, Users, User, Settings, Plus, Bell } from 'lucide-react';
 import {useState} from "react";
 import NewPost from "./NewPost.tsx";
 import {useNavigate} from "react-router-dom";
 
-export default function Sidebar({onPostCreated} : {onPostCreated: () => void}) {
+export default function Sidebar({ onPostCreated }: { onPostCreated: () => void }) {
     const [createPost, setCreatePost] = useState(false);
     const navigate = useNavigate();
 

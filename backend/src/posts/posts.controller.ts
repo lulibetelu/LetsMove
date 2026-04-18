@@ -46,6 +46,21 @@ export class PostsController {
   @Delete(':id')
   remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
     const userId = req.user.sub;
-    return this.postsService.remove(userId, +id);
+    return this.postsService.remove(userId, id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/user/:id')
+  findPostsFromUser(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) userId: number,
+    @Query('cursor', new ParseIntPipe({ optional: true })) lastPostId?: number,
+  ) {
+    const currentUserId = req.user.sub;
+    return this.postsService.findPostsFromUser(
+      currentUserId,
+      userId,
+      lastPostId,
+    );
   }
 }
