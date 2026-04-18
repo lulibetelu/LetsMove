@@ -23,18 +23,18 @@ export class PostsRepositoryService {
       take: 50,
       ...(lastPostId ? { cursor: { id: lastPostId }, skip: 1 } : {}),
       include: {
-        user: {
-          select: {
-            username: true,
-          },
+        postsDisliked: {
+          where: { userId: currentUserId },
+          select: { id: true },
         },
         postsLiked: {
           where: { userId: currentUserId },
           select: { id: true },
         },
-        postsDisliked: {
-          where: { userId: currentUserId },
-          select: { id: true },
+        user: {
+          select: {
+            username: true,
+          },
         },
       },
     });

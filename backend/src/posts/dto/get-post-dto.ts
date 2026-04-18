@@ -1,7 +1,5 @@
 import type { Post } from '../entities/post.entity';
 export class GetPostDto {
-  isLiked: boolean;
-  isDisliked: boolean;
   user: {
     username: string;
   };
@@ -9,6 +7,8 @@ export class GetPostDto {
   createdAt: Date;
   id: number;
   userId: number;
+  isLiked: boolean;
+  isDisliked: boolean;
 
   constructor(post: Post, isLiked: boolean, isDisliked: boolean) {
     this.user = { username: post.user.username };

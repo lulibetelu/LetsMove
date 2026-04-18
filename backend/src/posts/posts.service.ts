@@ -10,7 +10,10 @@ import { UserRepositoryService } from '../repository/user/user.repository.servic
 
 @Injectable()
 export class PostsService {
-  constructor(private postsRepository: PostsRepositoryService, private userRepository: UserRepositoryService) {}
+  constructor(
+    private postsRepository: PostsRepositoryService,
+    private userRepository: UserRepositoryService,
+  ) {}
 
   async create(userId: number, createPostDto: CreatePostDto) {
     return this.postsRepository.create(userId, createPostDto);
