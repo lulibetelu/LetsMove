@@ -7,17 +7,32 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { PostsRepositoryService } from '../repository/posts/posts.repository.service';
 import { GetPostDto } from './dto/get-post-dto';
 import { UserRepositoryService } from '../repository/user/user.repository.service';
+import { PreferenceRepositoryService } from '../repository/preference/preference.repository.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     private postsRepository: PostsRepositoryService,
     private userRepository: UserRepositoryService,
+    private preferencesRepository: PreferenceRepositoryService,
   ) {}
 
-  async create(userId: number, createPostDto: CreatePostDto) {
-
-    return await this.postsRepository.create(userId, createPostDto);
+  async create(id: number, createPostDto: CreatePostDto) {
+    const users = await this.preferencesRepository.findBySportId(
+      createPostDto.sports,
+    );
+    const sportMatchByUser = users.reduce(
+      (acc, { userId }) => {
+        acc[userId] = (acc[userId] ?? 0) + 1;
+        return acc;
+      },
+      {} as Record<number, number>,
+    );
+    return await this.postsRepository.create(
+      id,
+      createPostDto,
+      sportMatchByUser,
+    );
   }
 
   async findAll(currentUserId: number, lastPostId?: number) {

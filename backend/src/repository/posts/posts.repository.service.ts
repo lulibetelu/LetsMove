@@ -6,18 +6,31 @@ import { CreatePostDto } from '../../posts/dto/create-post.dto';
 export class PostsRepositoryService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(userId: number, createPostDto: CreatePostDto) {
+  async create(
+    userId: number,
+    createPostDto: CreatePostDto,
+    sportMatchByUser: Record<number, number>,
+  ) {
+    // 1. creo el post
     const newPost = await this.prismaService.post.create({
       data: {
         content: createPostDto.content,
         userId: userId,
       },
     });
-
+    // 2. creo el postSport, guardando los sports de los que habla el post
     await this.prismaService.postSport.createMany({
       data: createPostDto.sports.map((sportId) => ({
         postId: newPost.id,
         sportId,
+      })),
+    });
+    // 3. a todos los usuarios que les interesa alguno de esos deportes, se les agrega una tupla en postScore
+    await this.prismaService.postScore.createMany({
+      data: Object.entries(sportMatchByUser).map(([userId, sportMatch]) => ({
+        userId: Number(userId),
+        postId: newPost.id,
+        sportMatch,
       })),
     });
 
