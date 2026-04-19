@@ -176,6 +176,9 @@ export class PostsRepositoryService {
           where: { userId: currentUserId },
           select: { id: true },
         },
+        postSport: {
+          select: { sportId: true },
+        },
       },
     });
   }

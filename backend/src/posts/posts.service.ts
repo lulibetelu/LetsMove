@@ -83,11 +83,12 @@ export class PostsService {
     );
 
     const formattedPosts = posts.map((post) => {
-      const { postsLiked, postsDisliked, ...postData } = post;
+      const { postsLiked, postsDisliked, postSport, ...postData } = post;
       return new GetPostDto(
         postData,
         postsLiked.length === 1,
         postsDisliked.length === 1,
+        postSport.map((ps) => ps.sportId),
       );
     });
 
