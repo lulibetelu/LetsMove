@@ -9,8 +9,14 @@ export class GetPostDto {
   userId: number;
   isLiked: boolean;
   isDisliked: boolean;
+  postSports: number[];
 
-  constructor(post: Post, isLiked: boolean, isDisliked: boolean) {
+  constructor(
+    post: Post,
+    isLiked: boolean,
+    isDisliked: boolean,
+    postSports: number[],
+  ) {
     this.user = { username: post.user.username };
     this.content = post.content;
     this.id = post.id;
@@ -19,5 +25,7 @@ export class GetPostDto {
 
     this.isLiked = isLiked;
     this.isDisliked = isDisliked;
+
+    this.postSports = postSports;
   }
 }

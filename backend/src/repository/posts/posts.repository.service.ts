@@ -57,6 +57,9 @@ export class PostsRepositoryService {
             where: { userId: currentUserId },
             select: { id: true },
           },
+          postSport: {
+            select: { sportId: true },
+          },
           user: {
             select: { username: true },
           },
@@ -113,7 +116,7 @@ export class PostsRepositoryService {
 
     const start = (page - 1) * 50;
 
-    return scored.slice(start, start + 50);
+    return scored.slice(start, start + 49);
   }
 
   async findUnique(postId: number) {

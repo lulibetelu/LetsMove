@@ -35,17 +35,19 @@ export class PostsService {
     );
   }
 
-  async findAll(currentUserId: number, lastPostId?: number) {
-    const posts = await this.postsRepository.findAll(currentUserId, lastPostId);
+  async findAll(currentUserId: number, page: number = 1) {
+    const posts = await this.postsRepository.findAll(currentUserId, page);
 
     const formattedPosts = posts.map((post) => {
-      const { postsLiked, postsDisliked, ...postData } = post;
+      const { postsLiked, postsDisliked, postSport, ...postData } = post;
       return new GetPostDto(
         postData,
         postsLiked.length === 1,
         postsDisliked.length === 1,
+        postSport.map((ps) => ps.sportId),
       );
     });
+
     const newCursor = formattedPosts[formattedPosts.length - 1]?.id;
     return { formattedPosts, newCursor };
   }
