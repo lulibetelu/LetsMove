@@ -45,4 +45,11 @@ export async function getUsernameFromId(id?: number): Promise<string | null> {
         return user.username;
     }
 }
+export function getCurrentUserId(): number|null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    console.log(payload);
+    return payload.sub ?? null;
+}
 

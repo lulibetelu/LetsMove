@@ -1,11 +1,13 @@
 import { Home, CalendarDays, Users, User, Settings, Plus, Bell } from 'lucide-react';
 import {useState} from "react";
 import NewPost from "./NewPost.tsx";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {getCurrentUserId} from "../api/user.ts";
 
 export default function Sidebar({ onPostCreated }: { onPostCreated: () => void }) {
     const [createPost, setCreatePost] = useState(false);
     const navigate = useNavigate();
+    const currentUserId = getCurrentUserId();
 
     return (
         <aside className="fixed left-0 top-0 h-screen w-20 border-r border-base-300 bg-base-100 flex flex-col items-center py-6 z-50">
@@ -23,7 +25,12 @@ export default function Sidebar({ onPostCreated }: { onPostCreated: () => void }
                 </button>
 
                 <button type="button" className="btn btn-ghost btn-circle" aria-label="Perfil">
-                    <User size={26} strokeWidth={1.5} />
+                    <Link
+                        to={currentUserId ? "/profile/" + currentUserId : "/login"}
+                    >
+                        <User size={26} strokeWidth={1.5} className="font-semibold hover:underline" />
+                    </Link>
+
                 </button>
 
                 <button type="button" className="btn btn-ghost btn-circle" aria-label="Configuración">
