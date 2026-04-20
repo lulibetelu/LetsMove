@@ -17,7 +17,7 @@ import ErrorPage from "./pages/ErrorPage.tsx";
 const router = createBrowserRouter([
     {
       path: "/",
-      element: isLoggedIn() ? <Navigate to={"/homepage"}/> : <Navigate to={"/login"}/>,
+      element: await isLoggedIn() ? <Navigate to={"/homepage"}/> : <Navigate to={"/login"}/>,
     },
     {
         path: "/register",
@@ -53,13 +53,19 @@ const router = createBrowserRouter([
     },
 ]);
 //Estoy muy cansado como para pensar como verificar que ese logeado.
-function isLoggedIn(): boolean {
-    try {
+async function isLoggedIn(): Promise<boolean> {
+        const url = import.meta.env.VITE_API_URL;
         const token = localStorage.getItem('token');
-        return token !== null && token.trim() !== '';
-    } catch {
+        const response = await fetch(url + "auth", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        });
+        if (response.ok) return true;
         return false;
-    }
+
 }
 
 createRoot(document.getElementById('root')!).render(
