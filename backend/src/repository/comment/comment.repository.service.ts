@@ -42,4 +42,12 @@ export class CommentRepositoryService {
       },
     });
   }
+
+  async remove(commentId: number){
+    return this.prismaService.comment.delete({
+      where: {
+        id: commentId,
+      },
+    });
+  }
 }

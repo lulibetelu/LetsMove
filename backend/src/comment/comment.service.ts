@@ -32,7 +32,12 @@ export class CommentService {
     return this.commentRepositoryServices.update(id, updateCommentDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async remove(removerId: number, commentId: number) {
+    const comment = await this.findOne(commentId);
+
+    if (comment === null || comment.authorId !== removerId)
+      throw new UnauthorizedException('Only author can remove this comment');
+
+    return this.commentRepositoryServices.remove(commentId);
   }
 }

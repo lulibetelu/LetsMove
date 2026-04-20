@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -37,7 +38,7 @@ export class CommentController {
   @UseGuards(AuthGuard)
   update(
     @Req() req: Request,
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateCommentDto: UpdateCommentDto,
   ) {
     const editorId: number = req.user.sub;
@@ -45,7 +46,9 @@ export class CommentController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentService.remove(+id);
+  @UseGuards(AuthGuard)
+  remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+    const removerId: number = req.user.sub;
+    return this.commentService.remove(removerId, id);
   }
 }
