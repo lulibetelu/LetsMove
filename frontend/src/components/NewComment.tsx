@@ -1,0 +1,86 @@
+import {useState} from "react";
+import {useUsername} from "../hooks/UseUsername.tsx";
+import type {NewPostCredentials} from "../types/postTypes.ts";
+import {create} from "../api/post.ts";
+import {CircleUserRound, Image} from "lucide-react";
+import PopUpError from "./PopUpError.tsx";
+
+export interface Props{
+    onClose: () => void,
+    onCommentCreated: () => void,
+    postAuthorUsername: string,
+}
+
+export default function NewComment(props: Props){
+    const [content, setContent] = useState<string>("");
+    const [error, setError] = useState<boolean>(false);
+
+    const { username, loading } = useUsername();
+
+
+    //TODO: cambiar esto para que sean comments
+    const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
+        event.preventDefault();
+        try {
+            // const postCredentials: NewPostCredentials = {content};
+            // const createPost = await create(postCredentials);
+            props.onClose();
+            props.onCommentCreated();
+        } catch {
+            setError(true);
+        }
+
+    };
+
+    return (
+        <dialog className="modal modal-open backdrop-blur-sm">
+            <form className="modal-box bg-base-100 p-0 overflow-hidden max-w-lg w-full" onSubmit={handleSubmit}>
+
+                <div className="p-4 flex gap-4">
+                    <div className="avatar placeholder">
+                        <div className="w-12 h-12 rounded-full bg-base-300 text-base-content/70 flex items-center justify-center">
+                            <CircleUserRound size={24} strokeWidth={1.5} />
+                        </div>
+                    </div>
+                    <div>
+                        {loading? 'loading' : username}
+                    </div>
+                </div>
+
+                <textarea
+                    name="content"
+                    aria-label="Post content"
+                    className="textarea textarea-ghost w-full text-lg resize-none focus:outline-none focus:bg-transparent"
+                    placeholder={`Answer ${props.postAuthorUsername}`}
+                    onChange ={(e) => {
+                        setContent(e.target.value)
+                    }}
+                ></textarea>
+
+                <div className="flex justify-between items-center w-full p-3 border-t border-base-200 bg-base-50">
+
+                    <div className="flex gap-2">
+                        <button
+                            type="button"
+                            className="btn btn-ghost btn-circle btn-sm text-base-content/70 hover:text-base-content"
+                            aria-label="Add image"
+                        ><Image size={20} strokeWidth={1.5} />
+                        </button>
+                    </div>
+                    <button
+                        type="submit"
+                        className="btn btn-neutral btn-sm px-6 rounded-full font-medium"
+                    >
+                        Comment
+                    </button>
+                </div>
+                <div>
+                    {error && <PopUpError message='Failed to create post'/>}
+                </div>
+            </form>
+            <form method="dialog" className="modal-backdrop">
+                <button onClick={props.onClose}>Cerrar</button>
+            </form>
+        </dialog>
+    );
+}

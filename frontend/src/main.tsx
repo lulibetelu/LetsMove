@@ -12,6 +12,7 @@ import Homepage from './pages/Homepage.tsx';
 import Profile from "./pages/Profile.tsx";
 import NotificationsPage from "./pages/NotificationsPage.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
+import PostPage from "./pages/PostPage.tsx";
 
 //define a partir de donde le pegué en la URL qué componente va a renderizar react
 const router = createBrowserRouter([
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
     {
         path: "/error",
         element: <ErrorPage/>
+    },
+    {
+        path: "/post/:id",
+        element: <PostPage/>
     },
 ]);
 //Estoy muy cansado como para pensar como verificar que ese logeado.

@@ -59,7 +59,8 @@ export default function Posts({userId, posts, cursor, loadPosts, setCursor, setP
         <div className="flex flex-col">
             {posts && posts.map((p) => (
                 <div key={p.id} className="w-full border-b-2 border-base-content/10 hover:bg-base-200/30 transition-colors">
-                    <Post user={p.user} content={p.content} id={p.id} userId={p.userId} isLiked={p.isLiked} isDisliked={p.isDisliked}/>
+                    {/*agregue el isForPostPage para distinguir si hago el post clickeable o no, para entrar a la pagina del post*/}
+                    <Post user={p.user} content={p.content} id={p.id} userId={p.userId} isLiked={p.isLiked} isDisliked={p.isDisliked} isForPostPage={false}/>
                 </div>
             ))}
             {cursor && (
