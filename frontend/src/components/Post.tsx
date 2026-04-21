@@ -39,7 +39,7 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
                 <div className="text-base-content/70 flex items-center"><CircleUserRound size={20} strokeWidth={1.5} /></div>
                 <div> <Link to={`/profile/${userId}`} onClick={(e) => e.stopPropagation()} className="font-semibold hover:underline" >{username}</Link> </div>
                 {canDelete && (
-                    <button type="button" onClick={deletePost} className="ml-auto text-base-content/70 hover:text-error transition-colors" aria-label="Eliminar post">
+                    <button type="button" onClick={(e) => { e.stopPropagation(); deletePost?.(); }} className="ml-auto text-base-content/70 hover:text-error transition-colors" aria-label="Eliminar post">
                         <Trash2 size={20} strokeWidth={1.5} />
                     </button>
                 )}
