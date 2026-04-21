@@ -24,6 +24,11 @@ export default function Profile() {
 
     const [error, setError] = useState<boolean>(false);
 
+    const logout = () => {
+        localStorage.removeItem('token');
+        navigate("/login");
+    }
+
     useEffect(() => {
         findUniqueFriend(numericId)
             // data es un array de Friend[] porque como la amistad es bidireccional hay que checkear la relacion
@@ -154,6 +159,10 @@ export default function Profile() {
                                 </button>
                             }
                         </div>
+
+                        <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors" onClick={logout}>
+                            <Edit3 size={14} className="mr-1" /> logout
+                        </button>
                     </div>
 
                     <div className="space-y-1 text-sm text-base-content/80">
