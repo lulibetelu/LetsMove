@@ -42,9 +42,9 @@ model Sport {
 
 model Preference {
   id      Int    @id @default(autoincrement())
-  sport   Sport  @relation(fields: [sportId], references: [id])
+  sport   Sport  @relation(fields: [sportId], references: [id], onDelete: Cascade)
   sportId Int
-  user    User   @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  Int
   level   String
 
@@ -54,9 +54,9 @@ model Preference {
 
 model UserLocation {
   id         Int      @id @default(autoincrement())
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int
-  location   Location @relation(fields: [locationId], references: [id])
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
   locationId Int
 }
 
@@ -72,7 +72,7 @@ model Post {
   id            Int            @id @default(autoincrement())
   content       String
   createdAt     DateTime       @default(now())
-  user          User           @relation(fields: [userId], references: [id])
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int
   postsLiked    PostLiked[]
   postsDisliked PostDisliked[]
@@ -82,9 +82,9 @@ model Post {
 
 model PostLiked {
   id     Int  @id @default(autoincrement())
-  post   Post @relation(fields: [postId], references: [id])
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 
   @@unique([postId, userId])
@@ -92,9 +92,9 @@ model PostLiked {
 
 model PostDisliked {
   id     Int  @id @default(autoincrement())
-  post   Post @relation(fields: [postId], references: [id])
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 
   @@unique([postId, userId])
@@ -102,9 +102,9 @@ model PostDisliked {
 
 model Friends {
   id      Int    @id @default(autoincrement())
-  user1   User   @relation("friend1", fields: [sender], references: [id])
+  user1   User   @relation("friend1", fields: [sender], references: [id], onDelete: Cascade)
   sender   Int
-  user2    User   @relation("friend2", fields: [receiver], references: [id])
+  user2    User   @relation("friend2", fields: [receiver], references: [id], onDelete: Cascade)
   receiver Int
   state    String
 
@@ -113,18 +113,18 @@ model Friends {
 
 model PostSport {
   id Int @id @default(autoincrement())
-  post Post @relation(fields: [postId], references: [id])
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
-  sport Sport @relation(fields: [sportId], references: [id])
+  sport Sport @relation(fields: [sportId], references: [id], onDelete: Cascade)
   sportId Int
   @@unique([postId, sportId])
 }
 
 model PostScore {
   id Int @id @default(autoincrement())
-  post Post @relation(fields: [postId], references: [id])
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
   sportMatch Int @default(0)
   @@unique([userId, postId])
