@@ -16,7 +16,7 @@ export default function Homepage() {
         try {
             const findAllTypes: PostType[] = await findAll();
             setPosts(findAllTypes);
-            setPage(1);
+            setPage(findAllTypes.length === 50 ? 1 : undefined);
         } catch {
             setError(true);
         }

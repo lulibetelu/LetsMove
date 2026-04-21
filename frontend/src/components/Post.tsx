@@ -3,11 +3,7 @@ import { Link } from 'react-router-dom';
 import {CircleUserRound, MessageCircle, Trash2} from 'lucide-react';
 import Like from "./Like.tsx";
 import Dislike from "./Dislike.tsx";
-import { removePost } from '../api/post.ts'
-export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, canDelete } : PostType){
-    const deletePost = () => {
-        removePost(id);
-    }
+export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, canDelete, deletePost } : PostType){
     return (
 
         <article className="flex w-full flex-col px-5 py-4">

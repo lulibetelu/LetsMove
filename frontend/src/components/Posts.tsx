@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useRef} from "react";
 import type {PostType} from "../types/postTypes.ts";
-import {findAll, findPostsFromUser} from "../api/post.ts";
+import {findAll, findPostsFromUser, removePost} from "../api/post.ts";
 import Post from "./Post.tsx";
 import {getCurrentUserId} from "../api/user.ts";
 
@@ -30,7 +30,7 @@ export default function Posts({userId, posts, page, loadPosts, setPage, setPosts
                 response = await findPostsFromUser(userId, page+1);
             }
             setPosts((prevPosts) => [...prevPosts, ...response]);
-            setPage(page+1);
+            setPage(response.length === 50 ? page + 1 : undefined);
         } catch {
             //set error
         }
@@ -57,11 +57,20 @@ export default function Posts({userId, posts, page, loadPosts, setPage, setPosts
         };
     }, [page, loadMorePosts]);
 
+    const handleDelete = useCallback(async (postId: number) => {
+        try {
+            await removePost(postId);
+            setPosts(prev => prev.filter(p => p.id !== postId));
+        } catch {
+            // set error
+        }
+    }, [setPosts]);
+
     return (
         <div className="flex flex-col">
             {posts && posts.map((p) => (
                 <div key={p.id} className="w-full border-b-2 border-base-content/10 hover:bg-base-200/30 transition-colors">
-                    <Post user={p.user} content={p.content} id={p.id} userId={p.userId} isLiked={p.isLiked} isDisliked={p.isDisliked} canDelete={canDelete}/>
+                    <Post user={p.user} content={p.content} id={p.id} userId={p.userId} isLiked={p.isLiked} isDisliked={p.isDisliked} canDelete={canDelete} deletePost={() => handleDelete(p.id)}/>
                 </div>
             ))}
             {page && (
