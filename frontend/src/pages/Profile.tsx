@@ -4,7 +4,6 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useUsername} from "../hooks/UseUsername.tsx";
 import {useCallback, useEffect, useState} from "react";
 import type {PostType} from "../types/postTypes.ts";
-import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
 import {findPostsFromUser} from "../api/post.ts";
 import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend.ts";
 import type { FriendRequestType } from '../types/friendRequestType.ts';
@@ -19,7 +18,7 @@ export default function Profile() {
     const currentUserId = getCurrentUserId();
 
     const [posts, setPosts] = useState<PostType[]>([]);
-    const [cursor, setcursor] = useState<number | undefined>();
+    const [page, setPage] = useState<number | undefined>();
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
 
@@ -41,9 +40,9 @@ export default function Profile() {
 
     const loadPosts = useCallback(async () => {
         try {
-            const findAllTypes: FindAllPostsTypes = await findPostsFromUser(numericId);
-            setPosts(findAllTypes.formattedPosts);
-            setcursor(findAllTypes.newCursor);
+            const findAllTypes: PostType[] = await findPostsFromUser(numericId);
+            setPosts(findAllTypes);
+            setPage(findAllTypes.length === 50 ? 1 : undefined);
         } catch {
             setError(true);
         }
@@ -182,7 +181,7 @@ export default function Profile() {
                     <h2 className="text-xl font-bold mb-4 px-4 lg:px-0 flex items-center gap-2">
                         Activity
                     </h2>
-                    <Posts userId={numericId} posts={posts} page={cursor} loadPosts={loadPosts} setPage={setcursor} setPosts={setPosts} />
+                    <Posts userId={numericId} posts={posts} page={page} loadPosts={loadPosts} setPage={setPage} setPosts={setPosts} />
                 </div>
 
                 {/* Columna Derecha: Amigos y Eventos (Ocupa 1 espacio) */}

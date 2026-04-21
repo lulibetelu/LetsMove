@@ -43,7 +43,7 @@ export async function findOne(postId: number){
     return response.json();
 }
 
-export async function remove(postId: number){
+export async function removePost(postId: number){
     const token = localStorage.getItem('token');
     const response = await fetch(url + 'posts/' + postId , {
         method: 'DELETE',
@@ -58,7 +58,7 @@ export async function remove(postId: number){
 
 export async function findPostsFromUser(userId: number, page?: number){
     const token = localStorage.getItem('token');
-    const completeUrl = page? url + 'posts/user/' + userId + '?page=' + page : url + 'posts/user/' + userId;
+    const completeUrl = page? url + 'posts/user/' + userId + '?page=' + page : url + 'posts/user/' + userId + '?page=1';
     const response = await fetch(completeUrl , {
         method: 'GET',
         headers: {

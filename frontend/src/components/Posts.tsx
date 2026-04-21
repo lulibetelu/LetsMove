@@ -1,8 +1,8 @@
 import {useCallback, useEffect, useRef} from "react";
 import type {PostType} from "../types/postTypes.ts";
-import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
-import {findAll, findPostsFromUser} from "../api/post.ts";
+import {findAll, findPostsFromUser, removePost} from "../api/post.ts";
 import Post from "./Post.tsx";
+import {getCurrentUserId} from "../api/user.ts";
 
 interface PostsProps {
     userId: number | null;
@@ -14,6 +14,8 @@ interface PostsProps {
 }
 
 export default function Posts({userId, posts, page, loadPosts, setPage, setPosts}: PostsProps) {
+    const currentUserId = getCurrentUserId();
+    const canDelete = currentUserId === userId;
     useEffect(() => {
         loadPosts().then();
     }, [loadPosts]);
@@ -21,14 +23,14 @@ export default function Posts({userId, posts, page, loadPosts, setPage, setPosts
     const loadMorePosts = useCallback(async () => {
         if (!page) return;
         try {
-            let response: FindAllPostsTypes;
+            let response: PostType[];
             if (userId === null) {
-                response = await findAll(page);
+                response = await findAll(page+1);
             } else {
-                response = await findPostsFromUser(userId, page);
+                response = await findPostsFromUser(userId, page+1);
             }
-            setPosts((prevPosts) => [...prevPosts, ...response.formattedPosts]);
-            setPage(response.newCursor);
+            setPosts((prevPosts) => [...prevPosts, ...response]);
+            setPage(response.length === 50 ? page + 1 : undefined);
         } catch {
             //set error
         }
@@ -55,12 +57,21 @@ export default function Posts({userId, posts, page, loadPosts, setPage, setPosts
         };
     }, [page, loadMorePosts]);
 
+    const handleDelete = useCallback(async (postId: number) => {
+        try {
+
+            await removePost(postId);
+            setPosts(prev => prev.filter(p => p.id !== postId));
+        } catch {
+            // set error
+        }
+    }, [setPosts]);
+
     return (
         <div className="flex flex-col">
             {posts && posts.map((p) => (
                 <div key={p.id} className="w-full border-b-2 border-base-content/10 hover:bg-base-200/30 transition-colors">
-                    {/*agregue el isForPostPage para distinguir si hago el post clickeable o no, para entrar a la pagina del post*/}
-                    <Post user={p.user} content={p.content} id={p.id} userId={p.userId} isLiked={p.isLiked} isDisliked={p.isDisliked} isForPostPage={false}/>
+                    <Post user={p.user} content={p.content} id={p.id} userId={p.userId} isLiked={p.isLiked} isDisliked={p.isDisliked} canDelete={canDelete} deletePost={() => handleDelete(p.id)} isForPostPage={false}/>
                 </div>
             ))}
             {page && (
