@@ -24,12 +24,15 @@ export default function Dislike(props: Props){
     return (
         <button
             type="button"
-            className={`flex cursor-pointer items-center gap-1 transition-colors hover:text-primary ${isDisliked ? 'text-primary' : 'text-base-content/70'}`}
+            className={`group flex cursor-pointer items-center gap-2 transition-all duration-300 rounded-full p-1 ${isDisliked ? 'text-[#8A9A5B]'
+                : 'text-base-content/70 hover:text-[#8A9A5B]'}`}
             aria-label={isDisliked ? "Quitar no me gusta" : "No me gusta"} onClick={handleClick}>
             <ThumbsDown
                 size={20}
-                strokeWidth={1.5}
-                fill={isDisliked ? "currentColor" : "none"} />
+                strokeWidth={isDisliked ? 2 : 1.5}
+                fill={isDisliked ? "#8A9A5B" : "none"}
+                className="transition-transform active:scale-125"
+            />
         </button>
     )
 }

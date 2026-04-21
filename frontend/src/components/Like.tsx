@@ -8,7 +8,8 @@ export default function Like({postId, initialIsLiked} : {postId: number, initial
     return(
         <button
             type="button"
-            className={`flex cursor-pointer items-center gap-1 transition-colors hover:text-primary ${isLiked ? 'text-primary' : 'text-base-content/70'}`}
+            className={`group flex cursor-pointer items-center gap-2 transition-all duration-300 rounded-full p-1 ${isLiked ? 'text-[#8A9A5B]'
+                : 'text-base-content/70 hover:text-[#8A9A5B]'}`}
             aria-label={isLiked ? "Quitar me gusta" : "Me gusta"}
             onClick={async () => {
             try {
@@ -26,8 +27,9 @@ export default function Like({postId, initialIsLiked} : {postId: number, initial
         }}>
             <ThumbsUp
                 size={20}
-                strokeWidth={1.5}
-                fill={isLiked ? "currentColor" : "none"}
+                strokeWidth={isLiked ? 2 : 1.5}
+                fill={isLiked ? "#8A9A5B" : "none"}
+                className="transition-transform active:scale-125"
             />
         </button>
     )
