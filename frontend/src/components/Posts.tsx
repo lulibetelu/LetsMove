@@ -7,39 +7,39 @@ import Post from "./Post.tsx";
 interface PostsProps {
     userId: number | null;
     posts: PostType[];
-    cursor: number | undefined;
+    page: number | undefined;
     loadPosts: () => Promise<void>;
-    setCursor: (cursor: number | undefined) => void;
+    setPage: (page: number | undefined) => void;
     setPosts: (posts: PostType[] | ((prev: PostType[]) => PostType[])) => void;
 }
 
-export default function Posts({userId, posts, cursor, loadPosts, setCursor, setPosts}: PostsProps) {
+export default function Posts({userId, posts, page, loadPosts, setPage, setPosts}: PostsProps) {
     useEffect(() => {
         loadPosts().then();
     }, [loadPosts]);
 
     const loadMorePosts = useCallback(async () => {
-        if (!cursor) return;
+        if (!page) return;
         try {
             let response: FindAllPostsTypes;
             if (userId === null) {
-                response = await findAll(cursor);
+                response = await findAll(page);
             } else {
-                response = await findPostsFromUser(userId, cursor);
+                response = await findPostsFromUser(userId, page);
             }
             setPosts((prevPosts) => [...prevPosts, ...response.formattedPosts]);
-            setCursor(response.newCursor);
+            setPage(response.newCursor);
         } catch {
             //set error
         }
-    }, [cursor, setCursor, setPosts, userId]);
+    }, [page, setPage, setPosts, userId]);
 
     const observerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const observerCallback = (entries: IntersectionObserverEntry[]) => {
             const ancla = entries[0];
-            if (ancla.isIntersecting && cursor) {
+            if (ancla.isIntersecting && page) {
                 loadMorePosts();
             }
         };
@@ -53,7 +53,7 @@ export default function Posts({userId, posts, cursor, loadPosts, setCursor, setP
         return () => {
             observer.disconnect();
         };
-    }, [cursor, loadMorePosts]);
+    }, [page, loadMorePosts]);
 
     return (
         <div className="flex flex-col">
@@ -62,7 +62,7 @@ export default function Posts({userId, posts, cursor, loadPosts, setCursor, setP
                     <Post user={p.user} content={p.content} id={p.id} userId={p.userId} isLiked={p.isLiked} isDisliked={p.isDisliked}/>
                 </div>
             ))}
-            {cursor && (
+            {page && (
                 <div ref={observerRef} className="h-20 w-full flex items-center justify-center">
                     <span className="loading loading-spinner loading-md text-primary"></span>
                 </div>

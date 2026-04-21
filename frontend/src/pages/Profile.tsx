@@ -19,7 +19,7 @@ export default function Profile() {
     const currentUserId = getCurrentUserId();
 
     const [posts, setPosts] = useState<PostType[]>([]);
-    const [cursor, setCursor] = useState<number | undefined>();
+    const [cursor, setcursor] = useState<number | undefined>();
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
 
@@ -43,7 +43,7 @@ export default function Profile() {
         try {
             const findAllTypes: FindAllPostsTypes = await findPostsFromUser(numericId);
             setPosts(findAllTypes.formattedPosts);
-            setCursor(findAllTypes.newCursor);
+            setcursor(findAllTypes.newCursor);
         } catch {
             setError(true);
         }
@@ -182,7 +182,7 @@ export default function Profile() {
                     <h2 className="text-xl font-bold mb-4 px-4 lg:px-0 flex items-center gap-2">
                         Activity
                     </h2>
-                    <Posts userId={numericId} posts={posts} cursor={cursor} loadPosts={loadPosts} setCursor={setCursor} setPosts={setPosts} />
+                    <Posts userId={numericId} posts={posts} page={cursor} loadPosts={loadPosts} setPage={setcursor} setPosts={setPosts} />
                 </div>
 
                 {/* Columna Derecha: Amigos y Eventos (Ocupa 1 espacio) */}
