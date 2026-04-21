@@ -59,6 +59,7 @@ export default function Posts({userId, posts, page, loadPosts, setPage, setPosts
 
     const handleDelete = useCallback(async (postId: number) => {
         try {
+
             await removePost(postId);
             setPosts(prev => prev.filter(p => p.id !== postId));
         } catch {
@@ -70,7 +71,7 @@ export default function Posts({userId, posts, page, loadPosts, setPage, setPosts
         <div className="flex flex-col">
             {posts && posts.map((p) => (
                 <div key={p.id} className="w-full border-b-2 border-base-content/10 hover:bg-base-200/30 transition-colors">
-                    <Post user={p.user} content={p.content} id={p.id} userId={p.userId} isLiked={p.isLiked} isDisliked={p.isDisliked} isForPostPage={false}/>
+                    <Post user={p.user} content={p.content} id={p.id} userId={p.userId} isLiked={p.isLiked} isDisliked={p.isDisliked} canDelete={canDelete} deletePost={() => handleDelete(p.id)} isForPostPage={false}/>
                 </div>
             ))}
             {page && (

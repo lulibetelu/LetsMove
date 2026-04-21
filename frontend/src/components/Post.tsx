@@ -3,16 +3,14 @@ import {Link, type NavigateFunction, useNavigate} from 'react-router-dom';
 import {CircleUserRound, MessageCircle, Trash2} from 'lucide-react';
 import Like from "./Like.tsx";
 import Dislike from "./Dislike.tsx";
-export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, canDelete, deletePost } : PostType){
 import {useState} from "react";
 import NewComment from "./NewComment.tsx";
-
 type Props = PostType & {
     isForPostPage: boolean,
     onCommentCreate?: () => void,
 }
 
-export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, isForPostPage, onCommentCreate } : Props){
+export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, canDelete, deletePost, isForPostPage, onCommentCreate } : Props){
     const [createComment, setCreateComment] = useState(false);
     const navigate: NavigateFunction = useNavigate();
     const handleClick = () => {
