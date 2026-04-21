@@ -115,16 +115,17 @@ model Friends {
 }
 
 model Comment {
-  id Int @id @default(autoincrement())
-  user User @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId Int
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId Int
-  parentId Int?
-  parent  Comment? @relation("parent",fields: [parentId], references: [id])
-  comments Comment[] @relation("parent")
-  content String
-  createdAt DateTime @default(now())
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  Int
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+  parentId  Int?
+  parent    Comment?  @relation("parent", fields: [parentId], references: [id])
+  comments  Comment[] @relation("parent")
+  content   String
+  createdAt DateTime  @default(now())
+}
 model PostSport {
   id Int @id @default(autoincrement())
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
