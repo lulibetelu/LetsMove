@@ -117,7 +117,7 @@ export class PostsRepositoryService {
 
     const start = (page - 1) * 50;
 
-    return scored.slice(start, start + 49);
+    return scored.slice(start, start + 50);
   }
 
   async findUnique(postId: number) {
@@ -152,14 +152,12 @@ export class PostsRepositoryService {
   async findPostsFromUser(
     currentUserId: number,
     userId: number,
-    lastPostId?: number,
+    page: number = 1,
   ) {
     return this.prismaService.post.findMany({
       orderBy: { createdAt: 'desc' },
-      // take toma de a 20 posteos, cursor le dice que te traiga 20 posts a partir de un post en particular
-      // y skip porque el cursor automaticamente incluye el post del id que le pasas
       take: 50,
-      ...(lastPostId ? { cursor: { id: lastPostId }, skip: 1 } : {}),
+      skip: (page - 1) * 50,
       where: {
         userId: userId,
       },

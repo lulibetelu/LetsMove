@@ -67,7 +67,7 @@ export class PostsService {
   async findPostsFromUser(
     currentUserId: number,
     userId: number,
-    lastPostId?: number,
+    page?: number,
   ) {
     // verifico si existe el usuario
     const user = await this.userRepository.findById(userId);
@@ -76,10 +76,10 @@ export class PostsService {
     const posts = await this.postsRepository.findPostsFromUser(
       currentUserId,
       userId,
-      lastPostId,
+      page,
     );
 
-    const formattedPosts = posts.map((post) => {
+    return posts.map((post) => {
       const { postsLiked, postsDisliked, postSport, ...postData } = post;
       return new GetPostDto(
         postData,
@@ -88,8 +88,5 @@ export class PostsService {
         postSport.map((ps) => ps.sportId),
       );
     });
-
-    const newCursor = formattedPosts[formattedPosts.length - 1]?.id;
-    return { formattedPosts, newCursor };
   }
 }
