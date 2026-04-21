@@ -1,4 +1,4 @@
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import Post from "../components/Post.tsx";
 import {useEffect, useState} from "react";
 import type {CommentRequestType} from "../types/commentTypes.ts";
@@ -8,11 +8,23 @@ import Comment from "../components/Comment.tsx";
 
 export default function PostPage(){
     const [loading, setLoading] = useState(true);
-    const { data } = useLocation().state;
+    const navigate= useNavigate();
+    const {data} = useLocation().state ?? {};
     const [comments, setComments] = useState<CommentRequestType>()
     const [render, setRender] = useState(false);
 
+
+
     useEffect(() => {
+        if (!data) {
+            navigate("/error", {
+                state: {
+                    title: "",
+                    message: "El posteo ingresado no existe",
+                }
+            });
+            return;
+        }
         const fetchData = async () => {
             try {
                 const apiComments: CommentRequestType = await findAllComments(data.id);
@@ -26,7 +38,7 @@ export default function PostPage(){
         }
 
         fetchData();
-    }, [data.id, render]);
+    }, [data, navigate, render]);
 
     const handleCommentCreation = () => {
         setRender(prev => !prev);
@@ -39,6 +51,8 @@ export default function PostPage(){
     }
 
     if (loading) return <span className="font-bold text-[#6B8E23]">Loading...</span>
+
+    if (!data) return null;
 
     return (
         <div className="min-h-screen bg-base-200 flex justify-center py-10 px-4">
