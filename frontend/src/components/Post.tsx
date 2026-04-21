@@ -18,7 +18,7 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
         if (onCommentCreate) {
             onCommentCreate();
         }
-        navigate('/post/id', {
+        navigate(`/post/${id}`, {
             state: {data}
         });
     }
