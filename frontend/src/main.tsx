@@ -49,13 +49,17 @@ const router = createBrowserRouter([
         element: <NotificationsPage/>
     },
     {
+        path: "/post/:id",
+        element: <PostPage/>
+    },
+    {
         path: "/error",
         element: <ErrorPage/>
     },
     {
-        path: "/post/:id",
-        element: <PostPage/>
-    },
+        path: "*",
+        element: <ErrorPage/>
+    }
 ]);
 //Estoy muy cansado como para pensar como verificar que ese logeado.
 async function isLoggedIn(): Promise<boolean> {
