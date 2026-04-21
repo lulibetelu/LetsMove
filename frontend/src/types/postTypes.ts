@@ -6,7 +6,8 @@ export interface PostType {
         username: string,
     },
     isLiked: boolean,
-    isDisliked: boolean
+    isDisliked: boolean,
+    canDelete?: boolean,
 }
 export interface NewPostCredentials {
     content: string,

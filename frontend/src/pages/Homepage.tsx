@@ -3,7 +3,6 @@ import Sidebar from "../components/Sidebar.tsx"
 import Posts from "../components/Posts.tsx";
 import {useCallback, useState} from "react";
 import type {PostType} from "../types/postTypes.ts";
-import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
 import {findAll} from "../api/post.ts";
 import PopUpError from "../components/PopUpError.tsx";
 
@@ -15,14 +14,13 @@ export default function Homepage() {
 
     const loadPosts = useCallback(async () => {
         try {
-            const findAllTypes: FindAllPostsTypes = await findAll();
-            setPosts(findAllTypes.formattedPosts);
-            setPage(findAllTypes.newCursor);
+            const findAllTypes: PostType[] = await findAll();
+            setPosts(findAllTypes);
+            setPage(1);
         } catch {
             setError(true);
         }
     }, []);
-
     return(
         <div className="min-h-screen bg-base-100 flex">
             <Sidebar onPostCreated={loadPosts}/>

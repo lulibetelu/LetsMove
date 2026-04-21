@@ -1,14 +1,24 @@
 import type { PostType } from '../types/postTypes'
 import { Link } from 'react-router-dom';
-import {CircleUserRound, MessageCircle} from 'lucide-react';
+import {CircleUserRound, MessageCircle, Trash2} from 'lucide-react';
 import Like from "./Like.tsx";
 import Dislike from "./Dislike.tsx";
-export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked } : PostType){
+import { removePost } from '../api/post.ts'
+export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, canDelete } : PostType){
+    const deletePost = () => {
+        removePost(id);
+    }
     return (
+
         <article className="flex w-full flex-col px-5 py-4">
             <div className="flex items-center gap-3 mb-2">
                 <div className="text-base-content/70 flex items-center"><CircleUserRound size={20} strokeWidth={1.5} /></div>
                 <div> <Link to={`/profile/${userId}`} className="font-semibold hover:underline" >{username}</Link> </div>
+                {canDelete && (
+                    <button type="button" onClick={deletePost} className="ml-auto text-base-content/70 hover:text-error transition-colors" aria-label="Eliminar post">
+                        <Trash2 size={20} strokeWidth={1.5} />
+                    </button>
+                )}
             </div>
             <div className="mb-3">
                 <p className="break-words whitespace-pre-wrap text-base-content/90">

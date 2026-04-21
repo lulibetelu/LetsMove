@@ -4,7 +4,6 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useUsername} from "../hooks/UseUsername.tsx";
 import {useCallback, useEffect, useState} from "react";
 import type {PostType} from "../types/postTypes.ts";
-import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
 import {findPostsFromUser} from "../api/post.ts";
 import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend.ts";
 import type { FriendRequestType } from '../types/friendRequestType.ts';
@@ -41,9 +40,9 @@ export default function Profile() {
 
     const loadPosts = useCallback(async () => {
         try {
-            const findAllTypes: FindAllPostsTypes = await findPostsFromUser(numericId);
-            setPosts(findAllTypes.formattedPosts);
-            setcursor(findAllTypes.newCursor);
+            const findAllTypes: PostType[] = await findPostsFromUser(numericId);
+            setPosts(findAllTypes);
+            setcursor(1);
         } catch {
             setError(true);
         }
