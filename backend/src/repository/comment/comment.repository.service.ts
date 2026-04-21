@@ -21,9 +21,18 @@ export class CommentRepositoryService {
   }
 
   async findAll(postId: number) {
-    return this.prismaService.comment.findMany({
+    return this.prismaService.post.findUnique({
       where: {
-        postId: postId,
+        id: postId,
+      },
+      include: {
+        comments: {
+          include: {
+            user: {
+              select: { username: true },
+            },
+          },
+        },
       },
     });
   }
@@ -43,7 +52,7 @@ export class CommentRepositoryService {
     });
   }
 
-  async remove(commentId: number){
+  async remove(commentId: number) {
     return this.prismaService.comment.delete({
       where: {
         id: commentId,

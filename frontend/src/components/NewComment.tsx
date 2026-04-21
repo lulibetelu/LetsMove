@@ -1,14 +1,15 @@
 import {useState} from "react";
 import {useUsername} from "../hooks/UseUsername.tsx";
-import type {NewPostCredentials} from "../types/postTypes.ts";
-import {create} from "../api/post.ts";
 import {CircleUserRound, Image} from "lucide-react";
 import PopUpError from "./PopUpError.tsx";
+import type {CreateComment} from "../types/commentTypes.ts";
+import {createComment} from "../api/comment.ts";
 
 export interface Props{
     onClose: () => void,
     onCommentCreated: () => void,
     postAuthorUsername: string,
+    postId: number,
 }
 
 export default function NewComment(props: Props){
@@ -18,12 +19,15 @@ export default function NewComment(props: Props){
     const { username, loading } = useUsername();
 
 
-    //TODO: cambiar esto para que sean comments
     const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
         try {
-            // const postCredentials: NewPostCredentials = {content};
-            // const createPost = await create(postCredentials);
+            const commentData: CreateComment = {
+                postId: props.postId,
+                content: content,
+            };
+             const createPost = await createComment(commentData);
+             console.log(createPost);
             props.onClose();
             props.onCommentCreated();
         } catch {

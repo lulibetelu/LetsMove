@@ -7,14 +7,17 @@ import {useState} from "react";
 import NewComment from "./NewComment.tsx";
 
 type Props = PostType & {
-    isForPostPage: boolean
+    isForPostPage: boolean,
+    onCommentCreate?: () => void,
 }
 
-export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, isForPostPage } : Props){
+export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, isForPostPage, onCommentCreate } : Props){
     const [createComment, setCreateComment] = useState(false);
     const navigate: NavigateFunction = useNavigate();
     const handleClick = () => {
-
+        if (onCommentCreate) {
+            onCommentCreate();
+        }
         navigate('/post/id', {
             state: {data}
         });
@@ -49,7 +52,7 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
                 <button type="button" className="flex cursor-pointer items-center gap-1 transition-colors hover:text-primary" onClick={() => setCreateComment(true)}>
                     <MessageCircle size={20} strokeWidth={1.5}/>
                 </button>
-                {createComment && <NewComment postAuthorUsername={username} onClose={() => setCreateComment(false)} onCommentCreated={handleClick}/>}
+                {createComment && <NewComment postId={id} postAuthorUsername={username} onClose={() => setCreateComment(false)} onCommentCreated={handleClick}/>}
             </div>
         </article>
 

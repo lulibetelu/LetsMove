@@ -31,7 +31,7 @@ model User {
   friendsAsUser1 Friends[]      @relation("friend1") @ignore
   friendsAsUser2 Friends[]      @relation("friend2") @ignore
 
-  comments Comment[] @ignore
+  comments Comment[]
 }
 
 model Sport {

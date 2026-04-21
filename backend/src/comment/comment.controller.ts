@@ -28,10 +28,10 @@ export class CommentController {
     return this.commentService.create(authorId, createCommentDto);
   }
 
-  @Get()
+  @Get(':id')
   @UseGuards(AuthGuard)
-  findAll(@Body() findAllCommentDto: FindAllCommentDto) {
-    return this.commentService.findAll(findAllCommentDto.postId);
+  findAll(@Param('id', ParseIntPipe) id: number) {
+    return this.commentService.findAll(id);
   }
 
   @Patch(':id')
