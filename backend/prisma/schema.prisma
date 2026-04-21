@@ -30,6 +30,8 @@ model User {
   //prisma es una mierda, ejemplo 1:
   friendsAsUser1 Friends[]      @relation("friend1") @ignore
   friendsAsUser2 Friends[]      @relation("friend2") @ignore
+
+  comments Comment[]
   postScore PostScore[]
 }
 
@@ -76,6 +78,7 @@ model Post {
   userId        Int
   postsLiked    PostLiked[]
   postsDisliked PostDisliked[]
+  comments      Comment[]
   postSport PostSport[]
   postScore PostScore[]
 }
@@ -111,6 +114,17 @@ model Friends {
   @@unique([sender, receiver])
 }
 
+model Comment {
+  id Int @id @default(autoincrement())
+  user User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId Int
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+  parentId Int?
+  parent  Comment? @relation("parent",fields: [parentId], references: [id])
+  comments Comment[] @relation("parent")
+  content String
+  createdAt DateTime @default(now())
 model PostSport {
   id Int @id @default(autoincrement())
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
