@@ -30,10 +30,10 @@ export class PostsController {
   @Get()
   findAll(
     @Req() req: Request,
-    @Query('cursor', new ParseIntPipe({ optional: true })) lastPostId?: number,
+    @Query('page', new ParseIntPipe({ optional: true })) page?: number,
   ) {
     const userId = req.user.sub;
-    return this.postsService.findAll(userId, lastPostId);
+    return this.postsService.findAll(userId, page);
   }
 
   @UseGuards(AuthGuard)
@@ -54,13 +54,9 @@ export class PostsController {
   findPostsFromUser(
     @Req() req: Request,
     @Param('id', ParseIntPipe) userId: number,
-    @Query('cursor', new ParseIntPipe({ optional: true })) lastPostId?: number,
+    @Query('page', new ParseIntPipe({ optional: true })) page?: number,
   ) {
     const currentUserId = req.user.sub;
-    return this.postsService.findPostsFromUser(
-      currentUserId,
-      userId,
-      lastPostId,
-    );
+    return this.postsService.findPostsFromUser(currentUserId, userId, page);
   }
 }

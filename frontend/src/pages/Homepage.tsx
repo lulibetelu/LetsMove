@@ -10,14 +10,14 @@ import PopUpError from "../components/PopUpError.tsx";
 
 export default function Homepage() {
     const [posts, setPosts] = useState<PostType[]>([]);
-    const [cursor, setCursor] = useState<number|undefined>();
+    const [page, setPage] = useState<number|undefined>();
     const [error, setError] = useState<boolean>(false);
 
     const loadPosts = useCallback(async () => {
         try {
             const findAllTypes: FindAllPostsTypes = await findAll();
             setPosts(findAllTypes.formattedPosts);
-            setCursor(findAllTypes.newCursor);
+            setPage(findAllTypes.newCursor);
         } catch {
             setError(true);
         }
@@ -41,7 +41,7 @@ export default function Homepage() {
                                 />
                             </div>
                         </header>
-                        <Posts userId={null} posts={posts} cursor={cursor} loadPosts={loadPosts} setCursor={setCursor} setPosts={setPosts}/>
+                        <Posts userId={null} posts={posts} page={page} loadPosts={loadPosts} setPage={setPage} setPosts={setPosts}/>
                         <div>
                             {error && <PopUpError message='Failed to load posts, please try again later'/>}
                         </div>

@@ -16,9 +16,9 @@ export async function create(postCredentials: NewPostCredentials){
     return response.json();
 }
 
-export async function findAll(cursor?: number){
+export async function findAll(page?: number){
     const token = localStorage.getItem('token');
-    const completeUrl = cursor? url + 'posts?cursor=' + cursor : url + 'posts';
+    const completeUrl = page? url + 'posts?page=' + page : url + 'posts';
     const response = await fetch( completeUrl , {
         method: 'GET',
         headers: {
@@ -56,9 +56,9 @@ export async function remove(postId: number){
     return response.json();
 }
 
-export async function findPostsFromUser(userId: number, cursor?: number){
+export async function findPostsFromUser(userId: number, page?: number){
     const token = localStorage.getItem('token');
-    const completeUrl = cursor? url + 'posts/user/' + userId + '?cursor=' + cursor : url + 'posts/user/' + userId;
+    const completeUrl = page? url + 'posts/user/' + userId + '?page=' + page : url + 'posts/user/' + userId;
     const response = await fetch(completeUrl , {
         method: 'GET',
         headers: {
