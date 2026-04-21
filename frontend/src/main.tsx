@@ -12,12 +12,13 @@ import Homepage from './pages/Homepage.tsx';
 import Profile from "./pages/Profile.tsx";
 import NotificationsPage from "./pages/NotificationsPage.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
+import PostPage from "./pages/PostPage.tsx";
 
 //define a partir de donde le pegué en la URL qué componente va a renderizar react
 const router = createBrowserRouter([
     {
       path: "/",
-      element: isLoggedIn() ? <Navigate to={"/homepage"}/> : <Navigate to={"/login"}/>,
+      element: await isLoggedIn() ? <Navigate to={"/homepage"}/> : <Navigate to={"/login"}/>,
     },
     {
         path: "/register",
@@ -51,15 +52,25 @@ const router = createBrowserRouter([
         path: "/error",
         element: <ErrorPage/>
     },
+    {
+        path: "/post/:id",
+        element: <PostPage/>
+    },
 ]);
 //Estoy muy cansado como para pensar como verificar que ese logeado.
-function isLoggedIn(): boolean {
-    try {
+async function isLoggedIn(): Promise<boolean> {
+        const url = import.meta.env.VITE_API_URL;
         const token = localStorage.getItem('token');
-        return token !== null && token.trim() !== '';
-    } catch {
+        const response = await fetch(url + "auth", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        });
+        if (response.ok) return true;
         return false;
-    }
+
 }
 
 createRoot(document.getElementById('root')!).render(

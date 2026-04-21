@@ -12,6 +12,7 @@ import { LikeModule } from './like/like.module';
 import { DislikeModule } from './dislike/dislike.module';
 import { PostActionValidatorModule } from './post-action-validator/post-action-validator.module';
 import { FriendsModule } from './friends/friends.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { FriendsModule } from './friends/friends.module';
     DislikeModule,
     PostActionValidatorModule,
     FriendsModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
