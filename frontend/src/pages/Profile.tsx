@@ -154,18 +154,18 @@ export default function Profile() {
                                         </button>
                                     ))
                                 )    :
-                                <div>
-                                <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors">
-                                    <Edit3 size={14} className="mr-1" /> edit profile
-                                </button>
-                                <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors" onClick={logout}>
-                                    <Edit3 size={14} className="mr-1" /> logout
-                                </button>
+                                <div className="flex flex-row">
+                                    <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors">
+                                        <Edit3 size={14} className="mr-1" /> edit profile
+                                    </button>
+
+                                    <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors" onClick={logout}>
+                                        <Edit3 size={14} className="mr-1" /> logout
+                                    </button>
+
                                 </div>
                             }
                         </div>
-
-
                     </div>
 
                     <div className="space-y-1 text-sm text-base-content/80">
