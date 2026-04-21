@@ -19,7 +19,7 @@ export class PostsService {
 
   async create(id: number, createPostDto: CreatePostDto) {
     const users = await this.preferencesRepository.findBySportId(
-      createPostDto.sports,
+      createPostDto.selectedSportsId,
     );
     const sportMatchByUser = users.reduce(
       (acc, { userId }) => {

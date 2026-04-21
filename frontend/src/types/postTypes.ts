@@ -1,5 +1,3 @@
-import type {Sport} from "./sportType.ts";
-
 export interface PostType {
     id:number,
     userId: number,
@@ -12,6 +10,6 @@ export interface PostType {
 }
 export interface NewPostCredentials {
     content: string,
-    sports: Sport[]
+    selectedSportsId: number[]
 }
 

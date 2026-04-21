@@ -27,7 +27,10 @@ export default function NewPost({ onClose, onPostCreated }: { onClose: () => voi
     const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
         try {
-            const postCredentials: NewPostCredentials = {content, sports};
+            const selectedSportsId = selectedSports.map((sport) =>
+                sport.id,
+            );
+            const postCredentials: NewPostCredentials = {content, selectedSportsId};
             const createPost = await create(postCredentials);
             console.log("CREATE POST:", createPost);
             onClose();

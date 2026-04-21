@@ -20,7 +20,7 @@ export class PostsRepositoryService {
     });
     // 2. creo el postSport, guardando los sports de los que habla el post
     await this.prismaService.postSport.createMany({
-      data: createPostDto.sports.map((sportId) => ({
+      data: createPostDto.selectedSportsId.map((sportId) => ({
         postId: newPost.id,
         sportId,
       })),
@@ -64,6 +64,7 @@ export class PostsRepositoryService {
             select: { username: true },
           },
         },
+        where: { userId: { not: currentUserId } },
       }),
       // agrupo en base a cada usuario que creó un post y me fijo cuantos de esos posts el current id likeo o dislikeo
       this.prismaService.$queryRaw<
