@@ -35,18 +35,18 @@ export default function RegisterPage(){
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-base-300 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-base-300 px-4 py-12">
             <div className="card w-full max-w-sm bg-base-100 shadow-2xl overflow-hidden border border-base-content/5">
 
                 {/* Header idéntico al Login pero con otro ícono y texto */}
-                <div className="bg-[#8A9A5B] py-10 flex flex-col items-center justify-center text-white">
+                <div className="bg-[#8A9A5B] py-8 flex flex-col items-center justify-center text-white">
                     <div className="bg-white/20 p-4 rounded-full mb-3">
-                        <UserPlus size={32} />
+                        <UserPlus size={28} />
                     </div>
                     <h2 className="text-3xl font-bold tracking-tight">Register</h2>
                     <p className="text-white/80 text-sm mt-1">Sumate a la comunidad</p>
                 </div>
-                <form className="p-8 flex flex-col gap-5" onSubmit={handleSubmit}>
+                <form className="p-6 flex flex-col gap-4" onSubmit={handleSubmit}>
                     <div className="w-full">
                         <CustomInput label = 'Username' input = {{
                                 type: 'text',
