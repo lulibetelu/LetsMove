@@ -27,10 +27,7 @@ export async function loginUser(credentials: LoginCredentials){
 
 export async function getUsernameFromId(id?: number): Promise<string | null> {
     if (!id) {
-        const token = localStorage.getItem('token');
-        if (!token) return null;
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        return payload.username ?? null;
+        return decodeToken()?.username ?? null;
     }
     else {
         const response = await fetch(url + 'register/' + id, {
@@ -42,6 +39,24 @@ export async function getUsernameFromId(id?: number): Promise<string | null> {
         if (!response.ok) throw new Error(`Couldn't get username from ${id} : ${response.status}`)
         const user: User = await response.json();
         return user.username;
+    }
+}
+export function getCurrentUserId(): number|null {
+    return decodeToken()?.sub ?? null;
+}
+
+function decodeToken(): { sub: number; username: string } | null {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) return null;
+        const base64url = token.split('.')[1];
+        const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+        const payload = JSON.parse(atob(base64));
+        const sub = Number(payload.sub);
+        if (isNaN(sub)) return null;
+        return { sub, username: payload.username ?? null };
+    } catch {
+        return null;
     }
 }
 

@@ -8,6 +8,7 @@ import type {FindAllPostsTypes} from "../types/findAllPostsTypes.ts";
 import {findPostsFromUser} from "../api/post.ts";
 import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend.ts";
 import type { FriendRequestType } from '../types/friendRequestType.ts';
+import {getCurrentUserId} from "../api/user.ts";
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -15,9 +16,10 @@ export default function Profile() {
     const numericId = Number(id);
     const isValid = !isNaN(numericId);
     const { username, loading } = useUsername(numericId);
+    const currentUserId = getCurrentUserId();
 
     const [posts, setPosts] = useState<PostType[]>([]);
-    const [cursor, setCursor] = useState<number | undefined>();
+    const [cursor, setcursor] = useState<number | undefined>();
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
 
@@ -41,7 +43,7 @@ export default function Profile() {
         try {
             const findAllTypes: FindAllPostsTypes = await findPostsFromUser(numericId);
             setPosts(findAllTypes.formattedPosts);
-            setCursor(findAllTypes.newCursor);
+            setcursor(findAllTypes.newCursor);
         } catch {
             setError(true);
         }
@@ -118,38 +120,40 @@ export default function Profile() {
                                     2. te mande request? si si, se pone en pending y gris y si pasas por arriba te permite cancelar la request
                                                          si no, el boton esta en verda y aparece Add friend
                             */}
-
-                            {friendAdded? (
-                                <button
-                                    className="btn btn-xs bg-[#8A9A5B] hover:bg-[#728249] text-base-100 border-[#8A9A5B] hover:border-[#728249] transition-all w-25"
-                                    onClick={handleClickFriend}
-                                >
-                                    <UserPlus size={16} className="mr-1" /> Friend!
-                                </button>
-                                ) : (friendReq ? (
-                                    <button
-                                        className="btn btn-xs btn-outline border-base-content/30 text-base-content/70 group hover:bg-error hover:border-error hover:text-white transition-all w-25"
-                                        onClick={handleClickRequest}
-                                    >
-                                        <span className="flex items-center group-hover:hidden">
-                                            <Hourglass size={16} className="mr-1" /> Pending
-                                        </span>
-
-                                        <span className="hidden items-center group-hover:flex">
-                                            <X size={16} className="mr-1" /> Cancel
-                                        </span>
-                                    </button>
-                                ) : (
+                            {(currentUserId != numericId) ?
+                                ( friendAdded? (
                                     <button
                                         className="btn btn-xs bg-[#8A9A5B] hover:bg-[#728249] text-base-100 border-[#8A9A5B] hover:border-[#728249] transition-all w-25"
-                                        onClick={handleClickRequest}
+                                        onClick={handleClickFriend}
                                     >
-                                        <UserPlus size={16} className="mr-1" /> Add Friend
+                                        <UserPlus size={16} className="mr-1" /> Friend!
                                     </button>
-                                ))}
-                            <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors">
-                                <Edit3 size={14} className="mr-1" /> edit profile
-                            </button>
+                                    ) : (friendReq ? (
+                                        <button
+                                            className="btn btn-xs btn-outline border-base-content/30 text-base-content/70 group hover:bg-error hover:border-error hover:text-white transition-all w-25"
+                                            onClick={handleClickRequest}
+                                        >
+                                            <span className="flex items-center group-hover:hidden">
+                                                <Hourglass size={16} className="mr-1" /> Pending
+                                            </span>
+
+                                            <span className="hidden items-center group-hover:flex">
+                                                <X size={16} className="mr-1" /> Cancel
+                                            </span>
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="btn btn-xs bg-[#8A9A5B] hover:bg-[#728249] text-base-100 border-[#8A9A5B] hover:border-[#728249] transition-all w-25"
+                                            onClick={handleClickRequest}
+                                        >
+                                            <UserPlus size={16} className="mr-1" /> Add Friend
+                                        </button>
+                                    ))
+                                )    :
+                                <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors">
+                                    <Edit3 size={14} className="mr-1" /> edit profile
+                                </button>
+                            }
                         </div>
                     </div>
 
@@ -178,7 +182,7 @@ export default function Profile() {
                     <h2 className="text-xl font-bold mb-4 px-4 lg:px-0 flex items-center gap-2">
                         Activity
                     </h2>
-                    <Posts userId={numericId} posts={posts} cursor={cursor} loadPosts={loadPosts} setCursor={setCursor} setPosts={setPosts} />
+                    <Posts userId={numericId} posts={posts} page={cursor} loadPosts={loadPosts} setPage={setcursor} setPosts={setPosts} />
                 </div>
 
                 {/* Columna Derecha: Amigos y Eventos (Ocupa 1 espacio) */}

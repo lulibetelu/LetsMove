@@ -10,5 +10,6 @@ export interface PostType {
 }
 export interface NewPostCredentials {
     content: string,
+    selectedSportsId: number[]
 }
 

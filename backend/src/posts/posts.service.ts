@@ -7,28 +7,46 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { PostsRepositoryService } from '../repository/posts/posts.repository.service';
 import { GetPostDto } from './dto/get-post-dto';
 import { UserRepositoryService } from '../repository/user/user.repository.service';
+import { PreferenceRepositoryService } from '../repository/preference/preference.repository.service';
 
 @Injectable()
 export class PostsService {
-  constructor(private postsRepository: PostsRepositoryService, private userRepository: UserRepositoryService) {}
+  constructor(
+    private postsRepository: PostsRepositoryService,
+    private userRepository: UserRepositoryService,
+    private preferencesRepository: PreferenceRepositoryService,
+  ) {}
 
-  async create(userId: number, createPostDto: CreatePostDto) {
-    return this.postsRepository.create(userId, createPostDto);
+  async create(id: number, createPostDto: CreatePostDto) {
+    const users = await this.preferencesRepository.findBySportId(
+      createPostDto.selectedSportsId,
+    );
+    const sportMatchByUser = users.reduce(
+      (acc, { userId }) => {
+        acc[userId] = (acc[userId] ?? 0) + 1;
+        return acc;
+      },
+      {} as Record<number, number>,
+    );
+    return await this.postsRepository.create(
+      id,
+      createPostDto,
+      sportMatchByUser,
+    );
   }
 
-  async findAll(currentUserId: number, lastPostId?: number) {
-    const posts = await this.postsRepository.findAll(currentUserId, lastPostId);
+  async findAll(currentUserId: number, page: number = 1) {
+    const posts = await this.postsRepository.findAll(currentUserId, page);
 
-    const formattedPosts = posts.map((post) => {
-      const { postsLiked, postsDisliked, ...postData } = post;
+    return posts.map((post) => {
+      const { postsLiked, postsDisliked, postSport, ...postData } = post;
       return new GetPostDto(
         postData,
         postsLiked.length === 1,
         postsDisliked.length === 1,
+        postSport.map((ps) => ps.sportId),
       );
     });
-    const newCursor = formattedPosts[formattedPosts.length - 1]?.id;
-    return { formattedPosts, newCursor };
   }
 
   async findOne(postId: number) {
@@ -49,7 +67,7 @@ export class PostsService {
   async findPostsFromUser(
     currentUserId: number,
     userId: number,
-    lastPostId?: number,
+    page?: number,
   ) {
     // verifico si existe el usuario
     const user = await this.userRepository.findById(userId);
@@ -58,19 +76,17 @@ export class PostsService {
     const posts = await this.postsRepository.findPostsFromUser(
       currentUserId,
       userId,
-      lastPostId,
+      page,
     );
 
-    const formattedPosts = posts.map((post) => {
-      const { postsLiked, postsDisliked, ...postData } = post;
+    return posts.map((post) => {
+      const { postsLiked, postsDisliked, postSport, ...postData } = post;
       return new GetPostDto(
         postData,
         postsLiked.length === 1,
         postsDisliked.length === 1,
+        postSport.map((ps) => ps.sportId),
       );
     });
-
-    const newCursor = formattedPosts[formattedPosts.length - 1]?.id;
-    return { formattedPosts, newCursor };
   }
 }

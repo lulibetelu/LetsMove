@@ -14,11 +14,16 @@ export class PreferenceRepositoryService {
     });
   }
 
-  //trae todos los usuarios que prefieren un deporte
-  async findBySportId(sportId: number) {
+  //trae todos los usuarios que prefieren algun deporte
+  async findBySportId(sportsId: number[]) {
     return this.prismaService.preference.findMany({
       where: {
-        sportId: sportId,
+        sportId: {
+          in: sportsId,
+        },
+      },
+      select: {
+        userId: true,
       },
     });
   }
