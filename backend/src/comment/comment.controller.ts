@@ -15,7 +15,6 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { AuthGuard } from '../authentication/auth.guard';
 import type { Request } from 'express';
-import { FindAllCommentDto } from './dto/find-all-comment.dto';
 
 @Controller('comment')
 export class CommentController {
