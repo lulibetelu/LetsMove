@@ -4,6 +4,7 @@ import {findAll, findPostsFromUser, removePost} from "../api/post.ts";
 import Post from "./Post.tsx";
 import {getCurrentUserId} from "../api/user.ts";
 
+
 interface PostsProps {
     userId: number | null;
     posts: PostType[];
@@ -16,6 +17,7 @@ interface PostsProps {
 export default function Posts({userId, posts, page, loadPosts, setPage, setPosts}: PostsProps) {
     const currentUserId = getCurrentUserId();
     const canDelete = currentUserId === userId;
+
     useEffect(() => {
         loadPosts().then();
     }, [loadPosts]);
@@ -32,7 +34,7 @@ export default function Posts({userId, posts, page, loadPosts, setPage, setPosts
             setPosts((prevPosts) => [...prevPosts, ...response]);
             setPage(response.length === 50 ? page + 1 : undefined);
         } catch {
-            //set error
+            //setError(true);
         }
     }, [page, setPage, setPosts, userId]);
 
@@ -63,7 +65,7 @@ export default function Posts({userId, posts, page, loadPosts, setPage, setPosts
             await removePost(postId);
             setPosts(prev => prev.filter(p => p.id !== postId));
         } catch {
-            // set error
+            //setError(true);
         }
     }, [setPosts]);
 
