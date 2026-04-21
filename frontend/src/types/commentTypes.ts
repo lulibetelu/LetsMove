@@ -7,7 +7,7 @@ export interface CreateComment{
 export interface CommentRequestType{
     id: number,
     content: string,
-    createdAt: Date,
+    createdAt: string,
     userId: number,
     comments: {
         id: number,
@@ -15,7 +15,7 @@ export interface CommentRequestType{
         postId: number,
         parentId?: number,
         content: string,
-        createdAt: Date,
+        createdAt: string,
         user: {
             username: string,
         }
