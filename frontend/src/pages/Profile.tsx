@@ -1,4 +1,4 @@
-import {MapPin, CalendarDays, Users, Edit3, UserCircle, Activity, UserPlus, Hourglass, X} from 'lucide-react';
+import {MapPin, CalendarDays, Users, Edit3, UserCircle, Activity, UserPlus, Hourglass, X, LogOut} from 'lucide-react';
 import Posts from "../components/Posts.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {useUsername} from "../hooks/UseUsername.tsx";
@@ -127,7 +127,7 @@ export default function Profile() {
                             {(currentUserId != numericId) ?
                                 ( friendAdded? (
                                     <button
-                                        className="btn btn-xs bg-[#8A9A5B] hover:bg-[#728249] text-base-100 border-[#8A9A5B] hover:border-[#728249] transition-all w-25"
+                                        className="btn btn-xs btn-outline border-base-content/30 bg-[#8A9A5B] hover:bg-[#728249] text-base-100  hover:border-[#728249] transition-all w-25"
                                         onClick={handleClickFriend}
                                     >
                                         <UserPlus size={16} className="mr-1" /> Friend!
@@ -154,13 +154,13 @@ export default function Profile() {
                                         </button>
                                     ))
                                 )    :
-                                <div className="flex flex-row">
+                                <div className="flex flex-row gap-2">
                                     <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors">
                                         <Edit3 size={14} className="mr-1" /> edit profile
                                     </button>
 
                                     <button className="btn btn-xs btn-outline hover:bg-[#8A9A5B] hover:border-[#8A9A5B] hover:text-base-100 text-[#8A9A5B] transition-colors" onClick={logout}>
-                                        <Edit3 size={14} className="mr-1" /> logout
+                                        <LogOut size={14} className="mr-1" /> logout
                                     </button>
 
                                 </div>
