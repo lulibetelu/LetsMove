@@ -108,7 +108,7 @@ export class PostsRepositoryService {
 
       const authorAffinity = affinityMap.get(post.userId) ?? 0;
 
-      const score = seniority + sportMatch * 2 + authorAffinity * 3;
+      const score = seniority + sportMatch * 3 + authorAffinity * 4;
 
       return { ...post, score };
     });
