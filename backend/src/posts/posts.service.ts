@@ -69,7 +69,7 @@ export class PostsService {
   async findPostsFromUser(
     currentUserId: number,
     userId: number,
-    page?: number,
+    page: number = 1,
   ) {
     // verifico si existe el usuario
     const user = await this.userRepository.findById(userId);
@@ -80,6 +80,10 @@ export class PostsService {
       userId,
       page,
     );
+
+    if (!posts) {
+      throw new NotFoundException(`User ${currentUserId} doesn't have posts`);
+    }
 
     return posts.map((post) => {
       const { postsLiked, postsDisliked, postSport, ...postData } = post;
