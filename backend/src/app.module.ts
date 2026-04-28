@@ -13,6 +13,7 @@ import { DislikeModule } from './dislike/dislike.module';
 import { PostActionValidatorModule } from './post-action-validator/post-action-validator.module';
 import { FriendsModule } from './friends/friends.module';
 import { CommentModule } from './comment/comment.module';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { CommentModule } from './comment/comment.module';
     PostActionValidatorModule,
     FriendsModule,
     CommentModule,
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService],
