@@ -4,6 +4,7 @@ import {createUser, loginUser} from '../api/user.ts'
 import type {LoginCredentials, RegisterCredentials} from "../types/userTypes.ts";
 import PopUpError from "../components/PopUpError.tsx";
 import CustomInput from "../components/CustomInput.tsx";
+import {UserPlus} from "lucide-react";
 
 export default function RegisterPage(){
     const [username, setUsername] = useState('');
@@ -34,16 +35,29 @@ export default function RegisterPage(){
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-base-300 px-4 py-12">
-            <div className="card w-full max-w-sm bg-base-100 shadow-2xl overflow-hidden border border-base-content/5">
+        <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#141414]">
+            <div className="w-full max-w-sm flex flex-col rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]">
 
                 {/* Header idéntico al Login pero con otro ícono y texto */}
-                <div className="bg-[#8A9A5B] py-8 flex flex-col items-center justify-center text-white">
-                    <h2 className="text-3xl font-bold tracking-tight">Register</h2>
-                    <p className="text-white/80 text-sm mt-1">Sumate a la comunidad</p>
+                <div className="relative py-10 flex flex-col items-center justify-center text-white overflow-hidden"
+                     style={{ background: "linear-gradient(135deg, #8A9A5B 0%, #6b7a46 100%)" }}
+                >
+                    <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/5" />
+                    <div className="absolute -bottom-12 -left-6 w-32 h-32 rounded-full bg-black/10" />
+
+                    <div className="relative bg-white/15 backdrop-blur-sm border border-white/20 p-4 rounded-2xl mb-4 shadow-lg">
+                        <UserPlus size={28} strokeWidth={1.8} />
+                    </div>
+
+                    <h2 className="relative text-3xl font-bold tracking-tight">Register</h2>
+                    <p className="relative text-white/70 text-sm mt-1.5 font-light">Sumate a la comunidad</p>
+
+                    <div className="absolute bottom-0 left-0 right-0 h-6 bg-[#1e1e1e] rounded-t-[50%]" />
+
                 </div>
+
                 <form className="p-6 flex flex-col gap-4" onSubmit={handleSubmit}>
-                    <div className="w-full">
+                    <div className="flex flex-col gap-1">
                         <CustomInput label = 'Username' input = {{
                                 type: 'text',
                                 placeHolder: 'your username',
@@ -51,7 +65,7 @@ export default function RegisterPage(){
                                 onChange: (e) => {setUsername(e.target.value)}
                             }}></CustomInput>
                     </div>
-                    <div className="w-full">
+                    <div className="flex flex-col gap-1">
                         <CustomInput label = 'Email' input = {{
                                 type: 'email',
                                 placeHolder: 'your email',
@@ -59,7 +73,7 @@ export default function RegisterPage(){
                                 onChange: (e) => {setEmail(e.target.value)}
                             }}></CustomInput>
                     </div>
-                    <div className="w-full">
+                    <div className="flex flex-col gap-1">
                         <CustomInput label = 'Password' input = {{
                                 type: 'password',
                                 placeHolder: 'your password',
