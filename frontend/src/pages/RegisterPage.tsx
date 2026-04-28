@@ -39,7 +39,7 @@ export default function RegisterPage(){
             <div className="w-full max-w-sm flex flex-col rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]">
 
                 {/* Header idéntico al Login pero con otro ícono y texto */}
-                <div className="relative py-10 flex flex-col items-center justify-center text-white overflow-hidden"
+                <div className="relative py-12 flex flex-col items-center justify-center text-white overflow-hidden"
                      style={{ background: "linear-gradient(135deg, #8A9A5B 0%, #6b7a46 100%)" }}
                 >
                     <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/5" />
@@ -56,7 +56,7 @@ export default function RegisterPage(){
 
                 </div>
 
-                <form className="p-6 flex flex-col gap-4" onSubmit={handleSubmit}>
+                <form className="p-8 flex flex-col gap-5" onSubmit={handleSubmit}>
                     <div className="flex flex-col gap-1">
                         <CustomInput label = 'Username' input = {{
                                 type: 'text',

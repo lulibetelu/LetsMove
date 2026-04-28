@@ -6,6 +6,7 @@ import SportLabel from "../components/SportLabel.tsx";
 import type {CreatePreferencesDto} from "backend/src/preferences/dto/create.preferences.dto.ts";
 import {createPreferences} from "../api/preferences.ts";
 import PopUpError from "../components/PopUpError.tsx";
+import {Dumbbell} from "lucide-react";
 
 export default function ChooseInterestsPage(){
     const navigate = useNavigate()
@@ -50,33 +51,52 @@ export default function ChooseInterestsPage(){
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-base-200">
+        <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#141414]">
 
-            <div>
-                {error && <PopUpError message='Failed to load sports, please try again later'/>}
-            </div>
+            <div className="w-full max-w-lg flex flex-col rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]">
 
-            <div className="card w-[600px] bg-base-100 shadow-xl p-6 flex flex-col gap-6">
+                <div
+                    className="relative py-10 flex flex-col items-center justify-center text-white overflow-hidden"
+                    style={{ background: "linear-gradient(135deg, #8A9A5B 0%, #6b7a46 100%)" }}
+                >
+                    <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/5" />
+                    <div className="absolute -bottom-12 -left-6 w-32 h-32 rounded-full bg-black/10" />
 
-                <h2 className="text-2xl font-bold text-center">
-                    Elija sus deportes favoritos
-                </h2>
+                    <div className="relative bg-white/15 backdrop-blur-sm border border-white/20 p-4 rounded-2xl mb-4 shadow-lg">
+                        {/* Usá el ícono que prefieras, por ej. Dumbbell o Star de lucide-react */}
+                        <Dumbbell size={28} strokeWidth={1.8} />
+                    </div>
 
-                <h3 className="text-2m text-center">
-                    Clickee hasta encontrar su nivel
-                </h3>
+                    <h2 className="relative text-3xl font-bold tracking-tight">
+                        Elija sus deportes favoritos
+                    </h2>
 
-                <div className="grid grid-cols-3 gap-3">
-                    {sports.map(sport => (
-                        <SportLabel key={sport.id} sportName={sport.name} onChange={handleChange}/>
+                    <p className="relative text-white/70 text-sm mt-1.5 font-light">
+                        Clickee hasta encontrar su nivel
+                    </p>
 
-                    ))}
+                    <div className="absolute bottom-0 left-0 right-0 h-6 bg-[#1c2114] rounded-t-[50%]" />
+
                 </div>
 
-                <button className="btn btn-primary" onClick={handleSubmit}>
-                    Continue
-                </button>
+                    <div className="bg-[#1c2114] px-8 pb-8 pt-6 flex flex-col gap-6">
+                        <div>
+                            {error && <PopUpError message='Failed to load sports, please try again later'/>}
+                        </div>
+                        <div className="flex flex-wrap gap-2.5 justify-center">
+                            {sports.map(sport => (
+                                <SportLabel key={sport.id} sportName={sport.name} onChange={handleChange}/>
 
+                            ))}
+                    </div>
+
+                        <button
+                            onClick={handleSubmit}
+                            className="btn border-none bg-[#8A9A5B] hover:bg-[#728249] text-white w-full mt-2 shadow-md transition-all active:scale-[0.98]"
+                        >
+                            Continue
+                        </button>
+                </div>
             </div>
         </div>
     );

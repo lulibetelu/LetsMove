@@ -25,7 +25,7 @@ export default function LoginPage(){
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 bg-[#141414]">
+        <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#141414]">
             <div className="w-full max-w-sm flex flex-col rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]">
                 {/* Header con el color de marca */}
                 <div className="relative py-12 flex flex-col items-center justify-center text-white overflow-hidden"
