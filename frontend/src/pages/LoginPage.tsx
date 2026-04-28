@@ -9,7 +9,7 @@ import {LogIn} from "lucide-react";
 export default function LoginPage(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorHasBeenThrown, setError] = useState(false);
+    const [error, setError] = useState<string|null>(null);
 
     const navigate = useNavigate();
     const handleSubmit:React.SubmitEventHandler= async (event) => {
@@ -19,8 +19,8 @@ export default function LoginPage(){
             const token = await loginUser(credentials);
             localStorage.setItem('token', token)
             navigate("/homepage")
-        } catch {
-            setError(true);
+        } catch (e) {
+            if (e instanceof Error) setError(e.message);
         }
     }
 
@@ -55,18 +55,17 @@ export default function LoginPage(){
                                 onChange: (e) => {setPassword(e.target.value)}
                             }}></CustomInput>
                     </div>
+                    <div>
+                        {error!=null && <PopUpError message={error}/>}
+                    </div>
                     <button className="btn border-none bg-[#8A9A5B] hover:bg-[#728249] text-white w-full mt-2 shadow-md transition-all active:scale-[0.98]"
                     > Login
                         </button>
-
                     <div className='flex flex-col items-center gap-2 mt-4'>
                         <p className="text-sm opacity-70">Don't have an account?</p>
                         <Link to='/register' className='text-[#8A9A5B] font-semibold hover:underline transition-all'>Register</Link>
                     </div>
 
-                    <div>
-                        {errorHasBeenThrown && <PopUpError message='Invalid email or password'/>}
-                    </div>
                 </form>
             </div>
         </div>

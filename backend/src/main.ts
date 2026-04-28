@@ -13,7 +13,7 @@ async function bootstrap() {
   );
   // this selects which pages can request/hit the api
   app.enableCors({
-    origin: process.env.DATABASE_URL,
+    origin: process.env.URL,
   });
   await app.listen(process.env.PORT ?? 3000);
 }
