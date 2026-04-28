@@ -40,7 +40,7 @@ export class RegisterController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.registerService.remove(+id);
+  remove(@Param('id', new ParseIntPipe()) id: number) {
+    return this.registerService.remove(id);
   }
 }
