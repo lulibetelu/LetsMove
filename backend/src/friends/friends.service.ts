@@ -50,6 +50,8 @@ export class FriendsService {
         'Only receiver can update the friendship request',
       );
     }
+    if (updateFriendDto.state === 'Rejected')
+      return this.friendsRepository.remove(userId, updateFriendDto.friendId);
     return this.friendsRepository.update(userId, updateFriendDto);
   }
 
