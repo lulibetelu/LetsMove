@@ -21,15 +21,15 @@ export class CommentService {
 
   async update(
     editorId: number,
-    id: number,
+    commentId: number,
     updateCommentDto: UpdateCommentDto,
   ) {
-    const comment = await this.findOne(id);
+    const comment = await this.findOne(commentId);
 
     if (comment === null || comment.authorId !== editorId)
       throw new UnauthorizedException('Only author can edit this comment.');
 
-    return this.commentRepositoryServices.update(id, updateCommentDto);
+    return this.commentRepositoryServices.update(commentId, updateCommentDto);
   }
 
   async remove(removerId: number, commentId: number) {
