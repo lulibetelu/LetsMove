@@ -183,11 +183,16 @@ model Event{
   host User @relation(fields: [hostId], references: [id], onDelete: Cascade)
   title String
   description String
-  chatId Int //falta la tabla chat
+  chatId Int? //falta la tabla chat
   startingDate DateTime
   locationId Int?
   location Location? @relation(fields: [locationId], references: [id], onDelete: Cascade)
   endingDate DateTime?
-
+  eventType EventType
   imageEvents ImageEvent[]
+}
+
+enum EventType{
+  Asynchronous
+  InPerson
 }

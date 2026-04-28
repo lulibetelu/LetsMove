@@ -6,18 +6,22 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards, Req,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { AuthGuard } from '../authentication/auth.guard';
+import type { Request } from 'express';
 
 @Controller('event')
 export class EventController {
   constructor(private readonly eventService: EventService) {}
-
+  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createEventDto: CreateEventDto) {
-    return this.eventService.create(createEventDto);
+  create(@Req() req: Request, @Body() createEventDto: CreateEventDto) {
+    const hostId: number = req.user.sub;
+    return this.eventService.create(hostId, createEventDto);
   }
 
   @Get()

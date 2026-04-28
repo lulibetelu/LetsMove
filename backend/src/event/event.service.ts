@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { EventRepositoryService } from '../repository/event/event.repository.service';
 
 @Injectable()
 export class EventService {
-  create(createEventDto: CreateEventDto) {
-    return 'This action adds a new event';
+  constructor(private eventRepositoryService: EventRepositoryService) {
+  }
+  create(hostId: number, createEventDto: CreateEventDto) {
+    return this.eventRepositoryService.createEvent(hostId, createEventDto);
   }
 
   findAll() {
