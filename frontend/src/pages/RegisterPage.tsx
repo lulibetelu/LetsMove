@@ -4,7 +4,6 @@ import {createUser, loginUser} from '../api/user.ts'
 import type {LoginCredentials, RegisterCredentials} from "../types/userTypes.ts";
 import PopUpError from "../components/PopUpError.tsx";
 import CustomInput from "../components/CustomInput.tsx";
-import {UserPlus} from "lucide-react";
 
 export default function RegisterPage(){
     const [username, setUsername] = useState('');
@@ -40,9 +39,6 @@ export default function RegisterPage(){
 
                 {/* Header idéntico al Login pero con otro ícono y texto */}
                 <div className="bg-[#8A9A5B] py-8 flex flex-col items-center justify-center text-white">
-                    <div className="bg-white/20 p-4 rounded-full mb-3">
-                        <UserPlus size={28} />
-                    </div>
                     <h2 className="text-3xl font-bold tracking-tight">Register</h2>
                     <p className="text-white/80 text-sm mt-1">Sumate a la comunidad</p>
                 </div>
