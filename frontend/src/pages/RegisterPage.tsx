@@ -10,7 +10,7 @@ export default function RegisterPage(){
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorHasBeenThrown, setError] = useState(false);
+    const [error, setError] = useState<string|null>(null);
 
     const navigate = useNavigate();
 
@@ -28,8 +28,8 @@ export default function RegisterPage(){
             localStorage.setItem('token', token)
 
             navigate("/interests");
-        } catch {
-            setError(true);
+        } catch (e) {
+            if (e instanceof Error) setError(e.message);
         }
 
     };
@@ -71,6 +71,9 @@ export default function RegisterPage(){
                                 onChange: (e) => {setPassword(e.target.value)}
                             }}></CustomInput>
                     </div>
+                    <div>
+                        {error!=null && <PopUpError message={error}/>}
+                    </div>
                     <button type="submit" className="btn border-none bg-[#8A9A5B] hover:bg-[#728249] text-white w-full mt-2 shadow-md transition-all active:scale-[0.98]"> Register </button>
                     <div className='flex flex-col items-center justify-center gap-1 mt-2 text-center'>
                         <p className="text-sm opacity-60">¿Ya tenés una cuenta?</p>
@@ -78,9 +81,7 @@ export default function RegisterPage(){
                             Iniciá sesión acá
                         </Link>
                     </div>
-                    <div>
-                        {errorHasBeenThrown && <PopUpError message='Invalid credentials'/>}
-                    </div>
+
 
                 </form>
             </div>
