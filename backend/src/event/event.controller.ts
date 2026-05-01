@@ -6,7 +6,9 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards, Req,
+  UseGuards,
+  Req,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -24,23 +26,31 @@ export class EventController {
     return this.eventService.create(hostId, createEventDto);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
-  findAll() {
-    return this.eventService.findAll();
+  findAll(@Req() req: Request) {
+    //Paso el Id para que en un futuro podamos usarlo para el feed de eventos "inteligente"
+    const requesterId = req.user.sub;
+    return this.eventService.findAll(requesterId);
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.eventService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.eventService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
-    return this.eventService.update(+id, updateEventDto);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateEventDto: UpdateEventDto,
+  ) {
+    return await this.eventService.update(id, updateEventDto);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.eventService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.eventService.remove(id);
   }
 }

@@ -35,6 +35,7 @@ export class CreateEventDto {
   @IsString()
   location?: string;
 
+  @Type(() => Date)
   @IsDate()
   @IsOptional()
   endingDate?: Date;
