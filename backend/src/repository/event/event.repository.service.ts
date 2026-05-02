@@ -88,20 +88,26 @@ export class EventRepositoryService {
       throw new BadRequestException('asynchronous events do not have location');
     }
 
-    const locationId: number | null = await this.findLocationId(
-      updateEventDto.location,
-    );
+    const data: {
+      description: UpdateEventDto['description'];
+      startingDate: UpdateEventDto['startingDate'];
+      endingDate: UpdateEventDto['endingDate'];
+      locationId?: number | null;
+    } = {
+      description: updateEventDto.description,
+      startingDate: updateEventDto.startingDate,
+      endingDate: updateEventDto.endingDate,
+    };
+
+    if (updateEventDto.location !== undefined) {
+      data.locationId = await this.findLocationId(updateEventDto.location);
+    }
 
     return this.prismaService.event.update({
       where: {
         id: id,
       },
-      data: {
-        description: updateEventDto.description,
-        startingDate: updateEventDto.startingDate,
-        locationId: locationId,
-        endingDate: updateEventDto.endingDate,
-      },
+      data: data,
     });
   }
 
