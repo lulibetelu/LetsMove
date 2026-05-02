@@ -1,17 +1,41 @@
 import Sidebar from "../components/Sidebar.tsx";
 import {Search} from "lucide-react";
-import Event from "../components/Event.tsx";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import type {EventType} from "../types/eventTypes.ts"
+import {findEvents} from "../api/event.ts";
+import Events from "../components/Events.tsx";
 
 export default function EventPage(){
-    /*const [events, setEvents] = useState<EventType[]>([]);
+    const [events, setEvents] = useState<EventType[]>([]);
+    const [cursor, setCursor] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [error, setError] = useState(false);
+    //lo que usas para indicar qué div es el que usas para pedir los proximos eventos.
+    const loaderRef = useRef<HTMLDivElement>(null);
 
-    const loadEvents = useEffect(() =>{
+    const fetchEvents = async () => {
+        try {
+            const events: EventType[] = await findEvents(cursor)
+            if (events.length !== 0){
+                setEvents(prev => [...prev, ...events])
+                setCursor(prev => prev+1);
+                setHasMore(true);
+            }else {
+                setHasMore(false);
+            }
+        }catch {
+            setError(true);
+        }
 
+    }
 
-
-    },[])*/
+    useEffect(() => {
+        const observer = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) fetchEvents();
+        });
+        if (loaderRef.current) observer.observe(loaderRef.current);
+        return () => observer.disconnect();
+    },[cursor, hasMore]);
 
     return (
         <div className="min-h-screen bg-base-100 flex">
@@ -31,7 +55,8 @@ export default function EventPage(){
                             />
                         </div>
                     </header>
-                    <Event id={1} title="Football match" description="This is a football match"/>
+                    <Events eventArray={events}/>
+                    <div ref={loaderRef}></div>
                 </div>
             </main>
         </div>

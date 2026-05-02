@@ -1,9 +1,9 @@
 const url = import.meta.env.VITE_API_URL;
 
 
-export async function findAllEvents(){
+export async function findEvents(page:number){
     const token = localStorage.getItem('token');
-    const response = await fetch(url + "event", {
+    const response = await fetch(url + `event/limited?page=${page}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
