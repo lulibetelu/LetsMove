@@ -166,6 +166,8 @@ model ImagePost{
   image Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
   postId Int
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([imageId, postId])
 }
 
 model ImageEvent{
@@ -175,6 +177,8 @@ model ImageEvent{
   eventId Int
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
   description String
+
+  @@unique([imageId, eventId])
 }
 
 model Event{

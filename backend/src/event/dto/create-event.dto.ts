@@ -21,7 +21,6 @@ export class CreateEventDto {
   @IsDate()
   startingDate: Date;
 
-  @IsDate()
   @IsString()
   @IsOptional()
   imageUrl?: string;

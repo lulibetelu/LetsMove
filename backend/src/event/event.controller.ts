@@ -40,17 +40,21 @@ export class EventController {
     return this.eventService.findOne(id);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateEventDto: UpdateEventDto,
+    @Req() req: Request,
   ) {
-    return await this.eventService.update(id, updateEventDto);
+    const modifierId: number = req.user.sub;
+    return await this.eventService.update(id, modifierId, updateEventDto);
   }
 
   @UseGuards(AuthGuard)
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.eventService.remove(id);
+  remove(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
+    const removerId: number = req.user.sub;
+    return this.eventService.remove(id, removerId);
   }
 }

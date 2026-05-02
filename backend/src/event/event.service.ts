@@ -21,11 +21,16 @@ export class EventService {
     return this.eventRepositoryService.findOneById(id);
   }
 
-  async update(id: number, updateEventDto: UpdateEventDto) {
-    return await this.eventRepositoryService.updateEvent(id, updateEventDto);
+  async update(
+    eventId: number,
+    modifierId: number,
+    updateEventDto: UpdateEventDto,
+  ) {
+
+    return await this.eventRepositoryService.updateEvent(eventId, modifierId, updateEventDto);
   }
 
-  async remove(id: number) {
-    return await this.eventRepositoryService.deleteEvent(id);
+  async remove(id: number, removerId: number) {
+    return await this.eventRepositoryService.deleteEvent(id, removerId);
   }
 }

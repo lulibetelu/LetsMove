@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateEventDto } from '../../event/dto/create-event.dto';
 import { EventType, Location } from '@prisma/client';
@@ -57,7 +61,18 @@ export class EventRepositoryService {
     });
   }
 
-  async deleteEvent(id: number) {
+  async deleteEvent(id: number, removerId: number) {
+    const event = await this.prismaService.event.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    if (event === null) throw new BadRequestException('no such event');
+
+    if (removerId !== event.hostId)
+      throw new UnauthorizedException("cannot remove other user's event");
+
     return this.prismaService.event.delete({
       where: {
         id: id,
@@ -65,14 +80,21 @@ export class EventRepositoryService {
     });
   }
 
-  async updateEvent(id: number, updateEventDto: UpdateEventDto) {
+  async updateEvent(
+    eventId: number,
+    modifierId: number,
+    updateEventDto: UpdateEventDto,
+  ) {
     const event = await this.prismaService.event.findUnique({
       where: {
-        id: id,
+        id: eventId,
       },
     });
 
     if (event === null) throw new BadRequestException('no such event with id');
+
+    if (modifierId !== event.hostId)
+      throw new UnauthorizedException("cannot modify other user's event");
 
     if (
       event.eventType === 'InPerson' &&
@@ -94,7 +116,7 @@ export class EventRepositoryService {
 
     return this.prismaService.event.update({
       where: {
-        id: id,
+        id: eventId,
       },
       data: {
         description: updateEventDto.description,
