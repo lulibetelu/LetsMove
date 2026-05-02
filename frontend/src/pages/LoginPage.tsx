@@ -45,7 +45,7 @@ export default function LoginPage(){
                     <div className="absolute bottom-0 left-0 right-0 h-6 bg-[#1e1e1e] rounded-t-[50%]" />
                 </div>
 
-                <form className="p-8 flex flex-col gap-5" onSubmit={handleSubmit}>
+                <form className="p-8 flex flex-col gap-5 bg-[#1e1e1e]" onSubmit={handleSubmit}>
 
                         <div className="flex flex-col gap-1">
 

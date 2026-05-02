@@ -56,7 +56,7 @@ export default function RegisterPage(){
 
                 </div>
 
-                <form className="p-8 flex flex-col gap-5" onSubmit={handleSubmit}>
+                <form className="p-8 flex flex-col gap-5 bg-[#1e1e1e]" onSubmit={handleSubmit}>
                     <div className="flex flex-col gap-1">
                         <CustomInput label = 'Username' input = {{
                                 type: 'text',
