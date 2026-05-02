@@ -1,4 +1,4 @@
-import { Home, CalendarDays, Users, User, Settings, Plus, Bell } from 'lucide-react';
+import {Home, CalendarDays, Users, User, Settings, Plus, Bell, PartyPopper} from 'lucide-react';
 import {useState} from "react";
 import NewPost from "./NewPost.tsx";
 import {Link, useNavigate} from "react-router-dom";
@@ -12,11 +12,16 @@ export default function Sidebar({ onPostCreated }: { onPostCreated: () => void }
     return (
         <aside className="fixed left-0 top-0 h-screen w-20 border-r border-base-300 bg-base-100 flex flex-col items-center py-6 z-50">
             <nav className="flex flex-col gap-6 flex-1 mt-4">
-                <button type="button" className="btn btn-ghost btn-circle" aria-label="Inicio">
+                <button type="button" className="btn btn-ghost btn-circle" aria-label="Inicio" onClick={() => navigate("/homepage")}>
                     <Home size={26} strokeWidth={1.5} />
                 </button>
 
-                <button type="button" className="btn btn-ghost btn-circle" aria-label="Eventos">
+                <button type="button" className="btn btn-ghost btn-circle" aria-label="Eventos" onClick={() => navigate("/event")}>
+                    <PartyPopper size={26} strokeWidth={1.5}></PartyPopper>
+                </button>
+
+
+                <button type="button" className="btn btn-ghost btn-circle" aria-label="Calendario de Eventos">
                     <CalendarDays size={26} strokeWidth={1.5} />
                 </button>
 
