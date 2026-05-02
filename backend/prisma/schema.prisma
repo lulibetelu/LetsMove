@@ -33,6 +33,8 @@ model User {
 
   comments Comment[]
   postScore PostScore[]
+
+  events Event[]
 }
 
 model Sport {
@@ -68,6 +70,8 @@ model Location {
   latitude      Float
   longitude     Float
   userLocations UserLocation[] @ignore
+
+  events Event[]
 }
 
 model Post {
@@ -81,6 +85,8 @@ model Post {
   comments      Comment[]
   postSport PostSport[]
   postScore PostScore[]
+
+  imagePosts ImagePost[]
 }
 
 model PostLiked {
@@ -143,4 +149,54 @@ model PostScore {
   userId Int
   sportMatch Int @default(0)
   @@unique([userId, postId])
+}
+
+model Image{
+  id Int @id @default(autoincrement())
+  url String
+
+  imagePosts ImagePost[]
+
+  imageEvents ImageEvent[]
+}
+
+model ImagePost{
+  id Int @id @default(autoincrement())
+  imageId Int
+  image Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  postId Int
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([imageId, postId])
+}
+
+model ImageEvent{
+  id Int @id @default(autoincrement())
+  imageId Int
+  image Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  eventId Int
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  description String
+
+  @@unique([imageId, eventId])
+}
+
+model Event{
+  id Int @id @default(autoincrement())
+  hostId Int
+  host User @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  title String
+  description String
+  chatId Int? //falta la tabla chat
+  startingDate DateTime
+  locationId Int?
+  location Location? @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  endingDate DateTime?
+  eventType EventType
+  imageEvents ImageEvent[]
+}
+
+enum EventType{
+  Asynchronous
+  InPerson
 }
