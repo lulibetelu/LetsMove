@@ -17,6 +17,7 @@ export default function RegisterPage(){
     const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
         //Prevents the page from reloading on submit
         event.preventDefault();
+        setError(null);
         try {
             const credentials: RegisterCredentials = {username, email, password};
             const userResponse = await createUser(credentials);

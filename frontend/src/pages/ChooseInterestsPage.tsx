@@ -3,10 +3,12 @@ import {useEffect, useState} from "react";
 import type {Sport} from "../types/sportType.ts";
 import {findAllSports} from "../api/sport.ts";
 import SportLabel from "../components/SportLabel.tsx";
+// esto no esta bueno porque genera mucho acoplamiento entre front y back
 import type {CreatePreferencesDto} from "backend/src/preferences/dto/create.preferences.dto.ts";
 import {createPreferences} from "../api/preferences.ts";
 import PopUpError from "../components/PopUpError.tsx";
 import {Dumbbell} from "lucide-react";
+
 
 export default function ChooseInterestsPage(){
     const navigate = useNavigate()
