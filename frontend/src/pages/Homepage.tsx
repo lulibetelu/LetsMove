@@ -24,7 +24,7 @@ export default function Homepage() {
     return(
         <div className="min-h-screen bg-[#141414] flex">
             <Sidebar onPostCreated={loadPosts}/>
-                <main className="flex-1 ml-20 flex justify-center">
+                <main className="flex-1 ml-60 flex justify-center">
                     <div className="w-full max-w-2xl min-h-screen relative pb-24">
                         <header className="sticky top-0 z-40 bg-[#141414]/90 backdrop-blur-md px-4 py-5 flex justify-center border-b-2 border-base-content/10">
                             <div className="w-full max-w-md relative">
