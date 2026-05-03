@@ -37,7 +37,7 @@ export class PostsService {
 
   async findAll(currentUserId: number, page: number = 1) {
     const posts = await this.postsRepository.findAll(currentUserId, page);
-    if (!posts) {
+    if (posts.length === 0) {
       throw new NotFoundException(`User ${currentUserId} doesn't have posts`);
     }
     return posts.map((post) => {
@@ -81,7 +81,7 @@ export class PostsService {
       page,
     );
 
-    if (!posts) {
+    if (posts.length === 0) {
       throw new NotFoundException(`User ${currentUserId} doesn't have posts`);
     }
 
