@@ -33,14 +33,14 @@ export class RegisterController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', new ParseIntPipe()) id: number,
     @Body() updateRegisterDto: UpdateRegisterDto,
   ) {
-    return this.registerService.update(+id, updateRegisterDto);
+    return this.registerService.update(id, updateRegisterDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.registerService.remove(+id);
+  remove(@Param('id', new ParseIntPipe()) id: number) {
+    return this.registerService.remove(id);
   }
 }

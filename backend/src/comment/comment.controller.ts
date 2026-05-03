@@ -29,25 +29,26 @@ export class CommentController {
 
   @Get(':id')
   @UseGuards(AuthGuard)
-  findAll(@Param('id', ParseIntPipe) id: number) {
-    return this.commentService.findAll(id);
+  // todos los comentarios de un posteo
+  findAll(@Param('id', ParseIntPipe) postId: number) {
+    return this.commentService.findAll(postId);
   }
 
   @Patch(':id')
   @UseGuards(AuthGuard)
   update(
     @Req() req: Request,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) commentId: number,
     @Body() updateCommentDto: UpdateCommentDto,
   ) {
     const editorId: number = req.user.sub;
-    return this.commentService.update(editorId, +id, updateCommentDto);
+    return this.commentService.update(editorId, commentId, updateCommentDto);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
-  remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+  remove(@Req() req: Request, @Param('id', ParseIntPipe) commentId: number) {
     const removerId: number = req.user.sub;
-    return this.commentService.remove(removerId, id);
+    return this.commentService.remove(removerId, commentId);
   }
 }

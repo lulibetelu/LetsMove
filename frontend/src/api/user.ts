@@ -10,7 +10,11 @@ export async function createUser(credentials: RegisterCredentials){
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify(credentials)
     });
-    if (!response.ok) throw new Error(`Failed to create user: ${response.status}`);
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
     return response.json();
 }
 
@@ -20,7 +24,10 @@ export async function loginUser(credentials: LoginCredentials){
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(credentials)
     });
-    if (!response.ok) throw new Error(`Failed to login user: ${response.status}`)
+    if (!response.ok) {
+        const message = await response.json();
+        throw new Error(message.message);
+    }
     const data: LoginResponse =  await response.json();
     return data.access_token;
 }

@@ -23,8 +23,7 @@ export class PreferencesService {
     const sportsFound =
       await this.sportRepository.findManyByName(preferencesSportList);
 
-    const preferences: PreferenceEntity[] = sportsFound.map(({ name, id }) => (
-      {
+    const preferences: PreferenceEntity[] = sportsFound.map(({ name, id }) => ({
       // en user prisma no devuelve user = 1, sino user = { id: 1}
       userId: userId,
       sportId: id,
@@ -32,11 +31,7 @@ export class PreferencesService {
         .level,
     }));
 
-    //esta funcion es la unica que usa prismaService, probablemente habria que sacarla de aca
-    return this.prismaService.preference.createMany({
-      data: preferences,
-      skipDuplicates: true,
-    });
+    return this.preferencesRepository.create(preferences);
   }
 
   async delete(userId: number, updatePreferencesDto: DeletePreferencesDto) {

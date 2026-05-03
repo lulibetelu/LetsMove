@@ -12,7 +12,6 @@ export class FriendsService {
   constructor(private friendsRepository: FriendsRepositoryService) {}
 
   async create(senderId: number, createFriendDto: CreateFriendDto) {
-    //Con el OR de la query en repository, los dos ifs te traian cosas
     const exitsFriendship = await this.friendsRepository.findUnique(
       senderId,
       createFriendDto.receiverId,
@@ -35,12 +34,13 @@ export class FriendsService {
       sender,
       receiver,
     );
-    if (friendship.length === 0) throw new NotFoundException("Friendship doesn't exist");
+    if (friendship.length === 0) {
+      throw new NotFoundException("Friendship doesn't exist");
+    }
     return friendship;
   }
 
   async update(userId: number, updateFriendDto: UpdateFriendDto) {
-    //Si existe la tupla que quiero updatear, updateo.
     const findFriendShipRequest = await this.friendsRepository.findUnique(
       updateFriendDto.friendId,
       userId,
@@ -50,8 +50,9 @@ export class FriendsService {
         'Only receiver can update the friendship request',
       );
     }
-    if (updateFriendDto.state === 'Rejected')
+    if (updateFriendDto.state === 'Rejected') {
       return this.friendsRepository.remove(userId, updateFriendDto.friendId);
+    }
     return this.friendsRepository.update(userId, updateFriendDto);
   }
 

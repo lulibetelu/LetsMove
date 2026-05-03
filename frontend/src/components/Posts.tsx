@@ -72,13 +72,25 @@ export default function Posts({userId, posts, page, loadPosts, setPage, setPosts
     return (
         <div className="flex flex-col">
             {posts && posts.map((p) => (
-                <div key={p.id} className="w-full border-b-2 border-base-content/10 hover:bg-base-200/30 transition-colors">
-                    <Post user={p.user} content={p.content} id={p.id} userId={p.userId} isLiked={p.isLiked} isDisliked={p.isDisliked} canDelete={canDelete} deletePost={() => handleDelete(p.id)} isForPostPage={false}/>
+                <div
+                    key={p.id}
+                    className="w-full border-b border-white/5 hover:bg-white/[0.02] transition-colors cursor-pointer"
+                >
+                    <Post
+                        user={p.user}
+                        content={p.content}
+                        id={p.id}
+                        userId={p.userId}
+                        isLiked={p.isLiked}
+                        isDisliked={p.isDisliked}
+                        canDelete={canDelete}
+                        deletePost={() => handleDelete(p.id)} isForPostPage={false}
+                    />
                 </div>
             ))}
             {page && (
                 <div ref={observerRef} className="h-20 w-full flex items-center justify-center">
-                    <span className="loading loading-spinner loading-md text-primary"></span>
+                    <span className="loading loading-spinner loading-md text-[#8A9A5B]"></span>
                 </div>
             )}
         </div>
