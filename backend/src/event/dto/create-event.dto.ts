@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDate,
   IsIn,
   IsNotEmpty,
@@ -38,4 +39,8 @@ export class CreateEventDto {
   @IsDate()
   @IsOptional()
   endingDate?: Date;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  isPrivate: boolean;
 }

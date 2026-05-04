@@ -1,6 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateEventDto } from './create-event.dto';
 import {
+  IsBoolean,
   IsDate,
   IsNotEmpty,
   IsOptional,
@@ -33,4 +34,8 @@ export class UpdateEventDto extends PartialType(CreateEventDto) {
   @IsDate()
   @IsOptional()
   endingDate?: Date;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  isPrivate?: boolean;
 }
