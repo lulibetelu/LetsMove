@@ -196,6 +196,7 @@ model Event{
   eventType EventType
   imageEvents ImageEvent[]
   eventSignUp EventSignUp[]
+  isPrivate Boolean
 }
 
 enum EventType{
@@ -209,7 +210,6 @@ model EventSignUp {
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
   userId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  isPrivate Boolean
   state String
   joinedAt DateTime
   @@unique([userId, eventId])
