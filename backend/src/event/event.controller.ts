@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
   ParseIntPipe,
 } from '@nestjs/common';
 import { EventService } from './event.service';
@@ -32,6 +33,13 @@ export class EventController {
     //Paso el Id para que en un futuro podamos usarlo para el feed de eventos "inteligente"
     const requesterId = req.user.sub;
     return this.eventService.findAll(requesterId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('limited')
+  findLimited(@Req() req: Request, @Query('page', ParseIntPipe) page: number) {
+    const requesterId: number = req.user.sub;
+    return this.eventService.findLimited(requesterId, page);
   }
 
   @UseGuards(AuthGuard)

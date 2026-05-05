@@ -133,6 +133,13 @@ export class EventRepositoryService {
     });
   }
 
+  async findLimited(requesterId: number, page: number) {
+    return this.prismaService.event.findMany({
+      take: 15,
+      skip: (page - 1) * 15,
+    });
+  }
+
   private async findLocationId(locationName: string | undefined) {
     if (locationName === undefined) return null;
 

@@ -1,4 +1,4 @@
-import { Home, CalendarDays, Users, User, Settings, Plus, Bell } from 'lucide-react';
+import {Home, CalendarDays, Users, User, Settings, Plus, Bell, PartyPopper} from 'lucide-react';
 import {useState} from "react";
 import NewPost from "./NewPost.tsx";
 import {Link, useLocation} from "react-router-dom";
@@ -13,6 +13,7 @@ export default function Sidebar({ onPostCreated }: { onPostCreated: () => void }
 
     const navItems = [
         { path: "/homepage", icon: Home, label: "Inicio" },
+        { path: "/event", icon: PartyPopper, label: "Evento"},
         { path: "/events", icon: CalendarDays, label: "Eventos" },
         { path: "/groups", icon: Users, label: "Grupos" },
         { path: currentUserId ? `/profile/${currentUserId}` : "/login", icon: User, label: "Perfil" },
