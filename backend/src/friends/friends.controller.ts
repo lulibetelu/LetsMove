@@ -9,6 +9,7 @@ import {
   UseGuards,
   Req,
   ParseIntPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import { FriendsService } from './friends.service';
 import { CreateFriendDto } from './dto/create-friend.dto';
@@ -30,9 +31,12 @@ export class FriendsController {
   @Get()
   @UseGuards(AuthGuard)
   // de un user
-  findAll(@Req() req: Request) {
+  async findAll(@Req() req: Request) {
     const userId = req.user.sub;
-    return this.friendsService.findAll(userId);
+    const promise = await this.friendsService.findAll(userId);
+
+    if (!promise) throw new NotFoundException();
+    return promise;
   }
 
   @Get('requests/:id')
@@ -62,6 +66,9 @@ export class FriendsController {
   @UseGuards(AuthGuard)
   async findAllRequested(@Req() req: Request) {
     const userId = req.user.sub;
-    return this.friendsService.findAllRequested(userId);
+    const promise = await this.friendsService.findAllRequested(userId);
+
+    if (!promise) throw new NotFoundException();
+    return promise;
   }
 }
