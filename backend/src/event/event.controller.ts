@@ -35,7 +35,7 @@ export class EventController {
     const requesterId = req.user.sub;
     const promise = await this.eventService.findAll(requesterId);
 
-    if (!promise) throw new NotFoundException('No events found');
+    if (!promise || promise.length === 0) throw new NotFoundException('No events found');
 
     return promise;
   }
@@ -46,7 +46,7 @@ export class EventController {
     const requesterId: number = req.user.sub;
     const promise = await this.eventService.findLimited(requesterId, page);
 
-    if (!promise) throw new NotFoundException();
+    if (!promise || promise.length === 0) throw new NotFoundException();
     return promise;
   }
 

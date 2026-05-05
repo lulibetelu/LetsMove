@@ -39,6 +39,8 @@ export class PreferencesService {
       updatePreferencesDto.sports,
     );
 
+    if (sportsFound.length === 0) throw new NotFoundException("preferences not found");
+
     const sportsId = sportsFound.map((sport) => sport.id);
 
     return this.preferencesRepository.deleteMany(userId, sportsId);

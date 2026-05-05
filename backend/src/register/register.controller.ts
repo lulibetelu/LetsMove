@@ -23,8 +23,12 @@ export class RegisterController {
   }
 
   @Get()
-  findAll() {
-    return this.registerService.findAll();
+  async findAll() {
+    const promise = await this.registerService.findAll();
+
+    if (!promise || promise.length === 0)
+      throw new NotFoundException('user not found');
+    return promise;
   }
 
   @Get(':id')

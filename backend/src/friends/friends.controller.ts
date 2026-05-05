@@ -35,7 +35,7 @@ export class FriendsController {
     const userId = req.user.sub;
     const promise = await this.friendsService.findAll(userId);
 
-    if (!promise) throw new NotFoundException();
+    if (!promise || promise.length === 0) throw new NotFoundException();
     return promise;
   }
 
@@ -68,7 +68,7 @@ export class FriendsController {
     const userId = req.user.sub;
     const promise = await this.friendsService.findAllRequested(userId);
 
-    if (!promise) throw new NotFoundException();
+    if (!promise || promise.length === 0) throw new NotFoundException();
     return promise;
   }
 }

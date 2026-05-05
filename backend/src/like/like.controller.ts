@@ -50,7 +50,7 @@ export class LikeController {
     const userId = req.user.sub;
     const promise = await this.likeService.findAll(userId);
 
-    if (!promise) throw new NotFoundException();
+    if (!promise || promise.length === 0) throw new NotFoundException();
     return promise;
   }
 

@@ -48,9 +48,9 @@ export class DislikeController {
   @UseGuards(AuthGuard)
   async findAll(@Req() request: Request) {
     const userId: number = request.user.sub;
-    const promise =  await this.dislikeService.findAll(userId);
+    const promise = await this.dislikeService.findAll(userId);
 
-    if (!promise) throw new NotFoundException();
+    if (!promise || promise.length === 0) throw new NotFoundException();
     return promise;
   }
 

@@ -9,6 +9,7 @@ import {
   Req,
   ParseIntPipe,
   Query,
+  NotFoundException,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -28,18 +29,25 @@ export class PostsController {
 
   @UseGuards(AuthGuard)
   @Get()
-  findAll(
+  async findAll(
     @Req() req: Request,
     @Query('page', new ParseIntPipe({ optional: true })) page: number = 1,
   ) {
     const userId = req.user.sub;
-    return this.postsService.findAll(userId, page);
+    const promise = await this.postsService.findAll(userId, page);
+
+    if (!promise || promise.length === 0)
+      throw new NotFoundException('posts not found');
+    return promise;
   }
 
   @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.postsService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const promise = await this.postsService.findOne(id);
+
+    if (!promise) throw new NotFoundException('post not found');
+    return promise;
   }
 
   @UseGuards(AuthGuard)
