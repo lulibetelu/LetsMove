@@ -10,6 +10,7 @@ import {
   Req,
   Query,
   ParseIntPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -29,23 +30,33 @@ export class EventController {
 
   @UseGuards(AuthGuard)
   @Get()
-  findAll(@Req() req: Request) {
+  async findAll(@Req() req: Request) {
     //Paso el Id para que en un futuro podamos usarlo para el feed de eventos "inteligente"
     const requesterId = req.user.sub;
-    return this.eventService.findAll(requesterId);
+    const promise = await this.eventService.findAll(requesterId);
+
+    if (!promise) throw new NotFoundException('No events found');
+
+    return promise;
   }
 
   @UseGuards(AuthGuard)
   @Get('limited')
-  findLimited(@Req() req: Request, @Query('page', ParseIntPipe) page: number) {
+  async findLimited(@Req() req: Request, @Query('page', ParseIntPipe) page: number) {
     const requesterId: number = req.user.sub;
-    return this.eventService.findLimited(requesterId, page);
+    const promise = await this.eventService.findLimited(requesterId, page);
+
+    if (!promise) throw new NotFoundException();
+    return promise;
   }
 
   @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.eventService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const promise = await this.eventService.findOne(id);
+
+    if (!promise) throw new NotFoundException();
+    return promise;
   }
 
   @UseGuards(AuthGuard)
