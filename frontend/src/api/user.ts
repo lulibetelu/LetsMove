@@ -43,6 +43,7 @@ export async function getUsernameFromId(id?: number): Promise<string | null> {
                 'Content-Type': 'application/json',
             },
         });
+        debugger
         if (!response.ok) throw new Error(`Couldn't get username from ${id} : ${response.status}`)
         const user: User = await response.json();
         return user.username;

@@ -13,7 +13,7 @@
     "prisma:push": "npm run prisma:push -w backend",
 
     "dev:backend": "npm run start:dev -w backend",
-    "dev:frontend": "npm run dev -w frontend",
+    "dev:frontend": "npm run dev -w frontend --debug --watch",
     "dev:all": "npm run dev:backend & npm run dev:frontend",
     "prisma:seed": "npm run prisma:seed -w backend"
   }
