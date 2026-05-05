@@ -4,13 +4,20 @@ import { CreateEventSignUpDto } from '../../event-sign-up/dto/create-event-sign-
 
 @Injectable()
 export class EventSignUpRepositoryService {
-  constructor(private prismaService: PrismaService) {
-  }
-  public create(dto: CreateEventSignUpDto){
+  constructor(private prismaService: PrismaService) {}
+  public create(
+    dto: CreateEventSignUpDto,
+    userId: number,
+    state: string,
+    joinedAt?: Date,
+  ) {
     return this.prismaService.eventSignUp.create({
       data: {
-
-      }
-    })
+        eventId: dto.eventId,
+        userId: userId,
+        state: state,
+        joinedAt: joinedAt,
+      },
+    });
   }
 }

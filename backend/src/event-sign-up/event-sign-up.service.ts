@@ -6,14 +6,30 @@ import { EventRepositoryService } from '../repository/event/event.repository.ser
 
 @Injectable()
 export class EventSignUpService {
-  constructor(private signUpRepositoryService: EventSignUpRepositoryService, private eventRepositoryService: EventRepositoryService ) {}
-  create(createEventSignUpDto: CreateEventSignUpDto, userId: number) {
-    const event = this.eventRepositoryService.findOneById(
+  constructor(
+    private signUpRepositoryService: EventSignUpRepositoryService,
+    private eventRepositoryService: EventRepositoryService,
+  ) {}
+  async create(createEventSignUpDto: CreateEventSignUpDto, userId: number) {
+    const event = await this.eventRepositoryService.findOneById(
       createEventSignUpDto.eventId,
     );
-    if () {
-      return this.signUpRepositoryService.create(createEventSignUpDto, userId);
+    if (!event) {
+      throw new Error('');
     }
+    if (event.isPrivate) {
+      return this.signUpRepositoryService.create(
+        createEventSignUpDto,
+        userId,
+        'Requested',
+      );
+    }
+    return this.signUpRepositoryService.create(
+      createEventSignUpDto,
+      userId,
+      'Accepted',
+      new Date(),
+    );
   }
 
   findAllFromUser(userId: number) {
@@ -28,7 +44,11 @@ export class EventSignUpService {
     return `This action returns a #${id} eventSignUp`;
   }
 
-  update(eventId: number, userId: number, updateEventSignUpDto: UpdateEventSignUpDto) {
+  update(
+    eventId: number,
+    userId: number,
+    updateEventSignUpDto: UpdateEventSignUpDto,
+  ) {
     return `This action updates a #${id} eventSignUp`;
   }
 

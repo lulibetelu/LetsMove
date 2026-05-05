@@ -41,6 +41,7 @@ export class EventRepositoryService {
         startingDate: createEventDto.startingDate,
         locationId: locationId,
         endingDate: createEventDto.endingDate,
+        isPrivate: createEventDto.isPrivate,
         eventType:
           createEventDto.type === 'Asynchronous'
             ? EventType.Asynchronous

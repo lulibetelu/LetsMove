@@ -211,7 +211,7 @@ model EventSignUp {
   userId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   state String
-  joinedAt DateTime
+  joinedAt DateTime?
   @@unique([userId, eventId])
 }
 
