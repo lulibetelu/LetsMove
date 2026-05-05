@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDislikeDto } from './dto/create-dislike.dto';
 import { DislikeRepositoryService } from '../repository/dislike/dislike.repository.service';
 
@@ -17,7 +17,12 @@ export class DislikeService {
     return this.dislikeRepositoryService.getOneDislike(userId, postId);
   }
 
-  remove(userId: number, postId: number) {
+  async remove(userId: number, postId: number) {
+    const dislike = await this.findOne(userId, postId);
+
+    if (!dislike) {
+      throw new NotFoundException('dislike not found');
+    }
     return this.dislikeRepositoryService.removeDislike(userId, postId);
   }
 }

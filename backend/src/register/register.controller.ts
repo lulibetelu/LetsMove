@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import { RegisterService } from './register.service';
 import { RegisterDto } from './dto/register.dto';
@@ -22,13 +23,21 @@ export class RegisterController {
   }
 
   @Get()
-  findAll() {
-    return this.registerService.findAll();
+  async findAll() {
+    const promise = await this.registerService.findAll();
+
+    if (!promise || promise.length === 0)
+      throw new NotFoundException('user not found');
+    return promise;
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.registerService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const promise = await this.registerService.findOne(id);
+    if (!promise) {
+      throw new NotFoundException('Not Found');
+    }
+    return promise;
   }
 
   @Patch(':id')
