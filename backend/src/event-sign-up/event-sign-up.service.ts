@@ -22,6 +22,7 @@ export class EventSignUpService {
         createEventSignUpDto,
         userId,
         'Requested',
+        undefined,
       );
     }
     return this.signUpRepositoryService.create(
@@ -33,26 +34,29 @@ export class EventSignUpService {
   }
 
   findAllFromUser(userId: number) {
-    return `This action returns all eventSignUp`;
+    return this.signUpRepositoryService.findAllFromUser(userId);
   }
 
   findAllFromEvent(eventId: number) {
-    return `This action returns all eventSignUp`;
+    return this.signUpRepositoryService.findAllFromEvent(eventId);
   }
 
   findOne(eventId: number, userId: number) {
-    return `This action returns a #${id} eventSignUp`;
+    return this.signUpRepositoryService.findOne(userId, eventId);
   }
 
-  update(
-    eventId: number,
-    userId: number,
-    updateEventSignUpDto: UpdateEventSignUpDto,
-  ) {
-    return `This action updates a #${id} eventSignUp`;
+  async update(hostId: number, updateEventSignUpDto: UpdateEventSignUpDto) {
+    const event = await this.eventRepositoryService.findOneById(
+      updateEventSignUpDto.eventId,
+    );
+    if (!event) throw new Error();
+    if (event.hostId != hostId) throw new Error();
+    return this.signUpRepositoryService.update(updateEventSignUpDto);
   }
 
-  remove(eventId: number, userId: number) {
-    return `This action removes a #${id} eventSignUp`;
+  async remove(dto: CreateEventSignUpDto, userId: number) {
+    const event = await this.eventRepositoryService.findOneById(dto.eventId);
+    if (!event) throw new Error();
+    return this.signUpRepositoryService.remove(userId, dto);
   }
 }

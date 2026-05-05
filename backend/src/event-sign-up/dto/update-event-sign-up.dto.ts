@@ -1,4 +1,16 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateEventSignUpDto } from './create-event-sign-up.dto';
+import { IsDefined, IsIn, IsNumber, IsString } from 'class-validator';
 
-export class UpdateEventSignUpDto extends PartialType(CreateEventSignUpDto) {}
+export class UpdateEventSignUpDto {
+  @IsDefined()
+  @IsNumber()
+  eventId: number;
+
+  @IsIn(['Accepted', 'Rejected'])
+  @IsString()
+  @IsDefined()
+  state: string;
+
+  @IsNumber()
+  @IsDefined()
+  userId: number;
+}
