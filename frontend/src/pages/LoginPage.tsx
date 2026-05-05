@@ -9,7 +9,7 @@ import {LogIn} from "lucide-react";
 export default function LoginPage(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorHasBeenThrown, setError] = useState(false);
+    const [error, setError] = useState<string|null>(null);
 
     const navigate = useNavigate();
     const handleSubmit:React.SubmitEventHandler= async (event) => {
@@ -19,53 +19,61 @@ export default function LoginPage(){
             const token = await loginUser(credentials);
             localStorage.setItem('token', token)
             navigate("/homepage")
-        } catch {
-            setError(true);
+        } catch (e) {
+            if (e instanceof Error) setError(e.message);
         }
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-base-300 px-4">
-            <div className="card w-full max-w-sm bg-base-100 shadow-2xl overflow-hidden border border-base-content/5">
+        <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#141414]">
+            <div className="w-full max-w-sm flex flex-col rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]">
                 {/* Header con el color de marca */}
-                <div className="bg-[#8A9A5B] py-10 flex flex-col items-center justify-center text-white">
-                    <div className="bg-white/20 p-4 rounded-full mb-3">
-                        <LogIn size={32} />
+                <div className="relative py-12 flex flex-col items-center justify-center text-white overflow-hidden"
+                     style={{ background: "linear-gradient(135deg, #8A9A5B 0%, #6b7a46 100%)" }}
+                >
+                    <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/5" />
+                    <div className="absolute -bottom-12 -left-6 w-32 h-32 rounded-full bg-black/10" />
+
+                    <div className="relative bg-white/15 backdrop-blur-sm border border-white/20 p-4 rounded-2xl mb-4 shadow-lg">
+                        <LogIn size={28} strokeWidth={1.8} />
                     </div>
-                    <h2 className="text-3xl font-bold tracking-tight">¡Bienvenido!</h2>
-                    <p className="text-white/80 text-sm mt-1">
+
+                    <h2 className="relative text-3xl font-bold tracking-tight">¡Bienvenido!</h2>
+                    <p className="relative text-white/70 text-sm mt-1.5 font-light">
                         Conectate con gente para hacer deporte.
                     </p>
+                    <div className="absolute bottom-0 left-0 right-0 h-6 bg-[#1e1e1e] rounded-t-[50%]" />
                 </div>
-                <form className="p-8 flex flex-col gap-5" onSubmit={handleSubmit}>
-                    <div className="w-full">
-                        <CustomInput label = 'Email' input = {{
-                                type: 'email',
-                                placeHolder: 'your email',
-                                value: email,
-                                onChange: (e) => {setEmail(e.target.value)}
-                            }}></CustomInput>
 
-                    </div>
-                    <div className="w-full">
-                        <CustomInput label = 'Password' input = {{
-                                type: 'password',
-                                placeHolder: 'your password',
+                <form className="p-8 flex flex-col gap-5 bg-[#1e1e1e]" onSubmit={handleSubmit}>
+
+                        <div className="flex flex-col gap-1">
+
+                            <CustomInput label="Email" input={{
+                                type: "email",
+                                placeHolder: "your email",
+                                value: email,
+                                onChange: (e) => setEmail(e.target.value)
+                            }} />
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                            <CustomInput label="Password" input={{
+                                type: "password",
+                                placeHolder: "your password",
                                 value: password,
-                                onChange: (e) => {setPassword(e.target.value)}
-                            }}></CustomInput>
+                                onChange: (e) => setPassword(e.target.value)
+                            }} />
+                        </div>
+                    <div>
+                        {error!=null && <PopUpError message={error}/>}
                     </div>
                     <button className="btn border-none bg-[#8A9A5B] hover:bg-[#728249] text-white w-full mt-2 shadow-md transition-all active:scale-[0.98]"
                     > Login
                         </button>
-
                     <div className='flex flex-col items-center gap-2 mt-4'>
                         <p className="text-sm opacity-70">Don't have an account?</p>
                         <Link to='/register' className='text-[#8A9A5B] font-semibold hover:underline transition-all'>Register</Link>
-                    </div>
-
-                    <div>
-                        {errorHasBeenThrown && <PopUpError message='Invalid email or password'/>}
                     </div>
                 </form>
             </div>

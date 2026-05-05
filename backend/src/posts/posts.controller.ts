@@ -30,7 +30,7 @@ export class PostsController {
   @Get()
   findAll(
     @Req() req: Request,
-    @Query('page', new ParseIntPipe({ optional: true })) page?: number,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number = 1,
   ) {
     const userId = req.user.sub;
     return this.postsService.findAll(userId, page);
@@ -54,7 +54,7 @@ export class PostsController {
   findPostsFromUser(
     @Req() req: Request,
     @Param('id', ParseIntPipe) userId: number,
-    @Query('page', new ParseIntPipe({ optional: true })) page?: number,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number = 1,
   ) {
     const currentUserId = req.user.sub;
     return this.postsService.findPostsFromUser(currentUserId, userId, page);

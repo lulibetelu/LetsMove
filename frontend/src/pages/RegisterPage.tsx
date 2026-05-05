@@ -10,13 +10,14 @@ export default function RegisterPage(){
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorHasBeenThrown, setError] = useState(false);
+    const [error, setError] = useState<string|null>(null);
 
     const navigate = useNavigate();
 
     const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
         //Prevents the page from reloading on submit
         event.preventDefault();
+        setError(null);
         try {
             const credentials: RegisterCredentials = {username, email, password};
             const userResponse = await createUser(credentials);
@@ -28,26 +29,36 @@ export default function RegisterPage(){
             localStorage.setItem('token', token)
 
             navigate("/interests");
-        } catch {
-            setError(true);
+        } catch (e) {
+            if (e instanceof Error) setError(e.message);
         }
 
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-base-300 px-4 py-12">
-            <div className="card w-full max-w-sm bg-base-100 shadow-2xl overflow-hidden border border-base-content/5">
+        <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#141414]">
+            <div className="w-full max-w-sm flex flex-col rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]">
 
                 {/* Header idéntico al Login pero con otro ícono y texto */}
-                <div className="bg-[#8A9A5B] py-8 flex flex-col items-center justify-center text-white">
-                    <div className="bg-white/20 p-4 rounded-full mb-3">
-                        <UserPlus size={28} />
+                <div className="relative py-12 flex flex-col items-center justify-center text-white overflow-hidden"
+                     style={{ background: "linear-gradient(135deg, #8A9A5B 0%, #6b7a46 100%)" }}
+                >
+                    <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/5" />
+                    <div className="absolute -bottom-12 -left-6 w-32 h-32 rounded-full bg-black/10" />
+
+                    <div className="relative bg-white/15 backdrop-blur-sm border border-white/20 p-4 rounded-2xl mb-4 shadow-lg">
+                        <UserPlus size={28} strokeWidth={1.8} />
                     </div>
-                    <h2 className="text-3xl font-bold tracking-tight">Register</h2>
-                    <p className="text-white/80 text-sm mt-1">Sumate a la comunidad</p>
+
+                    <h2 className="relative text-3xl font-bold tracking-tight">Register</h2>
+                    <p className="relative text-white/70 text-sm mt-1.5 font-light">Sumate a la comunidad</p>
+
+                    <div className="absolute bottom-0 left-0 right-0 h-6 bg-[#1e1e1e] rounded-t-[50%]" />
+
                 </div>
-                <form className="p-6 flex flex-col gap-4" onSubmit={handleSubmit}>
-                    <div className="w-full">
+
+                <form className="p-8 flex flex-col gap-5 bg-[#1e1e1e]" onSubmit={handleSubmit}>
+                    <div className="flex flex-col gap-1">
                         <CustomInput label = 'Username' input = {{
                                 type: 'text',
                                 placeHolder: 'your username',
@@ -55,7 +66,7 @@ export default function RegisterPage(){
                                 onChange: (e) => {setUsername(e.target.value)}
                             }}></CustomInput>
                     </div>
-                    <div className="w-full">
+                    <div className="flex flex-col gap-1">
                         <CustomInput label = 'Email' input = {{
                                 type: 'email',
                                 placeHolder: 'your email',
@@ -63,13 +74,16 @@ export default function RegisterPage(){
                                 onChange: (e) => {setEmail(e.target.value)}
                             }}></CustomInput>
                     </div>
-                    <div className="w-full">
+                    <div className="flex flex-col gap-1">
                         <CustomInput label = 'Password' input = {{
                                 type: 'password',
                                 placeHolder: 'your password',
                                 value: password,
                                 onChange: (e) => {setPassword(e.target.value)}
                             }}></CustomInput>
+                    </div>
+                    <div>
+                        {error!=null && <PopUpError message={error}/>}
                     </div>
                     <button type="submit" className="btn border-none bg-[#8A9A5B] hover:bg-[#728249] text-white w-full mt-2 shadow-md transition-all active:scale-[0.98]"> Register </button>
                     <div className='flex flex-col items-center justify-center gap-1 mt-2 text-center'>
@@ -78,9 +92,7 @@ export default function RegisterPage(){
                             Iniciá sesión acá
                         </Link>
                     </div>
-                    <div>
-                        {errorHasBeenThrown && <PopUpError message='Invalid credentials'/>}
-                    </div>
+
 
                 </form>
             </div>

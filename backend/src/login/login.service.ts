@@ -10,8 +10,11 @@ export class LoginService {
   ) {}
   async login(email: string, pass: string) {
     const user = await this.userRepositoryService.findByEmail(email);
-    if (user?.password !== pass) {
-      throw new UnauthorizedException();
+    if (!user) {
+      throw new UnauthorizedException('Email not found');
+    }
+    if (user.password !== pass) {
+      throw new UnauthorizedException('Wrong password');
     }
     // payload ~= token, sub = subject
     // se crea el token con el id y el email del user

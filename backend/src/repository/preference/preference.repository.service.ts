@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { PreferenceEntity } from '../../preferences/entity/preference.entity';
 
 @Injectable()
 export class PreferenceRepositoryService {
   constructor(private prismaService: PrismaService) {}
-
+  async create(preferences: PreferenceEntity[]) {
+    return this.prismaService.preference.createMany({
+      data: preferences,
+      skipDuplicates: true,
+    });
+  }
   // trae todas las preferencias de un user
   async findByUserId(userId: number) {
     return this.prismaService.preference.findMany({

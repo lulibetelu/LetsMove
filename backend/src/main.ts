@@ -13,7 +13,7 @@ async function bootstrap() {
   );
   // this selects which pages can request/hit the api
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: process.env.URL,
   });
   await app.listen(process.env.PORT ?? 3000);
 }

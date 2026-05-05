@@ -53,7 +53,6 @@ export class DislikeController {
   @Get('post/:id')
   @UseGuards(AuthGuard)
   findOne(@Req() request: Request, @Param('id', ParseIntPipe) postId: number) {
-    //si pincha, ojo aca con el number.
     const userId: number = request.user.sub;
     return this.dislikeService.findOne(userId, postId);
   }

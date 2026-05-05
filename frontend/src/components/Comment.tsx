@@ -1,5 +1,4 @@
 import {CircleUserRound, Trash} from "lucide-react";
-import {useUsername} from "../hooks/UseUsername.tsx";
 
 interface Props {
     id: number,
@@ -22,22 +21,22 @@ export default function Comment(props: Props){
 
     return (
         <>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-start py-3 px-1">
 
-                <div className="flex flex-col gap-1">
-                    <div className="flex flex-row gap-2">
-                    <CircleUserRound size={20} strokeWidth={1.5} />
-                    <span className="font-semibold text-sm">{props.user}</span>
+                <div className="flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2">
+                        <CircleUserRound size={18} strokeWidth={1.5} className="text-white/40"/>
+                    <span className="text-sm font-semibold text-[#8A9A5B]">{props.user}</span>
                     </div>
-                    <p className="text-base-content/80">
+                    <p className="text-sm text-white/70 leading-relaxed">
                         {props.content}
                     </p>
                 </div>
-                { showEliminate ? <button onClick={() => props.handleClick(props.id)}>
-                    <Trash className="hover:bg-red-800"/>
+                { showEliminate ? <button onClick={() => props.handleClick(props.id)} className="text-white/30 hover:text-red-400 transition-colors ml-4 mt-0.5">
+                    <Trash size={16} strokeWidth={1.5}/>
                 </button> : <></> }
             </div>
-            <hr className="border-base-300" />
+            <hr className="border-white/5" />
         </>
     )
 }

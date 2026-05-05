@@ -34,29 +34,57 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
 
     return (
 
-        <article className="flex w-full flex-col px-5 py-4" onClick={isForPostPage? () => {} : () => {handleClick()}}>
-            <div className="flex items-center gap-3 mb-2">
-                <div className="text-base-content/70 flex items-center"><CircleUserRound size={20} strokeWidth={1.5} /></div>
-                <div> <Link to={`/profile/${userId}`} onClick={(e) => e.stopPropagation()} className="font-semibold hover:underline" >{username}</Link> </div>
+        <article className="flex w-full flex-col px-6 py-5"
+                 onClick={isForPostPage? () => {} : () => {handleClick()}}
+        >
+            <div className="flex items-center gap-3 mb-3">
+                <CircleUserRound size={20} strokeWidth={1.5} className="text-white/40" />
+                 <Link
+                     to={`/profile/${userId}`}
+                     onClick={(e) => e.stopPropagation()}
+                     className="text-sm font-semibold text-[#8A9A5B] hover:text-[#a8bb72] transition-colors"
+                 >
+                     {username}
+                 </Link>
                 {canDelete && (
-                    <button type="button" onClick={(e) => { e.stopPropagation(); deletePost?.(); }} className="ml-auto text-base-content/70 hover:text-error transition-colors" aria-label="Eliminar post">
-                        <Trash2 size={20} strokeWidth={1.5} />
+                    <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); deletePost?.(); }}
+                        className="ml-auto text-white/30 hover:text-red-400 transition-colors"
+                        aria-label="Eliminar post"
+                    >
+                        <Trash2 size={18} strokeWidth={1.5} />
                     </button>
                 )}
             </div>
-            <div className="mb-3">
-                <p className="break-words whitespace-pre-wrap text-base-content/90">
-                    {content}
-                </p>
-            </div>
-            <hr className="w-full border-base-300 mb-3"/>
-            <div className="flex items-center gap-6 text-base-content/70" onClick={(e) => e.stopPropagation()}>
+
+
+            <p className="break-words whitespace-pre-wrap text-white/80 text-sm leading-relaxed mb-4">
+                {content}
+            </p>
+
+
+            <div
+                className="flex items-center gap-5 text-white/40"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <Like postId={id} initialIsLiked={isLiked}/>
                 <Dislike postId={id} initialIsDisliked={isDisliked}/>
-                <button type="button" className="flex cursor-pointer items-center gap-1 transition-colors hover:text-primary" onClick={() => setCreateComment(true)}>
+                <button
+                    type="button"
+                    className="flex cursor-pointer items-center gap-1 transition-colors hover:text-[#8A9A5B]"
+                    onClick={() => setCreateComment(true)}
+                >
                     <MessageCircle size={20} strokeWidth={1.5}/>
                 </button>
-                {createComment && <NewComment postId={id} postAuthorUsername={username} onClose={() => setCreateComment(false)} onCommentCreated={handleClick}/>}
+                {createComment && (
+                    <NewComment
+                        postId={id}
+                        postAuthorUsername={username}
+                        onClose={() => setCreateComment(false)}
+                        onCommentCreated={handleClick}
+                    />
+                )}
             </div>
         </article>
 
