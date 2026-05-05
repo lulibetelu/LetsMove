@@ -22,6 +22,8 @@ export default function Profile() {
     const [page, setPage] = useState<number | undefined>();
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
+    const [userExists, setUserExists] = useState<boolean | null>(null);
+
 
     // const [error, setError] = useState<boolean>(false);
 
@@ -68,6 +70,21 @@ export default function Profile() {
             setFriendAdded(false);
         }
     }
+
+
+    useEffect(() => {
+        if (!isValid) {
+            navigate("/error", { state: { message: "ID inválido" } });
+            return;
+        }
+
+        getUsernameFromId(numericId)
+            .then(() => setUserExists(true))
+            .catch(() => navigate("/error", { state: { message: "El usuario no existe" } }));
+    }, [numericId, isValid, navigate]);
+
+// Mientras verifica, no renderizar nada (o un spinner)
+    if (userExists === null) return null;
 
 
     // Datos mockeados para que veas el diseño
