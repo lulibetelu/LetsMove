@@ -66,6 +66,10 @@ export async function findPostsFromUser(userId: number, page?: number){
             'Authorization': `Bearer ${token}`
         }
     });
-    if (!response.ok) throw new Error(`Failed to load post from user ${userId}: ${response.status}`);
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
     return response.json();
 }

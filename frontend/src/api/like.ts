@@ -11,7 +11,12 @@ export async function createLike(postId: number):Promise<ActionValidatorResponse
         },
         body: JSON.stringify({postId})
     })
-    return {error: !response.ok};
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
+    return response.json();
 }
 export async function findAll(){
     const token = localStorage.getItem('token');
@@ -22,7 +27,11 @@ export async function findAll(){
             'Authorization': `Bearer ${token}`
         },
     })
-    if (!response.ok) throw new Error(`Failed to load posts likes: ${response.status}`);
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
     return response.json();
 }
 export async function findUnique(postId: number) {
@@ -34,7 +43,11 @@ export async function findUnique(postId: number) {
             'Authorization': `Bearer ${token}`
         },
     })
-    if (!response.ok) throw new Error(`Failed to load like from post ${postId}: ${response.status}`)
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
     return response.json();
 }
 export async function removeLike(postId: number){
@@ -46,5 +59,10 @@ export async function removeLike(postId: number){
             'Authorization': `Bearer ${token}`
         },
     })
-    return {error: !response.ok}
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
+    return response.json();
 }
