@@ -25,6 +25,10 @@ export async function removeDislike(postId: number){
             'Authorization': `Bearer ${token}`
         },
     });
-    if (!response.ok) throw new Error(`Failed to remove dislike from post ${postId}: ${response.status}`)
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
     return response.json();
 }

@@ -12,7 +12,11 @@ export async function createComment(commentData: CreateComment) {
         },
         body: JSON.stringify(commentData)
     });
-    if (!response.ok) throw new Error("Unable to create comment")
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
     return response.json();
 }
 
@@ -25,7 +29,11 @@ export async function findAllComments(postId: number){
             'Authorization': `Bearer ${token}`
         },
     });
-    if (!response.ok) throw new Error("Unable to fetch comments")
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
     return response.json();
 }
 
@@ -38,6 +46,10 @@ export async function eliminateCommentApi(commentId: number){
             'Authorization': `Bearer ${token}`
         },
     });
-    if (!response.ok) throw new Error("Unable to fetch comments")
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
     return response.json();
 }
