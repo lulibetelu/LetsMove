@@ -58,6 +58,17 @@ export class EventRepositoryService {
       where: {
         id: id,
       },
+      include: {
+        host: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+        location: true,
+        // chat: true,
+      },
     });
   }
 

@@ -19,7 +19,8 @@ export default function EventFeed(){
             const events: EventType[] = await findEvents(cursor)
             if (events.length !== 0){
                 setEvents(prev => [...prev, ...events])
-                setCursor(prev => prev+1);
+                if (events.length >= 15) setCursor(prev => prev+1);
+
                 setHasMore(true);
             }else {
                 setHasMore(false);
