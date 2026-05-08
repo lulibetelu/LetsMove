@@ -8,6 +8,10 @@ export async function findAllSports(){
             'Authorization': `Bearer ${token}`
         },
     })
-    if(!response.ok) throw new Error(`Could not get sports`);
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
     return response.json();
 }

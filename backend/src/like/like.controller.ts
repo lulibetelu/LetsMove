@@ -11,6 +11,7 @@ import {
   ConflictException,
   Inject,
   forwardRef,
+  NotFoundException,
 } from '@nestjs/common';
 import { LikeService } from './like.service';
 import { CreateLikeDto } from './dto/create-like.dto';
@@ -45,16 +46,22 @@ export class LikeController {
 
   @Get()
   @UseGuards(AuthGuard)
-  findAll(@Req() req: Request) {
+  async findAll(@Req() req: Request) {
     const userId = req.user.sub;
-    return this.likeService.findAll(userId);
+    const promise = await this.likeService.findAll(userId);
+
+    if (!promise || promise.length === 0) throw new NotFoundException();
+    return promise;
   }
 
   @Get('/post/:id')
   @UseGuards(AuthGuard)
-  findOne(@Req() req: Request, @Param('id', ParseIntPipe) postId: number) {
+  async findOne(@Req() req: Request, @Param('id', ParseIntPipe) postId: number) {
     const userId = req.user.sub;
-    return this.likeService.findOne(userId, postId);
+    const promise = await this.likeService.findOne(userId, postId);
+
+    if (!promise) throw new NotFoundException();
+    return promise;
   }
 
   @Delete('/post/:id')

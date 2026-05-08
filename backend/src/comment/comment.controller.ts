@@ -9,6 +9,7 @@ import {
   UseGuards,
   Req,
   ParseIntPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -30,8 +31,10 @@ export class CommentController {
   @Get(':id')
   @UseGuards(AuthGuard)
   // todos los comentarios de un posteo
-  findAll(@Param('id', ParseIntPipe) postId: number) {
-    return this.commentService.findAll(postId);
+  async findAll(@Param('id', ParseIntPipe) postId: number) {
+    const promise = await this.commentService.findAll(postId);
+    if (!promise) throw new NotFoundException();
+    return promise;
   }
 
   @Patch(':id')

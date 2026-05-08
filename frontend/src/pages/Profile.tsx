@@ -7,7 +7,7 @@ import type {PostType} from "../types/postTypes.ts";
 import {findPostsFromUser} from "../api/post.ts";
 import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend.ts";
 import type { FriendRequestType } from '../types/friendRequestType.ts';
-import {getCurrentUserId} from "../api/user.ts";
+import {getCurrentUserId, getUsernameFromId} from "../api/user.ts";
 import Sidebar from "../components/Sidebar.tsx";
 
 export default function Profile() {
@@ -22,8 +22,10 @@ export default function Profile() {
     const [page, setPage] = useState<number | undefined>();
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
+    const [userExists, setUserExists] = useState<boolean | null>(null);
 
-    const [error, setError] = useState<boolean>(false);
+
+    // const [error, setError] = useState<boolean>(false);
 
     const logout = () => {
         localStorage.removeItem('token');
@@ -50,7 +52,7 @@ export default function Profile() {
             setPosts(findAllTypes);
             setPage(findAllTypes.length === 50 ? 1 : undefined);
         } catch {
-            setError(true);
+            setPosts([]);
         }
     }, [numericId]);
 
@@ -70,6 +72,21 @@ export default function Profile() {
     }
 
 
+    useEffect(() => {
+        if (!isValid) {
+            navigate("/error", { state: { message: "ID inválido" } });
+            return;
+        }
+
+        getUsernameFromId(numericId)
+            .then(() => setUserExists(true))
+            .catch(() => navigate("/error", { state: { message: "El usuario no existe" } }));
+    }, [numericId, isValid, navigate]);
+
+// Mientras verifica, no renderizar nada (o un spinner)
+    if (userExists === null) return null;
+
+
     // Datos mockeados para que veas el diseño
     const mockFriends = [
         { id: 1, name: "Friend One", location: "Escobar, Buenos Aires" },
@@ -85,15 +102,18 @@ export default function Profile() {
             }
         });
         return null;
-    }
-    else if (error) {
-        navigate("/error", {
-            state: {
-                title: "",
-                message: "El usuario ingresado no existe",
-            }
-        });
-        return null;
+    }else {
+        try {
+            getUsernameFromId(numericId);
+        }catch {
+            navigate("/error", {
+                state: {
+                    title: "",
+                    message: "El usuario ingresado no existe",
+                }
+            });
+            return null;
+        }
     }
 
     return (

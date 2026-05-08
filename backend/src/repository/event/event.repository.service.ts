@@ -59,6 +59,17 @@ export class EventRepositoryService {
       where: {
         id: id,
       },
+      include: {
+        host: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+        location: true,
+        // chat: true,
+      },
     });
   }
 
@@ -131,6 +142,13 @@ export class EventRepositoryService {
         id: eventId,
       },
       data: data,
+    });
+  }
+
+  async findLimited(requesterId: number, page: number) {
+    return this.prismaService.event.findMany({
+      take: 15,
+      skip: (page - 1) * 15,
     });
   }
 

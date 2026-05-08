@@ -26,8 +26,15 @@ export class EventService {
     modifierId: number,
     updateEventDto: UpdateEventDto,
   ) {
+    return await this.eventRepositoryService.updateEvent(
+      eventId,
+      modifierId,
+      updateEventDto,
+    );
+  }
 
-    return await this.eventRepositoryService.updateEvent(eventId, modifierId, updateEventDto);
+  async findLimited(requesterId: number, page: number) {
+    return this.eventRepositoryService.findLimited(requesterId, page);
   }
 
   async remove(id: number, removerId: number) {

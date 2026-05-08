@@ -22,11 +22,11 @@ export class LikeService {
     return this.likeRepository.findUnique(userId, postId);
   }
 
-  remove(userId: number, postId: number) {
-    try {
-      return this.likeRepository.delete(userId, postId);
-    } catch {
-      throw new NotFoundException("tried to delete like that didn't exist");
-    }
+  async remove(userId: number, postId: number) {
+    const like = await this.findOne(userId, postId);
+
+    if (!like) throw new NotFoundException('like not found');
+
+    return this.likeRepository.delete(userId, postId);
   }
 }

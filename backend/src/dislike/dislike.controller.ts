@@ -9,6 +9,7 @@ import {
   Req,
   ParseIntPipe,
   ConflictException,
+  NotFoundException,
 } from '@nestjs/common';
 import { DislikeService } from './dislike.service';
 import { CreateDislikeDto } from './dto/create-dislike.dto';
@@ -45,16 +46,25 @@ export class DislikeController {
 
   @Get()
   @UseGuards(AuthGuard)
-  findAll(@Req() request: Request) {
+  async findAll(@Req() request: Request) {
     const userId: number = request.user.sub;
-    return this.dislikeService.findAll(userId);
+    const promise = await this.dislikeService.findAll(userId);
+
+    if (!promise || promise.length === 0) throw new NotFoundException();
+    return promise;
   }
 
   @Get('post/:id')
   @UseGuards(AuthGuard)
-  findOne(@Req() request: Request, @Param('id', ParseIntPipe) postId: number) {
+  async findOne(
+    @Req() request: Request,
+    @Param('id', ParseIntPipe) postId: number,
+  ) {
     const userId: number = request.user.sub;
-    return this.dislikeService.findOne(userId, postId);
+    const promise = await this.dislikeService.findOne(userId, postId);
+
+    if (!promise) throw new NotFoundException();
+    return promise;
   }
 
   @Delete('post/:id')
