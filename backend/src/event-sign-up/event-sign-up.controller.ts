@@ -48,22 +48,16 @@ export class EventSignUpController {
 
   @Patch()
   update(
-    @Query('eventId', ParseIntPipe) eventId: number,
-    @Query('userId', ParseIntPipe) userId: number,
+    @Req() req: Request,
     @Body() updateEventSignUpDto: UpdateEventSignUpDto,
   ) {
-    return this.eventSignUpService.update(
-      eventId,
-      userId,
-      updateEventSignUpDto,
-    );
+    const hostId = req.user.sub;
+    return this.eventSignUpService.update(hostId, updateEventSignUpDto);
   }
 
   @Delete()
-  remove(
-    @Query('eventId', ParseIntPipe) eventId: number,
-    @Query('userId', ParseIntPipe) userId: number,
-  ) {
-    return this.eventSignUpService.remove(eventId, userId);
+  remove(@Req() req: Request, dto: CreateEventSignUpDto) {
+    const userId = req.user.sub;
+    return this.eventSignUpService.remove(dto, userId);
   }
 }

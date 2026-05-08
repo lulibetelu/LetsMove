@@ -15,7 +15,9 @@ export class EventSignUpService {
       createEventSignUpDto.eventId,
     );
     if (!event) {
-      throw new Error('');
+      throw new Error(
+        `Event with id: ${createEventSignUpDto.eventId} doesn't exist`,
+      );
     }
     if (event.isPrivate) {
       return this.signUpRepositoryService.create(
