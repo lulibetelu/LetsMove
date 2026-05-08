@@ -5,6 +5,7 @@ import type {EventType} from "../types/eventTypes.ts"
 import {findEvents} from "../api/event.ts";
 import Events from "../components/Events.tsx";
 import PopUpError from "../components/PopUpError.tsx";
+import NewEvent from "../components/NewEvent.tsx";
 
 export default function EventFeed(){
     const [events, setEvents] = useState<EventType[]>([]);
@@ -13,6 +14,8 @@ export default function EventFeed(){
     const [error, setError] = useState(false);
     //lo que usas para indicar qué div es el que usas para pedir los proximos eventos.
     const loaderRef = useRef<HTMLDivElement>(null);
+    const [createEvent, setCreateEvent] = useState(false);
+    const [reloadPage, setReloadPage] = useState<boolean>(false);
 
     const fetchEvents = async () => {
         try {
@@ -37,12 +40,12 @@ export default function EventFeed(){
         });
         if (loaderRef.current) observer.observe(loaderRef.current);
         return () => observer.disconnect();
-    },[cursor, hasMore]);
+    },[cursor, hasMore,reloadPage]);
 
     return (
 
         <div className="min-h-screen bg-base-100 flex">
-            <Sidebar onPostCreated={() => null}/>
+            <Sidebar/>
             <main className="flex-1 ml-20 flex justify-center">
                 <div className="w-full max-w-2xl min-h-screen relative pb-24">
                     <header className="sticky top-0 z-40 bg-base-100/90 backdrop-blur-md px-4 py-5 flex justify-center border-b-2 border-base-content/10">
@@ -66,6 +69,35 @@ export default function EventFeed(){
                     <div ref={loaderRef}></div>
                 </div>
             </main>
+            <div className="flex justify-end items-end h-screen">
+                <button type="button"  onClick={() => setCreateEvent(true)} className="
+    fixed bottom-6 right-6
+    w-16 h-16
+    rounded-full
+
+    bg-[#96a55a]
+    hover:bg-[#a8b96a]
+
+    text-white
+    text-4xl
+
+    flex items-center justify-center
+
+    shadow-lg
+    hover:shadow-2xl
+
+    transition-all duration-300 ease-out
+
+    hover:scale-110
+    hover:rotate-90
+
+    active:scale-95
+
+    cursor-pointer
+  "
+                >+</button>
+                {createEvent && <NewEvent onClose={() => setCreateEvent(false)} onEventCreated={() => setReloadPage(prev => !prev)} />}
+                </div>
         </div>
     )
 }
