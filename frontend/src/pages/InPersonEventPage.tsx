@@ -1,4 +1,5 @@
 import type { EventType } from "../types/eventTypes.ts";
+import Sidebar from "../components/Sidebar.tsx";
 
 interface Props {
     event: EventType;
@@ -27,6 +28,7 @@ function getInitials(username: string): string {
 export default function InPersonEventDetail({ event }: Props) {
     return (
         <div className="card bg-base-200 border border-base-300 max-w-4xl mx-auto shadow-xl overflow-hidden">
+            <Sidebar onPostCreated={() => null}/>
             <div className="h-1 w-full bg-success" />
 
             <div className="card-body gap-4">

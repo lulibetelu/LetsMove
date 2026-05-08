@@ -28,8 +28,9 @@ function getInitials(username: string): string {
 export default function AsynchronousEventDetail({ event }: Props) {
     return (
 
-        <div className="card bg-base-200 border border-base-300 max-w-4xl mx-auto shadow-xl overflow-hidden">
 
+            <div className="card bg-base-200 border border-base-300 max-w-4xl mx-auto shadow-xl overflow-hidden">
+                <Sidebar onPostCreated={() => null}/>
             <div className="h-1 w-full bg-info" />
 
             <div className="card-body gap-4">
