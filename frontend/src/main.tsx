@@ -13,6 +13,7 @@ import Profile from "./pages/Profile.tsx";
 import NotificationsPage from "./pages/NotificationsPage.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import PostPage from "./pages/PostPage.tsx";
+import EventFeed from "./pages/EventFeed.tsx";
 import EventPage from "./pages/EventPage.tsx";
 
 //define a partir de donde le pegué en la URL qué componente va a renderizar react
@@ -55,7 +56,11 @@ const router = createBrowserRouter([
     },
     {
         path: "/event",
-        element: <EventPage></EventPage>
+        element: <EventFeed></EventFeed>
+    },
+    {
+        path: "/event/:id",
+        element: <EventPage/>
     },
     {
         path: "/error",

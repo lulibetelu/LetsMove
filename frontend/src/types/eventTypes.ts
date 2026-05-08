@@ -1,3 +1,6 @@
+import type {User} from "./userTypes.ts";
+import type {LocationType} from "./fileTypes.ts";
+
 export interface EventType{
     id: number,
     hostId: number,
@@ -7,6 +10,9 @@ export interface EventType{
     startingDate: Date,
     locationId?: number,
     endingDate?: Date,
-    eventType: string
+    eventType: string,
+    host: User,
+    location: LocationType
+
 
 }
