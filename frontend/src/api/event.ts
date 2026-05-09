@@ -1,3 +1,5 @@
+import type {CreateEventType, EventRawData} from "../types/eventTypes.ts";
+
 const url = import.meta.env.VITE_API_URL;
 
 
@@ -35,4 +37,44 @@ export async function findOneEvent(id: number) {
     }
 
     return response.json();
+}
+
+export async function createEvent(data: EventRawData){
+    const formattedData: CreateEventType = formatEventData(data);
+    const token = localStorage.getItem('token');
+    const response = await fetch(url + `event`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(formattedData),
+    })
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
+
+    return response.json();
+}
+
+function formatEventData(data: EventRawData): CreateEventType {
+    if (data.type === "InPerson") {
+        return {
+            title: data.title,
+            description: data.description,
+            type: data.type,
+            startingDate: new Date(data.startingDate),
+            location: data.location
+        }
+    }
+
+    return {
+        title: data.title,
+        description: data.description,
+        type: data.type,
+        startingDate: new Date(data.startingDate),
+        endingDate: new Date(data.endingDate)
+    }
 }

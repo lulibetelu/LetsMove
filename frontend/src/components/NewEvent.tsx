@@ -1,42 +1,38 @@
 import {CalendarDays} from "lucide-react";
 import {useState} from "react";
 import PopUpError from "./PopUpError.tsx";
+import {createEvent} from "../api/event.ts";
+import type {EventRawData} from "../types/eventTypes.ts";
 
 interface Props {
     onClose: () => void;
     onEventCreated: () => void
 }
 
-interface EventRawData {
-    title: string | undefined,
-    description: string | undefined,
-    type: string | undefined,
-    startingDate: string,
-    endingDate: string,
-    location: string | undefined
-}
+
 
 export default function NewEvent(props: Props){
-    const [title, setTitle] = useState<string>();
-    const [description, setDescription] = useState<string>();
-    const [type, setType] = useState<string>();
+    const [title, setTitle] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+    const [type, setType] = useState<string>("");
     const [startingDate, setStartingDate] = useState("");
     const [endingDate, setEndingDate] = useState("");
-    const [location, setLocation] = useState<string>();
+    const [location, setLocation] = useState<string>("");
     const [error, setError] = useState<boolean>();
 
     const checkData = (data:EventRawData) => {
-        if (!data.title || !data.description || !data.type || !data.startingDate) return false;
+        if (title.length === 0 || description.length === 0 || type.length === 0 || startingDate.length === 0) return false;
 
-        if (data.type === "InPerson" && !data.location) return false;
+        if (data.type === "InPerson" && location.length === 0) return false;
 
-        return !(data.type === "Asynchronous" && !endingDate);
+        return !(data.type === "Asynchronous" && endingDate.length === 0);
 
 
     }
 
 
-    const handleSubmit = () => {
+    const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = async (event) => {
+        event.preventDefault();
         const data: EventRawData = {
             title: title,
             description: description,
@@ -51,7 +47,9 @@ export default function NewEvent(props: Props){
         }
 
         try {
-            createEvent(data)
+            await createEvent(data);
+            props.onEventCreated()
+            props.onClose();
         }catch {
             setError(true);
         }
@@ -235,8 +233,7 @@ return (
                     transition-all duration-300
                     hover:scale-105
                     active:scale-95
-                "
-                >
+                ">
                     Create Event
                 </button>
             </div>

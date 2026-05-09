@@ -16,3 +16,21 @@ export interface EventType{
 
 
 }
+
+export interface EventRawData {
+    title: string ,
+    description: string,
+    type: string ,
+    startingDate: string,
+    endingDate: string,
+    location: string | undefined
+}
+
+export interface CreateEventType{
+    title: string ,
+    description: string,
+    type: string ,
+    startingDate: Date,
+    endingDate?: Date,
+    location?: string
+}

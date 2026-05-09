@@ -46,7 +46,8 @@ export class EventController {
     const requesterId: number = req.user.sub;
     const promise = await this.eventService.findLimited(requesterId, page);
 
-    if (!promise || promise.length === 0) throw new NotFoundException();
+    //No quiero que no me tire un arreglo vacio
+    if (!promise) throw new NotFoundException();
     return promise;
   }
 

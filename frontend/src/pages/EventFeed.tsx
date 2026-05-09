@@ -1,6 +1,6 @@
 import Sidebar from "../components/Sidebar.tsx";
 import {Search} from "lucide-react";
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import type {EventType} from "../types/eventTypes.ts"
 import {findEvents} from "../api/event.ts";
 import Events from "../components/Events.tsx";
@@ -15,24 +15,31 @@ export default function EventFeed(){
     //lo que usas para indicar qué div es el que usas para pedir los proximos eventos.
     const loaderRef = useRef<HTMLDivElement>(null);
     const [createEvent, setCreateEvent] = useState(false);
-    const [reloadPage, setReloadPage] = useState<boolean>(false);
+    const isFetching = useRef(false);
+    const [reloadCount, setReloadCount] = useState(0);
 
-    const fetchEvents = async () => {
+    const fetchEvents = useCallback(async () => {
+        if (isFetching.current) return;
+        isFetching.current = true;
         try {
             const events: EventType[] = await findEvents(cursor)
-            if (events.length !== 0){
-                setEvents(prev => [...prev, ...events])
-                if (events.length >= 15) setCursor(prev => prev+1);
-
-                setHasMore(true);
-            }else {
-                setHasMore(false);
-            }
+            if (events.length > 0) setEvents(prev => [...prev, ...events]);
+            setHasMore(events.length >= 15);
+            if (events.length >= 15) setCursor(prev => prev + 1);
         }catch {
             setError(true);
+        }finally {
+            isFetching.current = false;
         }
 
-    }
+    },[cursor, reloadCount]);
+
+    const resetFeed = useCallback(() => {
+        setEvents([]);
+        setCursor(1);
+        setHasMore(true);
+        setReloadCount(c => c+1);
+    }, []);
 
     useEffect(() => {
         const observer = new IntersectionObserver(entries => {
@@ -40,7 +47,7 @@ export default function EventFeed(){
         });
         if (loaderRef.current) observer.observe(loaderRef.current);
         return () => observer.disconnect();
-    },[cursor, hasMore,reloadPage]);
+    },[fetchEvents, hasMore]);
 
     return (
 
@@ -96,7 +103,7 @@ export default function EventFeed(){
     cursor-pointer
   "
                 >+</button>
-                {createEvent && <NewEvent onClose={() => setCreateEvent(false)} onEventCreated={() => setReloadPage(prev => !prev)} />}
+                {createEvent && <NewEvent onClose={() => setCreateEvent(false)} onEventCreated={resetFeed} />}
                 </div>
         </div>
     )
