@@ -60,6 +60,14 @@ export class EventRepositoryService {
             },
           },
         },
+        host: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+        location: true,
       },
     });
   }
