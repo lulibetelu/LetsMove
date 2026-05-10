@@ -35,7 +35,6 @@ export class UpdateEventDto extends PartialType(CreateEventDto) {
   @IsOptional()
   endingDate?: Date;
 
-  @IsNotEmpty()
   @IsBoolean()
   isPrivate?: boolean;
 }
