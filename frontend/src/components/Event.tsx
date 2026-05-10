@@ -105,18 +105,16 @@ export default function Event({event}: Props) {
                     <span className="text-xs text-white/30">
                       by {event.host?.username ?? `Host #${event.hostId}`}
                     </span>
-                    <div onClick={(e) => e.stopPropagation()}>
-                        <button
-                            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95
-                                ${joined
-                                ? "bg-white/10 text-white/50 hover:bg-red-400/10 hover:text-red-400"
-                                : "bg-[#8A9A5B] hover:bg-[#728249] text-white"
-                            }`}
-                            onClick={handleJoinClick}
-                        >
-                            {joined ? "Joined" : "Join"}
-                        </button>
-                    </div>
+                    <button
+                        className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95
+                            ${joined
+                            ? "bg-white/10 text-white/50 hover:bg-red-400/10 hover:text-red-400"
+                            : "bg-[#8A9A5B] hover:bg-[#728249] text-white"
+                        }`}
+                        onClick={handleJoinClick}
+                    >
+                        {joined ? "Joined" : "Join"}
+                    </button>
                 </div>
 
             </div>
