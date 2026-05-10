@@ -50,8 +50,18 @@ export class EventRepositoryService {
     });
   }
 
-  async findAll() {
-    return this.prismaService.event.findMany();
+  async findAll(requesterId: number) {
+    return this.prismaService.event.findMany({
+      include: {
+        imageEvents: {
+          include: {
+            image: {
+              select: { url: true },
+            },
+          },
+        },
+      },
+    });
   }
 
   async findOneById(id: number) {

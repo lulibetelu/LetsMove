@@ -26,6 +26,11 @@ export class CreateEventDto {
   @IsOptional()
   imageUrl?: string;
 
+  @IsString()
+  @IsOptional()
+  @IsIn(['Cover', 'Gallery'])
+  imageDescription?: string;
+
   @IsNotEmpty()
   @IsString()
   @IsIn(['Asynchronous', 'InPerson'])

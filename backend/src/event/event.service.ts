@@ -14,7 +14,7 @@ export class EventService {
   }
 
   async findAll(requesterId: number) {
-    return this.eventRepositoryService.findAll();
+    return this.eventRepositoryService.findAll(requesterId);
   }
 
   async findOne(id: number) {

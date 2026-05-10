@@ -13,6 +13,4 @@ export interface EventType{
     eventType: string,
     host: User,
     location: LocationType
-
-
 }
