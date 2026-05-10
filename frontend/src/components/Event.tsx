@@ -97,7 +97,7 @@ export default function Event({event}: Props) {
                     {event.location && (
                         <p className="flex items-center gap-1.5 text-xs text-white/40">
                             <MapPin size={12} className="text-[#8A9A5B] shrink-0"/>
-                            {event.location.toString()}
+                            {event.location.location}
                         </p>
                     )}
                 </div>
