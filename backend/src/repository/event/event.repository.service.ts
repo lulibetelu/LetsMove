@@ -77,6 +77,13 @@ export class EventRepositoryService {
             email: true,
           },
         },
+        imageEvents: {
+          include: {
+            image: {
+              select: { url: true },
+            },
+          },
+        },
         location: true,
         // chat: true,
       },
