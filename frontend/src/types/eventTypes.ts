@@ -19,7 +19,7 @@ export interface EventType{
     endingDate?: Date,
     eventType: string,
     host: User,
-    location: LocationType,
+    location?: LocationType,
     imageEvents?: ImageEvent[],
     isPrivate: boolean,
 }
