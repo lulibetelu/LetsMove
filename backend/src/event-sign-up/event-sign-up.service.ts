@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateEventSignUpDto } from './dto/create-event-sign-up.dto';
 import { UpdateEventSignUpDto } from './dto/update-event-sign-up.dto';
 import { EventSignUpRepositoryService } from '../repository/eventSignUp/event-sign-up.repository.service';
@@ -15,7 +19,7 @@ export class EventSignUpService {
       createEventSignUpDto.eventId,
     );
     if (!event) {
-      throw new Error(
+      throw new NotFoundException(
         `Event with id: ${createEventSignUpDto.eventId} doesn't exist`,
       );
     }
@@ -51,14 +55,14 @@ export class EventSignUpService {
     const event = await this.eventRepositoryService.findOneById(
       updateEventSignUpDto.eventId,
     );
-    if (!event) throw new Error();
-    if (event.hostId != hostId) throw new Error();
+    if (!event) throw new NotFoundException();
+    if (event.hostId != hostId) throw new UnauthorizedException();
     return this.signUpRepositoryService.update(updateEventSignUpDto);
   }
 
   async remove(userId: number, eventId: number) {
     const event = await this.eventRepositoryService.findOneById(eventId);
-    if (!event) throw new Error();
+    if (!event) throw new NotFoundException();
     return this.signUpRepositoryService.remove(userId, eventId);
   }
 }
