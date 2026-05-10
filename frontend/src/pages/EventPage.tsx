@@ -16,7 +16,6 @@ export default function EventPage() {
     useEffect(() => {
         const fetchEventData = async () => {
             try {
-
                 const eventResponse: EventType = await findOneEvent(numericId);
                 setEvent(eventResponse);
             } catch {

@@ -61,12 +61,12 @@ export class EventSignUpRepositoryService {
       },
     });
   }
-  public remove(userId: number, dto: CreateEventSignUpDto){
+  public remove(userId: number, eventId: number){
     return this.prismaService.eventSignUp.delete({
       where: {
         userId_eventId: {
           userId: userId,
-          eventId: dto.eventId,
+          eventId: eventId,
         },
       },
     });

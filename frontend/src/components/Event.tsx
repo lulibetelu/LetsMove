@@ -1,10 +1,21 @@
 import type {EventType} from "../types/eventTypes.ts";
+import {useState} from "react";
+import {exitEvent, joinEvent} from "../api/event.ts";
 interface Props  {
     event : EventType;
 }
 
 export default function Event(props: Props) {
-
+    const [joined, setJoined] = useState<boolean>(false);
+    const handleJoinClick = async () => {
+        if (!joined) {
+            await joinEvent(props.event.id);
+        }
+        else {
+            await exitEvent(props.event.id);
+        }
+        setJoined(!joined);
+    }
 
     return (
         <div>
@@ -41,7 +52,10 @@ export default function Event(props: Props) {
           <span className="text-xs text-base-content/30">
             Host #{props.event.hostId}
           </span>
-                        <button className="px-5 py-2 rounded-xl bg-[#7d8c4a] hover:bg-[#96a55a] active:scale-95 text-white text-sm font-bold transition-all duration-150 shadow-md hover:shadow-[#7d8c4a]/30">
+                        <button
+                            className="px-5 py-2 rounded-xl bg-[#7d8c4a] hover:bg-[#96a55a] active:scale-95 text-white text-sm font-bold transition-all duration-150 shadow-md hover:shadow-[#7d8c4a]/30"
+                            onClick={handleJoinClick}
+                        >
                             Join
                         </button>
                     </div>

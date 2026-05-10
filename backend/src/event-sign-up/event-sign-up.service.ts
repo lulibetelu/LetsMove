@@ -56,9 +56,9 @@ export class EventSignUpService {
     return this.signUpRepositoryService.update(updateEventSignUpDto);
   }
 
-  async remove(dto: CreateEventSignUpDto, userId: number) {
-    const event = await this.eventRepositoryService.findOneById(dto.eventId);
+  async remove(userId: number, eventId: number) {
+    const event = await this.eventRepositoryService.findOneById(eventId);
     if (!event) throw new Error();
-    return this.signUpRepositoryService.remove(userId, dto);
+    return this.signUpRepositoryService.remove(userId, eventId);
   }
 }
