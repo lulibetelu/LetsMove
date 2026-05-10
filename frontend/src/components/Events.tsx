@@ -6,15 +6,14 @@ interface Props {
     eventArray: EventType[],
 }
 
-export default function Events(props: Props){
+export default function Events({eventArray}: Props){
     return (
-        <div className="flex flex-col gap-7">
-        {props.eventArray.map((event: EventType) => {
-            return (<Link to={`/event/${event.id}`}>
-                <Event key={event.id} event={event} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+            {eventArray.map((event: EventType) => (
+                <Link key={event.id} to={`/event/${event.id}`}>
+                    <Event event={event} />
                 </Link>
-            )
-            })}
+            ))}
         </div>
-    )
+    );
 }
