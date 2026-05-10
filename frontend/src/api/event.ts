@@ -41,12 +41,12 @@ export async function findOneEvent(id: number) {
 export async function joinEvent(eventId: number) {
     const token = localStorage.getItem('token');
     const response = await fetch(url + 'event-sign-up', {
-        method: 'CREATE',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(eventId),
+        body: JSON.stringify({eventId: eventId}),
     });
 
     if (!response.ok) {

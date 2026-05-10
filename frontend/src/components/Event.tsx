@@ -2,12 +2,14 @@ import type {EventType} from "../types/eventTypes.ts";
 import {useState} from "react";
 import {exitEvent, joinEvent} from "../api/event.ts";
 import {CalendarDays, Lock, MapPin} from "lucide-react";
+import {useNavigate} from "react-router-dom";
 interface Props  {
     event : EventType;
 }
 
 export default function Event({event}: Props) {
     const [joined, setJoined] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const handleJoinClick = async (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -33,7 +35,10 @@ export default function Event({event}: Props) {
     };
 
     return (
-        <div className="bg-[#1e1e1e] rounded-2xl overflow-hidden border border-white/5 hover:-translate-y-1 hover:border-white/10 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-200 flex flex-col">
+        <div
+            className="bg-[#1e1e1e] rounded-2xl overflow-hidden border border-white/5 hover:-translate-y-1 hover:border-white/10 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-200 flex flex-col"
+            onClick={() => navigate(`/event/${event.id}`)}
+        >
 
             {/* Event Card */}
             <div
@@ -100,16 +105,18 @@ export default function Event({event}: Props) {
                     <span className="text-xs text-white/30">
                       by {event.host?.username ?? `Host #${event.hostId}`}
                     </span>
-                    <button
-                        className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95
-                            ${joined
-                            ? "bg-white/10 text-white/50 hover:bg-red-400/10 hover:text-red-400"
-                            : "bg-[#8A9A5B] hover:bg-[#728249] text-white"
-                        }`}
-                        onClick={handleJoinClick}
-                    >
-                        {joined ? "Joined" : "Join"}
-                    </button>
+                    <div onClick={(e) => e.stopPropagation()}>
+                        <button
+                            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95
+                                ${joined
+                                ? "bg-white/10 text-white/50 hover:bg-red-400/10 hover:text-red-400"
+                                : "bg-[#8A9A5B] hover:bg-[#728249] text-white"
+                            }`}
+                            onClick={handleJoinClick}
+                        >
+                            {joined ? "Joined" : "Join"}
+                        </button>
+                    </div>
                 </div>
 
             </div>
