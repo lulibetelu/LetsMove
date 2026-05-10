@@ -84,7 +84,7 @@ export async function acceptParticipant(userId: number, eventId: number){
         userId: userId,
     }
     const response = await fetch(url + 'event-sign-up', {
-        method: 'UPDATE',
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -109,7 +109,7 @@ export async function rejectParticipant(userId: number, eventId: number){
         userId: userId,
     }
     const response = await fetch(url + 'event-sign-up', {
-        method: 'UPDATE',
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
