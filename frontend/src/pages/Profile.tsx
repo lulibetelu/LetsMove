@@ -2,13 +2,15 @@ import {MapPin, CalendarDays, Users, Edit3, UserCircle, Activity, UserPlus, Hour
 import Posts from "../components/Posts.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {useUsername} from "../hooks/UseUsername.tsx";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import type {PostType} from "../types/postTypes.ts";
 import {findPostsFromUser} from "../api/post.ts";
 import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend.ts";
 import type { FriendRequestType } from '../types/friendRequestType.ts';
 import {getCurrentUserId, getUsernameFromId} from "../api/user.ts";
 import Sidebar from "../components/Sidebar.tsx";
+import type {EventType} from "../types/eventTypes.ts";
+import {findEvents} from "../api/event.ts";
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -23,9 +25,14 @@ export default function Profile() {
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
     const [userExists, setUserExists] = useState<boolean | null>(null);
+    const [events, setEvents] = useState<EventType[]>([]);
+    const isFetching = useRef(false);
+    const [cursor, setCursor] = useState(1);
+    const [hasMore, setHasMore] = useState(false);
+    const loaderRef = useRef<HTMLDivElement>(null);
 
 
-    // const [error, setError] = useState<boolean>(false);
+    const [error, setError] = useState<boolean>(false);
 
     const logout = () => {
         localStorage.removeItem('token');
@@ -83,6 +90,30 @@ export default function Profile() {
             .catch(() => navigate("/error", { state: { message: "El usuario no existe" } }));
     }, [numericId, isValid, navigate]);
 
+    const fetchEvents = useCallback(async () => {
+        if (isFetching.current) return;
+        isFetching.current = true;
+        try {
+            const events: EventType[] = await findEvents(cursor);
+            if (events.length > 0) setEvents(prev => [...prev, ...events]);
+            setHasMore(events.length >= 15);
+            if (events.length >= 15) setCursor(prev => prev + 1);
+        }catch {
+            setError(true);
+        }finally {
+            isFetching.current = false;
+        }
+
+    },[cursor]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) fetchEvents();
+        });
+        if (loaderRef.current) observer.observe(loaderRef.current);
+        return () => observer.disconnect();
+    },[fetchEvents, hasMore]);
+
 // Mientras verifica, no renderizar nada (o un spinner)
     if (userExists === null) return null;
 
@@ -119,7 +150,7 @@ export default function Profile() {
     return (
         // Contenedor principal sin bordes laterales, usando el max-width para que no se estire infinito en monitores gigantes
         <div className="min-h-screen bg-[#141414] flex">
-            <Sidebar onPostCreated={() => {}}/>
+            <Sidebar/>
 
             <main className="flex-1 ml-60">
                 <div className="w-full max-w-5xl mx-auto pb-10">
@@ -248,19 +279,9 @@ export default function Profile() {
                             <div className="bg-[#1e1e1e] rounded-xl p-5 border border-white/5">
                                 <h3 className="font-semibold text-sm text-white/50 uppercase tracking-widest mb-4 flex items-center gap-">
                                     <CalendarDays size={15} className="text-[#8A9A5B]" />
-                                    Participates In
+                                    Events
                                 </h3>
-                                <div className="space-y-3">
-                                    {/* Tarjeta de Evento */}
-                                    <div className="bg-[#141414] p-3 rounded-lg border border-white/5 border-l-2 border-l-[#8A9A5B] hover:bg-[#1a1a1a] transition-colors cursor-pointer">
-                                        <h4 className="font-semibold text-sm text-white/80">Futbol game saturday night</h4>
-                                        <p className="text-xs text-white/40 mt-1">Sat 21 Jun · 20:00</p>
-                                        <p className="text-xs text-white/40">City Stadium</p>
-                                        <span className="inline-block mt-2 text-[10px] uppercase font-bold tracking-wider text-[#8A9A5B] bg-[#8A9A5B]/10 px-2 py-0.5 rounded-full">
-                                          In person event
-                                        </span>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>

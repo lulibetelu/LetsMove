@@ -7,19 +7,12 @@ import EditButton from "../components/EditButton.tsx";
 import DeleteButton from "../components/DeleteButton.tsx";
 import PopUpError from "../components/PopUpError.tsx";
 import EditEventForm from "../components/EditEventForm.tsx";
+import {formatDate} from "../resusable-functions/event.ts";
 
 interface Props {
     event: EventType;
 }
 
-function formatDate(date: Date | string): string {
-    return new Date(date).toLocaleDateString("en-GB", {
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-    });
-}
 
 function formatTime(date: Date | string): string {
     return new Date(date).toLocaleTimeString("en-GB", {
