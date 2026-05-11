@@ -14,6 +14,7 @@ import { PostActionValidatorModule } from './post-action-validator/post-action-v
 import { FriendsModule } from './friends/friends.module';
 import { CommentModule } from './comment/comment.module';
 import { EventModule } from './event/event.module';
+import { EventSignUpModule } from './event-sign-up/event-sign-up.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { EventModule } from './event/event.module';
     FriendsModule,
     CommentModule,
     EventModule,
+    EventSignUpModule,
   ],
   controllers: [AppController],
   providers: [AppService],

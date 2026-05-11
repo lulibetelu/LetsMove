@@ -16,7 +16,7 @@ export async function createFriendRequest(receiverId: number){
 }
 export async function findAllFriendRequests(): Promise<FriendRequestType[]>{
     const token = localStorage.getItem('token');
-    const response = await fetch(url + 'friends/requests/', {
+    const response = await fetch(url + 'friends/requests', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

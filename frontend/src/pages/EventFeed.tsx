@@ -11,6 +11,7 @@ export default function EventFeed(){
     const [cursor, setCursor] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState(false);
+
     //lo que usas para indicar qué div es el que usas para pedir los proximos eventos.
     const loaderRef = useRef<HTMLDivElement>(null);
 
@@ -41,29 +42,37 @@ export default function EventFeed(){
 
     return (
 
-        <div className="min-h-screen bg-base-100 flex">
+        <div className="min-h-screen bg-[#141414] flex">
             <Sidebar onPostCreated={() => null}/>
-            <main className="flex-1 ml-20 flex justify-center">
-                <div className="w-full max-w-2xl min-h-screen relative pb-24">
-                    <header className="sticky top-0 z-40 bg-base-100/90 backdrop-blur-md px-4 py-5 flex justify-center border-b-2 border-base-content/10">
+            <main className="flex-1 ml-60">
+                <div className="w-full max-w-6xl mx-auto min-h-screen pb-24">
+                    <header className="sticky top-0 z-40 bg-[#141414]/90 backdrop-blur-md px-6 py-5 flex justify-center border-b border-white/5">
                         <div className="w-full max-w-md relative">
                             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <Search size={18} className="text-base-content/50" />
+                                <Search size={18} className="text-white/30" />
                             </div>
                             <input
                                 type="text"
-                                aria-label="Search posts"
-                                placeholder="search"
-                                className="input input-bordered w-full rounded-full pl-12 h-10 bg-base-200/50 focus:bg-base-100 transition-colors"
+                                aria-label="Search events"
+                                placeholder="Buscar eventos..."
+                                className="w-full rounded-full pl-12 h-10 bg-white/5 border border-white/10 text-white/80 placeholder:text-white/30 text-sm focus:outline-none focus:border-[#8A9A5B]/50 transition-colors"
                             />
                         </div>
                     </header>
+
                     <Events eventArray={events}/>
-                    <div>
-                        {/*No corresponde a la branch pero esta bueno tenerlo*/}
-                        {error && <PopUpError message='Failed to load events, please try again later'/>}
-                    </div>
-                    <div ref={loaderRef}></div>
+
+                    {error && <PopUpError message="Failed to load events, please try again later"/>}
+
+                    {/*{hasMore && (*/}
+                    {/*    <div ref={loaderRef} className="h-20 w-full flex items-center justify-center">*/}
+                    {/*        <span className="loading loading-spinner loading-md text-[#8A9A5B]"/>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
+
+                    {/*{!hasMore && <div ref={loaderRef}/>}*/}
+
+                    <div ref={loaderRef}/>
                 </div>
             </main>
         </div>

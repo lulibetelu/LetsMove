@@ -41,6 +41,7 @@ export class EventRepositoryService {
         startingDate: createEventDto.startingDate,
         locationId: locationId,
         endingDate: createEventDto.endingDate,
+        isPrivate: createEventDto.isPrivate,
         eventType:
           createEventDto.type === 'Asynchronous'
             ? EventType.Asynchronous
@@ -49,8 +50,26 @@ export class EventRepositoryService {
     });
   }
 
-  async findAll() {
-    return this.prismaService.event.findMany();
+  async findAll(requesterId: number) {
+    return this.prismaService.event.findMany({
+      include: {
+        imageEvents: {
+          include: {
+            image: {
+              select: { url: true },
+            },
+          },
+        },
+        host: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+        location: true,
+      },
+    });
   }
 
   async findOneById(id: number) {
@@ -64,6 +83,39 @@ export class EventRepositoryService {
             id: true,
             username: true,
             email: true,
+          },
+        },
+        imageEvents: {
+          include: {
+            image: {
+              select: { url: true },
+            },
+          },
+        },
+        location: true,
+        // chat: true,
+      },
+    });
+  }
+
+  async findAllFromUser(userId: number) {
+    return this.prismaService.event.findMany({
+      where: {
+        hostId: userId,
+      },
+      include: {
+        host: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+        imageEvents: {
+          include: {
+            image: {
+              select: { url: true },
+            },
           },
         },
         location: true,

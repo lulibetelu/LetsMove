@@ -14,11 +14,15 @@ export class EventService {
   }
 
   async findAll(requesterId: number) {
-    return this.eventRepositoryService.findAll();
+    return this.eventRepositoryService.findAll(requesterId);
   }
 
   async findOne(id: number) {
     return this.eventRepositoryService.findOneById(id);
+  }
+
+  async findAllFromUser(userId: number) {
+    return this.eventRepositoryService.findAllFromUser(userId);
   }
 
   async update(

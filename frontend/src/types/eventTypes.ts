@@ -1,6 +1,13 @@
 import type {User} from "./userTypes.ts";
 import type {LocationType} from "./fileTypes.ts";
 
+export interface ImageEvent {
+    description: string;
+    image: {
+        url: string;
+    };
+}
+
 export interface EventType{
     id: number,
     hostId: number,
@@ -12,7 +19,23 @@ export interface EventType{
     endingDate?: Date,
     eventType: string,
     host: User,
-    location: LocationType
+    location?: LocationType,
+    imageEvents?: ImageEvent[],
+    isPrivate: boolean,
+}
 
+export interface EventSignUp {
+    id: number;
+    eventId: number;
+    userId: number;
+    state: string;
+    joinedAt: Date | null;
+    user: {
+        id: number;
+        username: string;
+    };
+}
 
+export interface PendingParticipant extends EventSignUp {
+    eventTitle: string;
 }

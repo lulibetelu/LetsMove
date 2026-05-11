@@ -42,11 +42,24 @@ export class EventController {
 
   @UseGuards(AuthGuard)
   @Get('limited')
-  async findLimited(@Req() req: Request, @Query('page', ParseIntPipe) page: number) {
+  async findLimited(
+    @Req() req: Request,
+    @Query('page', ParseIntPipe) page: number,
+  ) {
     const requesterId: number = req.user.sub;
     const promise = await this.eventService.findLimited(requesterId, page);
 
     if (!promise || promise.length === 0) throw new NotFoundException();
+    return promise;
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('host')
+  async findAllFromUser(@Req() req: Request) {
+    const userId = req.user.sub;
+    const promise = await this.eventService.findAllFromUser(userId);
+
+    if (!promise) throw new NotFoundException();
     return promise;
   }
 
@@ -58,6 +71,7 @@ export class EventController {
     if (!promise) throw new NotFoundException();
     return promise;
   }
+
 
   @UseGuards(AuthGuard)
   @Patch(':id')
