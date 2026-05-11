@@ -53,7 +53,6 @@ export default function NewEvent(props: Props){
         }catch {
             setError(true);
         }
-        //TODO agregar el create que formatee la rawdata en algo que le sirva al back
     }
 
 return (

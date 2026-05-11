@@ -22,7 +22,7 @@ export default function EventFeed(){
         if (isFetching.current) return;
         isFetching.current = true;
         try {
-            const events: EventType[] = await findEvents(cursor)
+            const events: EventType[] = await findEvents(cursor);
             if (events.length > 0) setEvents(prev => [...prev, ...events]);
             setHasMore(events.length >= 15);
             if (events.length >= 15) setCursor(prev => prev + 1);

@@ -1,10 +1,10 @@
 import type {EventType} from "../types/eventTypes.ts";
 interface Props  {
     event : EventType;
+    currentUserIsOwner: boolean
 }
 
 export default function Event(props: Props) {
-
 
     return (
         <div>

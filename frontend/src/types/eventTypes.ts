@@ -12,7 +12,7 @@ export interface EventType{
     endingDate?: Date,
     eventType: string,
     host: User,
-    location: LocationType
+    location?: LocationType
 
 
 }
@@ -34,3 +34,15 @@ export interface CreateEventType{
     endingDate?: Date,
     location?: string
 }
+
+export interface UpdateEventRawData{
+    id: number,
+    title: string ,
+    description: string,
+    type: string ,
+    startingDate: string,
+    endingDate: string | undefined,
+    location: string | undefined
+}
+
+export type UpdateEventType = Omit<CreateEventType, 'title' | 'type'>

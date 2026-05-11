@@ -1,5 +1,12 @@
 import type { EventType } from "../types/eventTypes.ts";
 import Sidebar from "../components/Sidebar.tsx";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {eliminateEvent} from "../api/event.ts";
+import EditButton from "../components/EditButton.tsx";
+import DeleteButton from "../components/DeleteButton.tsx";
+import PopUpError from "../components/PopUpError.tsx";
+import EditEventForm from "../components/EditEventForm.tsx";
 
 interface Props {
     event: EventType;
@@ -26,11 +33,24 @@ function getInitials(username: string): string {
 }
 
 export default function AsynchronousEventDetail({ event }: Props) {
+    const [editEvent, setEditEvent] = useState(false);
+    const [error, setError] = useState(false);
+    const navigate = useNavigate();
+
+    const handleEventDeletion = async () => {
+        try {
+            await eliminateEvent(event.id);
+            navigate("/event");
+        }catch {
+            setError(true);
+        }
+    }
+
     return (
 
 
             <div className="card bg-base-200 border border-base-300 max-w-4xl mx-auto shadow-xl overflow-hidden">
-                <Sidebar onPostCreated={() => null}/>
+                <Sidebar/>
             <div className="h-1 w-full bg-info" />
 
             <div className="card-body gap-4">
@@ -43,6 +63,11 @@ export default function AsynchronousEventDetail({ event }: Props) {
                     <p className="text-base-content/60 text-sm leading-relaxed mt-1">
                         {event.description}
                     </p>
+                </div>
+
+                <div className="flex flex-row w-full">
+                    <EditButton handleClick={() => setEditEvent(true)}/>
+                    <DeleteButton handleClick={handleEventDeletion}/>
                 </div>
 
                 <div className="divider my-0" />
@@ -78,9 +103,12 @@ export default function AsynchronousEventDetail({ event }: Props) {
                     </div>
                 </div>
 
+                {error && <PopUpError message="Failed to update event"/>}
+
                 <button className="btn btn-info w-full font-bold">Join Event</button>
 
             </div>
+                {editEvent && <EditEventForm event={event} onClose={() => setEditEvent(false)}/>}
         </div>
     );
 }
