@@ -16,9 +16,10 @@ export class EventSignUpRepositoryService {
       eventId: dto.eventId,
       userId: userId,
       state: state,
+      joinedAt: null,
     };
 
-    if (joinedAt) {
+    if (joinedAt != undefined) {
       data.joinedAt = joinedAt;
     }
 
@@ -35,6 +36,11 @@ export class EventSignUpRepositoryService {
     return this.prismaService.eventSignUp.findMany({
       where: {
         eventId: eventId,
+      },
+      include: {
+        user: {
+          select: { id: true, username: true },
+        },
       },
     });
   }

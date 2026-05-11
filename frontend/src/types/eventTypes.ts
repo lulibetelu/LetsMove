@@ -23,3 +23,19 @@ export interface EventType{
     imageEvents?: ImageEvent[],
     isPrivate: boolean,
 }
+
+export interface EventSignUp {
+    id: number;
+    eventId: number;
+    userId: number;
+    state: string;
+    joinedAt: Date | null;
+    user: {
+        id: number;
+        username: string;
+    };
+}
+
+export interface PendingParticipant extends EventSignUp {
+    eventTitle: string;
+}

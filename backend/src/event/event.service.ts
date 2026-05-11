@@ -21,6 +21,10 @@ export class EventService {
     return this.eventRepositoryService.findOneById(id);
   }
 
+  async findAllFromUser(userId: number) {
+    return this.eventRepositoryService.findAllFromUser(userId);
+  }
+
   async update(
     eventId: number,
     modifierId: number,

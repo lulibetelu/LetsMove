@@ -81,7 +81,7 @@ export async function acceptParticipant(userId: number, eventId: number){
     const datos = {
         eventId: eventId,
         state: 'Accepted',
-        userId: userId,
+        userId: userId
     }
     const response = await fetch(url + 'event-sign-up', {
         method: 'PATCH',
@@ -123,5 +123,39 @@ export async function rejectParticipant(userId: number, eventId: number){
         else throw new Error(message.message);
     }
 
+    return response.json();
+}
+
+export async function findEventParticipants(eventId: number) {
+    const token = localStorage.getItem('token');
+    const response = await fetch(url + `event-sign-up/event/${eventId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    });
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
+    return response.json();
+}
+
+export async function findEventsFromHost() {
+    const token = localStorage.getItem('token');
+    const response = await fetch(url + `event/host`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    });
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
     return response.json();
 }

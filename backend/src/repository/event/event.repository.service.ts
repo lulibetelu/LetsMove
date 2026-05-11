@@ -98,6 +98,32 @@ export class EventRepositoryService {
     });
   }
 
+  async findAllFromUser(userId: number) {
+    return this.prismaService.event.findMany({
+      where: {
+        hostId: userId,
+      },
+      include: {
+        host: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+        imageEvents: {
+          include: {
+            image: {
+              select: { url: true },
+            },
+          },
+        },
+        location: true,
+        // chat: true,
+      },
+    });
+  }
+
   async deleteEvent(id: number, removerId: number) {
     const event = await this.prismaService.event.findUnique({
       where: {

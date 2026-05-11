@@ -11,6 +11,7 @@ export default function EventFeed(){
     const [cursor, setCursor] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState(false);
+
     //lo que usas para indicar qué div es el que usas para pedir los proximos eventos.
     const loaderRef = useRef<HTMLDivElement>(null);
 

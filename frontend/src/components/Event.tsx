@@ -10,6 +10,22 @@ interface Props  {
 export default function Event({event}: Props) {
     const [joined, setJoined] = useState<boolean>(false);
     const navigate = useNavigate();
+    // const [eventReq, setEventReq] = useState<boolean>(false);
+    // const [eventAdded, setEventAdded] = useState<boolean>(false);
+    //
+    // useEffect(() => {
+    //     findUniqueFriend(numericId)
+    //         // data es un array de Friend[] porque como la amistad es bidireccional hay que checkear la relacion
+    //         // user1,user2 y user2,user1 y eso genera algunos quilombos, pero en realidad esto solo devuelve un elemento
+    //         .then((data: FriendRequestType[]) => {
+    //             // some recorre el array data y devuelve true si algun elemento es true
+    //             const hasRequested: boolean = data.some(f => f.state === 'Requested');
+    //             setFriendReq(hasRequested);
+    //
+    //             const isFriend: boolean = data.some(f => f.state === 'Accepted');
+    //             setFriendAdded(isFriend);
+    //         });
+    // }, [numericId]);
 
     const handleJoinClick = async (e: React.MouseEvent) => {
         e.stopPropagation();
