@@ -10,8 +10,8 @@ export default function Sidebar() {
 
     const navItems = [
         { path: "/homepage", icon: Home, label: "Inicio" },
-        { path: "/event", icon: PartyPopper, label: "Evento"},
-        { path: "/events", icon: CalendarDays, label: "Eventos" },
+        { path: "/event", icon: PartyPopper, label: "Eventos"},
+        { path: "/events", icon: CalendarDays, label: "Calendario" },
         { path: "/groups", icon: Users, label: "Grupos" },
         { path: currentUserId ? `/profile/${currentUserId}` : "/login", icon: User, label: "Perfil" },
         { path: "/settings", icon: Settings, label: "Configuración" },

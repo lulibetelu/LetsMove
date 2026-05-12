@@ -35,6 +35,7 @@ model User {
   postScore PostScore[]
 
   events Event[]
+  eventSignUp EventSignUp[]
 }
 
 model Sport {
@@ -172,10 +173,13 @@ model ImagePost{
 
 model ImageEvent{
   id Int @id @default(autoincrement())
+
   imageId Int
   image Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
   eventId Int
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
   description String
 
   @@unique([imageId, eventId])
@@ -194,9 +198,23 @@ model Event{
   endingDate DateTime?
   eventType EventType
   imageEvents ImageEvent[]
+  eventSignUp EventSignUp[]
+  isPrivate Boolean
 }
 
 enum EventType{
   Asynchronous
   InPerson
 }
+
+model EventSignUp {
+  id Int @id @default(autoincrement())
+  eventId Int
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  state String
+  joinedAt DateTime?
+  @@unique([userId, eventId])
+}
+

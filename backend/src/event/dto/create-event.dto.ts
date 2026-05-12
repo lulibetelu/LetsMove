@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDate,
   IsIn,
   IsNotEmpty,
@@ -25,6 +26,11 @@ export class CreateEventDto {
   @IsOptional()
   imageUrl?: string;
 
+  @IsString()
+  @IsOptional()
+  @IsIn(['Cover', 'Gallery'])
+  imageDescription?: string;
+
   @IsNotEmpty()
   @IsString()
   @IsIn(['Asynchronous', 'InPerson'])
@@ -38,4 +44,8 @@ export class CreateEventDto {
   @IsDate()
   @IsOptional()
   endingDate?: Date;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  isPrivate: boolean;
 }
