@@ -72,7 +72,6 @@ export class EventController {
     return promise;
   }
 
-
   @UseGuards(AuthGuard)
   @Patch(':id')
   async update(

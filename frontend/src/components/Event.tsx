@@ -1,6 +1,6 @@
-import type {EventType} from "../types/eventTypes.ts";
-import {useState} from "react";
-import {exitEvent, joinEvent} from "../api/event.ts";
+import type {EventSignUp, EventType} from "../types/eventTypes.ts";
+import {useEffect, useState} from "react";
+import {exitEvent, findOneSignUp, joinEvent} from "../api/event.ts";
 import {CalendarDays, Lock, MapPin} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 interface Props  {
@@ -10,22 +10,19 @@ interface Props  {
 export default function Event({event}: Props) {
     const [joined, setJoined] = useState<boolean>(false);
     const navigate = useNavigate();
-    // const [eventReq, setEventReq] = useState<boolean>(false);
-    // const [eventAdded, setEventAdded] = useState<boolean>(false);
-    //
-    // useEffect(() => {
-    //     findUniqueFriend(numericId)
-    //         // data es un array de Friend[] porque como la amistad es bidireccional hay que checkear la relacion
-    //         // user1,user2 y user2,user1 y eso genera algunos quilombos, pero en realidad esto solo devuelve un elemento
-    //         .then((data: FriendRequestType[]) => {
-    //             // some recorre el array data y devuelve true si algun elemento es true
-    //             const hasRequested: boolean = data.some(f => f.state === 'Requested');
-    //             setFriendReq(hasRequested);
-    //
-    //             const isFriend: boolean = data.some(f => f.state === 'Accepted');
-    //             setFriendAdded(isFriend);
-    //         });
-    // }, [numericId]);
+    const [eventReq, setEventReq] = useState<boolean>(false);
+
+    useEffect(() => {
+        findOneSignUp(event.id)
+            .then((data: EventSignUp) => {
+                // some recorre el array data y devuelve true si algun elemento es true
+                const hasRequested: boolean = data.state === 'Requested';
+                setEventReq(hasRequested);
+
+                const isParticipant: boolean = data.state === 'Accepted';
+                setJoined(isParticipant);
+            });
+    },);
 
     const handleJoinClick = async (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -121,16 +118,33 @@ export default function Event({event}: Props) {
                     <span className="text-xs text-white/30">
                       by {event.host?.username ?? `Host #${event.hostId}`}
                     </span>
-                    <button
-                        className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95
-                            ${joined
-                            ? "bg-white/10 text-white/50 hover:bg-red-400/10 hover:text-red-400"
-                            : "bg-[#8A9A5B] hover:bg-[#728249] text-white"
-                        }`}
-                        onClick={handleJoinClick}
-                    >
-                        {joined ? "Joined" : "Join"}
-                    </button>
+
+                    <div onClick={(e) => e.stopPropagation()}>
+                        {joined ? (
+                            <button
+                                className="group flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 bg-[#8A9A5B] hover:bg-red-400/20 hover:text-red-400 text-white"
+                                onClick={handleJoinClick}
+                            >
+                                <span className="group-hover:hidden">Joined</span>
+                                <span className="hidden group-hover:inline">Leave</span>
+                            </button>
+                        ) : eventReq ? (
+                            <button
+                                className="group flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold border border-white/15 text-white/50 hover:border-red-400/50 hover:text-red-400 transition-all active:scale-95"
+                                onClick={handleJoinClick}
+                            >
+                                <span className="group-hover:hidden">Pending</span>
+                                <span className="hidden group-hover:inline">Cancel</span>
+                            </button>
+                        ) : (
+                            <button
+                                className="px-4 py-1.5 rounded-full text-xs font-semibold bg-[#8A9A5B] hover:bg-[#728249] text-white transition-all active:scale-95"
+                                onClick={handleJoinClick}
+                            >
+                                Join
+                            </button>
+                        )}
+                    </div>
                 </div>
 
             </div>

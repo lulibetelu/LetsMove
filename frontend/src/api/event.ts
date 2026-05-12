@@ -1,3 +1,5 @@
+import {getCurrentUserId} from "./user.ts";
+
 const url = import.meta.env.VITE_API_URL;
 
 
@@ -146,6 +148,25 @@ export async function findEventParticipants(eventId: number) {
 export async function findEventsFromHost() {
     const token = localStorage.getItem('token');
     const response = await fetch(url + `event/host`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    });
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
+    return response.json();
+}
+
+export async function findOneSignUp(eventId: number) {
+    const token = localStorage.getItem('token');
+    const user: number|null = getCurrentUserId();
+    if (user === null) throw new Error("User not found");
+    const response = await fetch(url + `event-sign-up?eventId=${eventId}&userId=${user}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
