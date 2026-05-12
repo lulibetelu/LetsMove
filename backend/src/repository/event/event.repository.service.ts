@@ -7,6 +7,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateEventDto } from '../../event/dto/create-event.dto';
 import { EventType, Location } from '@prisma/client';
 import { UpdateEventDto } from '../../event/dto/update-event.dto';
+import { CreateEventEntryDto } from '../../eventEntry/dto/create-event-entry-dto';
 
 @Injectable()
 export class EventRepositoryService {
@@ -215,5 +216,42 @@ export class EventRepositoryService {
     if (location === null) return null;
 
     return location.id;
+  }
+
+  async createEventEntry(userId: number, eventEntryDto: CreateEventEntryDto) {
+    return this.prismaService.eventEntry.create({
+      data: {
+        eventId: eventEntryDto.eventId,
+        userId: userId,
+        content: eventEntryDto.content,
+        images: {
+          create: eventEntryDto.images?.map((url) => ({
+            image: {
+              create: { url },
+            },
+          })),
+        },
+      },
+    });
+  }
+
+  async deleteEventEntry(entryId: number){
+    return this.prismaService.eventEntry.delete({
+      where: {
+        id: entryId,
+      },
+    });
+  }
+
+  async getEventEntry(entryId: number){
+    return this.prismaService.eventEntry.findUnique({
+      where: {
+        id: entryId,
+      },
+    });
+  }
+
+  async getEntries(){
+    return this.prismaService.eventEntry.findMany();
   }
 }

@@ -15,6 +15,7 @@ import { FriendsModule } from './friends/friends.module';
 import { CommentModule } from './comment/comment.module';
 import { EventModule } from './event/event.module';
 import { EventSignUpModule } from './event-sign-up/event-sign-up.module';
+import { EventEntryModule } from './eventEntry/event-entry.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { EventSignUpModule } from './event-sign-up/event-sign-up.module';
     CommentModule,
     EventModule,
     EventSignUpModule,
+    EventEntryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
