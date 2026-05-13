@@ -1,6 +1,8 @@
 // hooks/useUsername.ts
 import { useState, useEffect } from 'react';
-import { getUsernameFromId } from '../api/user.ts'; // tu función existente
+import { getUsernameFromId } from '../api/user.ts';
+import type {PostType} from "../types/postTypes.ts";
+import {findAll} from "../api/post.ts"; // tu función existente
 
 export function useUsername(id?: number) {
     const [username, setUsername] = useState<string | null>(null);

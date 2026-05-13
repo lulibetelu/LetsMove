@@ -67,7 +67,8 @@ function formatEventData(data: EventRawData): CreateEventType {
             description: data.description,
             type: data.type,
             startingDate: new Date(data.startingDate),
-            location: data.location
+            location: data.location,
+            isPrivate: data.isPrivate
         }
     }
 
@@ -76,7 +77,8 @@ function formatEventData(data: EventRawData): CreateEventType {
         description: data.description,
         type: data.type,
         startingDate: new Date(data.startingDate),
-        endingDate: new Date(data.endingDate)
+        endingDate: new Date(data.endingDate),
+        isPrivate: data.isPrivate
     }
 }
 
@@ -85,14 +87,16 @@ function formatUpdateEventData(data: UpdateEventRawData): UpdateEventType {
         return {
             description: data.description,
             startingDate: new Date(data.startingDate),
-            location: data.location
+            location: data.location,
+            isPrivate: data.isPrivate
         }
     }
 
     return {
         description: data.description,
         startingDate: new Date(data.startingDate),
-        endingDate: new Date(data.endingDate!)
+        endingDate: new Date(data.endingDate!),
+        isPrivate: data.isPrivate
     }
 }
 

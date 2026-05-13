@@ -15,6 +15,7 @@ export default function EditEventForm({event, onClose}:Props){
     const [startingDate ,setStartingDate] = useState(event.startingDate.toString());
     const [location, setLocation] = useState(event.location? event.location.location : "");
     const [endingDate, setEndingDate] = useState(event.endingDate ? event.endingDate.toString() : "");
+    const [isPrivate, setIsPrivate] = useState(event.isPrivate);
     const [error, setError] = useState(false);
 
     const checkData = (data: UpdateEventRawData) => {
@@ -34,7 +35,8 @@ export default function EditEventForm({event, onClose}:Props){
             description: description,
             startingDate: startingDate,
             endingDate: endingDate,
-            location: location
+            location: location,
+            isPrivate: isPrivate
         }
         if (!checkData(data)) {
             setError(true);
@@ -159,6 +161,40 @@ export default function EditEventForm({event, onClose}:Props){
                         focus:border-[#96a55a]
                     "
                         />
+                    </div>
+
+                    <div>
+                        <label className="label">
+                    <span className="label-text font-medium">
+                        Access
+                    </span>
+                        </label>
+
+                        <div className="flex gap-3">
+                            <button
+                                type="button"
+                                onClick={() => setIsPrivate(false)}
+                                className={`flex-1 btn rounded-xl border-none ${
+                                    !isPrivate
+                                        ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
+                                        : "bg-base-200 text-base-content/70 hover:bg-base-300"
+                                }`}
+                            >
+                                Public
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => setIsPrivate(true)}
+                                className={`flex-1 btn rounded-xl border-none ${
+                                    isPrivate
+                                        ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
+                                        : "bg-base-200 text-base-content/70 hover:bg-base-300"
+                                }`}
+                            >
+                                Private
+                            </button>
+                        </div>
                     </div>
 
                     {/* In Person Location */}

@@ -178,10 +178,12 @@ export class EventRepositoryService {
       startingDate: UpdateEventDto['startingDate'];
       endingDate: UpdateEventDto['endingDate'];
       locationId?: number | null;
+      isPrivate: boolean | undefined;
     } = {
       description: updateEventDto.description,
       startingDate: updateEventDto.startingDate,
       endingDate: updateEventDto.endingDate,
+      isPrivate: updateEventDto.isPrivate,
     };
 
     if (updateEventDto.location !== undefined) {
@@ -198,6 +200,24 @@ export class EventRepositoryService {
 
   async findLimited(requesterId: number, page: number) {
     return this.prismaService.event.findMany({
+      include: {
+        host: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+        imageEvents: {
+          include: {
+            image: {
+              select: { url: true },
+            },
+          },
+        },
+        location: true,
+        // chat: true,
+      },
       take: 15,
       skip: (page - 1) * 15,
     });

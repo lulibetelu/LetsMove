@@ -41,7 +41,8 @@ export interface EventRawData {
     type: string ,
     startingDate: string,
     endingDate: string,
-    location: string | undefined
+    location: string | undefined,
+    isPrivate: boolean
 }
 
 export interface CreateEventType {
@@ -50,7 +51,8 @@ export interface CreateEventType {
     type: string,
     startingDate: Date,
     endingDate?: Date,
-    location?: string
+    location?: string,
+    isPrivate: boolean
 
 }
 export interface UpdateEventRawData{
@@ -60,7 +62,8 @@ export interface UpdateEventRawData{
     type: string ,
     startingDate: string,
     endingDate: string | undefined,
-    location: string | undefined
+    location: string | undefined,
+    isPrivate: boolean,
 }
 
 export type UpdateEventType = Omit<CreateEventType, 'title' | 'type'>

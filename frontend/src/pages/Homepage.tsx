@@ -1,28 +1,18 @@
 import {Search} from 'lucide-react';
 import Sidebar from "../components/Sidebar.tsx"
 import Posts from "../components/Posts.tsx";
-import {useCallback, useState} from "react";
-import type {PostType} from "../types/postTypes.ts";
-import {findAll} from "../api/post.ts";
+import { useState} from "react";
 import PopUpError from "../components/PopUpError.tsx";
 import NewPost from "../components/NewPost.tsx";
+import {usePosts} from "../hooks/usePosts.ts";
 
 
 export default function Homepage() {
-    const [posts, setPosts] = useState<PostType[]>([]);
-    const [page, setPage] = useState<number|undefined>();
     const [error, setError] = useState<boolean>(false);
     const [createPost, setCreatePost] = useState<boolean>(false);
+    const { posts, updatePosts, deletePost,observerRef } = usePosts(false);
 
-    const loadPosts = useCallback(async () => {
-        try {
-            const findAllTypes: PostType[] = await findAll();
-            setPosts(findAllTypes);
-            setPage(findAllTypes.length === 50 ? 1 : undefined);
-        } catch {
-            setError(true);
-        }
-    }, []);
+
     return(
         <div className="min-h-screen bg-[#141414] flex">
             <Sidebar/>
@@ -41,7 +31,7 @@ export default function Homepage() {
                                 />
                             </div>
                         </header>
-                        <Posts userId={null} posts={posts} page={page} loadPosts={loadPosts} setPage={setPage} setPosts={setPosts}/>
+                        <Posts userId={null} posts={posts} deletePost={deletePost} observerRef={observerRef} setError={(hasError:boolean) => setError(hasError)}/>
                         <div>
                             {error && <PopUpError message='Failed to load posts, please try again later'/>}
                         </div>
@@ -75,7 +65,7 @@ export default function Homepage() {
     cursor-pointer
   "
                 >+</button>
-                {createPost && <NewPost onClose={() => setCreatePost(false)} onPostCreated={loadPosts} />}
+                {createPost && <NewPost onClose={() => setCreatePost(false)} onPostCreated={updatePosts} />}
             </div>
         </div>
     );

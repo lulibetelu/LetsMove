@@ -2,15 +2,12 @@ import {MapPin, CalendarDays, Users, Edit3, UserCircle, Activity, UserPlus, Hour
 import Posts from "../components/Posts.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {useUsername} from "../hooks/UseUsername.tsx";
-import {useCallback, useEffect, useRef, useState} from "react";
-import type {PostType} from "../types/postTypes.ts";
-import {findPostsFromUser} from "../api/post.ts";
+import {useEffect, useState} from "react";
 import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend.ts";
 import type { FriendRequestType } from '../types/friendRequestType.ts';
 import {getCurrentUserId, getUsernameFromId} from "../api/user.ts";
 import Sidebar from "../components/Sidebar.tsx";
-import type {EventType} from "../types/eventTypes.ts";
-import {findEvents} from "../api/event.ts";
+import {usePosts} from "../hooks/usePosts.ts";
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -19,20 +16,12 @@ export default function Profile() {
     const isValid = !isNaN(numericId);
     const { username, loading } = useUsername(numericId);
     const currentUserId = getCurrentUserId();
-
-    const [posts, setPosts] = useState<PostType[]>([]);
-    const [page, setPage] = useState<number | undefined>();
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
     const [userExists, setUserExists] = useState<boolean | null>(null);
-    const [events, setEvents] = useState<EventType[]>([]);
-    const isFetching = useRef(false);
-    const [cursor, setCursor] = useState(1);
-    const [hasMore, setHasMore] = useState(false);
-    const loaderRef = useRef<HTMLDivElement>(null);
-
-
     const [error, setError] = useState<boolean>(false);
+    const { posts, deletePost,observerRef } = usePosts(true, numericId);
+
 
     const logout = () => {
         localStorage.removeItem('token');
@@ -51,16 +40,6 @@ export default function Profile() {
                 const isFriend: boolean = data.some(f => f.state === 'Accepted');
                 setFriendAdded(isFriend);
             });
-    }, [numericId]);
-
-    const loadPosts = useCallback(async () => {
-        try {
-            const findAllTypes: PostType[] = await findPostsFromUser(numericId);
-            setPosts(findAllTypes);
-            setPage(findAllTypes.length === 50 ? 1 : undefined);
-        } catch {
-            setPosts([]);
-        }
     }, [numericId]);
 
     const handleClickRequest = async () => {
@@ -89,30 +68,6 @@ export default function Profile() {
             .then(() => setUserExists(true))
             .catch(() => navigate("/error", { state: { message: "El usuario no existe" } }));
     }, [numericId, isValid, navigate]);
-
-    const fetchEvents = useCallback(async () => {
-        if (isFetching.current) return;
-        isFetching.current = true;
-        try {
-            const events: EventType[] = await findEvents(cursor);
-            if (events.length > 0) setEvents(prev => [...prev, ...events]);
-            setHasMore(events.length >= 15);
-            if (events.length >= 15) setCursor(prev => prev + 1);
-        }catch {
-            setError(true);
-        }finally {
-            isFetching.current = false;
-        }
-
-    },[cursor]);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore) fetchEvents();
-        });
-        if (loaderRef.current) observer.observe(loaderRef.current);
-        return () => observer.disconnect();
-    },[fetchEvents, hasMore]);
 
 // Mientras verifica, no renderizar nada (o un spinner)
     if (userExists === null) return null;
@@ -246,7 +201,7 @@ export default function Profile() {
                                 Activity
                             </h2>
                             <div className="rounded-xl overflow-hidden border border-white/5">
-                                <Posts userId={numericId} posts={posts} page={page} loadPosts={loadPosts} setPage={setPage} setPosts={setPosts} />
+                                <Posts userId={numericId} posts={posts} setError={(hasError:boolean) => setError(hasError)} deletePost={deletePost} observerRef={observerRef} />
                             </div>
                         </div>
 

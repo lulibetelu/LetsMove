@@ -5,10 +5,9 @@ import {CalendarDays, Lock, MapPin} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 interface Props  {
     event : EventType;
-    currentUserIsOwner: boolean
 }
 
-export default function Event({event, currentUserIsOwner}: Props) {
+export default function Event({event}: Props) {
     const [joined, setJoined] = useState<boolean>(false);
     const navigate = useNavigate();
     // const [eventReq, setEventReq] = useState<boolean>(false);
