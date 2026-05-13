@@ -1,54 +1,17 @@
 import Sidebar from "../components/Sidebar.tsx";
 import {Search} from "lucide-react";
-import {useCallback, useEffect, useRef, useState} from "react";
-import type {EventType} from "../types/eventTypes.ts"
-import {findEvents} from "../api/event.ts";
+import {useState} from "react";
 import Events from "../components/Events.tsx";
 import PopUpError from "../components/PopUpError.tsx";
 import NewEvent from "../components/NewEvent.tsx";
+import {useEvents} from "../hooks/useEvents.ts";
 
 export default function EventFeed(){
-    const [events, setEvents] = useState<EventType[]>([]);
-    const [cursor, setCursor] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
-    const [error, setError] = useState(false);
+    const {events, observerRef, error} = useEvents();
 
     //lo que usas para indicar qué div es el que usas para pedir los proximos eventos.
-    const loaderRef = useRef<HTMLDivElement>(null);
     const [createEvent, setCreateEvent] = useState(false);
-    const isFetching = useRef(false);
-    const [reloadCount, setReloadCount] = useState(0);
 
-    const fetchEvents = useCallback(async () => {
-        if (isFetching.current) return;
-        isFetching.current = true;
-        try {
-            const events: EventType[] = await findEvents(cursor);
-            if (events.length > 0) setEvents(prev => [...prev, ...events]);
-            setHasMore(events.length >= 15);
-            if (events.length >= 15) setCursor(prev => prev + 1);
-        }catch {
-            setError(true);
-        }finally {
-            isFetching.current = false;
-        }
-
-    },[cursor, reloadCount]);
-
-    const resetFeed = useCallback(() => {
-        setEvents([]);
-        setCursor(1);
-        setHasMore(true);
-        setReloadCount(c => c+1);
-    }, []);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore) fetchEvents();
-        });
-        if (loaderRef.current) observer.observe(loaderRef.current);
-        return () => observer.disconnect();
-    },[fetchEvents, hasMore]);
 
     return (
 
@@ -82,7 +45,7 @@ export default function EventFeed(){
 
                     {/*{!hasMore && <div ref={loaderRef}/>}*/}
 
-                    <div ref={loaderRef}/>
+                    <div ref={observerRef}/>
                 </div>
             </main>
             <div className="flex justify-end items-end h-screen">
@@ -112,7 +75,7 @@ export default function EventFeed(){
     cursor-pointer
   "
                 >+</button>
-                {createEvent && <NewEvent onClose={() => setCreateEvent(false)} onEventCreated={resetFeed} />}
+                {createEvent && <NewEvent onClose={() => setCreateEvent(false)} />}
                 </div>
         </div>
     )

@@ -6,7 +6,6 @@ import type {EventRawData} from "../types/eventTypes.ts";
 
 interface Props {
     onClose: () => void;
-    onEventCreated: () => void
 }
 
 
@@ -50,7 +49,6 @@ export default function NewEvent(props: Props){
 
         try {
             await createEvent(data);
-            props.onEventCreated()
             props.onClose();
         }catch {
             setError(true);
