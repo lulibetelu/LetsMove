@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {findEvents} from "../api/event.ts";
 import type {EventType} from "../types/eventTypes.ts";
 
@@ -19,14 +19,14 @@ export function useEvents(){
         return page +1;
     }
 
-    function updateEvents() {
+    const updateEvents = useCallback( () => {
         findEvents(page)
             .then((p) => {
                 setEvents(prev => [...prev, ...p]);
                 setPage(updateState(p));
             })
             .catch((_) => setError(true))
-    }
+    },[page])
 
     useEffect(() => {
         const observerCallback = (entries: IntersectionObserverEntry[]) => {
@@ -45,13 +45,11 @@ export function useEvents(){
         return () => {
             observer.disconnect();
         };
-    }, [page, updateEvents]);
+    }, [updateEvents, hasMore]);
 
     useEffect(() => {
-
         updateEvents()
-
-    }, [setEvents]);
+    }, []);
 
     return {events, observerRef, updateEvents, error}
 }

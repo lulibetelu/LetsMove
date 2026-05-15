@@ -18,7 +18,7 @@ export default function Events({eventArray}: Props){
             .filter((event) => event.hostId !== userId)
             .map((event: EventType) => {
             return (<Link key={event.id} to={`/event/${event.id}`}>
-                <Event event={event} currentUserIsOwner={false} />
+                <Event event={event} />
                 </Link>
             )
             })}
