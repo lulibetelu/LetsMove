@@ -7,11 +7,10 @@ import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend
 import type { FriendRequestType } from '../types/friendRequestType.ts';
 import {getCurrentUserId, getUsernameFromId} from "../api/user.ts";
 import Sidebar from "../components/Sidebar.tsx";
-import {usePosts} from "../hooks/usePosts.ts";
 import ActivityTabBar from "../components/ActivityTabBar.tsx";
-import {useEvents} from "../hooks/useEvents.ts";
 import Events from "../components/Events.tsx";
 import {useProfilePosts} from "../hooks/useProfilePosts.ts";
+import {useProfileEvents} from "../hooks/useProfileEvents.ts";
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -25,7 +24,7 @@ export default function Profile() {
     const [userExists, setUserExists] = useState<boolean | null>(null);
     const { posts, deletePost,observerRef, error } = useProfilePosts(numericId);
     const [tab, setTab] = useState<'posts' | 'events'>('posts');
-    const {events} = useEvents(true);
+    const {events} = useProfileEvents();
 
 
     const logout = () => {
@@ -241,15 +240,6 @@ export default function Profile() {
                                         </div>
                                     ))}
                                 </div>
-                            </div>
-
-                            {/* Eventos en los que participa */}
-                            <div className="bg-[#1e1e1e] rounded-xl p-5 border border-white/5">
-                                <h3 className="font-semibold text-sm text-white/50 uppercase tracking-widest mb-4 flex items-center gap-">
-                                    <CalendarDays size={15} className="text-[#8A9A5B]" />
-                                    Events
-                                </h3>
-
                             </div>
                         </div>
                     </div>

@@ -259,3 +259,20 @@ export async function findEventsFromHost() {
     }
     return response.json();
 }
+
+export async function findEventsUserParticipate(page: number){
+    const token = localStorage.getItem('token');
+    const response = await fetch(url + `event/participates?page=${page}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
+    return response.json();
+}
