@@ -5,18 +5,14 @@ import {getCurrentUserId} from "../api/user.ts";
 
 interface PostsProps {
     userId: number | null;
-    setError: (hasError:boolean) => void;
     posts: PostType[];
     deletePost: (id:number) => void;
     observerRef:  React.RefObject<HTMLDivElement | null>
 }
 
-export default function Posts({userId, setError, posts, deletePost, observerRef}: PostsProps) {
+export default function Posts({userId, posts, deletePost, observerRef}: PostsProps) {
     const currentUserId = getCurrentUserId();
     const canDelete = currentUserId === userId;
-
-
-
 
     return (
         <div className="flex flex-col">

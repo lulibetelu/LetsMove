@@ -1,55 +1,47 @@
-import {useCallback, useEffect, useRef, useState} from "react";
-import {findEvents} from "../api/event.ts";
-import type {EventType} from "../types/eventTypes.ts";
+import { useEffect, useRef } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { findEvents } from "../api/event.ts";
+import type { EventType } from "../types/eventTypes.ts";
 
-export function useEvents(){
-    const [events, setEvents] = useState<EventType[]>([]);
-    const [page, setPage] = useState<number>(1);
-    const [hasMore, setHasMore] = useState<boolean>();
+export function useEvents() {
     const observerRef = useRef<HTMLDivElement>(null);
-    const [error, setError] = useState<boolean>(false);
 
-    function updateState(fetchedEvents: EventType[]){
-        if (fetchedEvents.length < 10 || fetchedEvents.length === 0) {
-            setHasMore(false);
-            return page;
-        }
+        const {
+            data,
+            fetchNextPage,
+            hasNextPage,
+            isFetchingNextPage,
+            isError,
+        } = useInfiniteQuery({
+        queryKey: ["events"],
+        queryFn: async ({ pageParam }) => {
+            const [events] = await Promise.all([
+                findEvents(pageParam),
+                new Promise(resolve => setTimeout(resolve, 300))
+            ]);
+            return events;
+        },
+        getNextPageParam: (lastPage, allPages) => {
+            if (!lastPage || lastPage.length < 10) return undefined;
+            return allPages.length + 1;
+        },
+        initialPageParam: 1,
+    });
 
-        setHasMore(true);
-        return page +1;
-    }
-
-    const updateEvents = useCallback( () => {
-        findEvents(page)
-            .then((p) => {
-                setEvents(prev => [...prev, ...p]);
-                setPage(updateState(p));
-            })
-            .catch((_) => setError(true))
-    },[page])
+    const events: EventType[] = data?.pages.flat() ?? [];
 
     useEffect(() => {
-        const observerCallback = (entries: IntersectionObserverEntry[]) => {
-            const ancla = entries[0];
-            if (ancla.isIntersecting && hasMore) {
-                updateEvents();
+        if (!observerRef.current) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && hasNextPage) {
+                fetchNextPage();
             }
-        };
+        });
 
-        const observer = new IntersectionObserver(observerCallback);
+        observer.observe(observerRef.current);
+        return () => observer.disconnect();
+    }, [hasNextPage, fetchNextPage]);
 
-        if (observerRef.current) {
-            observer.observe(observerRef.current);
-        }
-
-        return () => {
-            observer.disconnect();
-        };
-    }, [updateEvents, hasMore]);
-
-    useEffect(() => {
-        updateEvents()
-    }, []);
-
-    return {events, observerRef, updateEvents, error}
+    return { events, observerRef, error: isError, isFetchingNextPage };
 }

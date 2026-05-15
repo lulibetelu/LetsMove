@@ -11,6 +11,7 @@ import {usePosts} from "../hooks/usePosts.ts";
 import ActivityTabBar from "../components/ActivityTabBar.tsx";
 import {useEvents} from "../hooks/useEvents.ts";
 import Events from "../components/Events.tsx";
+import {useProfilePosts} from "../hooks/useProfilePosts.ts";
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -22,10 +23,9 @@ export default function Profile() {
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
     const [userExists, setUserExists] = useState<boolean | null>(null);
-    const [error, setError] = useState<boolean>(false);
-    const { posts, deletePost,observerRef } = usePosts(true, numericId);
+    const { posts, deletePost,observerRef, error } = useProfilePosts(numericId);
     const [tab, setTab] = useState<'posts' | 'events'>('posts');
-    const {events} = useEvents(true, numericId);
+    const {events} = useEvents();
 
 
     const logout = () => {
@@ -210,7 +210,7 @@ export default function Profile() {
                                     onTabChange={(tab) => setTab(tab)}
                                 />
                                 {tab === 'posts' ? (
-                                    <Posts userId={numericId} posts={posts} setError={(hasError:boolean) => setError(hasError)} deletePost={deletePost} observerRef={observerRef} />
+                                    <Posts userId={numericId} posts={posts} deletePost={deletePost} observerRef={observerRef} />
                                 ) : (
                                     <Events eventArray={events}/>
                                 )}

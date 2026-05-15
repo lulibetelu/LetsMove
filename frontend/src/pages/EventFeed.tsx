@@ -7,10 +7,10 @@ import NewEvent from "../components/NewEvent.tsx";
 import {useEvents} from "../hooks/useEvents.ts";
 
 export default function EventFeed(){
-    const {events, observerRef, error} = useEvents();
+    const {events, observerRef, error, isFetchingNextPage} = useEvents();
 
     //lo que usas para indicar qué div es el que usas para pedir los proximos eventos.
-    const [createEvent, setCreateEvent] = useState(false);
+    const [showCreateEventForm, setShowCreateEventForm] = useState(false);
 
 
     return (
@@ -37,19 +37,17 @@ export default function EventFeed(){
 
                     {error && <PopUpError message="Failed to load events, please try again later"/>}
 
-                    {/*{hasMore && (*/}
-                    {/*    <div ref={loaderRef} className="h-20 w-full flex items-center justify-center">*/}
-                    {/*        <span className="loading loading-spinner loading-md text-[#8A9A5B]"/>*/}
-                    {/*    </div>*/}
-                    {/*)}*/}
-
-                    {/*{!hasMore && <div ref={loaderRef}/>}*/}
+                    {isFetchingNextPage && (
+                        <div className="h-20 w-full flex items-center justify-center">
+                            <span className="loading loading-spinner loading-md text-[#8A9A5B]"/>
+                        </div>
+                    )}
 
                     <div ref={observerRef}/>
                 </div>
             </main>
             <div className="flex justify-end items-end h-screen">
-                <button type="button"  onClick={() => setCreateEvent(true)} className="
+                <button type="button"  onClick={() => setShowCreateEventForm(true)} className="
     fixed bottom-6 right-6
     w-16 h-16
     rounded-full
@@ -75,7 +73,7 @@ export default function EventFeed(){
     cursor-pointer
   "
                 >+</button>
-                {createEvent && <NewEvent onClose={() => setCreateEvent(false)} />}
+                {showCreateEventForm && <NewEvent onClose={() => setShowCreateEventForm(false)} />}
                 </div>
         </div>
     )

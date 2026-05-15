@@ -10,7 +10,7 @@ import {usePosts} from "../hooks/usePosts.ts";
 export default function Homepage() {
     const [error, setError] = useState<boolean>(false);
     const [createPost, setCreatePost] = useState<boolean>(false);
-    const { posts, updatePosts, deletePost,observerRef } = usePosts(false);
+    const { posts, deletePost,observerRef } = usePosts();
 
 
     return(
@@ -31,7 +31,7 @@ export default function Homepage() {
                                 />
                             </div>
                         </header>
-                        <Posts userId={null} posts={posts} deletePost={deletePost} observerRef={observerRef} setError={(hasError:boolean) => setError(hasError)}/>
+                        <Posts userId={null} posts={posts} deletePost={deletePost} observerRef={observerRef}/>
                         <div>
                             {error && <PopUpError message='Failed to load posts, please try again later'/>}
                         </div>
@@ -65,7 +65,7 @@ export default function Homepage() {
     cursor-pointer
   "
                 >+</button>
-                {createPost && <NewPost onClose={() => setCreatePost(false)} onPostCreated={updatePosts} />}
+                {createPost && <NewPost onClose={() => setCreatePost(false)}/>}
             </div>
         </div>
     );
