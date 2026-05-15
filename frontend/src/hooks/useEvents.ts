@@ -2,10 +2,11 @@ import { useEffect, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { findEvents } from "../api/event.ts";
 import type { EventType } from "../types/eventTypes.ts";
+import {getCurrentUserId} from "../api/user.ts";
 
-export function useEvents() {
+export function useEvents(isProfile: boolean) {
     const observerRef = useRef<HTMLDivElement>(null);
-
+    const currentUserId = getCurrentUserId();
         const {
             data,
             fetchNextPage,
@@ -28,7 +29,14 @@ export function useEvents() {
         initialPageParam: 1,
     });
 
-    const events: EventType[] = data?.pages.flat() ?? [];
+    // const events: EventType[] = data?.pages.flat().filter((event: EventType) => event.hostId !== currentUserId) ?? [];
+    let events: EventType[]  = [];
+    if (isProfile){
+        events = data?.pages.flat().filter((event: EventType) => event.hostId === currentUserId) ?? [];
+    } else {
+        events = data?.pages.flat().filter((event: EventType) => event.hostId !== currentUserId) ?? [];
+
+    }
 
     useEffect(() => {
         if (!observerRef.current) return;

@@ -25,7 +25,7 @@ export default function Profile() {
     const [userExists, setUserExists] = useState<boolean | null>(null);
     const { posts, deletePost,observerRef, error } = useProfilePosts(numericId);
     const [tab, setTab] = useState<'posts' | 'events'>('posts');
-    const {events} = useEvents();
+    const {events} = useEvents(true);
 
 
     const logout = () => {

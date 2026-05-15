@@ -44,4 +44,11 @@ export class EventService {
   async remove(id: number, removerId: number) {
     return await this.eventRepositoryService.deleteEvent(id, removerId);
   }
+
+  findEventsUserParticipates(requesterId: number, page: number) {
+    return this.eventRepositoryService.findEventsUserParticipates(
+      requesterId,
+      page,
+    );
+  }
 }
