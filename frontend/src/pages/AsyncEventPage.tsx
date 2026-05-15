@@ -8,6 +8,7 @@ import DeleteButton from "../components/DeleteButton.tsx";
 import PopUpError from "../components/PopUpError.tsx";
 import EditEventForm from "../components/EditEventForm.tsx";
 import {formatDate} from "../resusable-functions/event.ts";
+import {getCurrentUserId} from "../api/user.ts";
 
 interface Props {
     event: EventType;
@@ -29,6 +30,9 @@ export default function AsynchronousEventDetail({ event }: Props) {
     const [editEvent, setEditEvent] = useState(false);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
+    const userId = getCurrentUserId();
+    const isOwner: boolean =  userId === event.hostId;
+
 
     const handleEventDeletion = async () => {
         try {
@@ -58,10 +62,10 @@ export default function AsynchronousEventDetail({ event }: Props) {
                     </p>
                 </div>
 
-                <div className="flex flex-row w-full">
+                {isOwner && <div className="flex flex-row w-full">
                     <EditButton handleClick={() => setEditEvent(true)}/>
                     <DeleteButton handleClick={handleEventDeletion}/>
-                </div>
+                </div>}
 
                 <div className="divider my-0" />
 

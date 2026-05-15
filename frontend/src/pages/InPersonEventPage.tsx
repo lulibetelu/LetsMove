@@ -7,6 +7,7 @@ import DeleteButton from "../components/DeleteButton.tsx";
 import {eliminateEvent} from "../api/event.ts";
 import {useNavigate} from "react-router-dom";
 import PopUpError from "../components/PopUpError.tsx";
+import {getCurrentUserId} from "../api/user.ts";
 
 interface Props {
     event: EventType;
@@ -36,6 +37,9 @@ export default function InPersonEventDetail({ event }: Props) {
     const [editEvent, setEditEvent] = useState(false);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
+    const userId = getCurrentUserId();
+    const isOwner: boolean =  userId === event.hostId;
+
 
     const handleEventDeletion = async () => {
         try {
@@ -62,10 +66,10 @@ export default function InPersonEventDetail({ event }: Props) {
                         {event.description}
                     </p>
                 </div>
-                <div className="flex flex-row w-full">
+                {isOwner &&  <div className="flex flex-row w-full">
                     <EditButton handleClick={() => setEditEvent(true)}/>
                     <DeleteButton handleClick={handleEventDeletion}/>
-                </div>
+                </div>}
                 <div className="divider my-0" />
 
                 <div className="bg-base-300 rounded-xl p-4">
