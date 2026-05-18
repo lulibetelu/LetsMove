@@ -1,18 +1,19 @@
 import type { EventType } from "../types/eventTypes.ts";
 import Sidebar from "../components/Sidebar.tsx";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {eliminateEvent} from "../api/event.ts";
+import EditButton from "../components/EditButton.tsx";
+import DeleteButton from "../components/DeleteButton.tsx";
+import PopUpError from "../components/PopUpError.tsx";
+import EditEventForm from "../components/EditEventForm.tsx";
+import {formatDate} from "../resusable-functions/event.ts";
+import {getCurrentUserId} from "../api/user.ts";
 
 interface Props {
     event: EventType;
 }
 
-function formatDate(date: Date | string): string {
-    return new Date(date).toLocaleDateString("en-GB", {
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-    });
-}
 
 function formatTime(date: Date | string): string {
     return new Date(date).toLocaleTimeString("en-GB", {
@@ -26,11 +27,27 @@ function getInitials(username: string): string {
 }
 
 export default function AsynchronousEventDetail({ event }: Props) {
+    const [editEvent, setEditEvent] = useState(false);
+    const [error, setError] = useState(false);
+    const navigate = useNavigate();
+    const userId = getCurrentUserId();
+    const isOwner: boolean =  userId === event.hostId;
+
+
+    const handleEventDeletion = async () => {
+        try {
+            await eliminateEvent(event.id);
+            navigate("/event");
+        }catch {
+            setError(true);
+        }
+    }
+
     return (
 
 
             <div className="card bg-base-200 border border-base-300 max-w-4xl mx-auto shadow-xl overflow-hidden">
-                <Sidebar onPostCreated={() => null}/>
+                <Sidebar/>
             <div className="h-1 w-full bg-info" />
 
             <div className="card-body gap-4">
@@ -44,6 +61,11 @@ export default function AsynchronousEventDetail({ event }: Props) {
                         {event.description}
                     </p>
                 </div>
+
+                {isOwner && <div className="flex flex-row w-full">
+                    <EditButton handleClick={() => setEditEvent(true)}/>
+                    <DeleteButton handleClick={handleEventDeletion}/>
+                </div>}
 
                 <div className="divider my-0" />
 
@@ -78,9 +100,12 @@ export default function AsynchronousEventDetail({ event }: Props) {
                     </div>
                 </div>
 
+                {error && <PopUpError message="Failed to update event"/>}
+
                 <button className="btn btn-info w-full font-bold">Join Event</button>
 
             </div>
+                {editEvent && <EditEventForm event={event} onClose={() => setEditEvent(false)}/>}
         </div>
     );
 }

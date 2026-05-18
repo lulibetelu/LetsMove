@@ -1,29 +1,21 @@
 import {Search} from 'lucide-react';
 import Sidebar from "../components/Sidebar.tsx"
 import Posts from "../components/Posts.tsx";
-import {useCallback, useState} from "react";
-import type {PostType} from "../types/postTypes.ts";
-import {findAll} from "../api/post.ts";
+import { useState} from "react";
 import PopUpError from "../components/PopUpError.tsx";
+import NewPost from "../components/NewPost.tsx";
+import {usePosts} from "../hooks/usePosts.ts";
 
 
 export default function Homepage() {
-    const [posts, setPosts] = useState<PostType[]>([]);
-    const [page, setPage] = useState<number|undefined>();
     const [error, setError] = useState<boolean>(false);
+    const [createPost, setCreatePost] = useState<boolean>(false);
+    const { posts, deletePost,observerRef } = usePosts();
 
-    const loadPosts = useCallback(async () => {
-        try {
-            const findAllTypes: PostType[] = await findAll();
-            setPosts(findAllTypes);
-            setPage(findAllTypes.length === 50 ? 1 : undefined);
-        } catch {
-            setError(true);
-        }
-    }, []);
+
     return(
         <div className="min-h-screen bg-[#141414] flex">
-            <Sidebar onPostCreated={loadPosts}/>
+            <Sidebar/>
                 <main className="flex-1 ml-60 flex justify-center">
                     <div className="w-full max-w-2xl min-h-screen relative pb-24">
                         <header className="sticky top-0 z-40 bg-[#141414]/90 backdrop-blur-md px-4 py-5 flex justify-center border-b-2 border-base-content/10">
@@ -39,12 +31,43 @@ export default function Homepage() {
                                 />
                             </div>
                         </header>
-                        <Posts userId={null} posts={posts} page={page} loadPosts={loadPosts} setPage={setPage} setPosts={setPosts}/>
+                        <Posts userId={null} posts={posts} deletePost={deletePost} observerRef={observerRef}/>
                         <div>
                             {error && <PopUpError message='Failed to load posts, please try again later'/>}
                         </div>
                     </div>
+
                 </main>
+            <div className="flex justify-end items-end h-screen">
+                <button type="button" onClick={() => setCreatePost(true)} className="
+    fixed bottom-6 right-6
+    w-16 h-16
+    rounded-full
+
+    bg-[#96a55a]
+    hover:bg-[#a8b96a]
+
+    text-white
+    text-4xl
+
+    flex items-center justify-center
+
+    shadow-lg
+    hover:shadow-2xl
+
+    transition-all duration-300 ease-out
+
+    hover:scale-110
+    hover:rotate-90
+
+    active:scale-95
+
+    cursor-pointer
+  "
+                >+</button>
+                {createPost && <NewPost onClose={() => setCreatePost(false)}/>}
+            </div>
         </div>
     );
+    {/*<CirclePlus size={65} color="#96a55a" className="fixed bottom-10 right-15 transition hover:scale-130 cursor-pointer"/>*/}
 }

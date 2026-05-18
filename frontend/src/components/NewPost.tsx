@@ -8,7 +8,7 @@ import {findAllSports} from "../api/sport.ts";
 import type {Sport} from "../types/sportType.ts";
 
 
-export default function NewPost({ onClose, onPostCreated }: { onClose: () => void, onPostCreated: () => void}){
+export default function NewPost({ onClose }: { onClose: () => void}){
     const [content, setContent] = useState<string>("");
     const [error, setError] = useState<boolean>(false);
     const [sports, setSports] = useState<Sport[]>([]);
@@ -34,7 +34,6 @@ export default function NewPost({ onClose, onPostCreated }: { onClose: () => voi
             const createPost = await create(postCredentials);
             console.log("CREATE POST:", createPost);
             onClose();
-            onPostCreated();
         } catch {
             setError(true);
         }

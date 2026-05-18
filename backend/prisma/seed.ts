@@ -126,6 +126,556 @@ async function main() {
       content: 'Long cycling route today, 80km',
       sports: ['Cycling'],
     },
+    {
+      username: 'john_doe',
+      content: 'Just finished a 10k run!',
+      sports: ['Running'],
+    },
+    {
+      username: 'john_doe',
+      content: 'What a match yesterday, Football is life',
+      sports: ['Football'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Tennis practice was intense today',
+      sports: ['Tennis'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Morning swim session done',
+      sports: ['Swimming'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Basketball and cycling on the same day, exhausted',
+      sports: ['Basketball', 'Cycling'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Football season is back!',
+      sports: ['Football'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Volleyball tournament this weekend!',
+      sports: ['Volleyball'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Running 5k every morning this week',
+      sports: ['Running'],
+    },
+    {
+      username: 'mike_j',
+      content: 'NBA playoffs are insane this year',
+      sports: ['Basketball'],
+    },
+    {
+      username: 'mike_j',
+      content: 'Long cycling route today, 80km',
+      sports: ['Cycling'],
+    },
+    {
+      username: 'john_doe',
+      content: 'Just finished a 10k run!',
+      sports: ['Running'],
+    },
+    {
+      username: 'john_doe',
+      content: 'What a match yesterday, Football is life',
+      sports: ['Football'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Tennis practice was intense today',
+      sports: ['Tennis'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Morning swim session done',
+      sports: ['Swimming'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Basketball and cycling on the same day, exhausted',
+      sports: ['Basketball', 'Cycling'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Football season is back!',
+      sports: ['Football'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Volleyball tournament this weekend!',
+      sports: ['Volleyball'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Running 5k every morning this week',
+      sports: ['Running'],
+    },
+    {
+      username: 'mike_j',
+      content: 'NBA playoffs are insane this year',
+      sports: ['Basketball'],
+    },
+    {
+      username: 'mike_j',
+      content: 'Long cycling route today, 80km',
+      sports: ['Cycling'],
+    },
+    {
+      username: 'john_doe',
+      content: 'Just finished a 10k run!',
+      sports: ['Running'],
+    },
+    {
+      username: 'john_doe',
+      content: 'What a match yesterday, Football is life',
+      sports: ['Football'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Tennis practice was intense today',
+      sports: ['Tennis'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Morning swim session done',
+      sports: ['Swimming'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Basketball and cycling on the same day, exhausted',
+      sports: ['Basketball', 'Cycling'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Football season is back!',
+      sports: ['Football'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Volleyball tournament this weekend!',
+      sports: ['Volleyball'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Running 5k every morning this week',
+      sports: ['Running'],
+    },
+    {
+      username: 'mike_j',
+      content: 'NBA playoffs are insane this year',
+      sports: ['Basketball'],
+    },
+    {
+      username: 'mike_j',
+      content: 'Long cycling route today, 80km',
+      sports: ['Cycling'],
+    },
+    {
+      username: 'john_doe',
+      content: 'Just finished a 10k run!',
+      sports: ['Running'],
+    },
+    {
+      username: 'john_doe',
+      content: 'What a match yesterday, Football is life',
+      sports: ['Football'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Tennis practice was intense today',
+      sports: ['Tennis'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Morning swim session done',
+      sports: ['Swimming'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Basketball and cycling on the same day, exhausted',
+      sports: ['Basketball', 'Cycling'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Football season is back!',
+      sports: ['Football'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Volleyball tournament this weekend!',
+      sports: ['Volleyball'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Running 5k every morning this week',
+      sports: ['Running'],
+    },
+    {
+      username: 'mike_j',
+      content: 'NBA playoffs are insane this year',
+      sports: ['Basketball'],
+    },
+    {
+      username: 'mike_j',
+      content: 'Long cycling route today, 80km',
+      sports: ['Cycling'],
+    },
+    {
+      username: 'john_doe',
+      content: 'Just finished a 10k run!',
+      sports: ['Running'],
+    },
+    {
+      username: 'john_doe',
+      content: 'What a match yesterday, Football is life',
+      sports: ['Football'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Tennis practice was intense today',
+      sports: ['Tennis'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Morning swim session done',
+      sports: ['Swimming'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Basketball and cycling on the same day, exhausted',
+      sports: ['Basketball', 'Cycling'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Football season is back!',
+      sports: ['Football'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Volleyball tournament this weekend!',
+      sports: ['Volleyball'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Running 5k every morning this week',
+      sports: ['Running'],
+    },
+    {
+      username: 'mike_j',
+      content: 'NBA playoffs are insane this year',
+      sports: ['Basketball'],
+    },
+    {
+      username: 'mike_j',
+      content: 'Long cycling route today, 80km',
+      sports: ['Cycling'],
+    },
+    {
+      username: 'john_doe',
+      content: 'Just finished a 10k run!',
+      sports: ['Running'],
+    },
+    {
+      username: 'john_doe',
+      content: 'What a match yesterday, Football is life',
+      sports: ['Football'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Tennis practice was intense today',
+      sports: ['Tennis'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Morning swim session done',
+      sports: ['Swimming'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Basketball and cycling on the same day, exhausted',
+      sports: ['Basketball', 'Cycling'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Football season is back!',
+      sports: ['Football'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Volleyball tournament this weekend!',
+      sports: ['Volleyball'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Running 5k every morning this week',
+      sports: ['Running'],
+    },
+    {
+      username: 'mike_j',
+      content: 'NBA playoffs are insane this year',
+      sports: ['Basketball'],
+    },
+    {
+      username: 'mike_j',
+      content: 'Long cycling route today, 80km',
+      sports: ['Cycling'],
+    },
+    {
+      username: 'john_doe',
+      content: 'Just finished a 10k run!',
+      sports: ['Running'],
+    },
+    {
+      username: 'john_doe',
+      content: 'What a match yesterday, Football is life',
+      sports: ['Football'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Tennis practice was intense today',
+      sports: ['Tennis'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Morning swim session done',
+      sports: ['Swimming'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Basketball and cycling on the same day, exhausted',
+      sports: ['Basketball', 'Cycling'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Football season is back!',
+      sports: ['Football'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Volleyball tournament this weekend!',
+      sports: ['Volleyball'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Running 5k every morning this week',
+      sports: ['Running'],
+    },
+    {
+      username: 'mike_j',
+      content: 'NBA playoffs are insane this year',
+      sports: ['Basketball'],
+    },
+    {
+      username: 'mike_j',
+      content: 'Long cycling route today, 80km',
+      sports: ['Cycling'],
+    },
+    {
+      username: 'john_doe',
+      content: 'Just finished a 10k run!',
+      sports: ['Running'],
+    },
+    {
+      username: 'john_doe',
+      content: 'What a match yesterday, Football is life',
+      sports: ['Football'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Tennis practice was intense today',
+      sports: ['Tennis'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Morning swim session done',
+      sports: ['Swimming'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Basketball and cycling on the same day, exhausted',
+      sports: ['Basketball', 'Cycling'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Football season is back!',
+      sports: ['Football'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Volleyball tournament this weekend!',
+      sports: ['Volleyball'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Running 5k every morning this week',
+      sports: ['Running'],
+    },
+    {
+      username: 'mike_j',
+      content: 'NBA playoffs are insane this year',
+      sports: ['Basketball'],
+    },
+    {
+      username: 'mike_j',
+      content: 'Long cycling route today, 80km',
+      sports: ['Cycling'],
+    },
+    {
+      username: 'john_doe',
+      content: 'Just finished a 10k run!',
+      sports: ['Running'],
+    },
+    {
+      username: 'john_doe',
+      content: 'What a match yesterday, Football is life',
+      sports: ['Football'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Tennis practice was intense today',
+      sports: ['Tennis'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Morning swim session done',
+      sports: ['Swimming'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Basketball and cycling on the same day, exhausted',
+      sports: ['Basketball', 'Cycling'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Football season is back!',
+      sports: ['Football'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Volleyball tournament this weekend!',
+      sports: ['Volleyball'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Running 5k every morning this week',
+      sports: ['Running'],
+    },
+    {
+      username: 'mike_j',
+      content: 'NBA playoffs are insane this year',
+      sports: ['Basketball'],
+    },
+    {
+      username: 'mike_j',
+      content: 'Long cycling route today, 80km',
+      sports: ['Cycling'],
+    },
+    {
+      username: 'john_doe',
+      content: 'Just finished a 10k run!',
+      sports: ['Running'],
+    },
+    {
+      username: 'john_doe',
+      content: 'What a match yesterday, Football is life',
+      sports: ['Football'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Tennis practice was intense today',
+      sports: ['Tennis'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Morning swim session done',
+      sports: ['Swimming'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Basketball and cycling on the same day, exhausted',
+      sports: ['Basketball', 'Cycling'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Football season is back!',
+      sports: ['Football'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Volleyball tournament this weekend!',
+      sports: ['Volleyball'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Running 5k every morning this week',
+      sports: ['Running'],
+    },
+    {
+      username: 'mike_j',
+      content: 'NBA playoffs are insane this year',
+      sports: ['Basketball'],
+    },
+    {
+      username: 'mike_j',
+      content: 'Long cycling route today, 80km',
+      sports: ['Cycling'],
+    },
+    {
+      username: 'john_doe',
+      content: 'Just finished a 10k run!',
+      sports: ['Running'],
+    },
+    {
+      username: 'john_doe',
+      content: 'What a match yesterday, Football is life',
+      sports: ['Football'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Tennis practice was intense today',
+      sports: ['Tennis'],
+    },
+    {
+      username: 'jane_smith',
+      content: 'Morning swim session done',
+      sports: ['Swimming'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Basketball and cycling on the same day, exhausted',
+      sports: ['Basketball', 'Cycling'],
+    },
+    {
+      username: 'carlos_m',
+      content: 'Football season is back!',
+      sports: ['Football'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Volleyball tournament this weekend!',
+      sports: ['Volleyball'],
+    },
+    {
+      username: 'ana_perez',
+      content: 'Running 5k every morning this week',
+      sports: ['Running'],
+    },
+    {
+      username: 'mike_j',
+      content: 'NBA playoffs are insane this year',
+      sports: ['Basketball'],
+    },
+    {
+      username: 'mike_j',
+      content: 'Long cycling route today, 80km',
+      sports: ['Cycling'],
+    },
   ];
 
   for (const { username, content, sports } of postsData) {

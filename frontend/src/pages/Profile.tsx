@@ -2,13 +2,15 @@ import {MapPin, CalendarDays, Users, Edit3, UserCircle, Activity, UserPlus, Hour
 import Posts from "../components/Posts.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {useUsername} from "../hooks/UseUsername.tsx";
-import {useCallback, useEffect, useState} from "react";
-import type {PostType} from "../types/postTypes.ts";
-import {findPostsFromUser} from "../api/post.ts";
+import {useEffect, useState} from "react";
 import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend.ts";
 import type { FriendRequestType } from '../types/friendRequestType.ts';
 import {getCurrentUserId, getUsernameFromId} from "../api/user.ts";
 import Sidebar from "../components/Sidebar.tsx";
+import ActivityTabBar from "../components/ActivityTabBar.tsx";
+import Events from "../components/Events.tsx";
+import {useProfilePosts} from "../hooks/useProfilePosts.ts";
+import {useProfileEvents} from "../hooks/useProfileEvents.ts";
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -17,15 +19,13 @@ export default function Profile() {
     const isValid = !isNaN(numericId);
     const { username, loading } = useUsername(numericId);
     const currentUserId = getCurrentUserId();
-
-    const [posts, setPosts] = useState<PostType[]>([]);
-    const [page, setPage] = useState<number | undefined>();
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
     const [userExists, setUserExists] = useState<boolean | null>(null);
+    const { posts, deletePost,observerRef, error } = useProfilePosts(numericId);
+    const [tab, setTab] = useState<'posts' | 'events'>('posts');
+    const {events} = useProfileEvents(numericId);
 
-
-    // const [error, setError] = useState<boolean>(false);
 
     const logout = () => {
         localStorage.removeItem('token');
@@ -44,16 +44,6 @@ export default function Profile() {
                 const isFriend: boolean = data.some(f => f.state === 'Accepted');
                 setFriendAdded(isFriend);
             });
-    }, [numericId]);
-
-    const loadPosts = useCallback(async () => {
-        try {
-            const findAllTypes: PostType[] = await findPostsFromUser(numericId);
-            setPosts(findAllTypes);
-            setPage(findAllTypes.length === 50 ? 1 : undefined);
-        } catch {
-            setPosts([]);
-        }
     }, [numericId]);
 
     const handleClickRequest = async () => {
@@ -119,7 +109,7 @@ export default function Profile() {
     return (
         // Contenedor principal sin bordes laterales, usando el max-width para que no se estire infinito en monitores gigantes
         <div className="min-h-screen bg-[#141414] flex">
-            <Sidebar onPostCreated={() => {}}/>
+            <Sidebar/>
 
             <main className="flex-1 ml-60">
                 <div className="w-full max-w-5xl mx-auto pb-10">
@@ -215,7 +205,15 @@ export default function Profile() {
                                 Activity
                             </h2>
                             <div className="rounded-xl overflow-hidden border border-white/5">
-                                <Posts userId={numericId} posts={posts} page={page} loadPosts={loadPosts} setPage={setPage} setPosts={setPosts} />
+                                <ActivityTabBar
+                                    onTabChange={(tab) => setTab(tab)}
+                                />
+                                {tab === 'posts' ? (
+                                    <Posts userId={numericId} posts={posts} deletePost={deletePost} observerRef={observerRef} />
+                                ) : (
+                                    <Events eventArray={events}/>
+                                )}
+
                             </div>
                         </div>
 
@@ -241,25 +239,6 @@ export default function Profile() {
                                             </div>
                                         </div>
                                     ))}
-                                </div>
-                            </div>
-
-                            {/* Eventos en los que participa */}
-                            <div className="bg-[#1e1e1e] rounded-xl p-5 border border-white/5">
-                                <h3 className="font-semibold text-sm text-white/50 uppercase tracking-widest mb-4 flex items-center gap-">
-                                    <CalendarDays size={15} className="text-[#8A9A5B]" />
-                                    Participates In
-                                </h3>
-                                <div className="space-y-3">
-                                    {/* Tarjeta de Evento */}
-                                    <div className="bg-[#141414] p-3 rounded-lg border border-white/5 border-l-2 border-l-[#8A9A5B] hover:bg-[#1a1a1a] transition-colors cursor-pointer">
-                                        <h4 className="font-semibold text-sm text-white/80">Futbol game saturday night</h4>
-                                        <p className="text-xs text-white/40 mt-1">Sat 21 Jun · 20:00</p>
-                                        <p className="text-xs text-white/40">City Stadium</p>
-                                        <span className="inline-block mt-2 text-[10px] uppercase font-bold tracking-wider text-[#8A9A5B] bg-[#8A9A5B]/10 px-2 py-0.5 rounded-full">
-                                          In person event
-                                        </span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
