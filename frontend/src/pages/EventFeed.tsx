@@ -7,7 +7,7 @@ import NewEvent from "../components/NewEvent.tsx";
 import {useEvents} from "../hooks/useEvents.ts";
 
 export default function EventFeed(){
-    const {events, observerRef, error, isFetchingNextPage} = useEvents(false);
+    const {events, observerRef, error, isFetchingNextPage} = useEvents();
 
     //lo que usas para indicar qué div es el que usas para pedir los proximos eventos.
     const [showCreateEventForm, setShowCreateEventForm] = useState(false);

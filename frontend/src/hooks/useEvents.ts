@@ -4,7 +4,7 @@ import { findEvents } from "../api/event.ts";
 import type { EventType } from "../types/eventTypes.ts";
 import {getCurrentUserId} from "../api/user.ts";
 
-export function useEvents(isProfile: boolean) {
+export function useEvents() {
     const observerRef = useRef<HTMLDivElement>(null);
     const currentUserId = getCurrentUserId();
         const {
@@ -16,10 +16,7 @@ export function useEvents(isProfile: boolean) {
         } = useInfiniteQuery({
         queryKey: ["events"],
         queryFn: async ({ pageParam }) => {
-            const [events] = await Promise.all([
-                findEvents(pageParam),
-                new Promise(resolve => setTimeout(resolve, 300))
-            ]);
+            const events = await findEvents(pageParam)
             return events;
         },
         getNextPageParam: (lastPage, allPages) => {
@@ -31,12 +28,7 @@ export function useEvents(isProfile: boolean) {
 
     // const events: EventType[] = data?.pages.flat().filter((event: EventType) => event.hostId !== currentUserId) ?? [];
     let events: EventType[]  = [];
-    if (isProfile){
-        events = data?.pages.flat().filter((event: EventType) => event.hostId === currentUserId) ?? [];
-    } else {
-        events = data?.pages.flat().filter((event: EventType) => event.hostId !== currentUserId) ?? [];
-
-    }
+    events = data?.pages.flat().filter((event: EventType) => event.hostId !== currentUserId) ?? [];
 
     useEffect(() => {
         if (!observerRef.current) return;

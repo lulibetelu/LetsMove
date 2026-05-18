@@ -70,9 +70,9 @@ export class EventController {
   getEventsUserParticipate(
     @Req() req: Request,
     @Query('page', ParseIntPipe) page: number,
+    @Query('id', ParseIntPipe) requestedId: number,
   ) {
-    const requesterId: number = req.user.sub;
-    return this.eventService.findEventsUserParticipates(requesterId, page);
+    return this.eventService.findEventsUserParticipates(requestedId, page);
   }
 
   @UseGuards(AuthGuard)

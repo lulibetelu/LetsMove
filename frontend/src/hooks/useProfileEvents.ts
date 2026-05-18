@@ -3,7 +3,7 @@ import {findEventsUserParticipate} from "../api/event.ts";
 import type {EventType} from "../types/eventTypes.ts";
 import {useEffect, useRef} from "react";
 
-export function useProfileEvents(){
+export function useProfileEvents(profileUserId: number){
     const observerRef = useRef<HTMLDivElement>(null);
 
 
@@ -13,9 +13,9 @@ export function useProfileEvents(){
         hasNextPage,
         isError,
     }= useInfiniteQuery({
-        queryKey: ['profileEvents'],
+        queryKey: ['profileEvents', profileUserId],
         queryFn: (async ({pageParam}) => {
-            const events: EventType[] = await findEventsUserParticipate(pageParam);
+            const events: EventType[] = await findEventsUserParticipate(pageParam, profileUserId);
             return events;
         }),
         getNextPageParam: (lastPage, allPages) => {

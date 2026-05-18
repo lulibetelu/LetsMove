@@ -12,7 +12,7 @@ export function useProfilePosts(userId: number){
         hasNextPage,
         isError,
     } = useInfiniteQuery({
-        queryKey: ['profilePosts'],
+        queryKey: ['profilePosts', userId],
         queryFn: (async ({pageParam}) => {
             const posts: PostType[] = await findPostsFromUser(userId, pageParam);
             return posts;

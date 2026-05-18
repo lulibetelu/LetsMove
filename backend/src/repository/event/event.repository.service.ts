@@ -242,7 +242,7 @@ export class EventRepositoryService {
     return location.id;
   }
 
-  async findEventsUserParticipates(requesterId: number, page: number){
+  async findEventsUserParticipates(requesterId: number, page: number) {
     const signUpLists: EventSignUp[] =
       await this.eventSignupRepositoryService.findAllFromUser(requesterId);
 
@@ -252,6 +252,15 @@ export class EventRepositoryService {
       where: {
         id: {
           in: idList,
+        },
+      },
+      include: {
+        host: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
         },
       },
       take: 10,

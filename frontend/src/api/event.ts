@@ -260,9 +260,9 @@ export async function findEventsFromHost() {
     return response.json();
 }
 
-export async function findEventsUserParticipate(page: number){
+export async function findEventsUserParticipate(page: number, userId: number){
     const token = localStorage.getItem('token');
-    const response = await fetch(url + `event/participates?page=${page}`, {
+    const response = await fetch(url + `event/participates?page=${page}&id=${userId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
