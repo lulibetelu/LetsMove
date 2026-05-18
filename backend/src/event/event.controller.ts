@@ -35,7 +35,8 @@ export class EventController {
     const requesterId = req.user.sub;
     const promise = await this.eventService.findAll(requesterId);
 
-    if (!promise || promise.length === 0) throw new NotFoundException('No events found');
+    if (!promise || promise.length === 0)
+      throw new NotFoundException('No events found');
 
     return promise;
   }
@@ -49,7 +50,8 @@ export class EventController {
     const requesterId: number = req.user.sub;
     const promise = await this.eventService.findLimited(requesterId, page);
 
-    if (!promise || promise.length === 0) throw new NotFoundException();
+    //No quiero que no me tire un arreglo vacio
+    if (!promise) throw new NotFoundException();
     return promise;
   }
 
@@ -64,6 +66,16 @@ export class EventController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('participates')
+  getEventsUserParticipate(
+    @Req() req: Request,
+    @Query('page', ParseIntPipe) page: number,
+    @Query('id', ParseIntPipe) requestedId: number,
+  ) {
+    return this.eventService.findEventsUserParticipates(requestedId, page);
+  }
+
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const promise = await this.eventService.findOne(id);
@@ -71,7 +83,6 @@ export class EventController {
     if (!promise) throw new NotFoundException();
     return promise;
   }
-
 
   @UseGuards(AuthGuard)
   @Patch(':id')

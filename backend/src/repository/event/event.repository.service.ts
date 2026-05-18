@@ -7,10 +7,15 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateEventDto } from '../../event/dto/create-event.dto';
 import { EventType, Location } from '@prisma/client';
 import { UpdateEventDto } from '../../event/dto/update-event.dto';
+import { EventSignUpRepositoryService } from '../eventSignUp/event-sign-up.repository.service';
+import { EventSignUp } from '../../event-sign-up/entities/event-sign-up.entity';
 
 @Injectable()
 export class EventRepositoryService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private eventSignupRepositoryService: EventSignUpRepositoryService,
+  ) {}
 
   async createEvent(hostId: number, createEventDto: CreateEventDto) {
     //Se puede mejorar
@@ -178,10 +183,12 @@ export class EventRepositoryService {
       startingDate: UpdateEventDto['startingDate'];
       endingDate: UpdateEventDto['endingDate'];
       locationId?: number | null;
+      isPrivate: boolean | undefined;
     } = {
       description: updateEventDto.description,
       startingDate: updateEventDto.startingDate,
       endingDate: updateEventDto.endingDate,
+      isPrivate: updateEventDto.isPrivate,
     };
 
     if (updateEventDto.location !== undefined) {
@@ -198,6 +205,24 @@ export class EventRepositoryService {
 
   async findLimited(requesterId: number, page: number) {
     return this.prismaService.event.findMany({
+      include: {
+        host: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+        imageEvents: {
+          include: {
+            image: {
+              select: { url: true },
+            },
+          },
+        },
+        location: true,
+        // chat: true,
+      },
       take: 15,
       skip: (page - 1) * 15,
     });
@@ -215,5 +240,31 @@ export class EventRepositoryService {
     if (location === null) return null;
 
     return location.id;
+  }
+
+  async findEventsUserParticipates(requesterId: number, page: number) {
+    const signUpLists: EventSignUp[] =
+      await this.eventSignupRepositoryService.findAllFromUser(requesterId);
+
+    const idList: number[] = signUpLists.map((signUp) => signUp.eventId);
+
+    return this.prismaService.event.findMany({
+      where: {
+        id: {
+          in: idList,
+        },
+      },
+      include: {
+        host: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+      },
+      take: 10,
+      skip: (page - 1) * 10,
+    });
   }
 }

@@ -1,49 +1,22 @@
 import Sidebar from "../components/Sidebar.tsx";
 import {Search} from "lucide-react";
-import {useEffect, useRef, useState} from "react";
-import type {EventType} from "../types/eventTypes.ts"
-import {findEvents} from "../api/event.ts";
+import {useState} from "react";
 import Events from "../components/Events.tsx";
 import PopUpError from "../components/PopUpError.tsx";
+import NewEvent from "../components/NewEvent.tsx";
+import {useEvents} from "../hooks/useEvents.ts";
 
 export default function EventFeed(){
-    const [events, setEvents] = useState<EventType[]>([]);
-    const [cursor, setCursor] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
-    const [error, setError] = useState(false);
+    const {events, observerRef, error, isFetchingNextPage} = useEvents();
 
     //lo que usas para indicar qué div es el que usas para pedir los proximos eventos.
-    const loaderRef = useRef<HTMLDivElement>(null);
+    const [showCreateEventForm, setShowCreateEventForm] = useState(false);
 
-    const fetchEvents = async () => {
-        try {
-            const events: EventType[] = await findEvents(cursor)
-            if (events.length !== 0){
-                setEvents(prev => [...prev, ...events])
-                if (events.length >= 15) setCursor(prev => prev+1);
-
-                setHasMore(true);
-            }else {
-                setHasMore(false);
-            }
-        }catch {
-            setError(true);
-        }
-
-    }
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore) fetchEvents();
-        });
-        if (loaderRef.current) observer.observe(loaderRef.current);
-        return () => observer.disconnect();
-    },[cursor, hasMore]);
 
     return (
 
         <div className="min-h-screen bg-[#141414] flex">
-            <Sidebar onPostCreated={() => null}/>
+            <Sidebar/>
             <main className="flex-1 ml-60">
                 <div className="w-full max-w-6xl mx-auto min-h-screen pb-24">
                     <header className="sticky top-0 z-40 bg-[#141414]/90 backdrop-blur-md px-6 py-5 flex justify-center border-b border-white/5">
@@ -64,17 +37,44 @@ export default function EventFeed(){
 
                     {error && <PopUpError message="Failed to load events, please try again later"/>}
 
-                    {/*{hasMore && (*/}
-                    {/*    <div ref={loaderRef} className="h-20 w-full flex items-center justify-center">*/}
-                    {/*        <span className="loading loading-spinner loading-md text-[#8A9A5B]"/>*/}
-                    {/*    </div>*/}
-                    {/*)}*/}
+                    {isFetchingNextPage && (
+                        <div className="h-20 w-full flex items-center justify-center">
+                            <span className="loading loading-spinner loading-md text-[#8A9A5B]"/>
+                        </div>
+                    )}
 
-                    {/*{!hasMore && <div ref={loaderRef}/>}*/}
-
-                    <div ref={loaderRef}/>
+                    <div ref={observerRef}/>
                 </div>
             </main>
+            <div className="flex justify-end items-end h-screen">
+                <button type="button"  onClick={() => setShowCreateEventForm(true)} className="
+    fixed bottom-6 right-6
+    w-16 h-16
+    rounded-full
+
+    bg-[#96a55a]
+    hover:bg-[#a8b96a]
+
+    text-white
+    text-4xl
+
+    flex items-center justify-center
+
+    shadow-lg
+    hover:shadow-2xl
+
+    transition-all duration-300 ease-out
+
+    hover:scale-110
+    hover:rotate-90
+
+    active:scale-95
+
+    cursor-pointer
+  "
+                >+</button>
+                {showCreateEventForm && <NewEvent onClose={() => setShowCreateEventForm(false)} />}
+                </div>
         </div>
     )
 }

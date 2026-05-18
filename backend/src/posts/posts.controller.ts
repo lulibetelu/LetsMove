@@ -36,7 +36,7 @@ export class PostsController {
     const userId = req.user.sub;
     const promise = await this.postsService.findAll(userId, page);
 
-    if (!promise || promise.length === 0)
+    if (!promise)
       throw new NotFoundException('posts not found');
     return promise;
   }

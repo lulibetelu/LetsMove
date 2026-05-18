@@ -1,11 +1,8 @@
-import {Home, CalendarDays, Users, User, Settings, Plus, Bell, PartyPopper} from 'lucide-react';
-import {useState} from "react";
-import NewPost from "./NewPost.tsx";
+import {Home, CalendarDays, Users, User, Settings, Bell, PartyPopper} from 'lucide-react';
 import {Link, useLocation} from "react-router-dom";
 import {getCurrentUserId} from "../api/user.ts";
 
-export default function Sidebar({ onPostCreated }: { onPostCreated: () => void }) {
-    const [createPost, setCreatePost] = useState(false);
+export default function Sidebar() {
     const location = useLocation();
     const currentUserId = getCurrentUserId();
 
@@ -46,21 +43,6 @@ export default function Sidebar({ onPostCreated }: { onPostCreated: () => void }
                     );
                 })}
             </nav>
-
-
-            <button
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-white text-sm tracking-wide transition-all active:scale-[0.97]"
-                style={{
-                    background: "linear-gradient(135deg, #8A9A5B, #6b7a46)",
-                }}
-                type="button"
-                aria-label="Crear publicación"
-                onClick={()=> setCreatePost(true) }>
-                <Plus size={18}/>
-                Publicar
-            </button>
-            {createPost && <NewPost onClose={() => setCreatePost(false)} onPostCreated={onPostCreated} />}
-
         </aside>
     );
 }
