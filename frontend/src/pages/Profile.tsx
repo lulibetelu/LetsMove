@@ -1,4 +1,4 @@
-import {MapPin, CalendarDays, Users, Edit3, UserCircle, Activity, UserPlus, Hourglass, X, LogOut} from 'lucide-react';
+import {MapPin, Users, Edit3, UserCircle, Activity, UserPlus, Hourglass, X, LogOut} from 'lucide-react';
 import Posts from "../components/Posts.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {useUsername} from "../hooks/UseUsername.tsx";
@@ -22,7 +22,7 @@ export default function Profile() {
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
     const [userExists, setUserExists] = useState<boolean | null>(null);
-    const { posts, deletePost,observerRef, error } = useProfilePosts(numericId);
+    const { posts, deletePost,observerRef } = useProfilePosts(numericId);
     const [tab, setTab] = useState<'posts' | 'events'>('posts');
     const {events} = useProfileEvents(numericId);
 

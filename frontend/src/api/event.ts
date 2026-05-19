@@ -297,3 +297,54 @@ export async function findOneSignUp(eventId: number) {
     }
     return response.json();
 }
+export async function createEventEntry(eventId: number, content: string, images?: string[]) {
+    const token = localStorage.getItem('token');
+    const response = await fetch(url + 'event-entry', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ eventId, content, images }),
+    });
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
+    return response.json();
+}
+
+export async function getEntriesFromEvent(eventId: number) {
+    const token = localStorage.getItem('token');
+    const response = await fetch(url + `event-entry/event/${eventId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    });
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
+    return response.json();
+}
+
+export async function deleteEventEntry(entryId: number) {
+    const token = localStorage.getItem('token');
+    const response = await fetch(url + `event-entry/${entryId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    });
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
+    return response.json();
+}
