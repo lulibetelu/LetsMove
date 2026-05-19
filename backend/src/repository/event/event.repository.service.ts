@@ -285,7 +285,7 @@ export class EventRepositoryService {
     });
   }
 
-  async getEventEntry(entryId: number){
+  async getEventEntry(entryId: number) {
     return this.prismaService.eventEntry.findUnique({
       where: {
         id: entryId,
@@ -293,11 +293,15 @@ export class EventRepositoryService {
     });
   }
 
-  async getEntries(){
-    return this.prismaService.eventEntry.findMany();
+  async getEntries(eventId: number) {
+    return this.prismaService.eventEntry.findMany({
+      where: {
+        eventId: eventId,
+      },
+    });
   }
 
-  async deleteEventEntry(entryId: number){
+  async deleteEventEntry(entryId: number) {
     return this.prismaService.eventEntry.delete({
       where: {
         id: entryId,

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { EventRepositoryService } from '../repository/event/event.repository.service';
 import { CreateEventEntryDto } from './dto/create-event-entry-dto';
 import { EventSignUpRepositoryService } from '../repository/eventSignUp/event-sign-up.repository.service';
@@ -25,18 +29,21 @@ export class EventEntryService {
     return await this.eventRepositoryService.createEventEntry(userId, entryDto);
   }
 
-  async delete(entryId: number){
+  async delete(entryId: number, userId: number) {
     const event = await this.eventRepositoryService.getEventEntry(entryId);
     if (event === null) throw new NotFoundException('Entry not found');
+    const entry = await this.eventRepositoryService.getEventEntry(entryId);
+    if (entry === null) throw new NotFoundException('Entry not found');
+    if (entry.userId != userId)
+      throw new UnauthorizedException('Only creator can delete');
     return this.eventRepositoryService.deleteEventEntry(entryId);
   }
 
-  async getOneEntry(entryId: number){
+  async getOneEntry(entryId: number) {
     return this.eventRepositoryService.getEventEntry(entryId);
   }
 
-  async getEntries(){
-    return this.eventRepositoryService.getEntries();
+  async getEntries(eventId: number) {
+    return this.eventRepositoryService.getEntries(eventId);
   }
-
 }

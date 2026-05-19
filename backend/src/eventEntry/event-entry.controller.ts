@@ -28,25 +28,29 @@ export class EventEntryController {
   }
 
   @UseGuards(AuthGuard)
-  @Delete()
-  async delete(entryId: number) {
-    const promise = await this.eventEntryService.delete(entryId);
+  @Delete('/:id')
+  async delete(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) entryId: number,
+  ) {
+    const user = req.user.sub;
+    const promise = await this.eventEntryService.delete(entryId, user);
     if (!promise) throw new NotFoundException('No events found');
     return promise;
   }
 
   @UseGuards(AuthGuard)
-  @Get(':id')
+  @Get('/event/:eventId')
+  async getEntries(@Param('eventId', ParseIntPipe) eventId: number) {
+    const promise = await this.eventEntryService.getEntries(eventId);
+    if (!promise) throw new NotFoundException('No events found');
+    return promise;
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/:id')
   async getOneEntry(@Param('id', ParseIntPipe) entryId: number) {
     const promise = await this.eventEntryService.getOneEntry(entryId);
-    if (!promise) throw new NotFoundException('No events found');
-    return promise;
-  }
-
-  @UseGuards(AuthGuard)
-  @Get()
-  async getEntries() {
-    const promise = await this.eventEntryService.getEntries();
     if (!promise) throw new NotFoundException('No events found');
     return promise;
   }
