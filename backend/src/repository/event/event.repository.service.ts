@@ -9,6 +9,7 @@ import { EventType, Location } from '@prisma/client';
 import { UpdateEventDto } from '../../event/dto/update-event.dto';
 import { EventSignUpRepositoryService } from '../eventSignUp/event-sign-up.repository.service';
 import { EventSignUp } from '../../event-sign-up/entities/event-sign-up.entity';
+import { FilterEventDto } from '../../event/dto/filter-event.dto';
 
 @Injectable()
 export class EventRepositoryService {
@@ -203,8 +204,30 @@ export class EventRepositoryService {
     });
   }
 
-  async findLimited(requesterId: number, page: number) {
+  async findLimited(page: number, filter: FilterEventDto = {}) {
+    const titleClause = filter.title
+      ? {
+          title: {
+            contains: filter.title,
+          },
+        }
+      : {};
+    const hostClause = filter.host
+      ? {
+          host: {
+            is: {
+              username: {
+                contains: filter.host,
+              },
+            },
+          },
+        }
+      : {};
     return this.prismaService.event.findMany({
+      where: {
+        ...titleClause,
+        ...hostClause,
+      },
       include: {
         host: {
           select: {

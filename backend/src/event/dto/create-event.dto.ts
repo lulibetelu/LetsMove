@@ -22,6 +22,10 @@ export class CreateEventDto {
   @IsDate()
   startingDate: Date;
 
+  @IsNotEmpty()
+  @IsString()
+  sportName: string;
+
   @IsString()
   @IsOptional()
   imageUrl?: string;

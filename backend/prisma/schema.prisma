@@ -43,6 +43,8 @@ model Sport {
   name        String       @unique
   preferences Preference[] @ignore
   postSport PostSport[] @ignore
+
+  events Event[]
 }
 
 model Preference {
@@ -200,6 +202,8 @@ model Event{
   imageEvents ImageEvent[]
   eventSignUp EventSignUp[]
   isPrivate Boolean
+  sportId Int
+  sport Sport @relation(fields: [sportId], references: [id], onDelete: Cascade)
 }
 
 enum EventType{
