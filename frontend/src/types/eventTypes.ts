@@ -71,3 +71,21 @@ export type UpdateEventType = Omit<CreateEventType, 'title' | 'type'>
 export interface PendingParticipant extends EventSignUp {
     eventTitle: string;
 }
+export interface ImageEntry {
+    image: {
+        url: string;
+    };
+}
+
+export interface EventEntry {
+    id: number;
+    eventId: number;
+    userId: number;
+    content: string;
+    createdAt: Date;
+    images: ImageEntry[];
+    user: {
+        id: number;
+        username: string;
+    };
+}

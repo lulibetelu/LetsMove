@@ -1,5 +1,5 @@
-import type {EventType} from "../types/eventTypes.ts";
-import {formatDate} from "../resusable-functions/event.ts";
+import type {EventType} from "../../types/eventTypes.ts";
+import {formatDate} from "../../resusable-functions/formatDate.ts";
 
 interface Props{
     event: EventType

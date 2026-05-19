@@ -1,14 +1,14 @@
 import {ThumbsDown} from "lucide-react";
 import {useState} from "react";
-import {createDislike, removeDislike} from "../api/dislike.ts";
-import type {ActionValidatorResponse} from "../types/actionValidatorResponse.ts";
+import {createDislike, removeDislike} from "../../api/dislike.ts";
+import type {ActionValidatorResponse} from "../../types/actionValidatorResponse.ts";
 
 interface Props{
     postId: number,
     initialIsDisliked: boolean
 }
 
-export default function Dislike(props: Props){
+export default function DislikeButton(props: Props){
     const [isDisliked, setDislike] = useState(props.initialIsDisliked);
 
     const handleClick = async () => {

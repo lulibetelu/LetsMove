@@ -1,9 +1,9 @@
 import {ThumbsUp} from "lucide-react";
-import {createLike, removeLike} from "../api/like.ts";
+import {createLike, removeLike} from "../../api/like.ts";
 import {useState} from "react";
-import type {ActionValidatorResponse} from "../types/actionValidatorResponse.ts";
+import type {ActionValidatorResponse} from "../../types/actionValidatorResponse.ts";
 
-export default function Like({postId, initialIsLiked} : {postId: number, initialIsLiked: boolean}){
+export default function LikeButton({postId, initialIsLiked} : {postId: number, initialIsLiked: boolean}){
     const [isLiked, setLike] = useState(initialIsLiked);
     return(
         <button

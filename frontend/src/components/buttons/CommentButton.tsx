@@ -7,7 +7,7 @@ interface Props {
     handleClick: (id:number) => void,
 }
 
-export default function Comment(props: Props){
+export default function CommentButton(props: Props){
     const getUsername= () => {
         const token = localStorage.getItem("token");
         if (!token) return null;

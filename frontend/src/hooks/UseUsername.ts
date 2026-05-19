@@ -1,4 +1,3 @@
-// hooks/useUsername.ts
 import { useState, useEffect } from 'react';
 import { getUsernameFromId } from '../api/user.ts';
 

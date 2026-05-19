@@ -1,10 +1,10 @@
-import type { PostType } from '../types/postTypes'
+import type { PostType } from '../../types/postTypes.ts'
 import {Link, type NavigateFunction, useNavigate} from 'react-router-dom';
 import {CircleUserRound, MessageCircle, Trash2} from 'lucide-react';
-import Like from "./Like.tsx";
-import Dislike from "./Dislike.tsx";
+import LikeButton from "../buttons/LikeButton.tsx";
+import DislikeButton from "../buttons/DislikeButton.tsx";
 import {useState} from "react";
-import NewComment from "./NewComment.tsx";
+import NewComment from "../create/NewComment.tsx";
 type Props = PostType & {
     isForPostPage: boolean,
     onCommentCreate?: () => void,
@@ -68,8 +68,8 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
                 className="flex items-center gap-5 text-white/40"
                 onClick={(e) => e.stopPropagation()}
             >
-                <Like postId={id} initialIsLiked={isLiked}/>
-                <Dislike postId={id} initialIsDisliked={isDisliked}/>
+                <LikeButton postId={id} initialIsLiked={isLiked}/>
+                <DislikeButton postId={id} initialIsDisliked={isDisliked}/>
                 <button
                     type="button"
                     className="flex cursor-pointer items-center gap-1 transition-colors hover:text-[#8A9A5B]"

@@ -1,11 +1,11 @@
 import {Image, CircleUserRound} from 'lucide-react';
-import type {NewPostCredentials} from "../types/postTypes.ts";
-import {create} from "../api/post.ts";
+import type {NewPostCredentials} from "../../types/postTypes.ts";
+import {create} from "../../api/post.ts";
 import {useEffect, useState} from "react";
-import {useUsername} from "../hooks/UseUsername.tsx";
-import PopUpError from "./PopUpError.tsx";
-import {findAllSports} from "../api/sport.ts";
-import type {Sport} from "../types/sportType.ts";
+import {useUsername} from "../../hooks/UseUsername.ts";
+import PopUpError from "../PopUpError.tsx";
+import {findAllSports} from "../../api/sport.ts";
+import type {Sport} from "../../types/sportType.ts";
 
 
 export default function NewPost({ onClose }: { onClose: () => void}){

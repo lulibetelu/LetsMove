@@ -1,9 +1,9 @@
 import {useState} from "react";
-import {useUsername} from "../hooks/UseUsername.tsx";
+import {useUsername} from "../../hooks/UseUsername.ts";
 import {CircleUserRound, Image} from "lucide-react";
-import PopUpError from "./PopUpError.tsx";
-import type {CreateComment} from "../types/commentTypes.ts";
-import {createComment} from "../api/comment.ts";
+import PopUpError from "../PopUpError.tsx";
+import type {CreateComment} from "../../types/commentTypes.ts";
+import {createComment} from "../../api/comment.ts";
 
 export interface Props{
     onClose: () => void,

@@ -1,8 +1,8 @@
 import {Pencil} from "lucide-react";
-import type {EventType, UpdateEventRawData} from "../types/eventTypes.ts";
+import type {EventType, UpdateEventRawData} from "../../types/eventTypes.ts";
 import {useState} from "react";
-import PopUpError from "./PopUpError.tsx";
-import {updateEvent} from "../api/event.ts";
+import PopUpError from "../PopUpError.tsx";
+import {updateEvent} from "../../api/event.ts";
 
 interface Props {
     event: EventType

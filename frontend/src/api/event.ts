@@ -315,9 +315,9 @@ export async function createEventEntry(eventId: number, content: string, images?
     return response.json();
 }
 
-export async function getEntriesFromEvent(eventId: number) {
+export async function getEntriesFromEvent(eventId: number, page: number) {
     const token = localStorage.getItem('token');
-    const response = await fetch(url + `event-entry/event/${eventId}`, {
+    const response = await fetch(url + `event-entry/event/${eventId}?page=${page}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

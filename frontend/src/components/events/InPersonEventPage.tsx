@@ -1,13 +1,13 @@
-import type { EventType } from "../types/eventTypes.ts";
-import Sidebar from "../components/Sidebar.tsx";
-import EditButton from "../components/EditButton.tsx";
+import type { EventType } from "../../types/eventTypes.ts";
+import Sidebar from "../Sidebar.tsx";
+import EditButton from "../buttons/EditButton.tsx";
 import {useState} from "react";
-import EditEventForm from "../components/EditEventForm.tsx";
-import DeleteButton from "../components/DeleteButton.tsx";
-import {eliminateEvent} from "../api/event.ts";
+import EditEventForm from "./EditEventForm.tsx";
+import DeleteButton from "../buttons/DeleteButton.tsx";
+import {eliminateEvent} from "../../api/event.ts";
 import {useNavigate} from "react-router-dom";
-import PopUpError from "../components/PopUpError.tsx";
-import {getCurrentUserId} from "../api/user.ts";
+import PopUpError from "../PopUpError.tsx";
+import {getCurrentUserId} from "../../api/user.ts";
 
 interface Props {
     event: EventType;

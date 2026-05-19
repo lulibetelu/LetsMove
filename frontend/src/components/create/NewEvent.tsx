@@ -1,8 +1,8 @@
 import {CalendarDays} from "lucide-react";
 import {useState} from "react";
-import PopUpError from "./PopUpError.tsx";
-import {createEvent} from "../api/event.ts";
-import type {EventRawData} from "../types/eventTypes.ts";
+import PopUpError from "../PopUpError.tsx";
+import {createEvent} from "../../api/event.ts";
+import type {EventRawData} from "../../types/eventTypes.ts";
 
 interface Props {
     onClose: () => void;

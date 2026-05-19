@@ -3,7 +3,7 @@ import {useState} from "react";
 import {createUser, loginUser} from '../api/user.ts'
 import type {LoginCredentials, RegisterCredentials} from "../types/userTypes.ts";
 import PopUpError from "../components/PopUpError.tsx";
-import CustomInput from "../components/CustomInput.tsx";
+import CustomInput from "../components/create/CustomInput.tsx";
 import {UserPlus} from "lucide-react";
 
 export default function RegisterPage(){

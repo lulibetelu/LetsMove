@@ -1,19 +1,19 @@
 import { useEffect, useRef } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { findEvents } from "../api/event.ts";
+import {useInfiniteQuery} from "@tanstack/react-query";
+import {findEvents} from "../api/event.ts";
 import type { EventType } from "../types/eventTypes.ts";
 import {getCurrentUserId} from "../api/user.ts";
 
 export function useEvents() {
     const observerRef = useRef<HTMLDivElement>(null);
     const currentUserId = getCurrentUserId();
-        const {
-            data,
-            fetchNextPage,
-            hasNextPage,
-            isFetchingNextPage,
-            isError,
-        } = useInfiniteQuery({
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        isError,
+    } = useInfiniteQuery({
         queryKey: ["events"],
         queryFn: async ({ pageParam }) => {
             const events = await findEvents(pageParam)
@@ -42,6 +42,7 @@ export function useEvents() {
         observer.observe(observerRef.current);
         return () => observer.disconnect();
     }, [hasNextPage, fetchNextPage]);
+
 
     return { events, observerRef, error: isError, isFetchingNextPage };
 }

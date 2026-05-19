@@ -1,9 +1,9 @@
 import {Search} from 'lucide-react';
 import Sidebar from "../components/Sidebar.tsx"
-import Posts from "../components/Posts.tsx";
+import Posts from "../components/posts/Posts.tsx";
 import { useState} from "react";
 import PopUpError from "../components/PopUpError.tsx";
-import NewPost from "../components/NewPost.tsx";
+import NewPost from "../components/create/NewPost.tsx";
 import {usePosts} from "../hooks/usePosts.ts";
 
 

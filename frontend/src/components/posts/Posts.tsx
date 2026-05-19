@@ -1,6 +1,6 @@
-import type {PostType} from "../types/postTypes.ts";
+import type {PostType} from "../../types/postTypes.ts";
 import Post from "./Post.tsx";
-import {getCurrentUserId} from "../api/user.ts";
+import {getCurrentUserId} from "../../api/user.ts";
 
 
 interface PostsProps {

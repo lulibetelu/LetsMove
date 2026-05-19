@@ -1,8 +1,10 @@
-import type {EventSignUp, EventType} from "../types/eventTypes.ts";
+import type {EventSignUp, EventType} from "../../types/eventTypes.ts";
 import {useEffect, useState} from "react";
-import {exitEvent, findOneSignUp, joinEvent} from "../api/event.ts";
+import {exitEvent, findOneSignUp, joinEvent} from "../../api/event.ts";
 import {CalendarDays, Lock, MapPin} from "lucide-react";
 import {useNavigate} from "react-router-dom";
+import {formatDate} from "../../resusable-functions/formatDate.ts";
+import {formatTime} from "../../resusable-functions/formatTime.ts";
 interface Props  {
     event : EventType;
 }
@@ -22,10 +24,11 @@ export default function Event({event}: Props) {
                 const isParticipant: boolean = data.state === 'Accepted';
                 setJoined(isParticipant);
             });
-    },);
+    },[event.id]);
 
     const handleJoinClick = async (e: React.MouseEvent) => {
         e.stopPropagation();
+        e.preventDefault();
         if (!joined) {
             await joinEvent(event.id);
         }
@@ -36,16 +39,6 @@ export default function Event({event}: Props) {
     }
 
     const coverImage = event.imageEvents?.find(img => img.description === "Cover");
-
-    const formatDate = (date: Date) => {
-        return new Date(date).toLocaleDateString("es-AR", {
-            weekday: "short",
-            day: "numeric",
-            month: "short",
-            hour: "2-digit",
-            minute: "2-digit",
-        });
-    };
 
     return (
         <div
@@ -105,7 +98,7 @@ export default function Event({event}: Props) {
                 <div className="flex flex-col gap-1 mt-1">
                     <p className="flex items-center gap-1.5 text-xs text-white/40">
                         <CalendarDays size={12} className="text-[#8A9A5B] shrink-0"/>
-                        {formatDate(event.startingDate)}
+                        {formatDate(event.startingDate)} · {formatTime(event.startingDate)}
                     </p>
                     {event.location && (
                         <p className="flex items-center gap-1.5 text-xs text-white/40">
@@ -119,7 +112,7 @@ export default function Event({event}: Props) {
                       by {event.host?.username ?? `Host #${event.hostId}`}
                     </span>
 
-                    <div onClick={(e) => e.stopPropagation()}>
+                    <div>
                         {joined ? (
                             <button
                                 className="group flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 bg-[#8A9A5B] hover:bg-red-400/20 hover:text-red-400 text-white"

@@ -1,5 +1,5 @@
 import {Check, X, CircleUserRound} from "lucide-react";
-import type {PendingParticipant} from "../types/eventTypes.ts";
+import type {PendingParticipant} from "../../types/eventTypes.ts";
 
 type Props = {
     participant: PendingParticipant;

@@ -1,14 +1,14 @@
 import {MapPin, Users, Edit3, UserCircle, Activity, UserPlus, Hourglass, X, LogOut} from 'lucide-react';
-import Posts from "../components/Posts.tsx";
+import Posts from "../components/posts/Posts.tsx";
 import {useNavigate, useParams} from "react-router-dom";
-import {useUsername} from "../hooks/UseUsername.tsx";
+import {useUsername} from "../hooks/UseUsername.ts";
 import {useEffect, useState} from "react";
 import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend.ts";
 import type { FriendRequestType } from '../types/friendRequestType.ts';
 import {getCurrentUserId, getUsernameFromId} from "../api/user.ts";
 import Sidebar from "../components/Sidebar.tsx";
 import ActivityTabBar from "../components/ActivityTabBar.tsx";
-import Events from "../components/Events.tsx";
+import Events from "../components/events/Events.tsx";
 import {useProfilePosts} from "../hooks/useProfilePosts.ts";
 import {useProfileEvents} from "../hooks/useProfileEvents.ts";
 

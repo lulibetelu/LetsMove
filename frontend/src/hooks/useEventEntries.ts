@@ -1,9 +1,9 @@
+import {useInfiniteQuery} from "@tanstack/react-query";
+import {getEntriesFromEvent} from "../api/event.ts";
+import type {EventEntry} from "../types/eventTypes.ts";
 import {useEffect, useRef} from "react";
-import {findAll, removePost} from "../api/post.ts";
-import type {PostType} from "../types/postTypes.ts";
-import {useInfiniteQuery, useMutation} from "@tanstack/react-query";
 
-export function usePosts(){
+export function useEventEntries(eventId: number) {
     const observerRef = useRef<HTMLDivElement>(null);
 
     const {
@@ -12,11 +12,11 @@ export function usePosts(){
         hasNextPage,
         isError,
     } = useInfiniteQuery({
-        queryKey: ['posts'],
-        queryFn: (async ({pageParam}) => {
-            const posts: PostType[] = await findAll(pageParam);
-            return posts;
-        }),
+        queryKey: ['eventEntries', eventId],
+        queryFn: async ({pageParam}) => {
+            const entries: EventEntry[] = await getEntriesFromEvent(eventId, pageParam);
+            return entries;
+        },
         getNextPageParam: (lastPage, allPages) => {
             if (!lastPage || lastPage.length < 10) return undefined;
             return allPages.length + 1;
@@ -24,35 +24,18 @@ export function usePosts(){
         initialPageParam: 1,
     });
 
-    const posts: PostType[] = data?.pages.flat() ?? [];
-
-    const mutation  = useMutation({
-        mutationKey: ['eventsUpdate'],
-        mutationFn: (async (postId: number) => {
-            return removePost(postId);
-        })
-    })
-
-    const deletePost = (postId: number) => mutation.mutate(postId);
-
-
-
+    const entries: EventEntry[] = data?.pages.flat() ?? [];
 
     useEffect(() => {
         if (!observerRef.current) return;
-
         const observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting && hasNextPage) {
                 fetchNextPage();
             }
         });
-
         observer.observe(observerRef.current);
         return () => observer.disconnect();
     }, [hasNextPage, fetchNextPage]);
 
-
-    const error = isError || mutation.isError;
-
-    return { posts, deletePost, observerRef, error}
+    return { entries, observerRef, isError };
 }
