@@ -43,7 +43,7 @@ export class EventEntryService {
     return this.eventRepositoryService.getEventEntry(entryId);
   }
 
-  async getEntries(eventId: number) {
-    return this.eventRepositoryService.getEntries(eventId);
+  async getEntries(eventId: number, page: number) {
+    return this.eventRepositoryService.getEntries(eventId, page);
   }
 }

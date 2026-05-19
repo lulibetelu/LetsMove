@@ -290,14 +290,47 @@ export class EventRepositoryService {
       where: {
         id: entryId,
       },
+      include: {
+        images: {
+          include: {
+            image: {
+              select: { url: true },
+            },
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
     });
   }
 
-  async getEntries(eventId: number) {
+  async getEntries(eventId: number, page: number) {
     return this.prismaService.eventEntry.findMany({
       where: {
         eventId: eventId,
       },
+      include: {
+        images: {
+          include: {
+            image: {
+              select: { url: true },
+            },
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
+      take: 10,
+      skip: (page - 1) * 10,
+      orderBy: { createdAt: 'desc' },
     });
   }
 

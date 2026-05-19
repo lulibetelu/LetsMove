@@ -7,6 +7,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -41,8 +42,11 @@ export class EventEntryController {
 
   @UseGuards(AuthGuard)
   @Get('/event/:eventId')
-  async getEntries(@Param('eventId', ParseIntPipe) eventId: number) {
-    const promise = await this.eventEntryService.getEntries(eventId);
+  async getEntries(
+    @Param('eventId', ParseIntPipe) eventId: number,
+    @Query('page', ParseIntPipe) page: number,
+  ) {
+    const promise = await this.eventEntryService.getEntries(eventId, page);
     if (!promise) throw new NotFoundException('No events found');
     return promise;
   }
