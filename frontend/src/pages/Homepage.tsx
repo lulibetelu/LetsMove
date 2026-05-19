@@ -4,7 +4,7 @@ import Posts from "../components/posts/Posts.tsx";
 import { useState} from "react";
 import PopUpError from "../components/PopUpError.tsx";
 import NewPost from "../components/create/NewPost.tsx";
-import {usePosts} from "../hooks/usePosts.ts";
+import {usePosts} from "../hooks/posts/usePosts.ts";
 
 
 export default function Homepage() {
@@ -40,34 +40,33 @@ export default function Homepage() {
                 </main>
             <div className="flex justify-end items-end h-screen">
                 <button type="button" onClick={() => setCreatePost(true)} className="
-    fixed bottom-6 right-6
-    w-16 h-16
-    rounded-full
+                    fixed bottom-6 right-6
+                    w-16 h-16
+                    rounded-full
 
-    bg-[#96a55a]
-    hover:bg-[#a8b96a]
+                    bg-[#96a55a]
+                    hover:bg-[#a8b96a]
 
-    text-white
-    text-4xl
+                    text-white
+                    text-4xl
 
-    flex items-center justify-center
+                    flex items-center justify-center
 
-    shadow-lg
-    hover:shadow-2xl
+                    shadow-lg
+                    hover:shadow-2xl
 
-    transition-all duration-300 ease-out
+                    transition-all duration-300 ease-out
 
-    hover:scale-110
-    hover:rotate-90
+                    hover:scale-110
+                    hover:rotate-90
 
-    active:scale-95
+                    active:scale-95
 
-    cursor-pointer
-  "
+                    cursor-pointer
+                  "
                 >+</button>
                 {createPost && <NewPost onClose={() => setCreatePost(false)}/>}
             </div>
         </div>
     );
-    {/*<CirclePlus size={65} color="#96a55a" className="fixed bottom-10 right-15 transition hover:scale-130 cursor-pointer"/>*/}
 }

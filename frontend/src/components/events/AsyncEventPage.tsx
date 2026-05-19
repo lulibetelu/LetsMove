@@ -3,7 +3,7 @@ import Sidebar from "../Sidebar.tsx";
 import {getCurrentUserId} from "../../api/user.ts";
 import PrivateEventView from "./PrivateEventView.tsx";
 import PublicEventView from "./PublicEventView.tsx";
-import useOneEventEntry from "../../hooks/useOneEventEntry.ts";
+import useOneEventEntry from "../../hooks/events/useOneEventEntry.ts";
 import {useQueryClient} from "@tanstack/react-query";
 
 interface Props {

@@ -8,8 +8,6 @@ interface Props {
     onClose: () => void;
 }
 
-
-
 export default function NewEvent(props: Props){
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -26,8 +24,6 @@ export default function NewEvent(props: Props){
         if (data.type === "InPerson" && location.length === 0) return false;
 
         return !(data.type === "Asynchronous" && endingDate.length === 0 && isPrivate);
-
-
     }
 
 

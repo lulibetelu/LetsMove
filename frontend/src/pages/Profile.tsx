@@ -9,8 +9,8 @@ import {getCurrentUserId, getUsernameFromId} from "../api/user.ts";
 import Sidebar from "../components/Sidebar.tsx";
 import ActivityTabBar from "../components/ActivityTabBar.tsx";
 import Events from "../components/events/Events.tsx";
-import {useProfilePosts} from "../hooks/useProfilePosts.ts";
-import {useProfileEvents} from "../hooks/useProfileEvents.ts";
+import {useProfilePosts} from "../hooks/posts/useProfilePosts.ts";
+import {useProfileEvents} from "../hooks/events/useProfileEvents.ts";
 
 export default function Profile() {
     const navigate = useNavigate();

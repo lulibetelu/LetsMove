@@ -2,7 +2,7 @@ import {useParams} from "react-router-dom";
 import InPersonEventPage from "../components/events/InPersonEventPage.tsx";
 import AsyncEventPage from "../components/events/AsyncEventPage.tsx";
 import PopUpError from "../components/PopUpError.tsx";
-import useOneEvent from "../hooks/useOneEvent.ts";
+import useOneEvent from "../hooks/events/useOneEvent.ts";
 export default function EventPage() {
     const { id } = useParams();
     const numericId = Number(id);

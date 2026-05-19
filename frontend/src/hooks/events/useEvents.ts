@@ -1,23 +1,24 @@
+import { useEffect, useRef } from "react";
 import {useInfiniteQuery} from "@tanstack/react-query";
-import {findEventsUserParticipate} from "../api/event.ts";
-import type {EventType} from "../types/eventTypes.ts";
-import {useEffect, useRef} from "react";
+import {findEvents} from "../../api/event.ts";
+import type { EventType } from "../../types/eventTypes.ts";
+import {getCurrentUserId} from "../../api/user.ts";
 
-export function useProfileEvents(profileUserId: number){
+export function useEvents() {
     const observerRef = useRef<HTMLDivElement>(null);
-
-
+    const currentUserId = getCurrentUserId();
     const {
         data,
         fetchNextPage,
         hasNextPage,
+        isFetchingNextPage,
         isError,
-    }= useInfiniteQuery({
-        queryKey: ['profileEvents', profileUserId],
-        queryFn: (async ({pageParam}) => {
-            const events: EventType[] = await findEventsUserParticipate(pageParam, profileUserId);
+    } = useInfiniteQuery({
+        queryKey: ["events"],
+        queryFn: async ({ pageParam }) => {
+            const events = await findEvents(pageParam)
             return events;
-        }),
+        },
         getNextPageParam: (lastPage, allPages) => {
             if (!lastPage || lastPage.length < 10) return undefined;
             return allPages.length + 1;
@@ -25,7 +26,9 @@ export function useProfileEvents(profileUserId: number){
         initialPageParam: 1,
     });
 
-    const events: EventType[] = data?.pages.flat() ?? [];
+    // const events: EventType[] = data?.pages.flat().filter((event: EventType) => event.hostId !== currentUserId) ?? [];
+    let events: EventType[]  = [];
+    events = data?.pages.flat().filter((event: EventType) => event.hostId !== currentUserId) ?? [];
 
     useEffect(() => {
         if (!observerRef.current) return;
@@ -40,7 +43,6 @@ export function useProfileEvents(profileUserId: number){
         return () => observer.disconnect();
     }, [hasNextPage, fetchNextPage]);
 
-    const error: boolean = isError
 
-    return { events, observerRef, error}
+    return { events, observerRef, error: isError, isFetchingNextPage };
 }

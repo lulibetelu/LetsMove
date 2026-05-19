@@ -4,7 +4,7 @@ import {useState} from "react";
 import Events from "../components/events/Events.tsx";
 import PopUpError from "../components/PopUpError.tsx";
 import NewEvent from "../components/create/NewEvent.tsx";
-import {useEvents} from "../hooks/useEvents.ts";
+import {useEvents} from "../hooks/events/useEvents.ts";
 
 export default function EventFeed(){
     const {events, observerRef, error, isFetchingNextPage} = useEvents();

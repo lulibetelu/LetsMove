@@ -2,7 +2,7 @@ import type {EventEntry, EventSignUp, EventType} from "../../types/eventTypes.ts
 import {CalendarDays, UserCircle, Plus, Trash2, Image, Flame, Lock, MapPin, Users} from "lucide-react";
 import {useState} from "react";
 import {createEventEntry, deleteEventEntry, findEventParticipants} from "../../api/event.ts";
-import {useEventEntries} from "../../hooks/useEventEntries.ts";
+import {useEventEntries} from "../../hooks/events/useEventEntries.ts";
 import {getCurrentUserId} from "../../api/user.ts";
 import {useQueryClient, useQuery} from "@tanstack/react-query";
 import {formatRelative, formatDate} from "../../resusable-functions/formatDate.ts";
@@ -167,7 +167,10 @@ export default function PrivateEventView({event}: Props) {
                                 className="w-full bg-[#141414] border border-white/10 rounded-xl px-4 py-3 text-sm text-white/80 placeholder:text-white/25 focus:outline-none focus:border-[#8A9A5B]/50 resize-none transition-colors"
                             />
                             <div className="flex items-center justify-between">
-                                <button className="flex items-center gap-1.5 text-xs text-white/30 hover:text-white/50 transition-colors">
+                                <button
+                                    className="flex items-center gap-1.5 text-xs text-white/30 hover:text-white/50 transition-colors"
+                                    onClick={() => }
+                                >
                                     <Image size={14}/> Agregar fotos
                                 </button>
                                 <div className="flex items-center gap-2">

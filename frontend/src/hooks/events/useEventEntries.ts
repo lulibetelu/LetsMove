@@ -1,6 +1,6 @@
 import {useInfiniteQuery} from "@tanstack/react-query";
-import {getEntriesFromEvent} from "../api/event.ts";
-import type {EventEntry} from "../types/eventTypes.ts";
+import {getEntriesFromEvent} from "../../api/event.ts";
+import type {EventEntry} from "../../types/eventTypes.ts";
 import {useEffect, useRef} from "react";
 
 export function useEventEntries(eventId: number) {
