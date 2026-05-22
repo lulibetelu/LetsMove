@@ -32,7 +32,15 @@ export default function AsyncEventPage({event}: Props) {
         <div className="min-h-screen bg-[#141414] flex">
             <Sidebar/>
             <main className="flex-1 ml-60">
-                <PublicEventView event={event} signUp={signUp ?? null} onJoined={() => queryClient.invalidateQueries({ queryKey: ['oneEventSignUp', event.id, userId] })}/>
+                {(isMember || isHost) ? (
+                    <PrivateEventView event={event}/>
+                ) : (
+                    <PublicEventView
+                        event={event}
+                        signUp={signUp ?? null}
+                        onJoined={() => queryClient.invalidateQueries({ queryKey: ['oneEventSignUp', event.id, userId] })}
+                    />
+                )}
             </main>
         </div>
     );

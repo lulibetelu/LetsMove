@@ -1,12 +1,15 @@
 import {
+  IsArray,
   IsBoolean,
   IsDate,
   IsIn,
   IsNotEmpty,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { CreateImageDto } from '../../images/dto/create-image.dto';
 
 export class CreateEventDto {
   @IsNotEmpty()
@@ -22,9 +25,11 @@ export class CreateEventDto {
   @IsDate()
   startingDate: Date;
 
-  @IsString()
   @IsOptional()
-  imageUrl?: string;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateImageDto)
+  images?: CreateImageDto[];
 
   @IsString()
   @IsOptional()
@@ -49,5 +54,3 @@ export class CreateEventDto {
   @IsBoolean()
   isPrivate: boolean;
 }
-
-//TODO agregar isPrivate a la parte de la creación del evento en el front

@@ -4,8 +4,10 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUrl,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+import { CreateImageDto } from '../../images/dto/create-image.dto';
 
 export class CreateEventEntryDto {
   @IsNumber()
@@ -16,8 +18,9 @@ export class CreateEventEntryDto {
   @IsDefined()
   content: string;
 
-  @IsArray()
-  @IsUrl({}, { each: true })
   @IsOptional()
-  images?: string[];
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateImageDto)
+  images?: CreateImageDto[];
 }

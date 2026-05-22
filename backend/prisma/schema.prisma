@@ -157,6 +157,7 @@ model Image{
   id Int @id @default(autoincrement())
   url String?
   content Bytes?
+  mimeType String?
 
   imagePosts ImagePost[]
   imageEvents ImageEvent[]

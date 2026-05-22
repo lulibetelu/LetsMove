@@ -52,6 +52,13 @@ export class EventRepositoryService {
           createEventDto.type === 'Asynchronous'
             ? EventType.Asynchronous
             : EventType.InPerson,
+        imageEvents: {
+          create: createEventDto.imageUrl?.map((url) => ({
+            image: {
+              create: { url },
+            },
+          })),
+        },
       },
     });
   }
