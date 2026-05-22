@@ -39,6 +39,17 @@ export class EventRepositoryService {
       locationId = location.id;
     }
 
+    if (!createEventDto.sportName)
+      throw new BadRequestException('sport name is missing');
+
+    const sport = await this.prismaService.sport.findUnique({
+      where: {
+        name: createEventDto.sportName,
+      },
+    });
+
+    if (!sport) throw new BadRequestException('no such sport');
+
     return this.prismaService.event.create({
       data: {
         hostId: hostId,
@@ -52,10 +63,11 @@ export class EventRepositoryService {
           createEventDto.type === 'Asynchronous'
             ? EventType.Asynchronous
             : EventType.InPerson,
+        sportId: sport.id,
       },
     });
   }
-
+  //TODO test create with sport in postman. Afet that, add that in front.
   async findAll(requesterId: number) {
     return this.prismaService.event.findMany({
       include: {

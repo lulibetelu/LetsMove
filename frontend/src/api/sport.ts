@@ -1,5 +1,8 @@
+import type {SportListObject} from "../types/sportType.ts";
+
 const url = import.meta.env.VITE_API_URL;
-export async function findAllSports(){
+
+export async function findAllSports(): Promise<SportListObject> {
     const token = localStorage.getItem('token')
     const response = await fetch(url + 'sports', {
         method: 'GET',
@@ -13,5 +16,5 @@ export async function findAllSports(){
         if (Array.isArray(message.message)) throw new Error(message.message[0]);
         else throw new Error(message.message);
     }
-    return response.json();
+    return response.json()
 }

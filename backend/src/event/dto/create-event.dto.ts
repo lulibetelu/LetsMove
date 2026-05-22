@@ -53,5 +53,3 @@ export class CreateEventDto {
   @IsBoolean()
   isPrivate: boolean;
 }
-
-//TODO agregar isPrivate a la parte de la creación del evento en el front

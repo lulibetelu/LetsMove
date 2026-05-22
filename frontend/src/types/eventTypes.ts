@@ -42,7 +42,8 @@ export interface EventRawData {
     startingDate: string,
     endingDate: string,
     location: string | undefined,
-    isPrivate: boolean
+    isPrivate: boolean,
+    sport: string
 }
 
 export interface CreateEventType {
@@ -52,7 +53,8 @@ export interface CreateEventType {
     startingDate: Date,
     endingDate?: Date,
     location?: string,
-    isPrivate: boolean
+    isPrivate: boolean,
+    sportName: string
 
 }
 export interface UpdateEventRawData{
@@ -66,7 +68,7 @@ export interface UpdateEventRawData{
     isPrivate: boolean,
 }
 
-export type UpdateEventType = Omit<CreateEventType, 'title' | 'type'>
+export type UpdateEventType = Omit<CreateEventType, 'title' | 'type' | 'sport'>
 
 export interface PendingParticipant extends EventSignUp {
     eventTitle: string;

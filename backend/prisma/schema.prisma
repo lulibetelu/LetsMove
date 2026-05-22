@@ -31,10 +31,10 @@ model User {
   friendsAsUser1 Friends[]      @relation("friend1") @ignore
   friendsAsUser2 Friends[]      @relation("friend2") @ignore
 
-  comments Comment[]
+  comments  Comment[]
   postScore PostScore[]
 
-  events Event[]
+  events      Event[]
   eventSignUp EventSignUp[]
 }
 
@@ -42,7 +42,7 @@ model Sport {
   id          Int          @id @default(autoincrement())
   name        String       @unique
   preferences Preference[] @ignore
-  postSport PostSport[] @ignore
+  postSport   PostSport[]  @ignore
 
   events Event[]
 }
@@ -86,8 +86,8 @@ model Post {
   postsLiked    PostLiked[]
   postsDisliked PostDisliked[]
   comments      Comment[]
-  postSport PostSport[]
-  postScore PostScore[]
+  postSport     PostSport[]
+  postScore     PostScore[]
 
   imagePosts ImagePost[]
 }
@@ -113,8 +113,8 @@ model PostDisliked {
 }
 
 model Friends {
-  id      Int    @id @default(autoincrement())
-  user1   User   @relation("friend1", fields: [sender], references: [id], onDelete: Cascade)
+  id       Int    @id @default(autoincrement())
+  user1    User   @relation("friend1", fields: [sender], references: [id], onDelete: Cascade)
   sender   Int
   user2    User   @relation("friend2", fields: [receiver], references: [id], onDelete: Cascade)
   receiver Int
@@ -135,27 +135,30 @@ model Comment {
   content   String
   createdAt DateTime  @default(now())
 }
+
 model PostSport {
-  id Int @id @default(autoincrement())
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId Int
-  sport Sport @relation(fields: [sportId], references: [id], onDelete: Cascade)
+  id      Int   @id @default(autoincrement())
+  post    Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId  Int
+  sport   Sport @relation(fields: [sportId], references: [id], onDelete: Cascade)
   sportId Int
+
   @@unique([postId, sportId])
 }
 
 model PostScore {
-  id Int @id @default(autoincrement())
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId Int
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
-  sportMatch Int @default(0)
+  id         Int  @id @default(autoincrement())
+  post       Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId     Int
+  user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  sportMatch Int  @default(0)
+
   @@unique([userId, postId])
 }
 
-model Image{
-  id Int @id @default(autoincrement())
+model Image {
+  id  Int    @id @default(autoincrement())
   url String
 
   imagePosts ImagePost[]
@@ -163,62 +166,62 @@ model Image{
   imageEvents ImageEvent[]
 }
 
-model ImagePost{
-  id Int @id @default(autoincrement())
+model ImagePost {
+  id      Int   @id @default(autoincrement())
   imageId Int
-  image Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
-  postId Int
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  image   Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  postId  Int
+  post    Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([imageId, postId])
 }
 
-model ImageEvent{
+model ImageEvent {
   id Int @id @default(autoincrement())
 
   imageId Int
-  image Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  image   Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
 
   eventId Int
-  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   description String
 
   @@unique([imageId, eventId])
 }
 
-model Event{
-  id Int @id @default(autoincrement())
-  hostId Int
-  host User @relation(fields: [hostId], references: [id], onDelete: Cascade)
-  title String
-  description String
-  chatId Int? //falta la tabla chat
+model Event {
+  id           Int           @id @default(autoincrement())
+  hostId       Int
+  host         User          @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  title        String
+  description  String
+  chatId       Int? //falta la tabla chat
   startingDate DateTime
-  locationId Int?
-  location Location? @relation(fields: [locationId], references: [id], onDelete: Cascade)
-  endingDate DateTime?
-  eventType EventType
-  imageEvents ImageEvent[]
-  eventSignUp EventSignUp[]
-  isPrivate Boolean
-  sportId Int
-  sport Sport @relation(fields: [sportId], references: [id], onDelete: Cascade)
+  locationId   Int?
+  location     Location?     @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  endingDate   DateTime?
+  eventType    EventType
+  imageEvents  ImageEvent[]
+  eventSignUp  EventSignUp[]
+  isPrivate    Boolean
+  sportId      Int
+  sport        Sport         @relation(fields: [sportId], references: [id], onDelete: Cascade)
 }
 
-enum EventType{
+enum EventType {
   Asynchronous
   InPerson
 }
 
 model EventSignUp {
-  id Int @id @default(autoincrement())
-  eventId Int
-  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  userId Int
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  state String
+  id       Int       @id @default(autoincrement())
+  eventId  Int
+  event    Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId   Int
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  state    String
   joinedAt DateTime?
+
   @@unique([userId, eventId])
 }
-

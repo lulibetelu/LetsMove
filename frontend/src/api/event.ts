@@ -68,7 +68,8 @@ function formatEventData(data: EventRawData): CreateEventType {
             type: data.type,
             startingDate: new Date(data.startingDate),
             location: data.location,
-            isPrivate: data.isPrivate
+            isPrivate: data.isPrivate,
+            sportName: data.sport
         }
     }
 
@@ -78,7 +79,8 @@ function formatEventData(data: EventRawData): CreateEventType {
         type: data.type,
         startingDate: new Date(data.startingDate),
         endingDate: new Date(data.endingDate),
-        isPrivate: data.isPrivate
+        isPrivate: data.isPrivate,
+        sportName: data.sport
     }
 }
 
