@@ -13,9 +13,13 @@ export class ImageService {
       return this.imageRepository.create({ url: dto.url });
     } else if (dto.content) {
       const [prefix, content] = dto.content.split(',');
+      if (!prefix?.includes('data:') || !prefix?.includes(';base64')) {
+        throw new BadRequestException(
+          'El contenido no tiene un formato Base64 válido',
+        );
+      }
       const mimeType = prefix.split(':')[1].split(';')[0];
       const uint8Array = new Uint8Array(Buffer.from(content, 'base64'));
-
       return this.imageRepository.create({ content: uint8Array, mimeType });
     } else {
       throw new BadRequestException('Debe proveer una url o un contenido');

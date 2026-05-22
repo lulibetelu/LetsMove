@@ -19,6 +19,9 @@ export class ImageController {
   async getOne(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const image = await this.imageService.getOne(id);
     if (!image) throw new NotFoundException();
+    if (image.url) {
+      return res.redirect(image.url);
+    }
     res.set({ 'Content-Type': image.mimeType }).send(image.content);
   }
 }

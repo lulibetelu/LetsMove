@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsUrl, IsBase64, IsIn } from 'class-validator';
+import { IsOptional, IsString, IsUrl, IsIn } from 'class-validator';
 
 export class CreateImageDto {
   @IsOptional()
@@ -8,10 +8,6 @@ export class CreateImageDto {
 
   @IsOptional()
   @IsString()
-  @IsBase64(
-    {},
-    { message: 'El contenido debe ser un string en formato Base64' },
-  )
   content?: string;
 
   @IsOptional()
