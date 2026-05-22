@@ -284,21 +284,27 @@ export class EventRepositoryService {
       skip: (page - 1) * 10,
     });
   }
-  async createEventEntry(userId: number, eventEntryDto: CreateEventEntryDto) {
-    return this.prismaService.eventEntry.create({
+  async createEventEntry(
+    userId: number,
+    eventEntryDto: CreateEventEntryDto,
+    imageIds: number[],
+  ) {
+    const eventEntry = await this.prismaService.eventEntry.create({
       data: {
         eventId: eventEntryDto.eventId,
         userId: userId,
         content: eventEntryDto.content,
-        images: {
-          create: eventEntryDto.images?.map((url) => ({
-            image: {
-              create: { url },
-            },
-          })),
-        },
       },
     });
+
+    if (imageIds.length > 0) {
+      await this.prismaService.imageEntry.createMany({
+        data: imageIds.map((imageId) => ({
+          imageId,
+          entryId: eventEntry.id,
+        })),
+      });
+    }
   }
 
   async getEventEntry(entryId: number) {
