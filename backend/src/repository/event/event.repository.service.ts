@@ -21,7 +21,7 @@ export class EventRepositoryService {
   async createEvent(
     hostId: number,
     createEventDto: CreateEventDto,
-    imageIds: number[],
+    images: { id: number; description?: string }[],
   ) {
     //Se puede mejorar
     let locationId: number | null;
@@ -59,12 +59,12 @@ export class EventRepositoryService {
       },
     });
 
-    if (imageIds.length > 0) {
+    if (images.length > 0) {
       await this.prismaService.imageEvent.createMany({
-        data: imageIds.map((imageId) => ({
+        data: images.map(({ id, description }) => ({
           eventId: event.id,
-          imageId,
-          description: createEventDto.imageDescription!,
+          imageId: id,
+          description: description!,
         })),
       });
     }

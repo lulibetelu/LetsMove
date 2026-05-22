@@ -31,11 +31,6 @@ export class CreateEventDto {
   @Type(() => CreateImageDto)
   images?: CreateImageDto[];
 
-  @IsString()
-  @IsOptional()
-  @IsIn(['Cover', 'Gallery'])
-  imageDescription?: string;
-
   @IsNotEmpty()
   @IsString()
   @IsIn(['Asynchronous', 'InPerson'])

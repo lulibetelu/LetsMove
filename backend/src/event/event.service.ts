@@ -11,20 +11,25 @@ export class EventService {
     private imageService: ImageService,
   ) {}
   async create(hostId: number, createEventDto: CreateEventDto) {
-    if (createEventDto.images != null && !createEventDto.imageDescription) {
-      throw new BadRequestException();
+    if (createEventDto.images?.some((image) => !image.description)) {
+      throw new BadRequestException('Cada imagen debe tener una descripción');
     }
 
-    const imageIds = await Promise.all(
+    const images = await Promise.all(
       (createEventDto.images ?? []).map((image) =>
-        Promise.resolve(this.imageService.create(image)),
+        Promise.resolve(
+          this.imageService.create(image).then((created) => ({
+            id: created.id,
+            description: image.description,
+          })),
+        ),
       ),
-    ).then((images) => images.map((image) => image.id));
+    );
 
     return await this.eventRepositoryService.createEvent(
       hostId,
       createEventDto,
-      imageIds,
+      images,
     );
   }
 
