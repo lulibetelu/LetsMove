@@ -3,9 +3,10 @@ import { EventRepositoryModule } from '../repository/event/event.repository.modu
 import { EventEntryController } from './event-entry.controller';
 import { EventEntryService } from './event-entry.service';
 import { EventSignUpRepositoryModule } from '../repository/eventSignUp/event-sign-up.repository.module';
+import { ImageModule } from '../images/image.module';
 
 @Module({
-  imports: [EventRepositoryModule, EventSignUpRepositoryModule],
+  imports: [EventRepositoryModule, EventSignUpRepositoryModule, ImageModule],
   controllers: [EventEntryController],
   providers: [EventEntryService],
 })

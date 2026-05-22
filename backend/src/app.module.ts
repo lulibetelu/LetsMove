@@ -16,6 +16,7 @@ import { CommentModule } from './comment/comment.module';
 import { EventModule } from './event/event.module';
 import { EventSignUpModule } from './event-sign-up/event-sign-up.module';
 import { EventEntryModule } from './eventEntry/event-entry.module';
+import { ImageModule } from './images/image.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { EventEntryModule } from './eventEntry/event-entry.module';
     EventModule,
     EventSignUpModule,
     EventEntryModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

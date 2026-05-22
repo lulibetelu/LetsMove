@@ -305,6 +305,8 @@ export class EventRepositoryService {
         })),
       });
     }
+
+    return eventEntry;
   }
 
   async getEventEntry(entryId: number) {

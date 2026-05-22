@@ -23,9 +23,11 @@ export class EventEntryService {
       entryDto.eventId,
     );
     if (event === null) throw new NotFoundException('Event not found');
+
     const isParticipant = eventSignUps.some(
       (signUp) => signUp.userId === userId && signUp.state === 'Accepted',
     );
+
     if (!isParticipant)
       throw new UnauthorizedException('Must be a member to create an entry');
 
