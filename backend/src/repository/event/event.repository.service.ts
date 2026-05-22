@@ -18,7 +18,11 @@ export class EventRepositoryService {
     private eventSignupRepositoryService: EventSignUpRepositoryService,
   ) {}
 
-  async createEvent(hostId: number, createEventDto: CreateEventDto) {
+  async createEvent(
+    hostId: number,
+    createEventDto: CreateEventDto,
+    imageIds: number[],
+  ) {
     //Se puede mejorar
     let locationId: number | null;
     if (
@@ -39,7 +43,7 @@ export class EventRepositoryService {
       locationId = location.id;
     }
 
-    return this.prismaService.event.create({
+    const event = await this.prismaService.event.create({
       data: {
         hostId: hostId,
         title: createEventDto.title,
@@ -52,15 +56,20 @@ export class EventRepositoryService {
           createEventDto.type === 'Asynchronous'
             ? EventType.Asynchronous
             : EventType.InPerson,
-        imageEvents: {
-          create: createEventDto.imageUrl?.map((url) => ({
-            image: {
-              create: { url },
-            },
-          })),
-        },
       },
     });
+
+    if (imageIds.length > 0) {
+      await this.prismaService.imageEvent.createMany({
+        data: imageIds.map((imageId) => ({
+          eventId: event.id,
+          imageId,
+          description: createEventDto.imageDescription!,
+        })),
+      });
+    }
+
+    return event;
   }
 
   async findAll(requesterId: number) {

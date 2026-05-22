@@ -1,15 +1,30 @@
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { EventRepositoryService } from '../repository/event/event.repository.service';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { ImageService } from '../images/image.service';
 
 @Injectable()
 export class EventService {
-  constructor(private eventRepositoryService: EventRepositoryService) {}
+  constructor(
+    private eventRepositoryService: EventRepositoryService,
+    private imageService: ImageService,
+  ) {}
   async create(hostId: number, createEventDto: CreateEventDto) {
+    if (createEventDto.images != null && !createEventDto.imageDescription) {
+      throw new BadRequestException();
+    }
+
+    const imageIds = await Promise.all(
+      (createEventDto.images ?? []).map((image) =>
+        Promise.resolve(this.imageService.create(image)),
+      ),
+    ).then((images) => images.map((image) => image.id));
+
     return await this.eventRepositoryService.createEvent(
       hostId,
       createEventDto,
+      imageIds,
     );
   }
 
