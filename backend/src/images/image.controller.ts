@@ -14,7 +14,8 @@ import type {Response} from 'express';
 @Controller('image')
 export class ImageController {
   constructor(private imageService: ImageService) {}
-  @UseGuards(AuthGuard)
+
+  // a proposito no tiene el auth guard, no hay que ponerlo
   @Get('/:id')
   async getOne(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const image = await this.imageService.getOne(id);

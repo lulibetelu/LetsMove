@@ -78,7 +78,7 @@ export class EventRepositoryService {
         imageEvents: {
           include: {
             image: {
-              select: { url: true },
+              select: { id: true, url: true },
             },
           },
         },
@@ -110,7 +110,7 @@ export class EventRepositoryService {
         imageEvents: {
           include: {
             image: {
-              select: { url: true },
+              select: { id: true, url: true },
             },
           },
         },
@@ -136,7 +136,7 @@ export class EventRepositoryService {
         imageEvents: {
           include: {
             image: {
-              select: { url: true },
+              select: { id: true, url: true },
             },
           },
         },
@@ -233,7 +233,7 @@ export class EventRepositoryService {
         imageEvents: {
           include: {
             image: {
-              select: { url: true },
+              select: { id: true, url: true },
             },
           },
         },

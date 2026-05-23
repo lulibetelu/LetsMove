@@ -73,6 +73,13 @@ export class PostsRepositoryService {
           user: {
             select: { username: true },
           },
+          imagePosts: {
+            include: {
+              image: {
+                select: { id: true, url: true },
+              },
+            },
+          },
         },
         where: { userId: { not: currentUserId } },
       }),
@@ -139,6 +146,13 @@ export class PostsRepositoryService {
             username: true,
           },
         },
+        imagePosts: {
+          include: {
+            image: {
+              select: { id: true, url: true },
+            },
+          },
+        },
       },
     });
   }
@@ -187,6 +201,13 @@ export class PostsRepositoryService {
         },
         postSport: {
           select: { sportId: true },
+        },
+        imagePosts: {
+          include: {
+            image: {
+              select: { id: true, url: true },
+            },
+          },
         },
       },
     });

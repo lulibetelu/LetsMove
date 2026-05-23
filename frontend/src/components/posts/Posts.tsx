@@ -30,6 +30,7 @@ export default function Posts({userId, posts, deletePost, observerRef}: PostsPro
                         isDisliked={p.isDisliked}
                         canDelete={canDelete}
                         deletePost={() => deletePost(p.id)} isForPostPage={false}
+                        images={p.images}
                     />
                 </div>
             ))}

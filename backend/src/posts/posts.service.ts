@@ -50,12 +50,14 @@ export class PostsService {
     //   throw new NotFoundException(`User ${currentUserId} doesn't have posts`);
     // }
     return posts.map((post) => {
-      const { postsLiked, postsDisliked, postSport, ...postData } = post;
+      const { postsLiked, postsDisliked, postSport, imagePosts, ...postData } =
+        post;
       return new GetPostDto(
         postData,
         postsLiked.length === 1,
         postsDisliked.length === 1,
         postSport.map((ps) => ps.sportId),
+        imagePosts,
       );
     });
   }
@@ -95,12 +97,14 @@ export class PostsService {
     }
 
     return posts.map((post) => {
-      const { postsLiked, postsDisliked, postSport, ...postData } = post;
+      const { postsLiked, postsDisliked, postSport, imagePosts, ...postData } =
+        post;
       return new GetPostDto(
         postData,
         postsLiked.length === 1,
         postsDisliked.length === 1,
         postSport.map((ps) => ps.sportId),
+        imagePosts,
       );
     });
   }

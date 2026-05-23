@@ -10,7 +10,8 @@ type Props = PostType & {
     onCommentCreate?: () => void,
 }
 
-export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, canDelete, deletePost, isForPostPage, onCommentCreate } : Props){
+export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, canDelete, deletePost, isForPostPage, onCommentCreate, images } : Props){
+    const url = import.meta.env.VITE_API_URL;
     const [createComment, setCreateComment] = useState(false);
     const navigate: NavigateFunction = useNavigate();
     const handleClick = () => {
@@ -63,6 +64,13 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
                 {content}
             </p>
 
+            {images && images.length > 0 && (
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                    {images.map((img, i) => (
+                        <img key={i} src={img.image.url ?? `${url}image/${img.image.id}`} alt="" className="w-full h-48 object-cover rounded-xl"/>
+                    ))}
+                </div>
+            )}
 
             <div
                 className="flex items-center gap-5 text-white/40"

@@ -1,5 +1,5 @@
 import type {EventEntry, EventSignUp, EventType} from "../../types/eventTypes.ts";
-import {CalendarDays, UserCircle, Plus, Trash2, Image, Flame, Lock, MapPin, Users} from "lucide-react";
+import {CalendarDays, UserCircle, Plus, Trash2, Flame, Lock, MapPin, Users} from "lucide-react";
 import {useState} from "react";
 import {createEventEntry, deleteEventEntry, findEventParticipants} from "../../api/event.ts";
 import {useEventEntries} from "../../hooks/events/useEventEntries.ts";
@@ -7,7 +7,9 @@ import {getCurrentUserId} from "../../api/user.ts";
 import {useQueryClient, useQuery} from "@tanstack/react-query";
 import {formatRelative, formatDate} from "../../resusable-functions/formatDate.ts";
 import {formatTime} from "../../resusable-functions/formatTime.ts";
+import type {ImageInput} from "../../types/imageType.ts";
 
+import ImagePicker from "../ImagePicker.tsx";
 interface Props {
     event: EventType;
 }
@@ -60,6 +62,9 @@ export default function PrivateEventView({event}: Props) {
     const currentUserId = getCurrentUserId();
     const isHost = currentUserId === event.hostId;
     const queryClient = useQueryClient();
+    const [images, setImages] = useState<ImageInput[]>([])
+    const url = import.meta.env.VITE_API_URL;
+
 
     const {entries, observerRef, isError} = useEventEntries(event.id);
 
@@ -87,7 +92,7 @@ export default function PrivateEventView({event}: Props) {
         if (!newEntry.trim()) return;
         setSubmitting(true);
         try {
-            await createEventEntry(event.id, newEntry.trim());
+            await createEventEntry(event.id, newEntry.trim(), images);
             setNewEntry("");
             setShowForm(false);
             queryClient.invalidateQueries({queryKey: ['eventEntries', event.id]});
@@ -107,7 +112,7 @@ export default function PrivateEventView({event}: Props) {
             {/* Cover */}
             <div className="relative w-full h-64 rounded-2xl overflow-hidden mb-6">
                 {coverImage ? (
-                    <img src={coverImage.image.url} alt={event.title} className="w-full h-full object-cover"/>
+                    <img src={coverImage.image.url?? `${url}image/${coverImage.image.id}` } alt={event.title} className="w-full h-full object-cover"/>
                 ) : (
                     <div className="w-full h-full" style={{background: "linear-gradient(135deg, #8A9A5B 0%, #6b7a46 100%)"}}>
                         <div className="absolute inset-0 flex items-center justify-center opacity-10">
@@ -167,15 +172,10 @@ export default function PrivateEventView({event}: Props) {
                                 className="w-full bg-[#141414] border border-white/10 rounded-xl px-4 py-3 text-sm text-white/80 placeholder:text-white/25 focus:outline-none focus:border-[#8A9A5B]/50 resize-none transition-colors"
                             />
                             <div className="flex items-center justify-between">
-                                <button
-                                    className="flex items-center gap-1.5 text-xs text-white/30 hover:text-white/50 transition-colors"
-                                    onClick={() => }
-                                >
-                                    <Image size={14}/> Agregar fotos
-                                </button>
+                                <ImagePicker images={images} onChange={setImages}/>
                                 <div className="flex items-center gap-2">
                                     <button
-                                        onClick={() => {setShowForm(false); setNewEntry("");}}
+                                        onClick={() => {setShowForm(false); setNewEntry(""); setImages([])}}
                                         className="px-4 py-1.5 rounded-full text-xs font-semibold border border-white/10 text-white/40 hover:text-white/60 transition-all"
                                     >
                                         Cancelar
@@ -226,7 +226,7 @@ export default function PrivateEventView({event}: Props) {
                                 {entry.images.length > 0 && (
                                     <div className="grid grid-cols-2 gap-2">
                                         {entry.images.map((img, i) => (
-                                            <img key={i} src={img.image.url} alt="" className="w-full h-32 object-cover rounded-lg"/>
+                                            <img key={i} src={img.image.url ?? `${url}image/${img.image.id}`} alt="" className="w-full h-32 object-cover rounded-lg"/>
                                         ))}
                                     </div>
                                 )}

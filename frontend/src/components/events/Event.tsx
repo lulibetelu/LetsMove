@@ -13,6 +13,7 @@ export default function Event({event}: Props) {
     const [joined, setJoined] = useState<boolean>(false);
     const navigate = useNavigate();
     const [eventReq, setEventReq] = useState<boolean>(false);
+    const url = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         findOneSignUp(event.id)
@@ -53,7 +54,7 @@ export default function Event({event}: Props) {
             >
                 {coverImage ? (
                         <img
-                            src={coverImage.image.url}
+                            src={coverImage.image.url ?? `${url}image/${coverImage.image.id}`}
                             alt={event.title}
                             className="w-full h-full object-cover"
                         />

@@ -1,6 +1,7 @@
 import {getCurrentUserId} from "./user.ts";
 
 import type {CreateEventType, EventRawData, UpdateEventRawData, UpdateEventType} from "../types/eventTypes.ts";
+import type {ImageInput} from "../types/imageType.ts";
 
 const url = import.meta.env.VITE_API_URL;
 
@@ -297,7 +298,7 @@ export async function findOneSignUp(eventId: number) {
     }
     return response.json();
 }
-export async function createEventEntry(eventId: number, content: string, images?: string[]) {
+export async function createEventEntry(eventId: number, content: string, images?: ImageInput[]) {
     const token = localStorage.getItem('token');
     const response = await fetch(url + 'event-entry', {
         method: 'POST',

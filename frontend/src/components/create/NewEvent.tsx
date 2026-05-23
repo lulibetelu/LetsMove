@@ -3,6 +3,8 @@ import {useState} from "react";
 import PopUpError from "../PopUpError.tsx";
 import {createEvent} from "../../api/event.ts";
 import type {EventRawData} from "../../types/eventTypes.ts";
+import type {ImageInput} from "../../types/imageType.ts";
+import ImagePicker from "../ImagePicker.tsx";
 
 interface Props {
     onClose: () => void;
@@ -17,6 +19,7 @@ export default function NewEvent(props: Props){
     const [location, setLocation] = useState<string>("");
     const [isPrivate, setIsPrivate] = useState(false);
     const [error, setError] = useState<boolean>();
+    const [images, setImages] = useState<ImageInput[]>([])
 
     const checkData = (data:EventRawData) => {
         if (title.length === 0 || description.length === 0 || type.length === 0 || startingDate.length === 0) return false;
@@ -37,6 +40,7 @@ export default function NewEvent(props: Props){
             endingDate: endingDate,
             location: location,
             isPrivate: isPrivate,
+            images: images,
         }
         if (!checkData(data)) {
             setError(true);
@@ -235,6 +239,14 @@ return (
                         and asynchronously.
                     </div>
                 )}
+
+                {/* Images */}
+                <div>
+                    <label className="label">
+                        <span className="label-text font-medium">Images</span>
+                    </label>
+                    <ImagePicker images={images} onChange={setImages} allowDescription={true}/>
+                </div>
             </div>
 
             {/* Footer */}

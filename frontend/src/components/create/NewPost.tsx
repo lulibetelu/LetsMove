@@ -1,4 +1,4 @@
-import {Image, CircleUserRound} from 'lucide-react';
+import {CircleUserRound} from 'lucide-react';
 import type {NewPostCredentials} from "../../types/postTypes.ts";
 import {create} from "../../api/post.ts";
 import {useEffect, useState} from "react";
@@ -6,6 +6,8 @@ import {useUsername} from "../../hooks/UseUsername.ts";
 import PopUpError from "../PopUpError.tsx";
 import {findAllSports} from "../../api/sport.ts";
 import type {Sport} from "../../types/sportType.ts";
+import type {ImageInput} from "../../types/imageType.ts";
+import ImagePicker from "../ImagePicker.tsx";
 
 
 export default function NewPost({ onClose }: { onClose: () => void}){
@@ -13,6 +15,7 @@ export default function NewPost({ onClose }: { onClose: () => void}){
     const [error, setError] = useState<boolean>(false);
     const [sports, setSports] = useState<Sport[]>([]);
     const [selectedSports, setSelectedSports] = useState<Sport[]>([])
+    const [images, setImages] = useState<ImageInput[]>([])
 
     const { username, loading } = useUsername();
 
@@ -30,7 +33,7 @@ export default function NewPost({ onClose }: { onClose: () => void}){
             const selectedSportsId = selectedSports.map((sport) =>
                 sport.id,
             );
-            const postCredentials: NewPostCredentials = {content, selectedSportsId};
+            const postCredentials: NewPostCredentials = {content, selectedSportsId, images};
             const createPost = await create(postCredentials);
             console.log("CREATE POST:", createPost);
             onClose();
@@ -108,12 +111,7 @@ export default function NewPost({ onClose }: { onClose: () => void}){
                 <div className="flex justify-between items-center w-full p-3 border-t border-base-200 bg-base-50 mt-auto">
 
                     <div className="flex gap-2">
-                        <button
-                            type="button"
-                            className="btn btn-ghost btn-circle btn-sm text-base-content/70 hover:text-base-content"
-                            aria-label="Add image"
-                        ><Image size={20} strokeWidth={1.5} />
-                        </button>
+                        <ImagePicker images={images} onChange={setImages}/>
                     </div>
                     <button
                         type="submit"
