@@ -169,6 +169,7 @@ export class EventRepositoryService {
     eventId: number,
     modifierId: number,
     updateEventDto: UpdateEventDto,
+    images: { id: number; description?: string }[],
   ) {
     const event = await this.prismaService.event.findUnique({
       where: {
@@ -212,12 +213,24 @@ export class EventRepositoryService {
       data.locationId = await this.findLocationId(updateEventDto.location);
     }
 
-    return this.prismaService.event.update({
+    const newEvent = await this.prismaService.event.update({
       where: {
         id: eventId,
       },
       data: data,
     });
+
+    if (images.length > 0) {
+      await this.prismaService.imageEvent.createMany({
+        data: images.map(({ id, description }) => ({
+          eventId: newEvent.id,
+          imageId: id,
+          description: description!,
+        })),
+      });
+    }
+
+    return newEvent;
   }
 
   async findLimited(requesterId: number, page: number) {
@@ -318,7 +331,7 @@ export class EventRepositoryService {
         images: {
           include: {
             image: {
-              select: { url: true },
+              select: { id: true, url: true },
             },
           },
         },
@@ -341,7 +354,7 @@ export class EventRepositoryService {
         images: {
           include: {
             image: {
-              select: { url: true },
+              select: { id:true, url: true },
             },
           },
         },

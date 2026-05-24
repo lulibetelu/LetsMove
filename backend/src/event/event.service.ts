@@ -50,10 +50,24 @@ export class EventService {
     modifierId: number,
     updateEventDto: UpdateEventDto,
   ) {
+    if (updateEventDto.images?.some((image) => !image.description)) {
+      throw new BadRequestException('Cada imagen debe tener una descripción');
+    }
+    const images = await Promise.all(
+      (updateEventDto.images ?? []).map((image) =>
+        Promise.resolve(
+          this.imageService.create(image).then((created) => ({
+            id: created.id,
+            description: image.description,
+          })),
+        ),
+      ),
+    );
     return await this.eventRepositoryService.updateEvent(
       eventId,
       modifierId,
       updateEventDto,
+      images,
     );
   }
 
