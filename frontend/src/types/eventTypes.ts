@@ -68,8 +68,14 @@ export interface UpdateEventRawData{
     isPrivate: boolean,
 }
 
-export type UpdateEventType = Omit<CreateEventType, 'title' | 'type' | 'sport'>
+export type UpdateEventType = Omit<CreateEventType, 'title' | 'type' | 'sportName'>
 
 export interface PendingParticipant extends EventSignUp {
     eventTitle: string;
+}
+
+export interface EventFilters{
+    title : string,
+    host : string,
+    sport : string,
 }

@@ -9,5 +9,6 @@ export function useSports(){
     });
     const sportError = error;
     const sports = data ? data.sports : [];
+
     return {isPending, sportError, sports}
 }

@@ -1,22 +1,34 @@
-import { useEffect, useRef } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { findEvents } from "../api/event.ts";
-import type { EventType } from "../types/eventTypes.ts";
+import {useEffect, useRef, useState} from "react";
+import {useInfiniteQuery} from "@tanstack/react-query";
+import {findEvents} from "../api/event.ts";
+import type {EventFilters, EventType} from "../types/eventTypes.ts";
 import {getCurrentUserId} from "../api/user.ts";
+
+
 
 export function useEvents() {
     const observerRef = useRef<HTMLDivElement>(null);
     const currentUserId = getCurrentUserId();
-        const {
-            data,
-            fetchNextPage,
-            hasNextPage,
-            isFetchingNextPage,
-            isError,
-        } = useInfiniteQuery({
-        queryKey: ["events"],
-        queryFn: async ({ pageParam }) => {
-            const events = await findEvents(pageParam)
+    const [filters, setFilters] = useState<EventFilters>({
+        title: '',
+        host: '',
+        sport: ''
+    });
+
+    const refetchData = (newEventFilters: EventFilters)=> {
+        setFilters(newEventFilters)
+    }
+
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        isError,
+    } = useInfiniteQuery({
+        queryKey: ["events", filters.host,filters.title, filters.sport],
+        queryFn: async ({pageParam}) => {
+            const events = await findEvents(pageParam, filters)
             return events;
         },
         getNextPageParam: (lastPage, allPages) => {
@@ -27,7 +39,7 @@ export function useEvents() {
     });
 
     // const events: EventType[] = data?.pages.flat().filter((event: EventType) => event.hostId !== currentUserId) ?? [];
-    let events: EventType[]  = [];
+    let events: EventType[] = [];
     events = data?.pages.flat().filter((event: EventType) => event.hostId !== currentUserId) ?? [];
 
     useEffect(() => {
@@ -43,5 +55,5 @@ export function useEvents() {
         return () => observer.disconnect();
     }, [hasNextPage, fetchNextPage]);
 
-    return { events, observerRef, error: isError, isFetchingNextPage };
+    return {events, observerRef, error: isError, isFetchingNextPage, refetchData, filters};
 }

@@ -1,11 +1,24 @@
-import type {CreateEventType, EventRawData, UpdateEventRawData, UpdateEventType} from "../types/eventTypes.ts";
+import type {
+    CreateEventType,
+    EventFilters,
+    EventRawData,
+    UpdateEventRawData,
+    UpdateEventType
+} from "../types/eventTypes.ts";
 
 const url = import.meta.env.VITE_API_URL;
 
 
-export async function findEvents(page:number){
+export async function findEvents(page:number, filters:EventFilters){
     const token = localStorage.getItem('token');
-    const response = await fetch(url + `event/limited?page=${page}`, {
+    const params = new URLSearchParams({
+        page: page.toString(),
+        ...(filters.title && { title: filters.title }),
+        ...(filters.host && { host: filters.host }),
+        ...(filters.sport && { sport: filters.sport }),
+    });
+    console.log(params.toString())
+    const response = await fetch(url + `event/limited?${params}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -17,7 +30,6 @@ export async function findEvents(page:number){
         if (Array.isArray(message.message)) throw new Error(message.message[0]);
         else throw new Error(message.message);
     }
-
     return response.json();
 }
 

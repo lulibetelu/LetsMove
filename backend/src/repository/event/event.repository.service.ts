@@ -224,6 +224,7 @@ export class EventRepositoryService {
           },
         }
       : {};
+
     const hostClause = filter.host
       ? {
           host: {
@@ -235,10 +236,24 @@ export class EventRepositoryService {
           },
         }
       : {};
+
+    const sportClause = filter.sport
+      ? {
+          sport: {
+            is: {
+              name: {
+                contains: filter.sport,
+              },
+            },
+          },
+        }
+      : {};
+
     return this.prismaService.event.findMany({
       where: {
         ...titleClause,
         ...hostClause,
+        ...sportClause,
       },
       include: {
         host: {
@@ -256,6 +271,12 @@ export class EventRepositoryService {
           },
         },
         location: true,
+        sport: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         // chat: true,
       },
       take: 15,

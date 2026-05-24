@@ -47,8 +47,15 @@ export class EventController {
   async findLimited(
     @Req() req: Request,
     @Query('page', ParseIntPipe) page: number,
-    @Body() filters: FilterEventDto,
+    @Query('title') title: string,
+    @Query('host') host: string,
+    @Query('sport') sport: string,
   ) {
+    const filters: FilterEventDto = {
+      title: title,
+      host: host,
+      sport: sport,
+    };
     const promise = await this.eventService.findLimited(page, filters);
 
     //No quiero que no me tire un arreglo vacio
