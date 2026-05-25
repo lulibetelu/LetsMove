@@ -7,7 +7,7 @@ import Sidebar from "../components/Sidebar.tsx";
 import {Bell} from "lucide-react";
 import {acceptParticipant, findEventParticipants, findEventsFromHost, rejectParticipant} from "../api/event.ts";
 import type {EventType, PendingParticipant} from "../types/eventTypes.ts";
-import EventParticipantRequest from "../components/EventParticipantRequest.tsx";
+import EventParticipantRequest from "../components/events/EventParticipantRequest.tsx";
 
 export default function NotificationsPage(){
     const [friendRequests, setFriendRequests] = useState<FriendRequestType[]>([]);

@@ -1,10 +1,10 @@
 import Sidebar from "../components/Sidebar.tsx";
 import {Search} from "lucide-react";
 import {useState} from "react";
-import Events from "../components/Events.tsx";
+import Events from "../components/events/Events.tsx";
 import PopUpError from "../components/PopUpError.tsx";
-import NewEvent from "../components/NewEvent.tsx";
-import {useEvents} from "../hooks/useEvents.ts";
+import NewEvent from "../components/create/NewEvent.tsx";
+import {useEvents} from "../hooks/events/useEvents.ts";
 
 export default function EventFeed(){
     const {events, observerRef, error, isFetchingNextPage} = useEvents();
@@ -47,31 +47,33 @@ export default function EventFeed(){
                 </div>
             </main>
             <div className="flex justify-end items-end h-screen">
-                <button type="button"  onClick={() => setShowCreateEventForm(true)} className="
-    fixed bottom-6 right-6
-    w-16 h-16
-    rounded-full
+                <button type="button"
+                        onClick={() => setShowCreateEventForm(true)}
+                        className="
+                            fixed bottom-6 right-6
+                            w-16 h-16
+                            rounded-full
 
-    bg-[#96a55a]
-    hover:bg-[#a8b96a]
+                            bg-[#96a55a]
+                            hover:bg-[#a8b96a]
 
-    text-white
-    text-4xl
+                            text-white
+                            text-4xl
 
-    flex items-center justify-center
+                            flex items-center justify-center
 
-    shadow-lg
-    hover:shadow-2xl
+                            shadow-lg
+                            hover:shadow-2xl
 
-    transition-all duration-300 ease-out
+                            transition-all duration-300 ease-out
 
-    hover:scale-110
-    hover:rotate-90
+                            hover:scale-110
+                            hover:rotate-90
 
-    active:scale-95
+                            active:scale-95
 
-    cursor-pointer
-  "
+                            cursor-pointer
+                          "
                 >+</button>
                 {showCreateEventForm && <NewEvent onClose={() => setShowCreateEventForm(false)} />}
                 </div>

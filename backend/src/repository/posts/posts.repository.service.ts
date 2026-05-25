@@ -10,6 +10,7 @@ export class PostsRepositoryService {
     userId: number,
     createPostDto: CreatePostDto,
     sportMatchByUser: Record<number, number>,
+    imageIds: number[],
   ) {
     // 1. creo el post
     const newPost = await this.prismaService.post.create({
@@ -33,6 +34,15 @@ export class PostsRepositoryService {
         sportMatch,
       })),
     });
+
+    if (imageIds.length > 0) {
+      await this.prismaService.imagePost.createMany({
+        data: imageIds.map((imageId) => ({
+          postId: newPost.id,
+          imageId,
+        })),
+      });
+    }
 
     return newPost;
   }
@@ -62,6 +72,13 @@ export class PostsRepositoryService {
           },
           user: {
             select: { username: true },
+          },
+          imagePosts: {
+            include: {
+              image: {
+                select: { id: true, url: true },
+              },
+            },
           },
         },
         where: { userId: { not: currentUserId } },
@@ -129,6 +146,13 @@ export class PostsRepositoryService {
             username: true,
           },
         },
+        imagePosts: {
+          include: {
+            image: {
+              select: { id: true, url: true },
+            },
+          },
+        },
       },
     });
   }
@@ -177,6 +201,13 @@ export class PostsRepositoryService {
         },
         postSport: {
           select: { sportId: true },
+        },
+        imagePosts: {
+          include: {
+            image: {
+              select: { id: true, url: true },
+            },
+          },
         },
       },
     });

@@ -8,6 +8,7 @@ import { PostsRepositoryService } from '../repository/posts/posts.repository.ser
 import { GetPostDto } from './dto/get-post-dto';
 import { UserRepositoryService } from '../repository/user/user.repository.service';
 import { PreferenceRepositoryService } from '../repository/preference/preference.repository.service';
+import { ImageService } from '../images/image.service';
 
 @Injectable()
 export class PostsService {
@@ -15,6 +16,7 @@ export class PostsService {
     private postsRepository: PostsRepositoryService,
     private userRepository: UserRepositoryService,
     private preferencesRepository: PreferenceRepositoryService,
+    private imageService: ImageService,
   ) {}
 
   async create(id: number, createPostDto: CreatePostDto) {
@@ -28,10 +30,17 @@ export class PostsService {
       },
       {} as Record<number, number>,
     );
+    const imageIds = await Promise.all(
+      (createPostDto.images ?? []).map((image) =>
+        Promise.resolve(this.imageService.create(image)),
+      ),
+    ).then((images) => images.map((image) => image.id));
+
     return await this.postsRepository.create(
       id,
       createPostDto,
       sportMatchByUser,
+      imageIds,
     );
   }
 
@@ -41,12 +50,14 @@ export class PostsService {
     //   throw new NotFoundException(`User ${currentUserId} doesn't have posts`);
     // }
     return posts.map((post) => {
-      const { postsLiked, postsDisliked, postSport, ...postData } = post;
+      const { postsLiked, postsDisliked, postSport, imagePosts, ...postData } =
+        post;
       return new GetPostDto(
         postData,
         postsLiked.length === 1,
         postsDisliked.length === 1,
         postSport.map((ps) => ps.sportId),
+        imagePosts,
       );
     });
   }
@@ -86,12 +97,14 @@ export class PostsService {
     }
 
     return posts.map((post) => {
-      const { postsLiked, postsDisliked, postSport, ...postData } = post;
+      const { postsLiked, postsDisliked, postSport, imagePosts, ...postData } =
+        post;
       return new GetPostDto(
         postData,
         postsLiked.length === 1,
         postsDisliked.length === 1,
         postSport.map((ps) => ps.sportId),
+        imagePosts,
       );
     });
   }

@@ -22,9 +22,11 @@ export class PostsController {
 
   @UseGuards(AuthGuard)
   @Post()
-  create(@Req() req: Request, @Body() createPostDto: CreatePostDto) {
+  async create(@Req() req: Request, @Body() createPostDto: CreatePostDto) {
     const userId = req.user.sub;
-    return this.postsService.create(userId, createPostDto);
+    const promise = await this.postsService.create(userId, createPostDto);
+    if (!promise) throw new NotFoundException("Couldn't create post");
+    return promise;
   }
 
   @UseGuards(AuthGuard)
@@ -36,8 +38,7 @@ export class PostsController {
     const userId = req.user.sub;
     const promise = await this.postsService.findAll(userId, page);
 
-    if (!promise)
-      throw new NotFoundException('posts not found');
+    if (!promise) throw new NotFoundException('posts not found');
     return promise;
   }
 

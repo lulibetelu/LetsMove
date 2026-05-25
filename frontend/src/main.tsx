@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
     createBrowserRouter, Navigate,
@@ -10,7 +9,6 @@ const queryClient = new QueryClient();
 import RegisterPage from "./pages/RegisterPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import ChooseInterestsPage from "./pages/ChooseInterestsPage.tsx";
-import TestPage from "./pages/TestPage.tsx";
 import Homepage from './pages/Homepage.tsx';
 import Profile from "./pages/Profile.tsx";
 import NotificationsPage from "./pages/NotificationsPage.tsx";
@@ -36,10 +34,6 @@ const router = createBrowserRouter([
     {
         path: "/interests",
         element: <ChooseInterestsPage/>
-    },
-    {
-        path: "/test",
-        element: <TestPage/>
     },
     {
         path: "/homepage",

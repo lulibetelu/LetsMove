@@ -1,13 +1,16 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateEventDto } from './create-event.dto';
 import {
+  IsArray,
   IsBoolean,
   IsDate,
   IsNotEmpty,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { CreateImageDto } from '../../images/dto/create-image.dto';
 
 export class UpdateEventDto extends PartialType(CreateEventDto) {
   @IsNotEmpty()
@@ -21,10 +24,11 @@ export class UpdateEventDto extends PartialType(CreateEventDto) {
   @IsOptional()
   startingDate?: Date;
 
-  @IsDate()
-  @IsString()
   @IsOptional()
-  imageUrl?: string;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateImageDto)
+  images?: CreateImageDto[];
 
   @IsOptional()
   @IsString()
