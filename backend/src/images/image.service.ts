@@ -18,6 +18,11 @@ export class ImageService {
           'El contenido no tiene un formato Base64 válido',
         );
       }
+      if (!content) {
+        throw new BadRequestException(
+          'El contenido no tiene un formato Base64 válido',
+        );
+      }
       const mimeType = prefix.split(':')[1].split(';')[0];
       const uint8Array = new Uint8Array(Buffer.from(content, 'base64'));
       return this.imageRepository.create({ content: uint8Array, mimeType });

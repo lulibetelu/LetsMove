@@ -5,11 +5,9 @@ import {
   Param,
   ParseIntPipe,
   Res,
-  UseGuards,
 } from '@nestjs/common';
 import { ImageService } from './image.service';
-import { AuthGuard } from '../authentication/auth.guard';
-import type {Response} from 'express';
+import type { Response } from 'express';
 
 @Controller('image')
 export class ImageController {

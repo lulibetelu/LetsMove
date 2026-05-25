@@ -26,7 +26,7 @@ export class EventController {
   async create(@Req() req: Request, @Body() createEventDto: CreateEventDto) {
     const hostId: number = req.user.sub;
     const promise = await this.eventService.create(hostId, createEventDto);
-    if (!promise) throw new NotFoundException('No events found');
+    if (!promise) throw new NotFoundException("Couldn't create event");
 
     return promise;
   }

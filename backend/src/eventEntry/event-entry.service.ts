@@ -46,10 +46,12 @@ export class EventEntryService {
 
   async delete(entryId: number, userId: number) {
     const event = await this.eventRepositoryService.getEventEntry(entryId);
-    if (event === null) throw new NotFoundException('Entry not found');
+    if (event === null) throw new NotFoundException('Event not found');
+
     const entry = await this.eventRepositoryService.getEventEntry(entryId);
     if (entry === null) throw new NotFoundException('Entry not found');
-    if (entry.userId != userId)
+
+    if (entry.userId != userId || entry.userId != event.userId)
       throw new UnauthorizedException('Only creator can delete');
     return this.eventRepositoryService.deleteEventEntry(entryId);
   }

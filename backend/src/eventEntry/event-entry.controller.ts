@@ -21,11 +21,9 @@ export class EventEntryController {
   constructor(private eventEntryService: EventEntryService) {}
   @UseGuards(AuthGuard)
   @Post()
-  async create(@Req() req: Request, @Body() entryDto: CreateEventEntryDto) {
+  create(@Req() req: Request, @Body() entryDto: CreateEventEntryDto) {
     const user = req.user.sub;
-    const promise = await this.eventEntryService.create(user, entryDto);
-    if (!promise) throw new NotFoundException('No events found');
-    return promise;
+    return this.eventEntryService.create(user, entryDto);
   }
 
   @UseGuards(AuthGuard)
@@ -42,20 +40,16 @@ export class EventEntryController {
 
   @UseGuards(AuthGuard)
   @Get('/event/:eventId')
-  async getEntries(
+  getEntries(
     @Param('eventId', ParseIntPipe) eventId: number,
     @Query('page', ParseIntPipe) page: number,
   ) {
-    const promise = await this.eventEntryService.getEntries(eventId, page);
-    if (!promise) throw new NotFoundException('No events found');
-    return promise;
+    return this.eventEntryService.getEntries(eventId, page);
   }
 
   @UseGuards(AuthGuard)
   @Get('/:id')
-  async getOneEntry(@Param('id', ParseIntPipe) entryId: number) {
-    const promise = await this.eventEntryService.getOneEntry(entryId);
-    if (!promise) throw new NotFoundException('No events found');
-    return promise;
+  getOneEntry(@Param('id', ParseIntPipe) entryId: number) {
+    return this.eventEntryService.getOneEntry(entryId);
   }
 }
