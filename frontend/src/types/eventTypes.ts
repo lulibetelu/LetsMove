@@ -60,7 +60,7 @@ export interface UpdateEventRawData{
     startingDate: string,
     endingDate: string | undefined,
     location: string | undefined,
-    images?: ImageInput[]
+    images?: ImageInput[],
     isPrivate: boolean,
 }
 

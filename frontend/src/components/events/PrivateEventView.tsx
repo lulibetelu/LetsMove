@@ -112,7 +112,7 @@ export default function PrivateEventView({event}: Props) {
             {/* Cover */}
             <div className="relative w-full h-64 rounded-2xl overflow-hidden mb-6">
                 {coverImage ? (
-                    <img src={coverImage.image.url?? `${url}image/${coverImage.image.id}` } alt={event.title} className="w-full h-full object-cover"/>
+                    <img src={coverImage.image.url ?? `${url}image/${coverImage.image.id}` } alt={event.title} className="w-full h-full object-cover"/>
                 ) : (
                     <div className="w-full h-full" style={{background: "linear-gradient(135deg, #8A9A5B 0%, #6b7a46 100%)"}}>
                         <div className="absolute inset-0 flex items-center justify-center opacity-10">
