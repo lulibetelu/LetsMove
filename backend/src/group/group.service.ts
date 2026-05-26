@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { GroupRepositoryService } from '../repository/groups/group.repository.service';
@@ -26,9 +30,15 @@ export class GroupService {
     return groups;
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, userId: number) {
     const group = await this.groupRepository.findOne(id);
     if (!group) throw new NotFoundException('group not found');
+
+    const groupMembers = await this.groupRepository.getMembers(id);
+    const membersId = groupMembers.map((member) => member.userId);
+    if (!membersId.includes(userId))
+      throw new UnauthorizedException('user not in group');
+
     return group;
   }
 
@@ -42,9 +52,19 @@ export class GroupService {
     return this.groupRepository.update(id, updateGroupDto);
   }
 
-  async remove(id: number) {
+  async remove(id: number, userId: number) {
     const group = await this.groupRepository.findOne(id);
     if (!group) throw new NotFoundException('group not found');
+
+    const groupMembers = await this.groupRepository.getMembers(id);
+    const membersId = groupMembers.map((member) => member.userId);
+    if (!membersId.includes(userId))
+      throw new UnauthorizedException('user not in group');
+    else {
+      const user = groupMembers.find((member) => member.userId === userId);
+      if (!user?.isAdmin)
+        throw new UnauthorizedException('only admin can delete');
+    }
     return this.groupRepository.delete(id);
   }
 }

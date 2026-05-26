@@ -7,7 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req, ParseIntPipe,
+  Req,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
@@ -27,16 +28,20 @@ export class GroupController {
   }
 
   @UseGuards(AuthGuard)
-  @Get('/:userId')
-  findAll(@Param('userId', ParseIntPipe) userId: number) {
+  @Get()
+  findAll(@Req() req: Request) {
+    const userId = req.user.sub;
     return this.groupsService.findAll(userId);
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.groupsService.findOne(id);
+  findOne(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
+    const userId = req.user.sub;
+    return this.groupsService.findOne(id, userId);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -45,6 +50,7 @@ export class GroupController {
     return this.groupsService.update(id, updateGroupDto);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.groupsService.remove(id);

@@ -101,4 +101,12 @@ export class GroupRepositoryService {
       },
     });
   }
+
+  async getMembers(groupId: number) {
+    return this.prismaService.groupMember.findMany({
+      where: {
+        groupId: groupId,
+      },
+    });
+  }
 }

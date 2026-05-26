@@ -1,10 +1,11 @@
 import {
+  ArrayMinSize,
   IsArray,
   IsDefined,
-  IsNumber,
+  IsInt,
   IsOptional,
   IsString,
-  MinLength,
+  ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateImageDto } from '../../images/dto/create-image.dto';
@@ -20,11 +21,12 @@ export class CreateGroupDto {
 
   @IsOptional()
   @Type(() => CreateImageDto)
+  @ValidateNested()
   image?: CreateImageDto;
 
-  @IsNumber()
   @IsDefined()
   @IsArray()
-  @MinLength(1)
+  @ArrayMinSize(1)
+  @IsInt({ each: true })
   members: number[];
 }
