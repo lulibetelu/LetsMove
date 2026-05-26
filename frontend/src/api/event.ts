@@ -20,7 +20,6 @@ export async function findEvents(page:number, filters:EventFilters){
         ...(filters.host && { host: filters.host }),
         ...(filters.sport && { sport: filters.sport }),
     });
-    console.log(params.toString())
     const response = await fetch(url + `event/limited?${params}`, {
         method: 'GET',
         headers: {
