@@ -37,6 +37,8 @@ model User {
   events Event[]
   eventSignUp EventSignUp[]
   eventEntries EventEntry[]
+
+  groupMember GroupMember[]
 }
 
 model Sport {
@@ -162,6 +164,7 @@ model Image{
   imagePosts ImagePost[]
   imageEvents ImageEvent[]
   imageEntry ImageEntry[]
+  imageGroup Group[]
 }
 
 model ImagePost{
@@ -241,3 +244,21 @@ model ImageEntry {
   entry       EventEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
 }
 
+model Group {
+  id  Int @id @default(autoincrement())
+  name String
+  description String
+  imageId Int
+  image Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  groupMembers GroupMember[]
+}
+
+model GroupMember {
+  id Int @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  groupId Int
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  isAdmin Boolean
+  @@unique([groupId, userId])
+}
