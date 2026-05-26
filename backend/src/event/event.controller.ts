@@ -24,9 +24,12 @@ export class EventController {
   constructor(private readonly eventService: EventService) {}
   @UseGuards(AuthGuard)
   @Post()
-  create(@Req() req: Request, @Body() createEventDto: CreateEventDto) {
+  async create(@Req() req: Request, @Body() createEventDto: CreateEventDto) {
     const hostId: number = req.user.sub;
-    return this.eventService.create(hostId, createEventDto);
+    const promise = await this.eventService.create(hostId, createEventDto);
+    if (!promise) throw new NotFoundException("Couldn't create event");
+
+    return promise;
   }
 
   @UseGuards(AuthGuard)

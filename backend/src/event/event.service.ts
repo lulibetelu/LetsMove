@@ -1,16 +1,36 @@
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { EventRepositoryService } from '../repository/event/event.repository.service';
-import { Injectable } from '@nestjs/common';
 import { FilterEventDto } from './dto/filter-event.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { ImageService } from '../images/image.service';
 
 @Injectable()
 export class EventService {
-  constructor(private eventRepositoryService: EventRepositoryService) {}
+  constructor(
+    private eventRepositoryService: EventRepositoryService,
+    private imageService: ImageService,
+  ) {}
   async create(hostId: number, createEventDto: CreateEventDto) {
+    if (createEventDto.images?.some((image) => !image.description)) {
+      throw new BadRequestException('Cada imagen debe tener una descripción');
+    }
+
+    const images = await Promise.all(
+      (createEventDto.images ?? []).map((image) =>
+        Promise.resolve(
+          this.imageService.create(image).then((created) => ({
+            id: created.id,
+            description: image.description,
+          })),
+        ),
+      ),
+    );
+
     return await this.eventRepositoryService.createEvent(
       hostId,
       createEventDto,
+      images,
     );
   }
 
@@ -31,10 +51,24 @@ export class EventService {
     modifierId: number,
     updateEventDto: UpdateEventDto,
   ) {
+    if (updateEventDto.images?.some((image) => !image.description)) {
+      throw new BadRequestException('Cada imagen debe tener una descripción');
+    }
+    const images = await Promise.all(
+      (updateEventDto.images ?? []).map((image) =>
+        Promise.resolve(
+          this.imageService.create(image).then((created) => ({
+            id: created.id,
+            description: image.description,
+          })),
+        ),
+      ),
+    );
     return await this.eventRepositoryService.updateEvent(
       eventId,
       modifierId,
       updateEventDto,
+      images,
     );
   }
 

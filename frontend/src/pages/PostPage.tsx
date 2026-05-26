@@ -1,10 +1,10 @@
 import {useLocation, useNavigate} from "react-router-dom";
-import Post from "../components/Post.tsx";
+import Post from "../components/posts/Post.tsx";
 import {useEffect, useState} from "react";
 import type {CommentRequestType} from "../types/commentTypes.ts";
 import {eliminateCommentApi, findAllComments} from "../api/comment.ts";
 import PopUpError from "../components/PopUpError.tsx";
-import Comment from "../components/Comment.tsx";
+import CommentButton from "../components/buttons/CommentButton.tsx";
 
 export default function PostPage(){
     const [loading, setLoading] = useState(true);
@@ -77,9 +77,9 @@ export default function PostPage(){
                 <div className="bg-base-100 shadow-xl rounded-2xl p-4 flex flex-col gap-4">
 
                     <h3 className="text-lg font-semibold">Comments</h3>
-                    {/* Comment 1 */}
+                    {/* CommentButton 1 */}
                     {comments?.comments.map(comment =>
-                        <Comment key={comment.id} id={comment.id} user={comment.user.username} content={comment.content} handleClick={eliminateComment}/>
+                        <CommentButton key={comment.id} id={comment.id} user={comment.user.username} content={comment.content} handleClick={eliminateComment}/>
                     )}
 
                 </div>

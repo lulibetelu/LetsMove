@@ -1,12 +1,7 @@
 import type {User} from "./userTypes.ts";
 import type {LocationType} from "./fileTypes.ts";
+import type {ImageEvent, ImageInput, ImageRelation} from "./imageType.ts";
 
-export interface ImageEvent {
-    description: string;
-    image: {
-        url: string;
-    };
-}
 
 export interface EventType{
     id: number,
@@ -44,6 +39,7 @@ export interface EventRawData {
     location: string | undefined,
     isPrivate: boolean,
     sport: string
+    images?: ImageInput[]
 }
 
 export interface CreateEventType {
@@ -55,6 +51,7 @@ export interface CreateEventType {
     location?: string,
     isPrivate: boolean,
     sportName: string
+    images?: ImageInput[]
 
 }
 export interface UpdateEventRawData{
@@ -65,6 +62,7 @@ export interface UpdateEventRawData{
     startingDate: string,
     endingDate: string | undefined,
     location: string | undefined,
+    images?: ImageInput[],
     isPrivate: boolean,
 }
 
@@ -78,4 +76,18 @@ export interface EventFilters{
     title : string,
     host : string,
     sport : string,
+}
+
+
+export interface EventEntry {
+    id: number;
+    eventId: number;
+    userId: number;
+    content: string;
+    createdAt: Date;
+    images: ImageRelation[];
+    user: {
+        id: number;
+        username: string;
+    };
 }

@@ -5,6 +5,7 @@ import { PostsRepositoryModule } from '../repository/posts/posts.repository.modu
 import { LikeModule } from '../like/like.module';
 import { UserRepositoryModule } from '../repository/user/user.repository.module';
 import { PreferenceRepositoryModule } from '../repository/preference/preference.repository.module';
+import { ImageModule } from '../images/image.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { PreferenceRepositoryModule } from '../repository/preference/preference.
     LikeModule,
     UserRepositoryModule,
     PreferenceRepositoryModule,
+    ImageModule,
   ],
   controllers: [PostsController],
   providers: [PostsService],

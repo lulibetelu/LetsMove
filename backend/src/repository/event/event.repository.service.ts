@@ -7,6 +7,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateEventDto } from '../../event/dto/create-event.dto';
 import { EventType, Location } from '@prisma/client';
 import { UpdateEventDto } from '../../event/dto/update-event.dto';
+import { CreateEventEntryDto } from '../../eventEntry/dto/create-event-entry-dto';
 import { EventSignUpRepositoryService } from '../eventSignUp/event-sign-up.repository.service';
 import { EventSignUp } from '../../event-sign-up/entities/event-sign-up.entity';
 import { FilterEventDto } from '../../event/dto/filter-event.dto';
@@ -18,7 +19,11 @@ export class EventRepositoryService {
     private eventSignupRepositoryService: EventSignUpRepositoryService,
   ) {}
 
-  async createEvent(hostId: number, createEventDto: CreateEventDto) {
+  async createEvent(
+    hostId: number,
+    createEventDto: CreateEventDto,
+    images: { id: number; description?: string }[],
+  ) {
     //Se puede mejorar
     let locationId: number | null;
     if (
@@ -38,7 +43,6 @@ export class EventRepositoryService {
       if (location === null) throw new BadRequestException('no such location');
       locationId = location.id;
     }
-
     if (!createEventDto.sportName)
       throw new BadRequestException('sport name is missing');
 
@@ -50,7 +54,8 @@ export class EventRepositoryService {
 
     if (!sport) throw new BadRequestException('no such sport');
 
-    return this.prismaService.event.create({
+
+    const event = await this.prismaService.event.create({
       data: {
         hostId: hostId,
         title: createEventDto.title,
@@ -66,15 +71,27 @@ export class EventRepositoryService {
         sportId: sport.id,
       },
     });
+
+    if (images.length > 0) {
+      await this.prismaService.imageEvent.createMany({
+        data: images.map(({ id, description }) => ({
+          eventId: event.id,
+          imageId: id,
+          description: description!,
+        })),
+      });
+    }
+
+    return event;
   }
-  //TODO test create with sport in postman. Afet that, add that in front.
+
   async findAll(requesterId: number) {
     return this.prismaService.event.findMany({
       include: {
         imageEvents: {
           include: {
             image: {
-              select: { url: true },
+              select: { id: true, url: true },
             },
           },
         },
@@ -106,7 +123,7 @@ export class EventRepositoryService {
         imageEvents: {
           include: {
             image: {
-              select: { url: true },
+              select: { id: true, url: true },
             },
           },
         },
@@ -132,7 +149,7 @@ export class EventRepositoryService {
         imageEvents: {
           include: {
             image: {
-              select: { url: true },
+              select: { id: true, url: true },
             },
           },
         },
@@ -165,6 +182,7 @@ export class EventRepositoryService {
     eventId: number,
     modifierId: number,
     updateEventDto: UpdateEventDto,
+    images: { id: number; description?: string }[],
   ) {
     const event = await this.prismaService.event.findUnique({
       where: {
@@ -208,12 +226,24 @@ export class EventRepositoryService {
       data.locationId = await this.findLocationId(updateEventDto.location);
     }
 
-    return this.prismaService.event.update({
+    const newEvent = await this.prismaService.event.update({
       where: {
         id: eventId,
       },
       data: data,
     });
+
+    if (images.length > 0) {
+      await this.prismaService.imageEvent.createMany({
+        data: images.map(({ id, description }) => ({
+          eventId: newEvent.id,
+          imageId: id,
+          description: description!,
+        })),
+      });
+    }
+
+    return newEvent;
   }
 
   async findLimited(page: number, filter: FilterEventDto = {}) {
@@ -266,7 +296,7 @@ export class EventRepositoryService {
         imageEvents: {
           include: {
             image: {
-              select: { url: true },
+              select: { id: true, url: true },
             },
           },
         },
@@ -321,6 +351,87 @@ export class EventRepositoryService {
       },
       take: 10,
       skip: (page - 1) * 10,
+    });
+  }
+  async createEventEntry(
+    userId: number,
+    eventEntryDto: CreateEventEntryDto,
+    imageIds: number[],
+  ) {
+    const eventEntry = await this.prismaService.eventEntry.create({
+      data: {
+        eventId: eventEntryDto.eventId,
+        userId: userId,
+        content: eventEntryDto.content,
+      },
+    });
+
+    if (imageIds.length > 0) {
+      await this.prismaService.imageEntry.createMany({
+        data: imageIds.map((imageId) => ({
+          imageId,
+          entryId: eventEntry.id,
+        })),
+      });
+    }
+
+    return eventEntry;
+  }
+
+  async getEventEntry(entryId: number) {
+    return this.prismaService.eventEntry.findUnique({
+      where: {
+        id: entryId,
+      },
+      include: {
+        images: {
+          include: {
+            image: {
+              select: { id: true, url: true },
+            },
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getEntries(eventId: number, page: number) {
+    return this.prismaService.eventEntry.findMany({
+      where: {
+        eventId: eventId,
+      },
+      include: {
+        images: {
+          include: {
+            image: {
+              select: { id:true, url: true },
+            },
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
+      take: 10,
+      skip: (page - 1) * 10,
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async deleteEventEntry(entryId: number) {
+    return this.prismaService.eventEntry.delete({
+      where: {
+        id: entryId,
+      },
     });
   }
 }

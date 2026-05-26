@@ -4,8 +4,12 @@ import {
   IsArray,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+import { CreateImageDto } from '../../images/dto/create-image.dto';
 
 export class CreatePostDto {
   @IsString()
@@ -18,4 +22,10 @@ export class CreatePostDto {
   @ArrayUnique()
   @IsInt({ each: true })
   selectedSportsId: number[];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateImageDto)
+  images?: CreateImageDto[];
 }

@@ -3,7 +3,7 @@ import type {LoginCredentials} from "../types/userTypes.ts";
 import {loginUser} from "../api/user.ts";
 import {Link, useNavigate} from "react-router-dom";
 import PopUpError from "../components/PopUpError.tsx";
-import CustomInput from "../components/CustomInput.tsx";
+import CustomInput from "../components/create/CustomInput.tsx";
 import {LogIn} from "lucide-react";
 
 export default function LoginPage(){
