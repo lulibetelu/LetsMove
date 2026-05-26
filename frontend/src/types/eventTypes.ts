@@ -38,6 +38,7 @@ export interface EventRawData {
     endingDate: string,
     location: string | undefined,
     isPrivate: boolean,
+    sport: string
     images?: ImageInput[]
 }
 
@@ -49,6 +50,7 @@ export interface CreateEventType {
     endingDate?: Date,
     location?: string,
     isPrivate: boolean,
+    sportName: string
     images?: ImageInput[]
 
 }
@@ -64,10 +66,16 @@ export interface UpdateEventRawData{
     isPrivate: boolean,
 }
 
-export type UpdateEventType = Omit<CreateEventType, 'title' | 'type'>
+export type UpdateEventType = Omit<CreateEventType, 'title' | 'type' | 'sportName'>
 
 export interface PendingParticipant extends EventSignUp {
     eventTitle: string;
+}
+
+export interface EventFilters{
+    title : string,
+    host : string,
+    sport : string,
 }
 
 

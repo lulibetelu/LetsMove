@@ -3,6 +3,9 @@ import {useState} from "react";
 import PopUpError from "../PopUpError.tsx";
 import {createEvent} from "../../api/event.ts";
 import type {EventRawData} from "../../types/eventTypes.ts";
+import Dropdown from "../Dropdown.tsx";
+import {useSports} from "../../hooks/useSports.ts";
+import {sportsToString} from "../../resusable-functions/sportFunctions.ts";
 import type {ImageInput} from "../../types/imageType.ts";
 import ImagePicker from "../ImagePicker.tsx";
 
@@ -18,15 +21,22 @@ export default function NewEvent(props: Props){
     const [endingDate, setEndingDate] = useState("");
     const [location, setLocation] = useState<string>("");
     const [isPrivate, setIsPrivate] = useState(false);
+    const [sport, setSport] = useState<string>("");
     const [error, setError] = useState<boolean>();
+    const {sports, isPending, sportError} = useSports();
+
     const [images, setImages] = useState<ImageInput[]>([])
 
     const checkData = (data:EventRawData) => {
-        if (title.length === 0 || description.length === 0 || type.length === 0 || startingDate.length === 0) return false;
+        if (title.length === 0 || description.length === 0 || type.length === 0 || startingDate.length === 0 || sport.length === 0) return false;
 
         if (data.type === "InPerson" && location.length === 0) return false;
 
         return !(data.type === "Asynchronous" && endingDate.length === 0 && isPrivate);
+    }
+
+    const handleSportChange = (sport: string) => {
+        setSport(sport);
     }
 
 
@@ -40,6 +50,7 @@ export default function NewEvent(props: Props){
             endingDate: endingDate,
             location: location,
             isPrivate: isPrivate,
+            sport: sport,
             images: images,
         }
         if (!checkData(data)) {
@@ -111,6 +122,8 @@ return (
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 </div>
+
+                <Dropdown dataList={sportsToString(sports)} error={sportError} isPending={isPending} value={sport} handleChange={handleSportChange}/>
 
                 {/* Event Type */}
                 <div>

@@ -25,6 +25,10 @@ export class CreateEventDto {
   @IsDate()
   startingDate: Date;
 
+  @IsNotEmpty()
+  @IsString()
+  sportName: string;
+
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })

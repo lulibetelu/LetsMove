@@ -10,6 +10,7 @@ import { UpdateEventDto } from '../../event/dto/update-event.dto';
 import { CreateEventEntryDto } from '../../eventEntry/dto/create-event-entry-dto';
 import { EventSignUpRepositoryService } from '../eventSignUp/event-sign-up.repository.service';
 import { EventSignUp } from '../../event-sign-up/entities/event-sign-up.entity';
+import { FilterEventDto } from '../../event/dto/filter-event.dto';
 
 @Injectable()
 export class EventRepositoryService {
@@ -42,6 +43,17 @@ export class EventRepositoryService {
       if (location === null) throw new BadRequestException('no such location');
       locationId = location.id;
     }
+    if (!createEventDto.sportName)
+      throw new BadRequestException('sport name is missing');
+
+    const sport = await this.prismaService.sport.findUnique({
+      where: {
+        name: createEventDto.sportName,
+      },
+    });
+
+    if (!sport) throw new BadRequestException('no such sport');
+
 
     const event = await this.prismaService.event.create({
       data: {
@@ -56,6 +68,7 @@ export class EventRepositoryService {
           createEventDto.type === 'Asynchronous'
             ? EventType.Asynchronous
             : EventType.InPerson,
+        sportId: sport.id,
       },
     });
 
@@ -233,8 +246,45 @@ export class EventRepositoryService {
     return newEvent;
   }
 
-  async findLimited(requesterId: number, page: number) {
+  async findLimited(page: number, filter: FilterEventDto = {}) {
+    const titleClause = filter.title
+      ? {
+          title: {
+            contains: filter.title,
+          },
+        }
+      : {};
+
+    const hostClause = filter.host
+      ? {
+          host: {
+            is: {
+              username: {
+                contains: filter.host,
+              },
+            },
+          },
+        }
+      : {};
+
+    const sportClause = filter.sport
+      ? {
+          sport: {
+            is: {
+              name: {
+                contains: filter.sport,
+              },
+            },
+          },
+        }
+      : {};
+
     return this.prismaService.event.findMany({
+      where: {
+        ...titleClause,
+        ...hostClause,
+        ...sportClause,
+      },
       include: {
         host: {
           select: {
@@ -251,6 +301,12 @@ export class EventRepositoryService {
           },
         },
         location: true,
+        sport: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         // chat: true,
       },
       take: 15,

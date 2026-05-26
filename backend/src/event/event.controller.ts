@@ -17,6 +17,7 @@ import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { AuthGuard } from '../authentication/auth.guard';
 import type { Request } from 'express';
+import { FilterEventDto } from './dto/filter-event.dto';
 
 @Controller('event')
 export class EventController {
@@ -49,9 +50,16 @@ export class EventController {
   async findLimited(
     @Req() req: Request,
     @Query('page', ParseIntPipe) page: number,
+    @Query('title') title: string,
+    @Query('host') host: string,
+    @Query('sport') sport: string,
   ) {
-    const requesterId: number = req.user.sub;
-    const promise = await this.eventService.findLimited(requesterId, page);
+    const filters: FilterEventDto = {
+      title: title,
+      host: host,
+      sport: sport,
+    };
+    const promise = await this.eventService.findLimited(page, filters);
 
     //No quiero que no me tire un arreglo vacio
     if (!promise) throw new NotFoundException();

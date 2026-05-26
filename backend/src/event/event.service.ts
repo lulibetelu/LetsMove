@@ -1,6 +1,7 @@
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { EventRepositoryService } from '../repository/event/event.repository.service';
+import { FilterEventDto } from './dto/filter-event.dto';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ImageService } from '../images/image.service';
 
@@ -71,8 +72,8 @@ export class EventService {
     );
   }
 
-  async findLimited(requesterId: number, page: number) {
-    return this.eventRepositoryService.findLimited(requesterId, page);
+  async findLimited(page: number, filters: FilterEventDto) {
+    return this.eventRepositoryService.findLimited(page, filters);
   }
 
   async remove(id: number, removerId: number) {
