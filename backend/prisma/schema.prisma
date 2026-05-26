@@ -248,8 +248,8 @@ model Group {
   id  Int @id @default(autoincrement())
   name String
   description String
-  imageId Int
-  image Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  imageId Int?
+  image Image? @relation(fields: [imageId], references: [id], onDelete: Cascade)
   groupMembers GroupMember[]
 }
 
