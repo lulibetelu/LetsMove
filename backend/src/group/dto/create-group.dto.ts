@@ -29,4 +29,5 @@ export class CreateGroupDto {
   @ArrayMinSize(1)
   @IsInt({ each: true })
   members: number[];
+  // el author debe estar incluido aca
 }
