@@ -16,7 +16,6 @@ import ErrorPage from "./pages/ErrorPage.tsx";
 import PostPage from "./pages/PostPage.tsx";
 import EventFeed from "./pages/EventFeed.tsx";
 import EventPage from "./pages/EventPage.tsx";
-import Group from "./pages/GroupPage.tsx";
 import GroupPage from "./pages/GroupPage.tsx";
 
 //define a partir de donde le pegué en la URL qué componente va a renderizar react
