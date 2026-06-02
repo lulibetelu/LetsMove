@@ -12,11 +12,11 @@ import { Member } from '../entities/group.entity';
 export class UpdateGroupDto {
   @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
   @IsOptional()
   @IsString()
-  description: string;
+  description?: string;
 
   @IsOptional()
   @Type(() => CreateImageDto)
