@@ -13,7 +13,7 @@ import { Member } from '../entities/group.entity';
 export class CreateGroupDto {
   @IsString()
   @IsDefined()
-  title: string;
+  name: string;
 
   @IsString()
   @IsDefined()

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -15,27 +16,29 @@ export class GroupService {
     private imageService: ImageService,
   ) {}
   async create(createGroupDto: CreateGroupDto, userId: number) {
+    const creator = createGroupDto.members.find(
+      (member) => member.memberId === userId,
+    );
+    if (!creator || !creator.isAdmin)
+      throw new BadRequestException(
+        'Group author must be in members list and must be admin',
+      );
     if (createGroupDto.image) {
       const image = await this.imageService.create(createGroupDto.image);
-      return this.groupRepository.create(createGroupDto, userId, image.id);
+      return this.groupRepository.create(createGroupDto, image.id);
     }
-    return this.groupRepository.create(createGroupDto, userId);
+    return this.groupRepository.create(createGroupDto);
   }
 
   async findAll(userId: number) {
-    const groups = await this.groupRepository.findAll(userId);
-    if (!groups || groups.length === 0) {
-      throw new NotFoundException("user doesn't have groups");
-    }
-    return groups;
+    return this.groupRepository.findAll(userId);
   }
 
   async findOne(id: number, userId: number) {
     const group = await this.groupRepository.findOne(id);
     if (!group) throw new NotFoundException('group not found');
 
-    const groupMembers = await this.groupRepository.getMembers(id);
-    const membersId = groupMembers.map((member) => member.userId);
+    const membersId = group.groupMembers.map((member) => member.userId);
     if (!membersId.includes(userId))
       throw new UnauthorizedException('user not in group');
 

@@ -11,7 +11,7 @@ export class GroupRepositoryService {
   async create(createGroupDto: CreateGroupDto, imageId?: number) {
     const group = await this.prismaService.group.create({
       data: {
-        name: createGroupDto.title,
+        name: createGroupDto.name,
         description: createGroupDto.description,
         ...(imageId ? { imageId } : {}),
       } as Prisma.GroupUncheckedCreateInput,
@@ -38,6 +38,14 @@ export class GroupRepositoryService {
   async findOne(groupId: number) {
     return this.prismaService.group.findUnique({
       where: { id: groupId },
+      include: {
+        groupMembers: {
+          select: {
+            userId: true,
+            isAdmin: true,
+          },
+        },
+      },
     });
   }
 
@@ -49,7 +57,7 @@ export class GroupRepositoryService {
     const updatedGroup = await this.prismaService.group.update({
       where: { id: groupId },
       data: {
-        ...(updateGroupDto.title && { name: updateGroupDto.title }),
+        ...(updateGroupDto.name && { name: updateGroupDto.name }),
         ...(updateGroupDto.description && {
           description: updateGroupDto.description,
         }),

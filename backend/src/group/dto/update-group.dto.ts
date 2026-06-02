@@ -9,11 +9,10 @@ import { Type } from 'class-transformer';
 import { CreateImageDto } from '../../images/dto/create-image.dto';
 import { Member } from '../entities/group.entity';
 
-
 export class UpdateGroupDto {
   @IsOptional()
   @IsString()
-  title: string;
+  name: string;
 
   @IsOptional()
   @IsString()
