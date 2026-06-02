@@ -53,8 +53,7 @@ export class GroupService {
     const group = await this.groupRepository.findOne(groupId);
     if (!group) throw new NotFoundException('group not found');
 
-    const groupMembers = await this.groupRepository.getMembers(groupId);
-    if (!groupMembers.find((member) => member.userId === userId)?.isAdmin)
+    if (!group.groupMembers.find((member) => member.userId === userId)?.isAdmin)
       throw new UnauthorizedException('only admin can edit group');
 
     if (updateGroupDto.image) {
@@ -69,8 +68,7 @@ export class GroupService {
     const group = await this.groupRepository.findOne(groupId);
     if (!group) throw new NotFoundException('group not found');
 
-    const groupMembers = await this.groupRepository.getMembers(groupId);
-    if (!groupMembers.find((member) => member.userId === userId)?.isAdmin)
+    if (!group.groupMembers.find((member) => member.userId === userId)?.isAdmin)
       throw new UnauthorizedException('only admin can delete group');
 
     return this.groupRepository.delete(groupId);
