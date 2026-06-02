@@ -74,9 +74,9 @@ export default function NewGroup({ onClose, onGroupCreated }: NewGroupProps) {
                     <h2 className="text-lg font-bold text-white/90">New Group</h2>
                     <button
                         type="button"
+                        aria-label="Close"
                         onClick={onClose}
                         className="p-1 rounded-full hover:bg-white/10 transition-colors text-white/30 hover:text-white/60"
-                    >
                         <X size={20} />
                     </button>
                 </div>
