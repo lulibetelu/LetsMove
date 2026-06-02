@@ -80,6 +80,23 @@ export async function findUniqueFriend(receiverId: number) {
     return response.json();
 }
 
+export async function findAllFriends() {
+    const token = localStorage.getItem('token');
+    const response = await fetch(url + 'friends', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    });
+    if (!response.ok) {
+        const message = await response.json();
+        if (Array.isArray(message.message)) throw new Error(message.message[0]);
+        else throw new Error(message.message);
+    }
+    return response.json();
+}
+
 export async function removeFriend(receiverId: number){
     const token = localStorage.getItem('token');
     const response = await fetch(url + 'friends/requests/' + receiverId, {
