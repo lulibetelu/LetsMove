@@ -46,13 +46,16 @@ export class GroupController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateGroupDto: UpdateGroupDto,
+    @Req() req: Request,
   ) {
-    return this.groupsService.update(id, updateGroupDto);
+    const userId = req.user.sub;
+    return this.groupsService.update(id, updateGroupDto, userId);
   }
 
   @UseGuards(AuthGuard)
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.groupsService.remove(id);
+  remove(@Param('id', ParseIntPipe) groupId: number, @Req() req: Request) {
+    const userId = req.user.sub;
+    return this.groupsService.remove(groupId, userId);
   }
 }

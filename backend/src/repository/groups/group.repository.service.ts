@@ -3,35 +3,20 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateGroupDto } from '../../group/dto/create-group.dto';
 import { Prisma } from '@prisma/client';
 import { UpdateGroupDto } from '../../group/dto/update-group.dto';
-import { CreateImageDto } from '../../images/dto/create-image.dto';
 
 @Injectable()
 export class GroupRepositoryService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(
-    createGroupDto: CreateGroupDto,
-    userId: number,
-    imageId?: number,
-  ) {
+  async create(createGroupDto: CreateGroupDto, imageId?: number) {
     const group = await this.prismaService.group.create({
       data: {
-        name: createGroupDto.title,
+        name: createGroupDto.name,
         description: createGroupDto.description,
         ...(imageId ? { imageId } : {}),
       } as Prisma.GroupUncheckedCreateInput,
     });
-    await Promise.all(
-      createGroupDto.members.map(async (memberId) => {
-        await this.prismaService.groupMember.create({
-          data: {
-            userId: memberId,
-            groupId: group.id,
-            isAdmin: memberId === userId,
-          },
-        });
-      }),
-    );
+    await this.updateMembers(group.id, createGroupDto.members);
     return group;
   }
 
@@ -53,6 +38,14 @@ export class GroupRepositoryService {
   async findOne(groupId: number) {
     return this.prismaService.group.findUnique({
       where: { id: groupId },
+      include: {
+        groupMembers: {
+          select: {
+            userId: true,
+            isAdmin: true,
+          },
+        },
+      },
     });
   }
 
@@ -64,32 +57,21 @@ export class GroupRepositoryService {
     const updatedGroup = await this.prismaService.group.update({
       where: { id: groupId },
       data: {
-        ...(updateGroupDto.title && { name: updateGroupDto.title }),
+        ...(updateGroupDto.name && { name: updateGroupDto.name }),
         ...(updateGroupDto.description && {
           description: updateGroupDto.description,
         }),
         ...(imageId ? { imageId } : {}),
       },
     });
-    if (updateGroupDto.members) {
-      const admins = await this.prismaService.groupMember.findMany({
-        where: {
-          groupId: updatedGroup.id,
-          isAdmin: true,
-        },
-      });
-      const adminsId = admins.map((admin) => admin.userId);
-      await Promise.all(
-        updateGroupDto.members.map(async (memberId) => {
-          await this.prismaService.groupMember.create({
-            data: {
-              userId: memberId,
-              groupId: updatedGroup.id,
-              isAdmin: adminsId.includes(memberId),
-            },
-          });
-        }),
+    if (updateGroupDto.membersIdToRemove) {
+      await this.deleteMembers(
+        updatedGroup.id,
+        updateGroupDto.membersIdToRemove,
       );
+    }
+    if (updateGroupDto.membersToUpdate) {
+      await this.updateMembers(updatedGroup.id, updateGroupDto.membersToUpdate);
     }
     return updatedGroup;
   }
@@ -106,6 +88,41 @@ export class GroupRepositoryService {
     return this.prismaService.groupMember.findMany({
       where: {
         groupId: groupId,
+      },
+    });
+  }
+
+  async updateMembers(
+    groupId: number,
+    members: { memberId: number; isAdmin: boolean }[],
+  ) {
+    return Promise.all(
+      members.map((member) =>
+        this.prismaService.groupMember.upsert({
+          where: {
+            groupId_userId: {
+              groupId: groupId,
+              userId: member.memberId,
+            },
+          },
+          update: {
+            isAdmin: member.isAdmin,
+          },
+          create: {
+            groupId: groupId,
+            userId: member.memberId,
+            isAdmin: member.isAdmin,
+          },
+        }),
+      ),
+    );
+  }
+
+  async deleteMembers(groupId: number, membersId: number[]){
+    return this.prismaService.groupMember.deleteMany({
+      where: {
+        groupId: groupId,
+        userId: { in: membersId },
       },
     });
   }

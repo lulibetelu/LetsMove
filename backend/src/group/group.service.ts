@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -15,56 +16,61 @@ export class GroupService {
     private imageService: ImageService,
   ) {}
   async create(createGroupDto: CreateGroupDto, userId: number) {
+    const creator = createGroupDto.members.find(
+      (member) => member.memberId === userId,
+    );
+    if (!creator || !creator.isAdmin)
+      throw new BadRequestException(
+        'Group author must be in members list and must be admin',
+      );
     if (createGroupDto.image) {
       const image = await this.imageService.create(createGroupDto.image);
-      return this.groupRepository.create(createGroupDto, userId, image.id);
+      return this.groupRepository.create(createGroupDto, image.id);
     }
-    return this.groupRepository.create(createGroupDto, userId);
+    return this.groupRepository.create(createGroupDto);
   }
 
   async findAll(userId: number) {
-    const groups = await this.groupRepository.findAll(userId);
-    if (!groups || groups.length === 0) {
-      throw new NotFoundException("user doesn't have groups");
-    }
-    return groups;
+    return this.groupRepository.findAll(userId);
   }
 
   async findOne(id: number, userId: number) {
     const group = await this.groupRepository.findOne(id);
     if (!group) throw new NotFoundException('group not found');
 
-    const groupMembers = await this.groupRepository.getMembers(id);
-    const membersId = groupMembers.map((member) => member.userId);
+    const membersId = group.groupMembers.map((member) => member.userId);
     if (!membersId.includes(userId))
       throw new UnauthorizedException('user not in group');
 
     return group;
   }
 
-  async update(id: number, updateGroupDto: UpdateGroupDto) {
-    const group = await this.groupRepository.findOne(id);
+  async update(
+    groupId: number,
+    updateGroupDto: UpdateGroupDto,
+    userId: number,
+  ) {
+    const group = await this.groupRepository.findOne(groupId);
     if (!group) throw new NotFoundException('group not found');
+
+    if (!group.groupMembers.find((member) => member.userId === userId)?.isAdmin)
+      throw new UnauthorizedException('only admin can edit group');
+
     if (updateGroupDto.image) {
       const image = await this.imageService.create(updateGroupDto.image);
-      return this.groupRepository.update(id, updateGroupDto, image.id);
+      return this.groupRepository.update(groupId, updateGroupDto, image.id);
     }
-    return this.groupRepository.update(id, updateGroupDto);
+
+    return this.groupRepository.update(groupId, updateGroupDto);
   }
 
-  async remove(id: number, userId: number) {
-    const group = await this.groupRepository.findOne(id);
+  async remove(groupId: number, userId: number) {
+    const group = await this.groupRepository.findOne(groupId);
     if (!group) throw new NotFoundException('group not found');
 
-    const groupMembers = await this.groupRepository.getMembers(id);
-    const membersId = groupMembers.map((member) => member.userId);
-    if (!membersId.includes(userId))
-      throw new UnauthorizedException('user not in group');
-    else {
-      const user = groupMembers.find((member) => member.userId === userId);
-      if (!user?.isAdmin)
-        throw new UnauthorizedException('only admin can delete');
-    }
-    return this.groupRepository.delete(id);
+    if (!group.groupMembers.find((member) => member.userId === userId)?.isAdmin)
+      throw new UnauthorizedException('only admin can delete group');
+
+    return this.groupRepository.delete(groupId);
   }
 }
