@@ -269,3 +269,11 @@ model GroupMember {
   isAdmin Boolean
   @@unique([groupId, userId])
 }
+
+/**
+ * model Chat {
+ * id      Int  @id @default(autoincrement())
+ * groupId Int
+ * group   Grou
+ * }
+ */

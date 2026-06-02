@@ -29,9 +29,11 @@ export default function GroupsPage(){
         };
     }, []);
 
-    return (
-        <div className="App">
+    const handleClick = () => socket.emit("message", {hola: "hola"})
 
+    return (
+        <div >
+            <button type="button" onClick={handleClick}>akjshd</button>
         </div>
     );
 }

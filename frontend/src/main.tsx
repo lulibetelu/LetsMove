@@ -16,7 +16,7 @@ import ErrorPage from "./pages/ErrorPage.tsx";
 import PostPage from "./pages/PostPage.tsx";
 import EventFeed from "./pages/EventFeed.tsx";
 import EventPage from "./pages/EventPage.tsx";
-import GroupPage from "./pages/GroupPage.tsx";
+import GroupsPage from "./pages/GroupPage.tsx";
 
 //define a partir de donde le pegué en la URL qué componente va a renderizar react
 const router = createBrowserRouter([
@@ -61,12 +61,12 @@ const router = createBrowserRouter([
         element: <EventPage/>
     },
     {
-        path: "/error",
-        element: <ErrorPage/>
+        path: "/groups",
+        element: <GroupsPage/>
     },
     {
-        path: "/group",
-        element: <GroupPage/>
+        path: "/error",
+        element: <ErrorPage/>
     },
     {
         path: "*",

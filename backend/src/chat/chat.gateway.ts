@@ -9,7 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway({
+@WebSocketGateway(4000, {
   cors: { origin: '*' },
 })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -33,31 +33,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`User disconnected: ${client.id}`);
   }
 
-  /*  @SubscribeMessage('setUsername')
-  handleSetUsername(
-    @MessageBody() username: string,
-    @ConnectedSocket() client: Socket,
-  ): void {
-    this.users.set(client.id, username);
-    console.log(`${username} joined`);
-    this.server.emit('userJoined', { userId: client.id, username });
-  }
-
-  @SubscribeMessage('messageSent')
+  @SubscribeMessage('message')
   handleMessage(
-    @MessageBody() payload: { text: string },
+    @MessageBody() messageObj: holaMessage,
     @ConnectedSocket() client: Socket,
-  ): void {
-    this.server.emit('messageBroadcast', {
-      userId: this.users.get(client.id),
-      text: payload.text,
-      timestamp: new Date(),
-    });
-    saveMessage({
-      text:,
-      from:,
-      timestamp:
-      recipient: groupId/personal
-    })
-  }*/
+  ) {
+    console.log(messageObj);
+    client.broadcast.emit('message', messageObj);
+  }
 }
+type holaMessage = { hola: string };
