@@ -2,13 +2,13 @@ import {
   ArrayMinSize,
   IsArray,
   IsDefined,
-  IsInt,
   IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateImageDto } from '../../images/dto/create-image.dto';
+import { Member } from '../entities/group.entity';
 
 export class CreateGroupDto {
   @IsString()
@@ -27,7 +27,8 @@ export class CreateGroupDto {
   @IsDefined()
   @IsArray()
   @ArrayMinSize(1)
-  @IsInt({ each: true })
-  members: number[];
+  @Type(() => Member)
+  @ValidateNested({ each: true })
+  members: Member[];
   // el author debe estar incluido aca
 }
