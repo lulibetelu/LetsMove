@@ -17,6 +17,7 @@ import { EventModule } from './event/event.module';
 import { EventSignUpModule } from './event-sign-up/event-sign-up.module';
 import { EventEntryModule } from './eventEntry/event-entry.module';
 import { ImageModule } from './images/image.module';
+import { ChatGateway } from './chat/chat.gateway';
 import { GroupModule } from './group/group.module';
 
 @Module({
@@ -42,6 +43,6 @@ import { GroupModule } from './group/group.module';
     GroupModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ChatGateway],
 })
 export class AppModule {}

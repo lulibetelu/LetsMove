@@ -11,10 +11,12 @@
     "prisma:studio": "npm run prisma:studio -w backend",
     "prisma:migrate": "npm run prisma:migrate -w backend",
     "prisma:push": "npm run prisma:push -w backend",
-
     "dev:backend": "npm run start:dev -w backend",
     "dev:frontend": "npm run dev -w frontend --debug --watch",
     "dev:all": "npm run dev:backend & npm run dev:frontend",
     "prisma:seed": "npm run prisma:seed -w backend"
+  },
+  "dependencies": {
+    "socket.io": "^4.8.3"
   }
 }
