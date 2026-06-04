@@ -4,8 +4,8 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  //output   = "../generated/prisma"
-  //added because of nest-prisma documentation (v7 prisma version)
+  // output   = "../generated/prisma"
+  // added because of nest-prisma documentation (v7 prisma version)
   moduleFormat    = "cjs"
   provider        = "prisma-client-js"
   previewFeatures = ["relationJoins"]
@@ -15,7 +15,7 @@ datasource db {
   provider = "postgresql"
 }
 
-//profile picture is missing
+// profile picture is missing
 model User {
   id             Int            @id @default(autoincrement())
   username       String         @unique
@@ -27,15 +27,15 @@ model User {
   posts          Post[]
   postsLiked     PostLiked[]
   postsDisliked  PostDisliked[]
-  //prisma es una mierda, ejemplo 1:
+  // prisma es una mierda, ejemplo 1:
   friendsAsUser1 Friends[]      @relation("friend1") @ignore
   friendsAsUser2 Friends[]      @relation("friend2") @ignore
 
-  comments Comment[]
+  comments  Comment[]
   postScore PostScore[]
 
-  events Event[]
-  eventSignUp EventSignUp[]
+  events       Event[]
+  eventSignUp  EventSignUp[]
   eventEntries EventEntry[]
 
   groupMember GroupMember[]
@@ -58,7 +58,7 @@ model Preference {
   userId  Int
   level   String
 
-  //hace que la combinacion user-sport sea unica
+  // hace que la combinacion user-sport sea unica
   @@unique([userId, sportId])
 }
 
@@ -89,8 +89,8 @@ model Post {
   postsLiked    PostLiked[]
   postsDisliked PostDisliked[]
   comments      Comment[]
-  postSport PostSport[]
-  postScore PostScore[]
+  postSport     PostSport[]
+  postScore     PostScore[]
 
   imagePosts ImagePost[]
 }
@@ -116,8 +116,8 @@ model PostDisliked {
 }
 
 model Friends {
-  id      Int    @id @default(autoincrement())
-  user1   User   @relation("friend1", fields: [sender], references: [id], onDelete: Cascade)
+  id       Int    @id @default(autoincrement())
+  user1    User   @relation("friend1", fields: [sender], references: [id], onDelete: Cascade)
   sender   Int
   user2    User   @relation("friend2", fields: [receiver], references: [id], onDelete: Cascade)
   receiver Int
@@ -140,43 +140,45 @@ model Comment {
 }
 
 model PostSport {
-  id Int @id @default(autoincrement())
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId Int
-  sport Sport @relation(fields: [sportId], references: [id], onDelete: Cascade)
+  id      Int   @id @default(autoincrement())
+  post    Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId  Int
+  sport   Sport @relation(fields: [sportId], references: [id], onDelete: Cascade)
   sportId Int
 
   @@unique([postId, sportId])
 }
 
 model PostScore {
-  id Int @id @default(autoincrement())
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId Int
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
-  sportMatch Int @default(0)
+  id         Int  @id @default(autoincrement())
+  post       Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId     Int
+  user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  sportMatch Int  @default(0)
+
   @@unique([userId, postId])
 }
 
-model Image{
-  id Int @id @default(autoincrement())
-  url String?
-  content Bytes?
+model Image {
+  id       Int     @id @default(autoincrement())
+  url      String?
+  content  Bytes?
   mimeType String?
 
-  imagePosts ImagePost[]
-  imageEvents ImageEvent[]
-  imageEntry ImageEntry[]
-  imageGroup Group[]
+  imagePosts   ImagePost[]
+  imageEvents  ImageEvent[]
+  imageEntry   ImageEntry[]
+  imageGroup   Group[]
+  imageMessage ImageMessage[]
 }
 
-model ImagePost{
-  id Int @id @default(autoincrement())
+model ImagePost {
+  id      Int   @id @default(autoincrement())
   imageId Int
-  image Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
-  postId Int
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  image   Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  postId  Int
+  post    Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([imageId, postId])
 }
@@ -185,23 +187,35 @@ model ImageEvent {
   id Int @id @default(autoincrement())
 
   imageId Int
-  image Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  image   Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
 
   eventId Int
-  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   description String
 
   @@unique([imageId, eventId])
 }
 
-model Event{
+model ImageMessage {
   id Int @id @default(autoincrement())
-  hostId Int
-  host User @relation(fields: [hostId], references: [id], onDelete: Cascade)
-  title String
-  description String
-  chatId Int? //falta la tabla chat
+
+  imageId Int
+  image   Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  messageId Int
+  message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@unique([imageId, messageId])
+}
+
+model Event {
+  id           Int           @id @default(autoincrement())
+  hostId       Int
+  host         User          @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  title        String
+  description  String
+  chatId       Int? // falta la tabla chat
   startingDate DateTime
   locationId   Int?
   location     Location?     @relation(fields: [locationId], references: [id], onDelete: Cascade)
@@ -221,12 +235,12 @@ enum EventType {
 }
 
 model EventSignUp {
-  id Int @id @default(autoincrement())
-  eventId Int
-  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  userId Int
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  state String
+  id       Int       @id @default(autoincrement())
+  eventId  Int
+  event    Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId   Int
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  state    String
   joinedAt DateTime?
 
   @@unique([userId, eventId])
@@ -244,36 +258,43 @@ model EventEntry {
 }
 
 model ImageEntry {
-  id          Int        @id @default(autoincrement())
-  imageId     Int
-  image       Image      @relation(fields: [imageId], references: [id], onDelete: Cascade)
-  entryId     Int
-  entry       EventEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  id      Int        @id @default(autoincrement())
+  imageId Int
+  image   Image      @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  entryId Int
+  entry   EventEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
 }
 
 model Group {
-  id  Int @id @default(autoincrement())
-  name String
-  description String
-  imageId Int?
-  image Image? @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  id           Int           @id @default(autoincrement())
+  name         String
+  description  String
+  imageId      Int?
+  image        Image?        @relation(fields: [imageId], references: [id], onDelete: Cascade)
   groupMembers GroupMember[]
+
+  messages Message[]
 }
 
 model GroupMember {
-  id Int @id @default(autoincrement())
-  userId Int
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  groupId Int
-  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  isAdmin Boolean
+  id       Int       @id @default(autoincrement())
+  userId   Int
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  groupId  Int
+  group    Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  isAdmin  Boolean
+  messages Message[]
+
   @@unique([groupId, userId])
 }
 
-/**
- * model Chat {
- * id      Int  @id @default(autoincrement())
- * groupId Int
- * group   Grou
- * }
- */
+model Message {
+  id            Int            @id @default(autoincrement())
+  groupId       Int
+  group         Group          @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  content       String
+  groupMemberId Int
+  groupMember   GroupMember    @relation(fields: [groupMemberId], references: [id], onDelete: Cascade)
+  date          DateTime
+  images        ImageMessage[]
+}

@@ -19,6 +19,7 @@ import { EventEntryModule } from './eventEntry/event-entry.module';
 import { ImageModule } from './images/image.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { GroupModule } from './group/group.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { GroupModule } from './group/group.module';
     EventEntryModule,
     ImageModule,
     GroupModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],
