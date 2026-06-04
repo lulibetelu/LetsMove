@@ -20,7 +20,7 @@ export class CreateMessageDto {
 
   @IsNumber()
   @IsNotEmpty()
-  userId: number;
+  memberId: number;
 
   @Type(() => Date)
   @IsDate()
