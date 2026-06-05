@@ -8,11 +8,13 @@ import {useEvents} from "../hooks/events/useEvents.ts";
 import CustomButton from "../components/CustomButton.tsx";
 import Filters from "../components/Filters.tsx";
 import type {EventFilters} from "../types/eventTypes.ts";
+import {useNavigate} from "react-router-dom";
 
 export default function EventFeed(){
     const {events, observerRef, error, isFetchingNextPage, refetchData, filters} = useEvents();
     const [showFilters, setShowFilters] = useState(false);
     const [searchTitle, setSearchTitle] = useState<string>("");
+    const navigate = useNavigate();
 
     //lo que usas para indicar qué div es el que usas para pedir los proximos eventos.
     const [showCreateEventForm, setShowCreateEventForm] = useState(false);
@@ -100,7 +102,7 @@ export default function EventFeed(){
                             cursor-pointer
                           "
                 >+</button>
-                {showCreateEventForm && <NewEvent onClose={() => setShowCreateEventForm(false)} />}
+                {showCreateEventForm && <NewEvent onClose={() => setShowCreateEventForm(false)} onEventCreated={(id) => navigate(`/event/${id}`)} />}
                 </div>
             {showFilters && <Filters filters={filters} onClose={() => setShowFilters(false)} onSubmit={(hostAndSport:{host:string, sport: string}) =>handleSubmit(hostAndSport)}/>}
         </div>
