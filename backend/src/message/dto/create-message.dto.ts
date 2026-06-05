@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsString,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -14,7 +15,7 @@ export class CreateMessageDto {
   @IsNotEmpty()
   groupId: number;
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
   content: string;
 

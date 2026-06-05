@@ -26,4 +26,12 @@ export class MessageRepositoryService {
     }
     return messageCreated;
   }
+
+  async findAll(groupId: number) {
+    return this.prismaService.message.findMany({
+      where: {
+        groupId: groupId,
+      },
+    });
+  }
 }

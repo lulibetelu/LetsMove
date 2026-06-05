@@ -8,5 +8,6 @@ import { ImageModule } from '../images/image.module';
   imports: [GroupRepositoryModule, ImageModule],
   controllers: [GroupController],
   providers: [GroupService],
+  exports: [GroupService],
 })
 export class GroupModule {}
