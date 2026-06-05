@@ -1,0 +1,17 @@
+-- CreateTable
+CREATE TABLE "SavedEvent" (
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "eventId" INTEGER NOT NULL,
+
+    CONSTRAINT "SavedEvent_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SavedEvent_userId_eventId_key" ON "SavedEvent"("userId", "eventId");
+
+-- AddForeignKey
+ALTER TABLE "SavedEvent" ADD CONSTRAINT "SavedEvent_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SavedEvent" ADD CONSTRAINT "SavedEvent_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "Event"("id") ON DELETE CASCADE ON UPDATE CASCADE;
