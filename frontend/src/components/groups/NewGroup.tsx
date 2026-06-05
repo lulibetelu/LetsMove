@@ -68,15 +68,15 @@ export default function NewGroup({ onClose, onGroupCreated }: NewGroupProps) {
     };
 
     return (
-        <dialog open className="modal modal-open">
+        <dialog open className="modal modal-open" onCancel={(e) => { e.preventDefault(); onClose(); }} onClose={onClose}>
             <div className="modal-box max-w-lg bg-[#1e1e1e] border border-white/5 p-0 overflow-hidden">
                 <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/5">
                     <h2 className="text-lg font-bold text-white/90">New Group</h2>
                     <button
                         type="button"
+                        aria-label="Close"
                         onClick={onClose}
                         className="p-1 rounded-full hover:bg-white/10 transition-colors text-white/30 hover:text-white/60"
-                    >
                         <X size={20} />
                     </button>
                 </div>
