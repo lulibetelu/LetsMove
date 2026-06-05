@@ -8,7 +8,7 @@ import {usePosts} from "../hooks/posts/usePosts.ts";
 
 
 export default function Homepage() {
-    const [error, setError] = useState<boolean>(false);
+    const [error] = useState<boolean>(false);
     const [createPost, setCreatePost] = useState<boolean>(false);
     const { posts, deletePost,observerRef } = usePosts();
 

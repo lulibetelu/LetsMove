@@ -64,7 +64,7 @@ export default function NotificationsPage(){
 
     return (
         <div className="min-h-screen bg-[#141414] flex">
-            <Sidebar onPostCreated={() => {}} />
+            <Sidebar />
 
             <main className="flex-1 ml-60 flex justify-center">
                 <div className="w-full max-w-2xl min-h-screen pb-24">

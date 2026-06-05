@@ -1,5 +1,13 @@
-import type {CreatePreferencesDto} from "backend/src/preferences/dto/create.preferences.dto.ts";
 import api, { handleApiError } from "./client.ts";
+
+interface SportPreference {
+    sport: string;
+    level: string;
+}
+
+interface CreatePreferencesDto {
+    sports: SportPreference[];
+}
 
 export async function createPreferences(createPreferencesDto: CreatePreferencesDto){
     try {
