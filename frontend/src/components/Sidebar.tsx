@@ -12,7 +12,7 @@ export default function Sidebar() {
         { path: "/homepage", icon: Home, label: "Inicio" },
         { path: "/event", icon: PartyPopper, label: "Eventos"},
         { path: "/events", icon: CalendarDays, label: "Calendario" },
-        { path: "/groups", icon: Users, label: "Grupos" },
+        { path: "/group", icon: Users, label: "Grupos" },
         { path: currentUserId ? `/profile/${currentUserId}` : "/login", icon: User, label: "Perfil" },
         { path: "/settings", icon: Settings, label: "Configuración" },
         { path: "/notifications", icon: Bell, label: "Notificaciones" },

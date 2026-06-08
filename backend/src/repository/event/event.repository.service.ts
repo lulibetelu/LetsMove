@@ -54,7 +54,6 @@ export class EventRepositoryService {
 
     if (!sport) throw new BadRequestException('no such sport');
 
-
     const event = await this.prismaService.event.create({
       data: {
         hostId: hostId,
@@ -410,7 +409,7 @@ export class EventRepositoryService {
         images: {
           include: {
             image: {
-              select: { id:true, url: true },
+              select: { id: true, url: true },
             },
           },
         },
