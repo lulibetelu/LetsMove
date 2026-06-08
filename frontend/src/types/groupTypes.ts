@@ -17,3 +17,12 @@ export interface UpdateGroup {
     membersToUpdate?: Member[];
     membersIdToRemove?: number[]
 }
+
+export interface Group {
+    id: number;
+    name: string;
+    description: string;
+    imageId: number;
+    groupMembers: Member[];
+
+}
