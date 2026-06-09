@@ -6,9 +6,11 @@ interface Props {
     images: ImageInput[];
     onChange: (images: ImageInput[]) => void;
     allowDescription?: boolean;
+    max?: number;
+    forcedDescription?: string;
 }
 
-export default function ImagePicker({images, onChange, allowDescription = false}: Props) {
+export default function ImagePicker({images, onChange, allowDescription = false, max, forcedDescription}: Props) {
     const [open, setOpen] = useState(false);
     const [urlInput, setUrlInput] = useState('');
     // este es el componente que viene hecho del browser que te abre el filesystem para elegir imagenes
@@ -16,18 +18,18 @@ export default function ImagePicker({images, onChange, allowDescription = false}
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files ?? []);
+        const remaining = max ? max - images.length : files.length;
+        const allowed = files.slice(0, remaining);
 
-        // itera sobre cada foto que selecciono el usuario
-        files.forEach(file => {
+        allowed.forEach(file => {
             const reader = new FileReader();
 
-            // aca se crea una funcion que es llamada automaticamente por el browser cuando se termina de convertir
-            // la imagen a base64 (con la funcion de abajo readAsDataURL)
             reader.onload = () => {
-                onChange([...images, {content: reader.result as string}]);
+                const img: ImageInput = {content: reader.result as string};
+                if (forcedDescription) img.description = forcedDescription;
+                onChange([...images, img]);
             };
 
-            // convierte la imagen a base64, es una funcion nativa del browser
             reader.readAsDataURL(file);
         });
         e.target.value = '';
@@ -36,7 +38,10 @@ export default function ImagePicker({images, onChange, allowDescription = false}
 
     const handleAddUrl = () => {
         if (!urlInput.trim()) return;
-        onChange([...images, {url: urlInput.trim()}]);
+        if (max && images.length >= max) return;
+        const img: ImageInput = {url: urlInput.trim()};
+        if (forcedDescription) img.description = forcedDescription;
+        onChange([...images, img]);
         setUrlInput('');
         setOpen(false);
     };
@@ -53,13 +58,15 @@ export default function ImagePicker({images, onChange, allowDescription = false}
         <div className="flex flex-col gap-2">
 
             {/* Botón para abrir el picker */}
-            <button
-                type="button"
-                onClick={() => setOpen(!open)}
-                className="flex items-center gap-1.5 text-xs text-white/30 hover:text-white/50 transition-colors"
-            >
-                <Image size={14}/> Agregar fotos
-            </button>
+            {(!max || images.length < max) && (
+                <button
+                    type="button"
+                    onClick={() => setOpen(!open)}
+                    className="flex items-center gap-1.5 text-xs text-white/30 hover:text-white/50 transition-colors"
+                >
+                    <Image size={14}/> Agregar fotos
+                </button>
+            )}
 
             {/* Popover */}
             {open && (
@@ -77,7 +84,7 @@ export default function ImagePicker({images, onChange, allowDescription = false}
                         ref={fileInputRef}
                         type="file"
                         accept="image/*"
-                        multiple
+                        multiple={!max || max > 1}
                         className="hidden"
                         onChange={handleFileChange}
                     />
@@ -122,7 +129,7 @@ export default function ImagePicker({images, onChange, allowDescription = false}
                             <span className="text-xs text-white/40 truncate flex-1">
                                 {img.url ?? `Imagen ${i + 1}`}
                             </span>
-                            {allowDescription && (
+                            {allowDescription && !forcedDescription && (
                                 <select
                                     value={img.description ?? ''}
                                     onChange={(e) => handleDescriptionChange(i, e.target.value)}

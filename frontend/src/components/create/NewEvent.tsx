@@ -246,11 +246,11 @@ return (
                     </div>
                 </div>
 
-                {/* Starting Date */}
+                {/* Date / Starting Date */}
                 <div>
                     <label className="label">
                     <span className="label-text font-medium">
-                        Starting Date
+                        {type === "Asynchronous" ? "Starting Date" : "Date"}
                     </span>
                     </label>
 
@@ -266,40 +266,6 @@ return (
                         className="input input-bordered w-full"
                         wrapperClassName="w-full"
                     />
-                </div>
-
-                <div>
-                    <label className="label">
-                    <span className="label-text font-medium">
-                        Access
-                    </span>
-                    </label>
-
-                    <div className="flex gap-3">
-                        <button
-                            type="button"
-                            onClick={() => setIsPrivate(false)}
-                            className={`flex-1 btn rounded-xl border-none ${
-                                 !isPrivate
-                                    ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
-                                    : "bg-base-200 text-base-content/70 hover:bg-base-300"
-                            }`}
-                        >
-                            Public
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => setIsPrivate(true)}
-                            className={`flex-1 btn rounded-xl border-none ${
-                                isPrivate
-                                    ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
-                                    : "bg-base-200 text-base-content/70 hover:bg-base-300"
-                            }`}
-                        >
-                            Private
-                        </button>
-                    </div>
                 </div>
 
                 {/* Ending Date */}
@@ -352,12 +318,47 @@ return (
                     </div>
                 )}
 
+                {/* Access */}
+                <div>
+                    <label className="label">
+                    <span className="label-text font-medium">
+                        Access
+                    </span>
+                    </label>
+
+                    <div className="flex gap-3">
+                        <button
+                            type="button"
+                            onClick={() => setIsPrivate(false)}
+                            className={`flex-1 btn rounded-xl border-none ${
+                                 !isPrivate
+                                    ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
+                                    : "bg-base-200 text-base-content/70 hover:bg-base-300"
+                            }`}
+                        >
+                            Public
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => setIsPrivate(true)}
+                            className={`flex-1 btn rounded-xl border-none ${
+                                isPrivate
+                                    ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
+                                    : "bg-base-200 text-base-content/70 hover:bg-base-300"
+                            }`}
+                        >
+                            Private
+                        </button>
+                    </div>
+                </div>
+
                 {/* Images */}
                 <div>
                     <label className="label">
-                        <span className="label-text font-medium">Images</span>
+                        <span className="label-text font-medium">Cover Image</span>
                     </label>
-                    <ImagePicker images={images} onChange={setImages} allowDescription={true}/>
+                    <ImagePicker images={images} onChange={setImages} max={1} forcedDescription="Cover"/>
                 </div>
             </div>
 

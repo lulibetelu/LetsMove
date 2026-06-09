@@ -227,11 +227,11 @@ export default function EditEventForm({event, onClose}:Props){
                         />
                     </div>
 
-                    {/* Starting Date */}
+                    {/* Date / Starting Date */}
                     <div>
                         <label className="label">
                     <span className="label-text font-medium">
-                        Starting Date
+                        {event.eventType === "Asynchronous" ? "Starting Date" : "Date"}
                     </span>
                         </label>
 
@@ -246,40 +246,6 @@ export default function EditEventForm({event, onClose}:Props){
                             className="input input-bordered w-full"
                             wrapperClassName="w-full"
                         />
-                    </div>
-
-                    <div>
-                        <label className="label">
-                    <span className="label-text font-medium">
-                        Access
-                    </span>
-                        </label>
-
-                        <div className="flex gap-3">
-                            <button
-                                type="button"
-                                onClick={() => setIsPrivate(false)}
-                                className={`flex-1 btn rounded-xl border-none ${
-                                    !isPrivate
-                                        ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
-                                        : "bg-base-200 text-base-content/70 hover:bg-base-300"
-                                }`}
-                            >
-                                Public
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() => setIsPrivate(true)}
-                                className={`flex-1 btn rounded-xl border-none ${
-                                    isPrivate
-                                        ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
-                                        : "bg-base-200 text-base-content/70 hover:bg-base-300"
-                                }`}
-                            >
-                                Private
-                            </button>
-                        </div>
                     </div>
 
                     {/* In Person Location */}
@@ -335,6 +301,41 @@ export default function EditEventForm({event, onClose}:Props){
                             </p>
                         </div>
                     )}
+
+                    {/* Access */}
+                    <div>
+                        <label className="label">
+                    <span className="label-text font-medium">
+                        Access
+                    </span>
+                        </label>
+
+                        <div className="flex gap-3">
+                            <button
+                                type="button"
+                                onClick={() => setIsPrivate(false)}
+                                className={`flex-1 btn rounded-xl border-none ${
+                                    !isPrivate
+                                        ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
+                                        : "bg-base-200 text-base-content/70 hover:bg-base-300"
+                                }`}
+                            >
+                                Public
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => setIsPrivate(true)}
+                                className={`flex-1 btn rounded-xl border-none ${
+                                    isPrivate
+                                        ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
+                                        : "bg-base-200 text-base-content/70 hover:bg-base-300"
+                                }`}
+                            >
+                                Private
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Footer */}
