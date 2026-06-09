@@ -34,7 +34,7 @@ export default function InPersonEventDetail({ event }: Props) {
     const handleEventDeletion = async () => {
         try {
             await eliminateEvent(event.id);
-            navigate("/event");
+            navigate(`/profile/${userId}?tab=events`);
         }catch {
             setError(true);
         }
@@ -57,7 +57,10 @@ export default function InPersonEventDetail({ event }: Props) {
                 />
             )}
             {error && <PopUpError message="Failed to update event"/>}
-            {editEvent && <EditEventForm event={event} onClose={() => setEditEvent(false)}/>}
+            {editEvent && <EditEventForm event={event} onClose={() => {
+                setEditEvent(false);
+                queryClient.invalidateQueries({ queryKey: ['event', event.id] });
+            }}/>}
         </div>
     );
 }

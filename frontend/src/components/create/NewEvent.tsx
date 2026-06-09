@@ -8,6 +8,8 @@ import {useSports} from "../../hooks/useSports.ts";
 import {sportsToString} from "../../resusable-functions/sportFunctions.ts";
 import type {ImageInput} from "../../types/imageType.ts";
 import ImagePicker from "../ImagePicker.tsx";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface Props {
     onClose: () => void;
@@ -18,22 +20,44 @@ export default function NewEvent(props: Props){
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [type, setType] = useState<string>("");
-    const [startingDate, setStartingDate] = useState("");
-    const [endingDate, setEndingDate] = useState("");
+    const [startingDate, setStartingDate] = useState<Date | null>(null);
+    const [endingDate, setEndingDate] = useState<Date | null>(null);
     const [location, setLocation] = useState<string>("");
     const [isPrivate, setIsPrivate] = useState(false);
     const [sport, setSport] = useState<string>("");
     const [error, setError] = useState<boolean>();
+    const [validationError, setValidationError] = useState<string>("");
     const {sports, isPending, sportError} = useSports();
 
     const [images, setImages] = useState<ImageInput[]>([])
 
     const checkData = (data:EventRawData) => {
-        if (title.length === 0 || description.length === 0 || type.length === 0 || startingDate.length === 0 || sport.length === 0) return false;
+        if (!title || !description || !type || !startingDate || !sport) {
+            setValidationError("Please fill in all required fields");
+            return false;
+        }
 
-        if (data.type === "InPerson" && location.length === 0) return false;
+        if (startingDate <= new Date()) {
+            setValidationError("Starting date must be in the future");
+            return false;
+        }
 
-        return !(data.type === "Asynchronous" && endingDate.length === 0 && isPrivate);
+        if (data.endingDate && new Date(data.endingDate) <= startingDate) {
+            setValidationError("Ending date must be after the starting date");
+            return false;
+        }
+
+        if (data.type === "InPerson" && !location) {
+            setValidationError("Location is required for in-person events");
+            return false;
+        }
+
+        if (data.type === "Asynchronous" && !data.endingDate && isPrivate) {
+            setValidationError("Ending date is required for private asynchronous events");
+            return false;
+        }
+
+        return true;
     }
 
     const handleSportChange = (sport: string) => {
@@ -43,19 +67,19 @@ export default function NewEvent(props: Props){
 
     const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();
+        setValidationError("");
         const data: EventRawData = {
             title: title,
             description: description,
             type: type,
-            startingDate: startingDate,
-            endingDate: endingDate,
+            startingDate: startingDate!.toISOString(),
+            endingDate: endingDate ? endingDate.toISOString() : "",
             location: location,
             isPrivate: isPrivate,
             sport: sport,
             images: images,
         }
         if (!checkData(data)) {
-            setError(true);
             return;
         }
 
@@ -70,6 +94,66 @@ export default function NewEvent(props: Props){
 
 return (
     <dialog className="modal modal-open backdrop-blur-sm">
+        <style>{`
+            .react-datepicker {
+                background-color: #1e1e1e;
+                border-color: #333;
+                color: #e0e0e0;
+                font-family: inherit;
+            }
+            .react-datepicker__header {
+                background-color: #2a2a2a;
+                border-bottom-color: #333;
+            }
+            .react-datepicker__current-month,
+            .react-datepicker__day-name {
+                color: #e0e0e0;
+            }
+            .react-datepicker__day {
+                color: #ccc;
+            }
+            .react-datepicker__day:hover {
+                background-color: #8A9A5B;
+                color: #fff;
+            }
+            .react-datepicker__day--selected,
+            .react-datepicker__day--keyboard-selected {
+                background-color: #8A9A5B;
+                color: #fff;
+            }
+            .react-datepicker__day--disabled {
+                color: #555;
+            }
+            .react-datepicker__time-container {
+                border-left-color: #333;
+            }
+            .react-datepicker__time-container .react-datepicker__time {
+                background-color: #1e1e1e;
+            }
+            .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item {
+                color: #ccc;
+            }
+            .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item:hover {
+                background-color: #8A9A5B;
+                color: #fff;
+            }
+            .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item--selected {
+                background-color: #8A9A5B;
+                color: #fff;
+            }
+            .react-datepicker__triangle {
+                display: none;
+            }
+            .react-datepicker-popper .react-datepicker__navigation {
+                top: 12px;
+            }
+            .react-datepicker__navigation-icon::before {
+                border-color: #8A9A5B;
+            }
+            .react-datepicker__input-container input {
+                cursor: pointer;
+            }
+        `}</style>
         <form
             className="modal-box bg-base-100 p-0 overflow-hidden max-w-lg w-full flex flex-col h-auto max-h-[85vh]"
             onSubmit={handleSubmit}
@@ -170,11 +254,17 @@ return (
                     </span>
                     </label>
 
-                    <input
-                        type="datetime-local"
-                        className="input input-bordered w-full focus:outline-none focus:border-[#96a55a]"
-                        value={startingDate}
-                        onChange={(e) => setStartingDate(e.target.value)}
+                    <DatePicker
+                        selected={startingDate}
+                        onChange={(date: Date | null) => setStartingDate(date)}
+                        showTimeSelect
+                        dateFormat="MMMM d, yyyy h:mm aa"
+                        timeFormat="h:mm aa"
+                        timeIntervals={15}
+                        minDate={new Date()}
+                        placeholderText="Select starting date and time"
+                        className="input input-bordered w-full"
+                        wrapperClassName="w-full"
                     />
                 </div>
 
@@ -220,11 +310,18 @@ return (
                     </span>
                     </label>
 
-                    <input
-                        type="datetime-local"
-                        className="input input-bordered w-full focus:outline-none focus:border-[#96a55a]"
-                        value={endingDate}
-                        onChange={(e) => setEndingDate(e.target.value)}
+                    <DatePicker
+                        selected={endingDate}
+                        onChange={(date: Date | null) => setEndingDate(date)}
+                        showTimeSelect
+                        dateFormat="MMMM d, yyyy h:mm aa"
+                        timeFormat="h:mm aa"
+                        timeIntervals={15}
+                        minDate={startingDate ?? new Date()}
+                        isClearable
+                        placeholderText="No end date"
+                        className="input input-bordered w-full"
+                        wrapperClassName="w-full"
                     />
                 </div>)}
 
@@ -296,7 +393,8 @@ return (
 
             {/* Error */}
             <div>
-                {error && <PopUpError message="Failed to create event" />}
+                {validationError && <PopUpError message={validationError} />}
+                {error && !validationError && <PopUpError message="Failed to create event" />}
             </div>
         </form>
 

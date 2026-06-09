@@ -1,6 +1,6 @@
 import {MapPin, Users, Edit3, UserCircle, Activity, UserPlus, Hourglass, X, LogOut} from 'lucide-react';
 import Posts from "../components/posts/Posts.tsx";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import {useUsername} from "../hooks/UseUsername.ts";
 import {useEffect, useState} from "react";
 import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend.ts";
@@ -23,7 +23,8 @@ export default function Profile() {
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
     const [userExists, setUserExists] = useState<boolean | null>(null);
     const { posts, deletePost,observerRef } = useProfilePosts(numericId);
-    const [tab, setTab] = useState<'posts' | 'events'>('posts');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [tab, setTab] = useState<'posts' | 'events'>(searchParams.get('tab') === 'events' ? 'events' : 'posts');
     const {events} = useProfileEvents(numericId);
 
 
@@ -206,7 +207,11 @@ export default function Profile() {
                             </h2>
                             <div className="rounded-xl overflow-hidden border border-white/5">
                                 <ActivityTabBar
-                                    onTabChange={(tab) => setTab(tab)}
+                                    defaultTab={tab}
+                                    onTabChange={(tab) => {
+                                        setTab(tab);
+                                        setSearchParams(tab === 'posts' ? {} : { tab }, { replace: true });
+                                    }}
                                 />
                                 {tab === 'posts' ? (
                                     <Posts userId={numericId} posts={posts} deletePost={deletePost} observerRef={observerRef} />

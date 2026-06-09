@@ -3,6 +3,8 @@ import type {EventType, UpdateEventRawData} from "../../types/eventTypes.ts";
 import {useState} from "react";
 import PopUpError from "../PopUpError.tsx";
 import {updateEvent} from "../../api/event.ts";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface Props {
     event: EventType
@@ -12,34 +14,58 @@ interface Props {
 
 export default function EditEventForm({event, onClose}:Props){
     const [description, setDescription] = useState(event.description);
-    const [startingDate ,setStartingDate] = useState(event.startingDate.toString());
+    const [startingDate ,setStartingDate] = useState<Date>(new Date(event.startingDate));
     const [location, setLocation] = useState(event.location? event.location.location : "");
-    const [endingDate, setEndingDate] = useState(event.endingDate ? event.endingDate.toString() : "");
+    const [endingDate, setEndingDate] = useState<Date | null>(
+        event.endingDate ? new Date(event.endingDate) : null
+    );
     const [isPrivate, setIsPrivate] = useState(event.isPrivate);
     const [error, setError] = useState(false);
+    const [validationError, setValidationError] = useState("");
 
     const checkData = (data: UpdateEventRawData) => {
-        if (data.description.length === 0 || startingDate.length === 0) return false;
+        if (!data.description) {
+            setValidationError("Description is required");
+            return false;
+        }
 
-        if (event.eventType === "InPerson" && location.length === 0) return false;
+        if (startingDate <= new Date()) {
+            setValidationError("Starting date must be in the future");
+            return false;
+        }
 
-        return !(event.eventType === "Asynchronous" && endingDate.length === 0)
+        if (data.endingDate && new Date(data.endingDate) <= startingDate) {
+            setValidationError("Ending date must be after the starting date");
+            return false;
+        }
+
+        if (event.eventType === "InPerson" && !location) {
+            setValidationError("Location is required for in-person events");
+            return false;
+        }
+
+        if (event.eventType === "Asynchronous" && !data.endingDate) {
+            setValidationError("Ending date is required for asynchronous events");
+            return false;
+        }
+
+        return true;
     }
 
     const handleSubmit:React.SubmitEventHandler<HTMLFormElement> = async (eventi) => {
         eventi.preventDefault();
+        setValidationError("");
         const data: UpdateEventRawData = {
             id: event.id,
             title: event.title,
             type: event.eventType,
             description: description,
-            startingDate: startingDate,
-            endingDate: endingDate,
+            startingDate: startingDate.toISOString(),
+            endingDate: endingDate ? endingDate.toISOString() : undefined,
             location: location,
             isPrivate: isPrivate
         }
         if (!checkData(data)) {
-            setError(true);
             return;
         }
         try {
@@ -53,6 +79,66 @@ export default function EditEventForm({event, onClose}:Props){
 
     return (
         <dialog className="modal modal-open backdrop-blur-sm">
+            <style>{`
+                .react-datepicker {
+                    background-color: #1e1e1e;
+                    border-color: #333;
+                    color: #e0e0e0;
+                    font-family: inherit;
+                }
+                .react-datepicker__header {
+                    background-color: #2a2a2a;
+                    border-bottom-color: #333;
+                }
+                .react-datepicker__current-month,
+                .react-datepicker__day-name {
+                    color: #e0e0e0;
+                }
+                .react-datepicker__day {
+                    color: #ccc;
+                }
+                .react-datepicker__day:hover {
+                    background-color: #8A9A5B;
+                    color: #fff;
+                }
+                .react-datepicker__day--selected,
+                .react-datepicker__day--keyboard-selected {
+                    background-color: #8A9A5B;
+                    color: #fff;
+                }
+                .react-datepicker__day--disabled {
+                    color: #555;
+                }
+                .react-datepicker__time-container {
+                    border-left-color: #333;
+                }
+                .react-datepicker__time-container .react-datepicker__time {
+                    background-color: #1e1e1e;
+                }
+                .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item {
+                    color: #ccc;
+                }
+                .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item:hover {
+                    background-color: #8A9A5B;
+                    color: #fff;
+                }
+                .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item--selected {
+                    background-color: #8A9A5B;
+                    color: #fff;
+                }
+                .react-datepicker__triangle {
+                    display: none;
+                }
+                .react-datepicker-popper .react-datepicker__navigation {
+                    top: 12px;
+                }
+                .react-datepicker__navigation-icon::before {
+                    border-color: #8A9A5B;
+                }
+                .react-datepicker__input-container input {
+                    cursor: pointer;
+                }
+            `}</style>
             <form
                 className="modal-box bg-base-100 p-0 overflow-hidden max-w-lg w-full flex flex-col h-auto max-h-[85vh]"
                 onSubmit={handleSubmit}
@@ -149,17 +235,16 @@ export default function EditEventForm({event, onClose}:Props){
                     </span>
                         </label>
 
-                        <input
-                            type="datetime-local"
-                            value={startingDate}
-                            onChange={(e) => setStartingDate(e.target.value)}
-                            className="
-                        input input-bordered
-                        w-full
-
-                        focus:outline-none
-                        focus:border-[#96a55a]
-                    "
+                        <DatePicker
+                            selected={startingDate}
+                            onChange={(date: Date | null) => date && setStartingDate(date)}
+                            showTimeSelect
+                            dateFormat="MMMM d, yyyy h:mm aa"
+                            timeFormat="h:mm aa"
+                            timeIntervals={15}
+                            minDate={new Date()}
+                            className="input input-bordered w-full"
+                            wrapperClassName="w-full"
                         />
                     </div>
 
@@ -231,17 +316,18 @@ export default function EditEventForm({event, onClose}:Props){
                         </span>
                             </label>
 
-                            <input
-                                type="datetime-local"
-                                value={endingDate}
-                                onChange={(e) => setEndingDate(e.target.value)}
-                                className="
-                            input input-bordered
-                            w-full
-
-                            focus:outline-none
-                            focus:border-[#96a55a]
-                        "
+                            <DatePicker
+                                selected={endingDate}
+                                onChange={(date: Date | null) => setEndingDate(date)}
+                                showTimeSelect
+                                dateFormat="MMMM d, yyyy h:mm aa"
+                                timeFormat="h:mm aa"
+                                timeIntervals={15}
+                                minDate={startingDate}
+                                isClearable
+                                placeholderText="No end date"
+                                className="input input-bordered w-full"
+                                wrapperClassName="w-full"
                             />
 
                             <p className="text-xs text-base-content/50 mt-2">
@@ -286,9 +372,8 @@ export default function EditEventForm({event, onClose}:Props){
 
                 {/* Error */}
                 <div>
-                    {error && (
-                        <PopUpError message="Failed to update event" />
-                    )}
+                    {validationError && <PopUpError message={validationError} />}
+                    {error && !validationError && <PopUpError message="Failed to update event" />}
                 </div>
 
             </form>
