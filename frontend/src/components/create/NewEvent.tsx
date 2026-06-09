@@ -62,6 +62,7 @@ export default function NewEvent(props: Props){
         try {
             const created = await createEvent(data);
             props.onEventCreated?.(created.id);
+            props.onClose();
         }catch {
             setError(true);
         }
