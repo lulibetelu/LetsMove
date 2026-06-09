@@ -80,10 +80,11 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
                 <DislikeButton postId={id} initialIsDisliked={isDisliked}/>
                 <button
                     type="button"
-                    className="flex cursor-pointer items-center gap-1 transition-colors hover:text-[#8A9A5B]"
+                    className="flex cursor-pointer items-center gap-2 transition-all duration-300 rounded-full p-1 text-base-content/70 hover:text-[#8A9A5B]"
+                    aria-label="Comment"
                     onClick={() => setCreateComment(true)}
                 >
-                    <MessageCircle size={20} strokeWidth={1.5}/>
+                    <MessageCircle size={20} strokeWidth={1.5} className="transition-transform active:scale-125"/>
                 </button>
                 {createComment && (
                     <NewComment
