@@ -14,6 +14,7 @@ export default function ChooseInterestsPage(){
     const [sports, setSports] = useState<Sport[]>([]);
     const [selections, setSelections] = useState<Record<string, string>>({});
     const [error, setError] = useState<boolean>(false);
+    const [submitError, setSubmitError] = useState<boolean>(false);
 
     useEffect(() => {
         async function loadSports() {
@@ -45,8 +46,12 @@ export default function ChooseInterestsPage(){
         }))
 
         const dataRequest = {sports: selectionsToObjects}
-        await createPreferences(dataRequest);
-        navigate("/homepage");
+        try {
+            await createPreferences(dataRequest);
+            navigate("/homepage");
+        } catch {
+            setSubmitError(true);
+        }
     }
 
     return (
@@ -81,6 +86,7 @@ export default function ChooseInterestsPage(){
                     <div className="bg-[#1e1e1e] px-8 pb-8 pt-2 flex flex-col gap-6">
                         <div>
                             {error && <PopUpError message='Failed to load sports, please try again later'/>}
+                            {submitError && <PopUpError message='Failed to save preferences, please try again'/>}
                         </div>
                         <div className="flex flex-wrap gap-x-2.5 gap-y-4 justify-center">
                             {sports.map(sport => (
