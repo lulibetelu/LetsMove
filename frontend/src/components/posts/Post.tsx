@@ -74,7 +74,7 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
             )}
 
             <div
-                className="flex items-center gap-3 text-white/40 border-t border-white/5 pt-3 mt-2"
+                className="flex items-center gap-6 text-white/40 border-t border-white/5 pt-3 mt-2"
                 onClick={(e) => e.stopPropagation()}
             >
                 <LikeButton postId={id} initialIsLiked={isLiked}/>

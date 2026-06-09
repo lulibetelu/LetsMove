@@ -19,7 +19,7 @@ export default function Posts({userId, posts, deletePost, observerRef}: PostsPro
             {posts && posts.map((p) => (
                 <div
                     key={p.id}
-                    className="w-full border-b border-white/5 hover:bg-white/[0.02] transition-colors cursor-pointer"
+                    className="w-full border-b border-white/20 hover:bg-white/[0.02] transition-colors cursor-pointer"
                 >
                     <Post
                         user={p.user}

@@ -102,7 +102,7 @@ export default function PostPage(){
                     </header>
 
                     {/* Post */}
-                    <div className="border-b border-white/5">
+                    <div className="border-b border-white/20">
                         <Post
                             id={data.id}
                             userId={data.userId}
