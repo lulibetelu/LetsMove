@@ -7,4 +7,13 @@ export interface Message{
     groupMemberId: number;
     date: Date;
     images?: ImageInput
+    groupMember: {
+        id: number,
+        userId: number,
+        groupId: number,
+        isAdmin: boolean,
+        user: {
+            username: string
+        }
+    }
 }

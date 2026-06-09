@@ -14,6 +14,15 @@ export class MessageRepositoryService {
         groupMemberId: createMessageDto.memberId,
         date: createMessageDto.sentDate,
       },
+      include: {
+        groupMember: {
+          include: {
+            user: {
+              select: { username: true },
+            },
+          },
+        },
+      },
     });
 
     if (imageIds.length > 0) {
@@ -31,6 +40,15 @@ export class MessageRepositoryService {
     return this.prismaService.message.findMany({
       where: {
         groupId: groupId,
+      },
+      include: {
+        groupMember: {
+          include: {
+            user: {
+              select: { username: true },
+            },
+          },
+        },
       },
     });
   }

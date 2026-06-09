@@ -1,20 +1,19 @@
-import { CreateMessageDto } from '../dto/create-message.dto';
+import type { ImageInput } from 'frontend/src/types/imageType';
 
-export class Message {
+export interface Message {
+  id: number;
   groupId: number;
   content: string;
-  memberId: number;
+  groupMemberId: number;
   date: Date;
-  images: number[];
-  constructor(
-    createMessageDto: CreateMessageDto,
-    imagesIds: number[],
-    memberId: number,
-  ) {
-    this.groupId = createMessageDto.groupId;
-    this.content = createMessageDto.content;
-    this.memberId = memberId;
-    this.date = createMessageDto.sentDate;
-    this.images = imagesIds;
-  }
+  images?: ImageInput;
+  groupMember: {
+    id: number;
+    userId: number;
+    groupId: number;
+    isAdmin: boolean;
+    user: {
+      username: string;
+    };
+  };
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, X, Check, Users } from "lucide-react";
+import { Search, X, Check } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import ImagePicker from "../ImagePicker.tsx";
 import { useFriends } from "../../hooks/groups/useFriends.ts";

@@ -13,7 +13,7 @@ import { GroupService } from '../group/group.service';
 import { CreateImageDto } from '../images/dto/create-image.dto';
 import { MessageService } from '../message/message.service';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
-
+import { Message } from '../message/entities/message.entity';
 @WebSocketGateway(4000, {
   cors: { origin: '*' },
 })
@@ -83,7 +83,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       images: messageData.images,
       sentDate: new Date(),
     };
-    const createdMessage = await this.messageService.create(createMessageDto);
+    const createdMessage: Message =
+      await this.messageService.create(createMessageDto);
 
     this.server
       .to(messageData.groupId.toString())
