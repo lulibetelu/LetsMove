@@ -44,7 +44,11 @@ export default function GroupPage() {
 
                 <div className="flex-1 flex flex-col">
                     {selectedGroupId ? (
-                        <GroupDetail groupId={selectedGroupId} />
+                        <GroupDetail
+                            groupId={selectedGroupId}
+                            onGroupDeleted={() => setSelectedGroupId(null)}
+                            onGroupUpdated={() => {}}
+                        />
                     ) : (
                         <div className="flex-1 flex items-center justify-center">
                             <div className="text-center">
