@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, X, Check, Users } from "lucide-react";
+import { Search, X, Check } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import ImagePicker from "../ImagePicker.tsx";
 import { useFriends } from "../../hooks/groups/useFriends.ts";
@@ -58,7 +58,7 @@ export default function NewGroup({ onClose, onGroupCreated }: NewGroupProps) {
                 ...(images[0] ? { image: images[0] } : {}),
             };
             await createGroup(data);
-            queryClient.invalidateQueries({ queryKey: ['groups'] });
+            await queryClient.invalidateQueries({queryKey: ['groups']});
             onGroupCreated();
         } catch (err) {
             setError(err instanceof Error ? err.message : "Failed to create group");
@@ -77,6 +77,7 @@ export default function NewGroup({ onClose, onGroupCreated }: NewGroupProps) {
                         aria-label="Close"
                         onClick={onClose}
                         className="p-1 rounded-full hover:bg-white/10 transition-colors text-white/30 hover:text-white/60"
+                    >
                         <X size={20} />
                     </button>
                 </div>

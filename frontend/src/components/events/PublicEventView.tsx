@@ -6,6 +6,7 @@ import {useQuery} from "@tanstack/react-query";
 import {findEventParticipants} from "../../api/event.ts";
 import {formatDate} from "../../resusable-functions/formatDate.ts";
 import {formatTime} from "../../resusable-functions/formatTime.ts";
+import PopUpError from "../PopUpError.tsx";
 
 interface Props {
     event: EventType;
@@ -14,9 +15,12 @@ interface Props {
 }
 
 export default function PublicEventView({event, signUp, onJoined}: Props) {
-    const [joined, setJoined] = useState(signUp?.state === 'Accepted');
-    const [eventReq, setEventReq] = useState(signUp?.state === 'Requested');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const url = import.meta.env.VITE_API_URL;
+
+    const joined = signUp?.state === 'Accepted';
+    const eventReq = signUp?.state === 'Requested';
 
     const coverImage = event.imageEvents?.find(img => img.description === "Cover");
 
@@ -30,20 +34,24 @@ export default function PublicEventView({event, signUp, onJoined}: Props) {
     ) ?? [];
 
     const handleJoin = async () => {
-        if (!joined && !eventReq) {
-            await joinEvent(event.id);
-            if (event.isPrivate) {
-                setEventReq(true);
-            } else {
-                setJoined(true);
+        setLoading(true);
+        setError(null);
+        try {
+            if (!joined && !eventReq) {
+                await joinEvent(event.id);
+                if (event.isPrivate) {
+                    onJoined();
+                } else {
+                    onJoined();
+                }
+            } else if (joined || eventReq) {
+                await exitEvent(event.id);
                 onJoined();
             }
-        } else if (joined) {
-            await exitEvent(event.id);
-            setJoined(false);
-        } else if (eventReq) {
-            await exitEvent(event.id);
-            setEventReq(false);
+        } catch (e) {
+            setError(e instanceof Error ? e.message : 'Something went wrong');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -156,32 +164,44 @@ export default function PublicEventView({event, signUp, onJoined}: Props) {
                         )}
 
                         {/* Botón */}
-                        <div className="pt-3 border-t border-white/5">
+                        <div className="pt-3 border-t border-white/5 flex flex-col gap-2">
                             {joined ? (
                                 <button
                                     onClick={handleJoin}
-                                    className="group w-full py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-[0.97] bg-[#8A9A5B] hover:bg-red-400/20 hover:text-red-400 text-white"
+                                    disabled={loading}
+                                    className="group w-full py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none bg-[#8A9A5B] hover:bg-red-400/20 hover:text-red-400 text-white"
                                 >
-                                    <span className="group-hover:hidden">Joined</span>
-                                    <span className="hidden group-hover:inline">Leave</span>
+                                    {loading ? "Loading..." : (
+                                        <>
+                                            <span className="group-hover:hidden">Joined</span>
+                                            <span className="hidden group-hover:inline">Leave</span>
+                                        </>
+                                    )}
                                 </button>
                             ) : eventReq ? (
                                 <button
                                     onClick={handleJoin}
-                                    className="group w-full py-2.5 rounded-xl text-sm font-semibold border border-white/15 text-white/50 hover:border-red-400/50 hover:text-red-400 transition-all active:scale-[0.97]"
+                                    disabled={loading}
+                                    className="group w-full py-2.5 rounded-xl text-sm font-semibold border border-white/15 text-white/50 hover:border-red-400/50 hover:text-red-400 transition-all active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none"
                                 >
-                                    <span className="group-hover:hidden">Pending</span>
-                                    <span className="hidden group-hover:inline">Cancel</span>
+                                    {loading ? "Loading..." : (
+                                        <>
+                                            <span className="group-hover:hidden">Pending</span>
+                                            <span className="hidden group-hover:inline">Cancel</span>
+                                        </>
+                                    )}
                                 </button>
                             ) : (
                                 <button
                                     onClick={handleJoin}
-                                    className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all active:scale-[0.97]"
+                                    disabled={loading}
+                                    className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none"
                                     style={{background: "linear-gradient(135deg, #8A9A5B, #6b7a46)"}}
                                 >
-                                    Unirse
+                                    {loading ? "Loading..." : "Unirse"}
                                 </button>
                             )}
+                            {error && <PopUpError message={error} />}
                         </div>
                     </div>
                 </div>

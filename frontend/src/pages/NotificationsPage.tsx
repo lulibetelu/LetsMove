@@ -2,7 +2,6 @@ import FriendRequest from "../components/FriendRequest.tsx";
 import type {FriendRequestType} from "../types/friendRequestType.ts";
 import {useEffect, useState} from "react";
 import {acceptFriendRequest, findAllFriendRequests, rejectFriendRequest} from "../api/friend.ts";
-import PopUpError from "../components/PopUpError.tsx";
 import Sidebar from "../components/Sidebar.tsx";
 import {Bell} from "lucide-react";
 import {acceptParticipant, findEventParticipants, findEventsFromHost, rejectParticipant} from "../api/event.ts";
@@ -21,7 +20,11 @@ export default function NotificationsPage(){
             try {
                 const apiFriendRequests: FriendRequestType[] = await findAllFriendRequests();
                 setFriendRequests(apiFriendRequests);
+            } catch (e) {
+                console.error('Failed to fetch friend requests:', e);
+            }
 
+            try {
                 const events: EventType[] = await findEventsFromHost();
                 const privateEvents = events.filter(e => e.isPrivate);
                 const allParticipants = await Promise.all(
@@ -36,9 +39,8 @@ export default function NotificationsPage(){
                     })
                 );
                 setPendingParticipants(allParticipants.flat());
-
-            } catch{
-                return <PopUpError message="Something went wrong Could not reach requests"/>
+            } catch (e) {
+                console.error('Failed to fetch pending participants:', e);
             } finally {
                 setLoading(false);
             }
@@ -64,7 +66,7 @@ export default function NotificationsPage(){
 
     return (
         <div className="min-h-screen bg-[#141414] flex">
-            <Sidebar onPostCreated={() => {}} />
+            <Sidebar />
 
             <main className="flex-1 ml-60 flex justify-center">
                 <div className="w-full max-w-2xl min-h-screen pb-24">

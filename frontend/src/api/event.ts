@@ -8,70 +8,40 @@ import type {
 import {getCurrentUserId} from "./user.ts";
 
 import type {ImageInput} from "../types/imageType.ts";
-
-const url = import.meta.env.VITE_API_URL;
-
+import api, { handleApiError } from "./client.ts";
 
 export async function findEvents(page:number, filters:EventFilters){
-    const token = localStorage.getItem('token');
-    const params = new URLSearchParams({
+    const params = {
         page: page.toString(),
         ...(filters.title && { title: filters.title }),
         ...(filters.host && { host: filters.host }),
         ...(filters.sport && { sport: filters.sport }),
-    });
-    const response = await fetch(url + `event/limited?${params}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-    })
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    };
+    try {
+        const { data } = await api.get('event/limited', { params });
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-    return response.json();
 }
 
 export async function findOneEvent(id: number) {
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + `event/${id}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-    })
-
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const { data } = await api.get('event/' + id);
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-
-    return response.json();
 }
 
 export async function createEvent(data: EventRawData){
     const formattedData: CreateEventType = formatEventData(data);
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + `event`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(formattedData),
-    })
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const result = await api.post('event', formattedData);
+        return result.data;
+    } catch (error) {
+        handleApiError(error);
     }
-
-    return response.json();
 }
 
 function formatEventData(data: EventRawData): CreateEventType {
@@ -118,247 +88,126 @@ function formatUpdateEventData(data: UpdateEventRawData): UpdateEventType {
 
 export async function updateEvent(data: UpdateEventRawData){
     const formattedData: UpdateEventType = formatUpdateEventData(data);
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + `event/${data.id}`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(formattedData),
-    })
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const result = await api.patch('event/' + data.id, formattedData);
+        return result.data;
+    } catch (error) {
+        handleApiError(error);
     }
-
-    return response.json();
 }
 
 export async function eliminateEvent(id:number){
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + `event/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-    })
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const { data } = await api.delete('event/' + id);
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-
-    return response.json();
 }
 
 export async function joinEvent(eventId: number) {
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + 'event-sign-up', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({eventId: eventId}),
-    });
-
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const { data } = await api.post('event-sign-up', { eventId });
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-
-    return response.json();
 }
 
 export async function exitEvent(eventId: number){
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + `event-sign-up/${eventId}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-    })
-
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const { data } = await api.delete('event-sign-up/' + eventId);
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-
-    return response.json();
 }
 export async function acceptParticipant(userId: number, eventId: number){
-    const token = localStorage.getItem('token');
-    const datos = {
-        eventId: eventId,
-        state: 'Accepted',
-        userId: userId
+    try {
+        const { data } = await api.patch('event-sign-up', {
+            eventId,
+            state: 'Accepted',
+            userId,
+        });
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-    const response = await fetch(url + 'event-sign-up', {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(datos),
-    });
-
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
-    }
-
-    return response.json();
 }
 
 export async function rejectParticipant(userId: number, eventId: number){
-    const token = localStorage.getItem('token');
-    const datos = {
-        eventId: eventId,
-        state: 'Rejected',
-        userId: userId,
+    try {
+        const { data } = await api.patch('event-sign-up', {
+            eventId,
+            state: 'Rejected',
+            userId,
+        });
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-    const response = await fetch(url + 'event-sign-up', {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(datos),
-    });
-
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
-    }
-
-    return response.json();
 }
 
 export async function findEventParticipants(eventId: number) {
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + `event-sign-up/event/${eventId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-    });
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const { data } = await api.get('event-sign-up/event/' + eventId);
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-    return response.json();
 }
 
 export async function findEventsFromHost() {
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + `event/host`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-    });
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const { data } = await api.get('event/host');
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-    return response.json();
 }
 
 export async function findEventsUserParticipate(page: number, userId: number){
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + `event/participates?page=${page}&id=${userId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-    });
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const { data } = await api.get('event/participates', { params: { page, id: userId } });
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-    return response.json();
 }
 
 export async function findOneSignUp(eventId: number) {
-    const token = localStorage.getItem('token');
     const user: number|null = getCurrentUserId();
     if (user === null) throw new Error("User not found");
-    const response = await fetch(url + `event-sign-up?eventId=${eventId}&userId=${user}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-    });
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const { data } = await api.get('event-sign-up', { params: { eventId, userId: user } });
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-    return response.json();
 }
 export async function createEventEntry(eventId: number, content: string, images?: ImageInput[]) {
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + 'event-entry', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ eventId, content, images }),
-    });
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const { data } = await api.post('event-entry', { eventId, content, images });
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-    return response.json();
 }
 
 export async function getEntriesFromEvent(eventId: number, page: number) {
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + `event-entry/event/${eventId}?page=${page}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-    });
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const { data } = await api.get('event-entry/event/' + eventId, { params: { page } });
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-    return response.json();
 }
 
 export async function deleteEventEntry(entryId: number) {
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + `event-entry/${entryId}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-    });
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const { data } = await api.delete('event-entry/' + entryId);
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-    return response.json();
 }

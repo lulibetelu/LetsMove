@@ -1,7 +1,7 @@
 import type {EventEntry, EventSignUp, EventType} from "../../types/eventTypes.ts";
 import {CalendarDays, UserCircle, Plus, Trash2, Flame, Lock, MapPin, Users} from "lucide-react";
 import {useState} from "react";
-import {createEventEntry, deleteEventEntry, findEventParticipants} from "../../api/event.ts";
+import {createEventEntry, deleteEventEntry, exitEvent, findEventParticipants} from "../../api/event.ts";
 import {useEventEntries} from "../../hooks/events/useEventEntries.ts";
 import {getCurrentUserId} from "../../api/user.ts";
 import {useQueryClient, useQuery} from "@tanstack/react-query";
@@ -10,8 +10,10 @@ import {formatTime} from "../../resusable-functions/formatTime.ts";
 import type {ImageInput} from "../../types/imageType.ts";
 
 import ImagePicker from "../ImagePicker.tsx";
+import PopUpError from "../PopUpError.tsx";
 interface Props {
     event: EventType;
+    onLeft: () => void;
 }
 
 function calculateStreak(entries: EventEntry[], userId: number | null): number {
@@ -55,13 +57,28 @@ function getLast7Days(entries: EventEntry[], userId: number | null): boolean[] {
     });
 }
 
-export default function PrivateEventView({event}: Props) {
+export default function PrivateEventView({event, onLeft}: Props) {
     const [newEntry, setNewEntry] = useState("");
     const [showForm, setShowForm] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [leaveLoading, setLeaveLoading] = useState(false);
+    const [leaveError, setLeaveError] = useState<string | null>(null);
     const currentUserId = getCurrentUserId();
     const isHost = currentUserId === event.hostId;
     const queryClient = useQueryClient();
+
+    const handleLeave = async () => {
+        setLeaveLoading(true);
+        setLeaveError(null);
+        try {
+            await exitEvent(event.id);
+            onLeft();
+        } catch (e) {
+            setLeaveError(e instanceof Error ? e.message : 'Something went wrong');
+        } finally {
+            setLeaveLoading(false);
+        }
+    };
     const [images, setImages] = useState<ImageInput[]>([])
     const url = import.meta.env.VITE_API_URL;
 
@@ -330,6 +347,19 @@ export default function PrivateEventView({event}: Props) {
                             </div>
                         )}
                     </div>
+
+                    {!isHost && (
+                        <div className="bg-[#1e1e1e] rounded-xl border border-white/5 p-5 flex flex-col gap-3">
+                            <button
+                                onClick={handleLeave}
+                                disabled={leaveLoading}
+                                className="w-full py-2.5 rounded-xl text-sm font-semibold border border-red-400/30 text-red-400 hover:bg-red-400/10 transition-all active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none"
+                            >
+                                {leaveLoading ? "Leaving..." : "Leave Event"}
+                            </button>
+                            {leaveError && <PopUpError message={leaveError} />}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

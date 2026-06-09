@@ -75,6 +75,7 @@ export default function GroupPage() {
                 type="button"
                 aria-label="Create group"
                 onClick={() => setShowCreateForm(true)}
+                className="
                     fixed bottom-6 right-6
                     w-16 h-16
                     rounded-full

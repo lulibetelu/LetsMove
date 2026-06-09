@@ -17,6 +17,7 @@ import PostPage from "./pages/PostPage.tsx";
 import EventFeed from "./pages/EventFeed.tsx";
 import EventPage from "./pages/EventPage.tsx";
 import GroupPage from "./pages/GroupPage.tsx";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
 
 //define a partir de donde le pegué en la URL qué componente va a renderizar react
 const router = createBrowserRouter([
@@ -33,40 +34,45 @@ const router = createBrowserRouter([
         element: <LoginPage/>
     },
     {
-        path: "/interests",
-        element: <ChooseInterestsPage/>
-    },
-    {
-        path: "/homepage",
-        element: <Homepage/>
-    },
-    {
-        path: "/profile/:id",
-        element: <Profile/>
-    },
-    {
-        path: "/notifications",
-        element: <NotificationsPage/>
-    },
-    {
-        path: "/post/:id",
-        element: <PostPage/>
-    },
-    {
-        path: "/event",
-        element: <EventFeed></EventFeed>
-    },
-    {
-        path: "/event/:id",
-        element: <EventPage/>
-    },
-    {
         path: "/error",
         element: <ErrorPage/>
     },
     {
-        path: "/group",
-        element: <GroupPage/>
+        element: <ProtectedRoute />,
+        children: [
+            {
+                path: "/interests",
+                element: <ChooseInterestsPage/>
+            },
+            {
+                path: "/homepage",
+                element: <Homepage/>
+            },
+            {
+                path: "/profile/:id",
+                element: <Profile/>
+            },
+            {
+                path: "/notifications",
+                element: <NotificationsPage/>
+            },
+            {
+                path: "/post/:id",
+                element: <PostPage/>
+            },
+            {
+                path: "/event",
+                element: <EventFeed></EventFeed>
+            },
+            {
+                path: "/event/:id",
+                element: <EventPage/>
+            },
+            {
+                path: "/group",
+                element: <GroupPage/>
+            },
+        ]
     },
     {
         path: "*",

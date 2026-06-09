@@ -18,6 +18,7 @@ import { EventSignUpModule } from './event-sign-up/event-sign-up.module';
 import { EventEntryModule } from './eventEntry/event-entry.module';
 import { ImageModule } from './images/image.module';
 import { GroupModule } from './group/group.module';
+import { SavedEventModule } from './saved-event/saved-event.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { GroupModule } from './group/group.module';
     EventEntryModule,
     ImageModule,
     GroupModule,
+    SavedEventModule,
   ],
   controllers: [AppController],
   providers: [AppService],
