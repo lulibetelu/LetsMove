@@ -4,6 +4,7 @@ import GroupList from "../components/groups/GroupList.tsx";
 import GroupDetail from "../components/groups/GroupDetail.tsx";
 import NewGroup from "../components/groups/NewGroup.tsx";
 import { useGroups } from "../hooks/groups/useGroups.ts";
+import {GroupChat} from "../components/groups/Chat/GroupChat.tsx";
 
 export default function GroupPage() {
     const {data: groups, isLoading, isError} = useGroups();
@@ -44,7 +45,7 @@ export default function GroupPage() {
 
                 <div className="flex-1 flex flex-col">
                     {selectedGroupId ? (
-                        <GroupDetail groupId={selectedGroupId}/>
+                        <GroupChat groupId={selectedGroupId}/>
                     ) : (
                         <div className="flex-1 flex items-center justify-center">
                             <div className="text-center">

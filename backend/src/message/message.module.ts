@@ -9,5 +9,6 @@ import { MessageRepositoryModule } from '../repository/message/message.repositor
   imports: [ImageModule, GroupModule, MessageRepositoryModule],
   controllers: [MessageController],
   providers: [MessageService],
+  exports: [MessageService],
 })
 export class MessageModule {}

@@ -20,6 +20,7 @@ import { ImageModule } from './images/image.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { GroupModule } from './group/group.module';
 import { MessageModule } from './message/message.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -43,8 +44,9 @@ import { MessageModule } from './message/message.module';
     ImageModule,
     GroupModule,
     MessageModule,
+    ChatModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ChatGateway],
+  providers: [AppService],
 })
 export class AppModule {}

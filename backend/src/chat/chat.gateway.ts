@@ -8,7 +8,6 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { GroupService } from '../group/group.service';
 import { CreateImageDto } from '../images/dto/create-image.dto';
@@ -33,7 +32,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   handleConnection(client: Socket<any, any, any, SocketData>): void {
     const token = client.handshake.auth?.token as string | undefined;
 
-    if (!token) throw new UnauthorizedException('cannot fin token');
+    if (!token) {
+      client.disconnect();
+      return;
+    }
 
     try {
       const payload = this.jwtService.verify<JwtPayload>(token);
@@ -50,6 +52,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('joinGroup')
   async handleJoinGroup(
     @ConnectedSocket() client: Socket<any, any, any, SocketData>,
+    @MessageBody()
     groupId: number,
   ) {
     const userId: number = client.data.user.sub;
@@ -66,6 +69,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('message')
   async handleMessage(
     @ConnectedSocket() client: Socket<any, any, any, SocketData>,
+    @MessageBody()
     messageData: MessageData,
   ) {
     const userId: number = client.data.user.sub;
@@ -79,9 +83,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       images: messageData.images,
       sentDate: new Date(),
     };
-    await this.messageService.create(createMessageDto);
+    const createdMessage = await this.messageService.create(createMessageDto);
 
-    this.server.to(messageData.groupId.toString()).emit('message', messageData);
+    this.server
+      .to(messageData.groupId.toString())
+      .emit('newMessage', createdMessage);
   }
 }
 
