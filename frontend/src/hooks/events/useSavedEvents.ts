@@ -12,7 +12,7 @@ export function useSavedEvents() {
 
     const saved = useMemo(() => new Set(savedEntries.map((e) => e.eventId)), [savedEntries]);
 
-    const { mutateAsync: toggleSave } = useMutation({
+    const { mutate: toggleSave } = useMutation({
         mutationFn: async (eventId: number) => {
             if (saved.has(eventId)) {
                 await unsaveEvent(eventId);

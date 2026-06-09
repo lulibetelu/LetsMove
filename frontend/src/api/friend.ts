@@ -5,7 +5,7 @@ export async function createFriendRequest(receiverId: number){
     try {
         const { data } = await api.post('friends', { receiverId });
         return data;
-    } catch (error) {
+    } catch (error: any) {
         throw new Error(`Failed to create request to user ${receiverId}: ${error?.response?.status ?? 500}`);
     }
 }
@@ -31,7 +31,7 @@ export async function rejectFriendRequest(friendId: number){
     try {
         const { data } = await api.patch('friends', { friendId, state: 'Rejected' });
         return data;
-    } catch (error) {
+    } catch (error: any) {
         throw new Error(`Could not reject friend request. Status: ${error?.response?.status ?? 500}`);
     }
 }
@@ -53,6 +53,7 @@ export async function findAllFriends() {
         handleApiError(error);
     }
 }
+
 
 export async function removeFriend(receiverId: number){
     try {
