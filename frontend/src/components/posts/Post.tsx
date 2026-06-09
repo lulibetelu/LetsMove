@@ -8,9 +8,10 @@ import NewComment from "../create/NewComment.tsx";
 type Props = PostType & {
     isForPostPage: boolean,
     onCommentCreate?: () => void,
+    onCommentClick?: () => void,
 }
 
-export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, canDelete, deletePost, isForPostPage, onCommentCreate, images } : Props){
+export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, canDelete, deletePost, isForPostPage, onCommentCreate, onCommentClick, images } : Props){
     const url = import.meta.env.VITE_API_URL;
     const [createComment, setCreateComment] = useState(false);
     const navigate: NavigateFunction = useNavigate();
@@ -82,11 +83,17 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
                     type="button"
                     className="flex cursor-pointer items-center gap-2 transition-all duration-300 rounded-full p-1 text-base-content/70 hover:text-[#8A9A5B]"
                     aria-label="Comment"
-                    onClick={() => setCreateComment(true)}
+                    onClick={() => {
+                        if (isForPostPage && onCommentClick) {
+                            onCommentClick();
+                        } else {
+                            setCreateComment(true);
+                        }
+                    }}
                 >
                     <MessageCircle size={20} strokeWidth={1.5} className="transition-transform active:scale-125"/>
                 </button>
-                {createComment && (
+                {(!isForPostPage || !onCommentClick) && createComment && (
                     <NewComment
                         postId={id}
                         postAuthorUsername={username}
