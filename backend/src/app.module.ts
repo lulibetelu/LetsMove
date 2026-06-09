@@ -21,6 +21,7 @@ import { ChatGateway } from './chat/chat.gateway';
 import { GroupModule } from './group/group.module';
 import { MessageModule } from './message/message.module';
 import { ChatModule } from './chat/chat.module';
+import { SavedEventModule } from './saved-event/saved-event.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { ChatModule } from './chat/chat.module';
     GroupModule,
     MessageModule,
     ChatModule,
+    SavedEventModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -11,6 +11,7 @@ import ImagePicker from "../ImagePicker.tsx";
 
 interface Props {
     onClose: () => void;
+    onEventCreated?: (id: number) => void;
 }
 
 export default function NewEvent(props: Props){
@@ -59,7 +60,8 @@ export default function NewEvent(props: Props){
         }
 
         try {
-            await createEvent(data);
+            const created = await createEvent(data);
+            props.onEventCreated?.(created.id);
             props.onClose();
         }catch {
             setError(true);

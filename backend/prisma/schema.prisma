@@ -37,6 +37,7 @@ model User {
   events       Event[]
   eventSignUp  EventSignUp[]
   eventEntries EventEntry[]
+  savedEvents SavedEvent[]
 
   groupMember GroupMember[]
 }
@@ -227,6 +228,7 @@ model Event {
   sportId      Int
   sport        Sport         @relation(fields: [sportId], references: [id], onDelete: Cascade)
   eventEntries EventEntry[]
+  savedEvents SavedEvent[]
 }
 
 enum EventType {
@@ -297,4 +299,14 @@ model Message {
   groupMember   GroupMember    @relation(fields: [groupMemberId], references: [id], onDelete: Cascade)
   date          DateTime
   images        ImageMessage[]
+}
+
+model SavedEvent {
+  id      Int   @id @default(autoincrement())
+  userId  Int
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventId Int
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
 }

@@ -335,9 +335,7 @@ export class EventRepositoryService {
 
     return this.prismaService.event.findMany({
       where: {
-        id: {
-          in: idList,
-        },
+        OR: [{ id: { in: idList } }, { hostId: requesterId }],
       },
       include: {
         host: {

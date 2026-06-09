@@ -3,8 +3,6 @@ import {useEffect, useState} from "react";
 import type {Sport} from "../types/sportType.ts";
 import {findAllSports} from "../api/sport.ts";
 import SportLabel from "../components/SportLabel.tsx";
-// esto no esta bueno porque genera mucho acoplamiento entre front y back
-import type {CreatePreferencesDto} from "backend/src/preferences/dto/create.preferences.dto.ts";
 import {createPreferences} from "../api/preferences.ts";
 import PopUpError from "../components/PopUpError.tsx";
 import {Dumbbell} from "lucide-react";
@@ -16,6 +14,7 @@ export default function ChooseInterestsPage(){
     const [sports, setSports] = useState<Sport[]>([]);
     const [selections, setSelections] = useState<Record<string, string>>({});
     const [error, setError] = useState<boolean>(false);
+    const [submitError, setSubmitError] = useState<boolean>(false);
 
     useEffect(() => {
         async function loadSports() {
@@ -40,16 +39,19 @@ export default function ChooseInterestsPage(){
     });
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const selectionsToObjects = Object.entries(selections).map(([sport, level]) => ({
             sport,
             level
         }))
 
-        const dataRequest: CreatePreferencesDto = {sports: selectionsToObjects}
-        console.log(dataRequest);
-        createPreferences(dataRequest);
-        navigate("/homepage");
+        const dataRequest = {sports: selectionsToObjects}
+        try {
+            await createPreferences(dataRequest);
+            navigate("/homepage");
+        } catch {
+            setSubmitError(true);
+        }
     }
 
     return (
@@ -84,6 +86,7 @@ export default function ChooseInterestsPage(){
                     <div className="bg-[#1e1e1e] px-8 pb-8 pt-2 flex flex-col gap-6">
                         <div>
                             {error && <PopUpError message='Failed to load sports, please try again later'/>}
+                            {submitError && <PopUpError message='Failed to save preferences, please try again'/>}
                         </div>
                         <div className="flex flex-wrap gap-x-2.5 gap-y-4 justify-center">
                             {sports.map(sport => (

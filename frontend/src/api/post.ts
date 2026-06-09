@@ -1,75 +1,48 @@
 import type {NewPostCredentials} from "../types/postTypes.ts";
-
-const url = import.meta.env.VITE_API_URL;
+import api, { handleApiError } from "./client.ts";
 
 export async function create(postCredentials: NewPostCredentials){
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + 'posts' , {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(postCredentials)
-    });
-    if (!response.ok) throw new Error(`Failed to create post: ${response.status}`);
-    return response.json();
+    try {
+        const { data } = await api.post('posts', postCredentials);
+        return data;
+    } catch (error: any) {
+        throw new Error(`Failed to create post: ${error?.response?.status ?? 500}`);
+    }
 }
 
 export async function findAll(page?: number){
-    const token = localStorage.getItem('token');
-    const completeUrl = page? url + 'posts?page=' + page : url + 'posts';
-    const response = await fetch( completeUrl , {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-    });
-    if (!response.ok) throw new Error(`Failed to load posts: ${response.status}`);
-    return response.json();
+    const params = page ? { page } : {};
+    try {
+        const { data } = await api.get('posts', { params });
+        return data;
+    } catch (error: any) {
+        throw new Error(`Failed to load posts: ${error?.response?.status ?? 500}`);
+    }
 }
 
 export async function findOne(postId: number){
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + 'posts/' + postId , {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-    });
-    if (!response.ok) throw new Error(`Failed to load post with id ${postId}: ${response.status}`);
-    return response.json();
+    try {
+        const { data } = await api.get('posts/' + postId);
+        return data;
+    } catch (error: any) {
+        throw new Error(`Failed to load post with id ${postId}: ${error?.response?.status ?? 500}`);
+    }
 }
 
 export async function removePost(postId: number){
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + 'posts/' + postId , {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-    });
-    if (!response.ok) throw new Error(`Failed to delete post with id ${postId}: ${response.status}`);
-    return response.json();
+    try {
+        const { data } = await api.delete('posts/' + postId);
+        return data;
+    } catch (error: any) {
+        throw new Error(`Failed to delete post with id ${postId}: ${error?.response?.status ?? 500}`);
+    }
 }
 
 export async function findPostsFromUser(userId: number, page?: number){
-    const token = localStorage.getItem('token');
-    const completeUrl = page? url + 'posts/user/' + userId + '?page=' + page : url + 'posts/user/' + userId + '?page=1';
-    const response = await fetch(completeUrl , {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-    });
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
+    try {
+        const { data } = await api.get('posts/user/' + userId, { params: { page: page ?? 1 } });
+        return data;
+    } catch (error) {
+        handleApiError(error);
     }
-    return response.json();
 }

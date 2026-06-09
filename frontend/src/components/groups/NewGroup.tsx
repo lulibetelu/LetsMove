@@ -58,7 +58,7 @@ export default function NewGroup({ onClose, onGroupCreated }: NewGroupProps) {
                 ...(images[0] ? { image: images[0] } : {}),
             };
             await createGroup(data);
-            queryClient.invalidateQueries({ queryKey: ['groups'] });
+            await queryClient.invalidateQueries({queryKey: ['groups']});
             onGroupCreated();
         } catch (err) {
             setError(err instanceof Error ? err.message : "Failed to create group");

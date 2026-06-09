@@ -1,43 +1,24 @@
-import type {EventSignUp, EventType} from "../../types/eventTypes.ts";
-import {useEffect, useState} from "react";
-import {exitEvent, findOneSignUp, joinEvent} from "../../api/event.ts";
-import {CalendarDays, Lock, MapPin} from "lucide-react";
+import type {EventType} from "../../types/eventTypes.ts";
+import {CalendarDays, Lock, MapPin, Bookmark} from "lucide-react";
 import {useNavigate} from "react-router-dom";
 import {formatDate} from "../../resusable-functions/formatDate.ts";
 import {formatTime} from "../../resusable-functions/formatTime.ts";
+import {useSavedEvents} from "../../hooks/events/useSavedEvents.ts";
 interface Props  {
     event : EventType;
 }
 
 export default function Event({event}: Props) {
-    const [joined, setJoined] = useState<boolean>(false);
     const navigate = useNavigate();
-    const [eventReq, setEventReq] = useState<boolean>(false);
+    const { saved, toggleSave } = useSavedEvents();
+    const isSaved = saved.has(event.id);
     const url = import.meta.env.VITE_API_URL;
 
-    useEffect(() => {
-        findOneSignUp(event.id)
-            .then((data: EventSignUp) => {
-                // some recorre el array data y devuelve true si algun elemento es true
-                const hasRequested: boolean = data.state === 'Requested';
-                setEventReq(hasRequested);
-
-                const isParticipant: boolean = data.state === 'Accepted';
-                setJoined(isParticipant);
-            });
-    },[event.id]);
-
-    const handleJoinClick = async (e: React.MouseEvent) => {
+    const handleSaveClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         e.preventDefault();
-        if (!joined) {
-            await joinEvent(event.id);
-        }
-        else {
-            await exitEvent(event.id);
-        }
-        setJoined(!joined);
-    }
+        toggleSave(event.id);
+    };
 
     const coverImage = event.imageEvents?.find(img => img.description === "Cover");
 
@@ -75,13 +56,22 @@ export default function Event({event}: Props) {
                     </span>
                 </div>
 
-                {event.isPrivate && (
-                    <div className="absolute top-3 right-3">
+                <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                    <button
+                        onClick={handleSaveClick}
+                        className="p-1.5 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 hover:bg-black/70 transition-all active:scale-90"
+                    >
+                        <Bookmark
+                            size={12}
+                            className={isSaved ? "text-[#8A9A5B] fill-[#8A9A5B]" : "text-white/70"}
+                        />
+                    </button>
+                    {event.isPrivate && (
                         <div className="p-1.5 rounded-full bg-black/50 backdrop-blur-sm border border-white/10">
                             <Lock size={12} className="text-white/70"/>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
 
             <div className="p-4 flex flex-col gap-2 flex-1">
@@ -108,37 +98,10 @@ export default function Event({event}: Props) {
                         </p>
                     )}
                 </div>
-                <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
+                <div className="mt-auto pt-3 border-t border-white/5">
                     <span className="text-xs text-white/30">
                       by {event.host?.username ?? `Host #${event.hostId}`}
                     </span>
-
-                    <div>
-                        {joined ? (
-                            <button
-                                className="group flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 bg-[#8A9A5B] hover:bg-red-400/20 hover:text-red-400 text-white"
-                                onClick={handleJoinClick}
-                            >
-                                <span className="group-hover:hidden">Joined</span>
-                                <span className="hidden group-hover:inline">Leave</span>
-                            </button>
-                        ) : eventReq ? (
-                            <button
-                                className="group flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold border border-white/15 text-white/50 hover:border-red-400/50 hover:text-red-400 transition-all active:scale-95"
-                                onClick={handleJoinClick}
-                            >
-                                <span className="group-hover:hidden">Pending</span>
-                                <span className="hidden group-hover:inline">Cancel</span>
-                            </button>
-                        ) : (
-                            <button
-                                className="px-4 py-1.5 rounded-full text-xs font-semibold bg-[#8A9A5B] hover:bg-[#728249] text-white transition-all active:scale-95"
-                                onClick={handleJoinClick}
-                            >
-                                Join
-                            </button>
-                        )}
-                    </div>
                 </div>
 
             </div>
