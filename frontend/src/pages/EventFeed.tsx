@@ -1,5 +1,5 @@
 import Sidebar from "../components/Sidebar.tsx";
-import {Search} from "lucide-react";
+import {Search, Plus} from "lucide-react";
 import {useState} from "react";
 import Events from "../components/events/Events.tsx";
 import PopUpError from "../components/PopUpError.tsx";
@@ -78,14 +78,13 @@ export default function EventFeed(){
                         onClick={() => setShowCreateEventForm(true)}
                         className="
                             fixed bottom-6 right-6
-                            w-16 h-16
+                            w-10 h-10
                             rounded-full
 
                             bg-[#96a55a]
                             hover:bg-[#a8b96a]
 
                             text-white
-                            text-4xl
 
                             flex items-center justify-center
 
@@ -101,7 +100,7 @@ export default function EventFeed(){
 
                             cursor-pointer
                           "
-                >+</button>
+                ><Plus size={18} /></button>
                 {showCreateEventForm && <NewEvent onClose={() => setShowCreateEventForm(false)} onEventCreated={(id) => navigate(`/event/${id}`)} />}
                 </div>
             {showFilters && <Filters filters={filters} onClose={() => setShowFilters(false)} onSubmit={(hostAndSport:{host:string, sport: string}) =>handleSubmit(hostAndSport)}/>}

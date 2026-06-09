@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Plus } from "lucide-react";
 import Sidebar from "../components/Sidebar.tsx";
 import GroupList from "../components/groups/GroupList.tsx";
 import GroupDetail from "../components/groups/GroupDetail.tsx";
@@ -81,12 +82,11 @@ export default function GroupPage() {
                 onClick={() => setShowCreateForm(true)}
                 className="
                     fixed bottom-6 right-6
-                    w-16 h-16
+                    w-10 h-10
                     rounded-full
                     bg-[#96a55a]
                     hover:bg-[#a8b96a]
                     text-white
-                    text-4xl
                     flex items-center justify-center
                     shadow-lg
                     hover:shadow-2xl
@@ -97,7 +97,7 @@ export default function GroupPage() {
                     cursor-pointer
                 "
             >
-                +
+                <Plus size={18} />
             </button>
 
             {showCreateForm && (
