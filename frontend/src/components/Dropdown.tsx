@@ -164,7 +164,7 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
             {open && !isPending && createPortal(
                 <div
                     ref={popoverRef}
-                    className="fixed z-[9999] rounded-xl border border-white/10 bg-[#1e1e1e] shadow-xl overflow-hidden"
+                    className="fixed z-[9999] rounded-xl border border-white/10 bg-base-100 shadow-xl overflow-hidden"
                     style={{top: coords.top, left: coords.left, width: coords.width}}
                 >
                     {filtered.length === 0 ? (
