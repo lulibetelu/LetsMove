@@ -6,8 +6,6 @@ import PublicEventView from "./PublicEventView.tsx";
 import useOneEventEntry from "../../hooks/events/useOneEventEntry.ts";
 import {useQueryClient} from "@tanstack/react-query";
 import {useState} from "react";
-import EditButton from "../buttons/EditButton.tsx";
-import DeleteButton from "../buttons/DeleteButton.tsx";
 import EditEventForm from "./EditEventForm.tsx";
 import {eliminateEvent} from "../../api/event.ts";
 import {useNavigate} from "react-router-dom";
@@ -43,13 +41,9 @@ export default function AsyncEventPage({event}: Props) {
     return (
         <div className="min-h-screen bg-[#141414] flex">
             <Sidebar/>
-            <main className="flex-1 ml-60 relative">
-                {isHost && <div className="absolute top-4 right-4 flex gap-2 z-10">
-                    <EditButton handleClick={() => setEditEvent(true)}/>
-                    <DeleteButton handleClick={handleEventDeletion}/>
-                </div>}
+            <main className="flex-1 ml-60">
                 {(isMember || isHost) ? (
-                    <PrivateEventView event={event} onLeft={handleInvalidate} />
+                    <PrivateEventView event={event} onLeft={handleInvalidate} onEdit={() => setEditEvent(true)} onDelete={handleEventDeletion} />
                 ) : (
                     <PublicEventView
                         event={event}

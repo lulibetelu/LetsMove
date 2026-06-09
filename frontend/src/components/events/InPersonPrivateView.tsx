@@ -3,11 +3,15 @@ import {useState} from "react";
 import {exitEvent, findEventParticipants} from "../../api/event.ts";
 import {useQuery} from "@tanstack/react-query";
 import PopUpError from "../PopUpError.tsx";
+import EditButton from "../buttons/EditButton.tsx";
+import DeleteButton from "../buttons/DeleteButton.tsx";
 
 interface Props {
     event: EventType;
     isHost: boolean;
     onLeft: () => void;
+    onEdit?: () => void;
+    onDelete?: () => void;
 }
 
 function formatDate(date: Date | string): string {
@@ -150,7 +154,12 @@ export default function InPersonPrivateView({event, isHost, onLeft}: Props) {
                     )}
                 </div>
 
-                {!isHost && (
+                {isHost ? (
+                    <div className="flex gap-2">
+                        <EditButton handleClick={() => onEdit?.()}/>
+                        <DeleteButton handleClick={() => onDelete?.()}/>
+                    </div>
+                ) : (
                     <div className="flex flex-col gap-2">
                         <button
                             onClick={handleLeave}
