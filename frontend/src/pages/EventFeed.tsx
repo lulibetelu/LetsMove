@@ -38,7 +38,7 @@ export default function EventFeed(){
         <div className="min-h-screen bg-[#141414] flex">
             <Sidebar/>
             <main className="flex-1 ml-60">
-                <div className="w-full max-w-6xl mx-auto min-h-screen pb-24">
+                <div className="w-full max-w-5xl mx-auto min-h-screen pb-24">
                     <header className="sticky top-0 z-40 bg-[#141414]/90 backdrop-blur-md px-6 py-5 flex justify-center border-b border-white/5">
                         <div className="w-full max-w-md relative flex flex-row">
                             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
