@@ -1,6 +1,6 @@
 import type {ImageInput} from "./imageType.ts";
 
-interface Member {
+export interface Member {
     memberId: number,
     isAdmin: boolean,
 }

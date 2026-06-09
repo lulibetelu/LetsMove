@@ -76,7 +76,7 @@ export default function NewGroup({ onClose, onGroupCreated }: NewGroupProps) {
                         type="button"
                         aria-label="Close"
                         onClick={onClose}
-                        className="p-1 rounded-full hover:bg-white/10 transition-colors text-white/30 hover:text-white/60"
+                        className="p-1 rounded-full hover:bg-white/10 transition-colors text-white/30 hover:text-white/60">
                         <X size={20} />
                     </button>
                 </div>
@@ -220,7 +220,7 @@ export default function NewGroup({ onClose, onGroupCreated }: NewGroupProps) {
                         )}
                     </button>
                 </div>
-            </div>
+        </div>
             <div className="modal-backdrop" onClick={onClose} />
         </dialog>
     );
