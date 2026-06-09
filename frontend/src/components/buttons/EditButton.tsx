@@ -12,7 +12,7 @@ export default function EditButton(props: Props){
         px-4 py-2
         rounded-xl
 
-        bg-base-200
+        bg-[#141414]
         hover:bg-[#96a55a]
 
         text-base-content/70

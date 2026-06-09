@@ -12,7 +12,7 @@ export default function DeleteButton(props:Props){
         px-4 py-2
         rounded-xl
 
-        bg-base-200
+        bg-[#141414]
         hover:bg-[#f51414]
 
         text-base-content/70

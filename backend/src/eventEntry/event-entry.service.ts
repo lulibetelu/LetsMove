@@ -27,8 +27,9 @@ export class EventEntryService {
     const isParticipant = eventSignUps.some(
       (signUp) => signUp.userId === userId && signUp.state === 'Accepted',
     );
+    const isHost = event.hostId === userId;
 
-    if (!isParticipant)
+    if (!isParticipant && !isHost)
       throw new UnauthorizedException('Must be a member to create an entry');
 
     const imageIds = await Promise.all(
