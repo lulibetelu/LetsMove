@@ -2,11 +2,9 @@ import {useEffect, useRef, useState} from "react";
 import {useInfiniteQuery} from "@tanstack/react-query";
 import {findEvents} from "../../api/event.ts";
 import type {EventFilters, EventType} from "../../types/eventTypes.ts";
-import {getCurrentUserId} from "../../api/user.ts";
 
 export function useEvents() {
     const observerRef = useRef<HTMLDivElement>(null);
-    const currentUserId = getCurrentUserId();
     const [filters, setFilters] = useState<EventFilters>({
         title: '',
         host: '',
@@ -36,9 +34,7 @@ export function useEvents() {
         initialPageParam: 1,
     });
 
-    // const events: EventType[] = data?.pages.flat().filter((event: EventType) => event.hostId !== currentUserId) ?? [];
-    let events: EventType[]  = [];
-    events = data?.pages.flat().filter((event: EventType) => event.hostId !== currentUserId) ?? [];
+    const events: EventType[] = data?.pages.flat() ?? [];
 
     useEffect(() => {
         if (!observerRef.current) return;

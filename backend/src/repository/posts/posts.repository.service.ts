@@ -81,7 +81,7 @@ export class PostsRepositoryService {
             },
           },
         },
-        where: { userId: { not: currentUserId } },
+        where: {},
       }),
       // agrupo en base a cada usuario que creó un post y me fijo cuantos de esos posts el current id likeo o dislikeo
       this.prismaService.$queryRaw<
