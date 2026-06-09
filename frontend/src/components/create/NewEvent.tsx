@@ -25,7 +25,7 @@ export default function NewEvent(props: Props){
     const [location, setLocation] = useState<string>("");
     const [isPrivate, setIsPrivate] = useState(false);
     const [sport, setSport] = useState<string>("");
-    const [error, setError] = useState<boolean>();
+    const [error, setError] = useState<string | null>(null);
     const [validationError, setValidationError] = useState<string>("");
     const {sports, isPending, sportError} = useSports();
 
@@ -72,7 +72,7 @@ export default function NewEvent(props: Props){
             title: title,
             description: description,
             type: type,
-            startingDate: startingDate!.toISOString(),
+            startingDate: startingDate ? startingDate.toISOString() : "",
             endingDate: endingDate ? endingDate.toISOString() : "",
             location: location,
             isPrivate: isPrivate,
@@ -88,7 +88,7 @@ export default function NewEvent(props: Props){
             props.onEventCreated?.(created.id);
             props.onClose();
         }catch {
-            setError(true);
+            setError("Failed to create event. Check your connection and try again.");
         }
     }
 
@@ -360,6 +360,12 @@ return (
                     </label>
                     <ImagePicker images={images} onChange={setImages} max={1} forcedDescription="Cover"/>
                 </div>
+
+                {/* Error */}
+                <div>
+                    {validationError && <PopUpError message={validationError} />}
+                    {error && !validationError && <PopUpError message={error} />}
+                </div>
             </div>
 
             {/* Footer */}
@@ -392,11 +398,6 @@ return (
                 </button>
             </div>
 
-            {/* Error */}
-            <div>
-                {validationError && <PopUpError message={validationError} />}
-                {error && !validationError && <PopUpError message="Failed to create event" />}
-            </div>
         </form>
 
         <form method="dialog" className="modal-backdrop">

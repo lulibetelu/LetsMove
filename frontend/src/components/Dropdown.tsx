@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {createPortal} from "react-dom";
 import {ChevronDown, X} from "lucide-react";
+import PopUpError from "./PopUpError.tsx";
 
 interface Props {
     dataList: string[],
@@ -153,9 +154,7 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
                 <div className="text-xs text-white/40 mt-2">Loading sports...</div>
             )}
 
-            {error && (
-                <p className="text-xs text-red-400/80 mt-2 font-medium">{error.message}</p>
-            )}
+            {error && <PopUpError message={error.message} />}
 
             {!isPending && dataList.length === 0 && !error && (
                 <div className="text-xs text-white/40 mt-2">No sports available</div>
