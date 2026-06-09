@@ -5,7 +5,7 @@ export async function createFriendRequest(receiverId: number){
     try {
         const { data } = await api.post('friends', { receiverId });
         return data;
-    } catch (error: any) {
+    } catch (error) {
         throw new Error(`Failed to create request to user ${receiverId}: ${error?.response?.status ?? 500}`);
     }
 }
@@ -31,7 +31,7 @@ export async function rejectFriendRequest(friendId: number){
     try {
         const { data } = await api.patch('friends', { friendId, state: 'Rejected' });
         return data;
-    } catch (error: any) {
+    } catch (error) {
         throw new Error(`Could not reject friend request. Status: ${error?.response?.status ?? 500}`);
     }
 }
@@ -52,23 +52,6 @@ export async function findAllFriends() {
     } catch (error) {
         handleApiError(error);
     }
-}
-
-export async function findAllFriends() {
-    const token = localStorage.getItem('token');
-    const response = await fetch(url + 'friends', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-    });
-    if (!response.ok) {
-        const message = await response.json();
-        if (Array.isArray(message.message)) throw new Error(message.message[0]);
-        else throw new Error(message.message);
-    }
-    return response.json();
 }
 
 export async function removeFriend(receiverId: number){
