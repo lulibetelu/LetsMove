@@ -140,7 +140,7 @@ export default function EditEventForm({event, onClose}:Props){
                 }
             `}</style>
             <form
-                className="modal-box bg-base-100 p-0 overflow-hidden max-w-lg w-full flex flex-col h-auto max-h-[85vh]"
+                className="modal-box bg-[#141414] p-0 overflow-hidden max-w-lg w-full flex flex-col h-auto max-h-[85vh]"
                 onSubmit={handleSubmit}
             >
 

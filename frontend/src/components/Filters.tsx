@@ -32,7 +32,7 @@ export default function Filters(props: Props) {
     return (
         <dialog className="modal modal-open backdrop-blur-sm">
             <form
-                className="modal-box bg-base-100 p-0 overflow-hidden max-w-lg w-full flex flex-col h-auto max-h-[80vh]"
+                className="modal-box bg-[#141414] p-0 overflow-hidden max-w-lg w-full flex flex-col h-auto max-h-[80vh]"
                 onSubmit={(e) => {handleSubmit(e)
                 }}>
                 <div className="overflow-y-auto p-4 flex flex-col gap-4">

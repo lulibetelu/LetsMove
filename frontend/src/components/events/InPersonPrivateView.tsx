@@ -34,7 +34,7 @@ function getInitials(username: string): string {
     return username.slice(0, 2).toUpperCase();
 }
 
-export default function InPersonPrivateView({event, isHost, onLeft}: Props) {
+export default function InPersonPrivateView({event, isHost, onLeft, onEdit, onDelete}: Props) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const url = import.meta.env.VITE_API_URL;

@@ -61,7 +61,7 @@ function getLast7Days(entries: EventEntry[], userId: number | null): boolean[] {
     });
 }
 
-export default function PrivateEventView({event, onLeft}: Props) {
+export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Props) {
     const [newEntry, setNewEntry] = useState("");
     const [showForm, setShowForm] = useState(false);
     const [submitting, setSubmitting] = useState(false);

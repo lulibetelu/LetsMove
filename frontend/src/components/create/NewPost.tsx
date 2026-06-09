@@ -56,7 +56,7 @@ export default function NewPost({ onClose }: { onClose: () => void}){
 
     return (
         <dialog className="modal modal-open backdrop-blur-sm">
-            <form className="modal-box bg-base-100 p-0 overflow-hidden max-w-lg w-full flex flex-col h-auto max-h-[80vh]" onSubmit={handleSubmit}>
+            <form className="modal-box bg-[#141414] p-0 overflow-hidden max-w-lg w-full flex flex-col h-auto max-h-[80vh]" onSubmit={handleSubmit}>
 
                 <div className="p-4 flex gap-4 items-center">
                     <div className="avatar placeholder">
