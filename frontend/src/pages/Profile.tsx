@@ -22,7 +22,7 @@ export default function Profile() {
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
     const [userExists, setUserExists] = useState<boolean | null>(null);
-    const { posts, deletePost,observerRef } = useProfilePosts(numericId);
+    const { posts, deletePost,observerRef, isLoading } = useProfilePosts(numericId);
     const [searchParams, setSearchParams] = useSearchParams();
     const [tab, setTab] = useState<'posts' | 'events'>(searchParams.get('tab') === 'events' ? 'events' : 'posts');
     const {events} = useProfileEvents(numericId);
@@ -137,11 +137,18 @@ export default function Profile() {
                                 {(currentUserId != numericId) ?
                                     ( friendAdded? (
                                         <button
-                                            className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold text-white transition-all"
+                                            className="group flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold text-white hover:bg-red-500 transition-all"
                                             onClick={handleClickFriend}
                                             style={{background: "linear-gradient(135deg, #8A9A5B, #6b7a46)"}}
                                         >
-                                            <UserPlus size={14} /> Friend!
+
+                                            <span className="flex items-center gap-1 group-hover:hidden">
+                                                <UserPlus size={14} /> Friend!
+                                            </span>
+
+                                            <span className="hidden items-center gap-1 group-hover:flex">
+                                                <X size={14} /> End Friendship
+                                            </span>
                                         </button>
                                         ) : (friendReq ? (
                                             <button
@@ -214,7 +221,7 @@ export default function Profile() {
                                     }}
                                 />
                                 {tab === 'posts' ? (
-                                    <Posts userId={numericId} posts={posts} deletePost={deletePost} observerRef={observerRef} />
+                                    <Posts userId={numericId} posts={posts} deletePost={deletePost} observerRef={observerRef} isLoading={isLoading}/>
                                 ) : (
                                     <Events eventArray={events}/>
                                 )}

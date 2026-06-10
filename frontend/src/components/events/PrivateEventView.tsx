@@ -14,7 +14,6 @@ import PopUpError from "../PopUpError.tsx";
 import EditButton from "../buttons/EditButton.tsx";
 import DeleteButton from "../buttons/DeleteButton.tsx";
 import ProfileLink from "../profile/ProfileLink.tsx";
-import Profile from "../../pages/Profile.tsx";
 interface Props {
     event: EventType;
     onLeft: () => void;
