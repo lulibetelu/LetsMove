@@ -6,12 +6,16 @@ import { CreateMessageDto } from '../../message/dto/create-message.dto';
 export class MessageRepositoryService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(createMessageDto: CreateMessageDto, imageIds: number[]) {
+  async create(
+    createMessageDto: CreateMessageDto,
+    imageIds: number[],
+    userId: number,
+  ) {
     const messageCreated = await this.prismaService.message.create({
       data: {
         groupId: createMessageDto.groupId,
         content: createMessageDto.content,
-        groupMemberId: createMessageDto.memberId,
+        groupMemberId: userId,
         date: createMessageDto.sentDate,
       },
       include: {

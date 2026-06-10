@@ -12,11 +12,11 @@ export class MessageService {
     private imageService: ImageService,
     private groupService: GroupService,
   ) {}
-  async create(createMessageDto: CreateMessageDto) {
+  async create(createMessageDto: CreateMessageDto, userId: number) {
     //Verificar que exista el group
     const group = await this.groupService.findOne(
       createMessageDto.groupId,
-      createMessageDto.memberId,
+      userId,
     );
 
     if (!group) throw new NotFoundException();
@@ -28,7 +28,7 @@ export class MessageService {
       ),
     ).then((images) => images.map((image) => image.id));
 
-    return this.messageRepository.create(createMessageDto, imageIds);
+    return this.messageRepository.create(createMessageDto, imageIds, userId);
   }
 
   findAll(groupId: number) {

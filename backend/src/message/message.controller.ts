@@ -38,7 +38,8 @@ export class MessageController {
 
   @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createMessageDto: CreateMessageDto) {
-    return this.messageService.create(createMessageDto);
+  create(@Req() req: Request, @Body() createMessageDto: CreateMessageDto) {
+    const userId: number = req.user.sub;
+    return this.messageService.create(createMessageDto, userId);
   }
 }
