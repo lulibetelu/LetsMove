@@ -211,3 +211,21 @@ export async function deleteEventEntry(entryId: number) {
         handleApiError(error);
     }
 }
+
+export async function addGalleryImage(eventId: number, image: ImageInput) {
+    try {
+        const { data } = await api.post(`event/${eventId}/gallery`, image);
+        return data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export async function getGalleryImages(eventId: number) {
+    try {
+        const { data } = await api.get(`event/${eventId}/gallery`);
+        return data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
