@@ -54,7 +54,7 @@ export function GroupChat({groupId}: Props) {
     };
 
     return (
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col max-h-screen overflow-hidden">
             <ChatMessages messages={messages ?? []}/>
             <div className="flex items-center gap-2 border-t border-white/5 px-4 py-3">
                 <input
