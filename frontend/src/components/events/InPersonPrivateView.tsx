@@ -139,7 +139,7 @@ export default function InPersonPrivateView({event, isHost, onLeft, onEdit, onDe
                                 {acceptedParticipants.map((p: EventSignUp) => (
                                     <div key={p.userId} className="flex items-center gap-2 bg-[#1e1e1e] border border-white/5 rounded-full px-3 py-1.5">
                                         <UserCircle size={16} strokeWidth={1.5} className="text-white/30"/>
-                                        <ProfileLink username={p.user.username} userId={p.user.id} color={"white/70"} textSize={"xs"}/>
+                                        <ProfileLink username={p.user.username} userId={p.user.id} color={"white/50"} textSize={"xs"}/>
                                     </div>
                                 ))}
                             </div>

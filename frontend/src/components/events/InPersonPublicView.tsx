@@ -152,7 +152,7 @@ export default function InPersonPublicView({event, signUp, onJoined}: Props) {
                             <UserCircle size={14} strokeWidth={1.5} className="text-white/30 shrink-0"/>
                             <div>
                                 <p className="text-[10px] font-bold uppercase tracking-widest text-white/20">Hosted by</p>
-                                <ProfileLink username={event.host.username} userId={event.host.id} color={"white/50"}/>
+                                <p className="text-sm text-white/70">{event.host.username}</p>
                             </div>
                         </div>
 

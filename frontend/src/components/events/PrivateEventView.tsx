@@ -13,6 +13,8 @@ import ImagePicker from "../ImagePicker.tsx";
 import PopUpError from "../PopUpError.tsx";
 import EditButton from "../buttons/EditButton.tsx";
 import DeleteButton from "../buttons/DeleteButton.tsx";
+import ProfileLink from "../profile/ProfileLink.tsx";
+import Profile from "../../pages/Profile.tsx";
 interface Props {
     event: EventType;
     onLeft: () => void;
@@ -160,7 +162,7 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                 <div className="flex items-center gap-2">
                     <UserCircle size={16} strokeWidth={1.5} className="text-white/30"/>
                     <span className="text-sm text-white/40">Organizado por</span>
-                    <span className="text-sm font-semibold text-[#8A9A5B]">{event.host.username}</span>
+                    <ProfileLink username={event.host.username} userId={event.host.id}/>
                 </div>
             </div>
 
@@ -231,7 +233,7 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <UserCircle size={18} strokeWidth={1.5} className="text-white/30"/>
-                                        <span className="text-sm font-semibold text-[#8A9A5B]">{entry.user.username}</span>
+                                        <ProfileLink username={entry.user.username} userId={entry.user.id}/>
                                         <span className="text-xs text-white/25">{formatRelative(entry.createdAt)}</span>
                                     </div>
                                     {(entry.userId === currentUserId || isHost) && (
@@ -345,7 +347,7 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                                 {acceptedParticipants.map((p: EventSignUp) => (
                                     <div key={p.userId} className="flex items-center gap-2">
                                         <UserCircle size={15} strokeWidth={1.5} className="text-white/20 shrink-0"/>
-                                        <span className="text-xs text-white/50 truncate">{p.user.username}</span>
+                                        <ProfileLink username={p.user.username} userId={p.user.id} textSize={"xs"} color={"white/50"}/>
                                     </div>
                                 ))}
                             </div>

@@ -15,7 +15,7 @@ export default function ProfileLink(props: Props){
         <Link
             to={`/profile/${props.userId}`}
             onClick={(e) => e.stopPropagation()}
-            className={`text-[${textSize}] font-semibold text-[${color}] hover:text-[#a8bb72] transition-colors`}
+            className={`text-${textSize} font-semibold text-[${color}] hover:text-[#a8bb72] transition-colors`}
         >
             {props.username}
         </Link>
