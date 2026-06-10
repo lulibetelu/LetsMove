@@ -5,6 +5,7 @@ import LikeButton from "../buttons/LikeButton.tsx";
 import DislikeButton from "../buttons/DislikeButton.tsx";
 import {useState} from "react";
 import NewComment from "../create/NewComment.tsx";
+import ProfileLink from "../profile/ProfileLink.tsx";
 type Props = PostType & {
     isForPostPage: boolean,
     onCommentCreate?: () => void,
@@ -41,13 +42,7 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
         >
             <div className="flex items-center gap-3 mb-3">
                 <CircleUserRound size={20} strokeWidth={1.5} className="text-white/40" />
-                 <Link
-                     to={`/profile/${userId}`}
-                     onClick={(e) => e.stopPropagation()}
-                     className="text-sm font-semibold text-[#8A9A5B] hover:text-[#a8bb72] transition-colors"
-                 >
-                     {username}
-                 </Link>
+                 <ProfileLink username={username} userId={userId}/>
                 {canDelete && (
                     <button
                         type="button"
