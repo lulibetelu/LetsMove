@@ -31,7 +31,7 @@ export function GroupChat({groupId}: Props) {
     }, [groupId]);
 
     useEffect(() => {
-        socket.on("newMessage", (msg) => handleUpdate(msg))
+        socket.on("newMessage", handleUpdate)
 
         return () => {
             socket.off("newMessage")
