@@ -1,4 +1,8 @@
-import type { ImageInput } from 'frontend/src/types/imageType';
+export interface ImageInput {
+  content?: string;
+  url?: string;
+  description?: string;
+}
 
 export interface Message {
   id: number;
