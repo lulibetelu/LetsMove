@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Test</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 50px auto; }
+        #messages { border: 1px solid #ccc; height: 300px; overflow-y: auto; padding: 10px; margin-bottom: 10px; }
+        .message { margin: 5px 0; padding: 5px; background: #f0f0f0; border-radius: 3px; }
+        input { width: 80%; padding: 5px; }
+        button { padding: 5px 10px; }
+    </style>
+</head>
+<body>
+<h1>Chat Test</h1>
+
+<div>
+    <h3>Step 1: Set Your Username</h3>
+    <input type="text" id="username" placeholder="Enter your username" />
+    <button onclick="setUsername()">Join Chat</button>
+</div>
+
+<hr />
+
+<div>
+    <h3>Step 2: Send Messages</h3>
+    <div id="messages"></div>
+    <input type="text" id="messageInput" placeholder="Type a message..." />
+    <button onclick="sendMessage()">Send</button>
+</div>
+
+<hr />
+
+<div>
+    <h3>Connection Status</h3>
+    <p id="status">Disconnected</p>
+</div>
+
+<script>
+    // Connect to your NestJS server
+    const socket = io('http://localhost:3000');
+
+    // When socket connects
+    socket.on('connect', () => {
+        console.log('Connected to server');
+        document.getElementById('status').textContent = 'Connected: ' + socket.id;
+        socket.emit('identify', {token: localStorage.getItem('token')})
+    });
+
+    // When socket disconnects
+    socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+        document.getElementById('status').textContent = 'Disconnected';
+    });
+
+    // Listen for messages from server
+    socket.on('messageBroadcast', (data) => {
+        console.log('Received message:', data);
+        const messagesDiv = document.getElementById('messages');
+        messagesDiv.innerHTML += `<div class="message"><strong>${data.userId}:</strong> ${data.text}</div>`;
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+
+    // Listen for user joined event
+    socket.on('userJoined', (data) => {
+        console.log('User joined:', data);
+        const messagesDiv = document.getElementById('messages');
+        messagesDiv.innerHTML += `<div class="message" style="background: #e8f5e9;"><em>${data.username} joined the chat</em></div>`;
+    });
+
+    // Function to set username
+    function setUsername() {
+        const username = document.getElementById('username').value;
+        if (username.trim()) {
+            socket.emit('setUsername', username);
+            console.log('Emitted setUsername:', username);
+        } else {
+            alert('Please enter a username');
+        }
+    }
+
+    // Function to send message
+    function sendMessage() {
+        const text = document.getElementById('messageInput').value;
+        if (text.trim()) {
+            socket.emit('messageSent', { text: text });
+            console.log('Emitted message:', text);
+            document.getElementById('messageInput').value = '';
+        }
+    }
+</script>
+</body>
+</html>
