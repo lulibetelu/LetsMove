@@ -6,7 +6,7 @@ export interface Message{
     content: string;
     groupMemberId: number;
     date: Date;
-    images?: ImageInput
+    images?: ImageInput[]
     groupMember: {
         id: number,
         userId: number,
