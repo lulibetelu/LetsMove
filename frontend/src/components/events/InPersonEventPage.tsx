@@ -39,22 +39,24 @@ export default function InPersonEventDetail({ event }: Props) {
     }
 
     return (
-        <div className="card bg-base-200 border border-base-300 max-w-4xl mx-auto shadow-xl overflow-hidden">
+        <div className="min-h-screen bg-[#141414] flex">
             <Sidebar/>
-            {isMember || isOwner ? (
-                <InPersonPrivateView event={event} isHost={isOwner} onLeft={handleInvalidate} onEdit={() => setEditEvent(true)} onDelete={handleEventDeletion} />
-            ) : (
-                <InPersonPublicView
-                    event={event}
-                    signUp={signUp ?? null}
-                    onJoined={handleInvalidate}
-                />
-            )}
-            {error && <PopUpError message="Failed to update event"/>}
-            {editEvent && <EditEventForm event={event} onClose={() => {
-                setEditEvent(false);
-                queryClient.invalidateQueries({ queryKey: ['event', event.id] });
-            }}/>}
+            <main className="flex-1 ml-60">
+                {isMember || isOwner ? (
+                    <InPersonPrivateView event={event} isHost={isOwner} onLeft={handleInvalidate} onEdit={() => setEditEvent(true)} onDelete={handleEventDeletion} />
+                ) : (
+                    <InPersonPublicView
+                        event={event}
+                        signUp={signUp ?? null}
+                        onJoined={handleInvalidate}
+                    />
+                )}
+                {error && <PopUpError message="Failed to update event"/>}
+                {editEvent && <EditEventForm event={event} onClose={() => {
+                    setEditEvent(false);
+                    queryClient.invalidateQueries({ queryKey: ['event', event.id] });
+                }}/>}
+            </main>
         </div>
     );
 }

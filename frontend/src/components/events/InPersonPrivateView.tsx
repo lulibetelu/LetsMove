@@ -1,10 +1,16 @@
 import type {EventSignUp, EventType} from "../../types/eventTypes.ts";
 import {useState} from "react";
-import {exitEvent, findEventParticipants} from "../../api/event.ts";
-import {useQuery} from "@tanstack/react-query";
+import {CalendarDays, MapPin, UserCircle, Users} from "lucide-react";
+import {addGalleryImage, exitEvent, findEventParticipants, getGalleryImages} from "../../api/event.ts";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
+import {formatDate} from "../../resusable-functions/formatDate.ts";
+import {formatTime} from "../../resusable-functions/formatTime.ts";
 import PopUpError from "../PopUpError.tsx";
 import EditButton from "../buttons/EditButton.tsx";
 import DeleteButton from "../buttons/DeleteButton.tsx";
+import ImagePicker from "../ImagePicker.tsx";
+import type {ImageEvent} from "../../types/imageType.ts";
+import type {ImageInput} from "../../types/imageType.ts";
 
 interface Props {
     event: EventType;
@@ -14,34 +20,23 @@ interface Props {
     onDelete?: () => void;
 }
 
-function formatDate(date: Date | string): string {
-    return new Date(date).toLocaleDateString("en-GB", {
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-    });
-}
-
-function formatTime(date: Date | string): string {
-    return new Date(date).toLocaleTimeString("en-GB", {
-        hour: "2-digit",
-        minute: "2-digit",
-    });
-}
-
-function getInitials(username: string): string {
-    return username.slice(0, 2).toUpperCase();
-}
-
 export default function InPersonPrivateView({event, isHost, onLeft, onEdit, onDelete}: Props) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [galleryImages, setGalleryImages] = useState<ImageInput[]>([]);
+    const [uploading, setUploading] = useState(false);
+    const [galleryError, setGalleryError] = useState<string | null>(null);
+    const queryClient = useQueryClient();
     const url = import.meta.env.VITE_API_URL;
 
     const {data: participants} = useQuery({
         queryKey: ['eventParticipants', event.id],
         queryFn: () => findEventParticipants(event.id),
+    });
+
+    const {data: existingGallery} = useQuery({
+        queryKey: ['eventGallery', event.id],
+        queryFn: () => getGalleryImages(event.id),
     });
 
     const acceptedParticipants = participants?.filter(
@@ -61,117 +56,184 @@ export default function InPersonPrivateView({event, isHost, onLeft, onEdit, onDe
         }
     };
 
+    const handleUploadGallery = async () => {
+        if (galleryImages.length === 0) return;
+        setUploading(true);
+        setGalleryError(null);
+        try {
+            for (const img of galleryImages) {
+                await addGalleryImage(event.id, img);
+            }
+            setGalleryImages([]);
+            queryClient.invalidateQueries({queryKey: ['eventGallery', event.id]});
+        } catch {
+            setGalleryError('Failed to upload images');
+        } finally {
+            setUploading(false);
+        }
+    };
+
     const coverImage = event.imageEvents?.find(img => img.description === "Cover");
 
     return (
-        <>
-            <div className="h-1 w-full bg-success" />
-            <div className="card-body gap-4">
-                <div>
-                    <div className="badge badge-success badge-outline text-xs font-semibold tracking-widest uppercase mb-2">
+        <div className="max-w-5xl mx-auto py-10 px-6">
+
+            {/* Cover */}
+            <div className="relative w-full h-64 rounded-2xl overflow-hidden mb-6">
+                {coverImage ? (
+                    <img src={coverImage.image.url ?? `${url}image/${coverImage.image.id}`} alt={event.title} className="w-full h-full object-cover"/>
+                ) : (
+                    <div className="w-full h-full" style={{background: "linear-gradient(135deg, #8A9A5B 0%, #6b7a46 100%)"}}>
+                        <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                            <CalendarDays size={120} strokeWidth={0.8}/>
+                        </div>
+                    </div>
+                )}
+                <div className="absolute top-4 left-4">
+                    <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm text-white/80 border border-white/10">
                         In Person
+                    </span>
+                </div>
+            </div>
+
+            {/* Title + host */}
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold text-white/90 leading-tight mb-2">{event.title}</h1>
+                <div className="flex items-center gap-2">
+                    <UserCircle size={16} strokeWidth={1.5} className="text-white/30"/>
+                    <span className="text-sm text-white/40">Hosted by</span>
+                    <span className="text-sm font-semibold text-[#8A9A5B]">{event.host.username}</span>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                {/* Left column */}
+                <div className="lg:col-span-2 flex flex-col gap-6">
+
+                    {/* Description */}
+                    <div className="flex flex-col gap-2">
+                        <h2 className="text-xs font-bold uppercase tracking-widest text-white/30">Description</h2>
+                        <p className="text-sm text-white/60 leading-relaxed">{event.description}</p>
                     </div>
-                    <h2 className="card-title text-2xl font-bold">{event.title}</h2>
-                    <p className="text-base-content/60 text-sm leading-relaxed mt-1">
-                        {event.description}
-                    </p>
-                </div>
 
-                <div className="divider my-0" />
-
-                <div className="bg-base-300 rounded-xl p-4">
-                    <p className="text-xs font-semibold text-success tracking-widest uppercase mb-1">Date</p>
-                    <p className="text-sm font-medium">{formatDate(event.startingDate)}</p>
-                    <p className="text-sm text-success">{formatTime(event.startingDate)}</p>
-                </div>
-
-                {event.location && (
-                    <div className="bg-base-300 rounded-xl p-4 flex items-start gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-success shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 2C8.686 2 6 4.686 6 8c0 4.5 6 12 6 12s6-7.5 6-12c0-3.314-2.686-6-6-6z" />
-                            <circle cx="12" cy="8" r="2" />
-                        </svg>
-                        <div>
-                            <p className="text-xs font-semibold text-success tracking-widest uppercase mb-1">Location</p>
-                            <p className="text-sm font-medium">{event.location.location}</p>
+                    {/* Participants */}
+                    <div className="flex flex-col gap-3">
+                        <div className="flex items-center gap-2">
+                            <h2 className="text-xs font-bold uppercase tracking-widest text-white/30">Participants</h2>
+                            {acceptedParticipants.length > 0 && (
+                                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#8A9A5B]/10 text-[#8A9A5B]">
+                                    {acceptedParticipants.length}
+                                </span>
+                            )}
                         </div>
-                    </div>
-                )}
 
-                <div className="divider my-0" />
-
-                <div className="flex items-center gap-3">
-                    <div className="avatar placeholder">
-                        <div className="bg-base-300 text-success rounded-full w-10 border border-success/30">
-                            <span className="text-sm font-bold">{getInitials(event.host.username)}</span>
-                        </div>
-                    </div>
-                    <div>
-                        <p className="text-xs text-success font-semibold uppercase tracking-widest">Hosted by</p>
-                        <p className="text-sm font-medium">{event.host.username}</p>
-                    </div>
-                </div>
-
-                {coverImage && (
-                    <div className="rounded-xl overflow-hidden">
-                        <img
-                            src={coverImage.image.url ?? `${url}image/${coverImage.image.id}`}
-                            alt={event.title}
-                            className="w-full h-48 object-cover"
-                        />
-                    </div>
-                )}
-
-                <div className="divider my-0" />
-
-                <div className="flex flex-col gap-3">
-                    <div className="flex items-center gap-2">
-                        <p className="text-xs font-semibold text-success tracking-widest uppercase">
-                            Participants
-                        </p>
-                        {acceptedParticipants.length > 0 && (
-                            <span className="badge badge-success badge-outline badge-sm">
-                                {acceptedParticipants.length}
-                            </span>
+                        {acceptedParticipants.length === 0 ? (
+                            <div className="flex items-center gap-2 text-white/20 py-4">
+                                <Users size={18} strokeWidth={1}/>
+                                <p className="text-sm">No participants yet</p>
+                            </div>
+                        ) : (
+                            <div className="flex flex-wrap gap-3">
+                                {acceptedParticipants.map((p: EventSignUp) => (
+                                    <div key={p.userId} className="flex items-center gap-2 bg-[#1e1e1e] border border-white/5 rounded-full px-3 py-1.5">
+                                        <UserCircle size={16} strokeWidth={1.5} className="text-white/30"/>
+                                        <span className="text-xs font-medium text-white/60">{p.user.username}</span>
+                                    </div>
+                                ))}
+                            </div>
                         )}
                     </div>
 
-                    {acceptedParticipants.length === 0 ? (
-                        <p className="text-sm text-base-content/40 py-2">No participants yet</p>
-                    ) : (
-                        <div className="flex flex-wrap gap-2">
-                            {acceptedParticipants.map((p: EventSignUp) => (
-                                <div key={p.userId} className="flex items-center gap-2 bg-base-300 rounded-full px-3 py-1.5">
-                                    <div className="avatar placeholder">
-                                        <div className="bg-base-200 text-success rounded-full w-6">
-                                            <span className="text-xs font-bold">{getInitials(p.user.username)}</span>
-                                        </div>
+                    {/* Gallery */}
+                    <div className="flex flex-col gap-3">
+                        <h2 className="text-xs font-bold uppercase tracking-widest text-white/30">Gallery</h2>
+
+                        {/* Existing gallery images */}
+                        {existingGallery && existingGallery.length > 0 && (
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                {existingGallery.map((imgEvent: ImageEvent) => (
+                                    <div key={imgEvent.image.id} className="aspect-square rounded-xl overflow-hidden bg-[#1e1e1e] border border-white/5">
+                                        <img
+                                            src={imgEvent.image.url ?? `${url}image/${imgEvent.image.id}`}
+                                            alt=""
+                                            className="w-full h-full object-cover"
+                                        />
                                     </div>
-                                    <span className="text-sm font-medium">{p.user.username}</span>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Upload area */}
+                        <div className="bg-[#1e1e1e] rounded-xl border border-white/5 p-4 flex flex-col gap-3">
+                            <ImagePicker images={galleryImages} onChange={setGalleryImages} />
+                            {galleryImages.length > 0 && (
+                                <div className="flex justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={handleUploadGallery}
+                                        disabled={uploading}
+                                        className="px-4 py-1.5 rounded-full text-xs font-semibold text-white transition-all active:scale-95 disabled:opacity-40"
+                                        style={{background: "linear-gradient(135deg, #8A9A5B, #6b7a46)"}}
+                                    >
+                                        {uploading ? "Uploading..." : `Upload ${galleryImages.length} image${galleryImages.length > 1 ? 's' : ''}`}
+                                    </button>
                                 </div>
-                            ))}
+                            )}
+                            {galleryError && <PopUpError message={galleryError} />}
                         </div>
-                    )}
+                    </div>
                 </div>
 
-                {isHost ? (
-                    <div className="flex gap-2">
-                        <EditButton handleClick={() => onEdit?.()}/>
-                        <DeleteButton handleClick={() => onDelete?.()}/>
+                {/* Right sidebar */}
+                <div className="flex flex-col gap-4">
+                    <div className="bg-[#1e1e1e] rounded-xl border border-white/5 p-5 flex flex-col gap-4">
+
+                        {/* Date */}
+                        <div className="flex flex-col gap-0.5">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-[#8A9A5B]">Date</span>
+                            <p className="text-sm text-white/70">{formatDate(event.startingDate)}</p>
+                            <p className="text-xs text-white/40">{formatTime(event.startingDate)}</p>
+                        </div>
+
+                        {/* Location */}
+                        {event.location && (
+                            <div className="flex items-start gap-2 pt-3 border-t border-white/5">
+                                <MapPin size={14} className="text-[#8A9A5B] shrink-0 mt-0.5"/>
+                                <p className="text-sm text-white/50">{event.location.location}</p>
+                            </div>
+                        )}
+
+                        {/* Host */}
+                        <div className="flex items-center gap-2 pt-3 border-t border-white/5">
+                            <UserCircle size={14} strokeWidth={1.5} className="text-white/30 shrink-0"/>
+                            <div>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-white/20">Hosted by</p>
+                                <p className="text-sm text-white/70">{event.host.username}</p>
+                            </div>
+                        </div>
+
+                        {/* Actions */}
+                        {isHost ? (
+                            <div className="flex gap-2 pt-3 border-t border-white/5">
+                                <EditButton handleClick={() => onEdit?.()}/>
+                                <DeleteButton handleClick={() => onDelete?.()}/>
+                            </div>
+                        ) : (
+                            <div className="pt-3 border-t border-white/5 flex flex-col gap-2">
+                                <button
+                                    onClick={handleLeave}
+                                    disabled={loading}
+                                    className="w-full py-2.5 rounded-xl text-sm font-semibold border border-red-400/30 text-red-400 hover:bg-red-400/10 transition-all active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none"
+                                >
+                                    {loading ? "Leaving..." : "Leave Event"}
+                                </button>
+                                {error && <PopUpError message={error} />}
+                            </div>
+                        )}
                     </div>
-                ) : (
-                    <div className="flex flex-col gap-2">
-                        <button
-                            onClick={handleLeave}
-                            disabled={loading}
-                            className="group btn btn-outline btn-error w-full font-bold disabled:opacity-50 disabled:pointer-events-none"
-                        >
-                            {loading ? "Loading..." : "Leave Event"}
-                        </button>
-                        {error && <PopUpError message={error} />}
-                    </div>
-                )}
+                </div>
             </div>
-        </>
+        </div>
     );
 }
