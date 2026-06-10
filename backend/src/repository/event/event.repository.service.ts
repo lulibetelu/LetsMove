@@ -22,7 +22,7 @@ export class EventRepositoryService {
   async createEvent(
     hostId: number,
     createEventDto: CreateEventDto,
-    images: { id: number; description?: string }[],
+    image?: { id: number; description?: string },
   ) {
     //Se puede mejorar
     let locationId: number | null;
@@ -71,13 +71,13 @@ export class EventRepositoryService {
       },
     });
 
-    if (images.length > 0) {
-      await this.prismaService.imageEvent.createMany({
-        data: images.map(({ id, description }) => ({
+    if (image) {
+      await this.prismaService.imageEvent.create({
+        data: {
           eventId: event.id,
-          imageId: id,
-          description: description!,
-        })),
+          imageId: image.id,
+          description: image.description!,
+        },
       });
     }
 
@@ -429,6 +429,50 @@ export class EventRepositoryService {
       where: {
         id: entryId,
       },
+    });
+  }
+
+  async isEventMember(eventId: number, userId: number): Promise<boolean> {
+    const event = await this.prismaService.event.findUnique({
+      where: { id: eventId },
+    });
+    if (!event) return false;
+    if (event.hostId === userId) return true;
+
+    const signUps =
+      await this.eventSignupRepositoryService.findAllFromEvent(eventId);
+    return signUps.some(
+      (signUp) => signUp.userId === userId && signUp.state === 'Accepted',
+    );
+  }
+
+  async addGalleryImage(eventId: number, imageId: number) {
+    return this.prismaService.imageEvent.create({
+      data: {
+        eventId,
+        imageId,
+        description: 'Gallery',
+      },
+      include: {
+        image: {
+          select: { id: true, url: true },
+        },
+      },
+    });
+  }
+
+  async getGalleryImages(eventId: number) {
+    return this.prismaService.imageEvent.findMany({
+      where: {
+        eventId,
+        description: 'Gallery',
+      },
+      include: {
+        image: {
+          select: { id: true, url: true },
+        },
+      },
+      orderBy: { id: 'desc' },
     });
   }
 }
