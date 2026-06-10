@@ -1,18 +1,27 @@
 import { useEffect, useState } from "react";
 import { Shield, Users } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 import useGroup from "../../hooks/groups/useGroup.ts";
 import { getUsernameFromId, getCurrentUserId } from "../../api/user.ts";
+import { removeGroup } from "../../api/group.ts";
+import EditButton from "../buttons/EditButton.tsx";
+import DeleteButton from "../buttons/DeleteButton.tsx";
+import EditGroup from "./EditGroup.tsx";
 
 interface GroupDetailProps {
     groupId: number;
+    onGroupDeleted?: () => void;
+    onGroupUpdated?: () => void;
 }
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
-export default function GroupDetail({ groupId }: GroupDetailProps) {
+export default function GroupDetail({ groupId, onGroupDeleted, onGroupUpdated }: GroupDetailProps) {
     const { data: group, isLoading, isError } = useGroup(groupId);
     const [memberNames, setMemberNames] = useState<Record<number, string>>({});
+    const [showEditModal, setShowEditModal] = useState(false);
     const currentUserId = getCurrentUserId();
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         if (!group?.groupMembers) return;
@@ -53,7 +62,7 @@ export default function GroupDetail({ groupId }: GroupDetailProps) {
     );
 
     return (
-        <div className="flex-1 flex flex-col overflow-y-auto">
+        <><div className="flex-1 flex flex-col overflow-y-auto">
             <div className="relative h-48 shrink-0">
                 {imageUrl ? (
                     <img
@@ -73,6 +82,19 @@ export default function GroupDetail({ groupId }: GroupDetailProps) {
                         <div className="flex items-center gap-1.5 mt-1">
                             <Shield size={14} className="text-[#8A9A5B]" />
                             <span className="text-xs font-medium text-[#8A9A5B]">Admin</span>
+                        </div>
+                    )}
+                    {isCurrentUserAdmin && (
+                        <div className="flex gap-2 mt-3">
+                            <EditButton handleClick={() => setShowEditModal(true)} />
+                            <DeleteButton handleClick={async () => {
+                                if (!confirm("Delete this group? This action cannot be undone.")) return;
+                                try {
+                                    await removeGroup(groupId);
+                                    queryClient.invalidateQueries({queryKey: ['groups']});
+                                    onGroupDeleted?.();
+                                } catch {}
+                            }} />
                         </div>
                     )}
                 </div>
@@ -124,5 +146,23 @@ export default function GroupDetail({ groupId }: GroupDetailProps) {
                 </div>
             </div>
         </div>
+
+        {showEditModal && group && (
+            <EditGroup
+                groupId={groupId}
+                group={group}
+                onClose={() => setShowEditModal(false)}
+                onUpdated={() => {
+                    queryClient.invalidateQueries({queryKey: ['group', groupId]});
+                    queryClient.invalidateQueries({queryKey: ['groups']});
+                    onGroupUpdated?.();
+                }}
+                onDeleted={() => {
+                    queryClient.invalidateQueries({queryKey: ['groups']});
+                    onGroupDeleted?.();
+                }}
+            />
+        )}
+        </>
     );
 }

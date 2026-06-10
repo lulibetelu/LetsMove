@@ -15,6 +15,7 @@ import {
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { CreateImageDto } from '../images/dto/create-image.dto';
 import { AuthGuard } from '../authentication/auth.guard';
 import type { Request } from 'express';
 import { FilterEventDto } from './dto/filter-event.dto';
@@ -111,5 +112,22 @@ export class EventController {
   remove(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
     const removerId: number = req.user.sub;
     return this.eventService.remove(id, removerId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post(':id/gallery')
+  async addGalleryImage(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createImageDto: CreateImageDto,
+    @Req() req: Request,
+  ) {
+    const userId = req.user.sub;
+    return this.eventService.addGalleryImage(id, userId, createImageDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get(':id/gallery')
+  async getGalleryImages(@Param('id', ParseIntPipe) id: number) {
+    return this.eventService.getGalleryImages(id);
   }
 }

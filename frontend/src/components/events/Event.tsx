@@ -24,14 +24,14 @@ export default function Event({event}: Props) {
 
     return (
         <div
-            className="bg-[#1e1e1e] rounded-2xl overflow-hidden border border-white/5 hover:-translate-y-1 hover:border-white/10 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-200 flex flex-col"
+            className="bg-[#1e1e1e] rounded-2xl overflow-hidden border border-white/10 hover:-translate-y-1 hover:border-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-200 flex flex-col"
             onClick={() => navigate(`/event/${event.id}`)}
         >
 
             {/* Event Card */}
             <div
                 key={event.id}
-                className="relative h-40 w-full shrink-0"
+                className="relative h-28 w-full shrink-0"
             >
                 {coverImage ? (
                         <img
@@ -74,7 +74,7 @@ export default function Event({event}: Props) {
                 </div>
             </div>
 
-            <div className="p-4 flex flex-col gap-2 flex-1">
+            <div className="p-3 flex flex-col gap-1.5 flex-1">
 
                 {/* Title */}
                 <h3 className="text-sm font-bold text-white/90 leading-snug line-clamp-2">
@@ -86,7 +86,7 @@ export default function Event({event}: Props) {
                     {event.description}
                 </p>
 
-                <div className="flex flex-col gap-1 mt-1">
+                <div className="flex flex-col gap-0.5 mt-0.5">
                     <p className="flex items-center gap-1.5 text-xs text-white/40">
                         <CalendarDays size={12} className="text-[#8A9A5B] shrink-0"/>
                         {formatDate(event.startingDate)} · {formatTime(event.startingDate)}
@@ -98,7 +98,7 @@ export default function Event({event}: Props) {
                         </p>
                     )}
                 </div>
-                <div className="mt-auto pt-3 border-t border-white/5">
+                <div className="mt-auto pt-2 border-t border-white/5">
                     <span className="text-xs text-white/30">
                       by {event.host?.username ?? `Host #${event.hostId}`}
                     </span>

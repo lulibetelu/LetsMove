@@ -30,10 +30,8 @@ export class CreateEventDto {
   sportName: string;
 
   @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
   @Type(() => CreateImageDto)
-  images?: CreateImageDto[];
+  coverImage?: CreateImageDto;
 
   @IsNotEmpty()
   @IsString()

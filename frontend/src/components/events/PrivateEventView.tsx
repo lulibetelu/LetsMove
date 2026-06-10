@@ -11,9 +11,13 @@ import type {ImageInput} from "../../types/imageType.ts";
 
 import ImagePicker from "../ImagePicker.tsx";
 import PopUpError from "../PopUpError.tsx";
+import EditButton from "../buttons/EditButton.tsx";
+import DeleteButton from "../buttons/DeleteButton.tsx";
 interface Props {
     event: EventType;
     onLeft: () => void;
+    onEdit?: () => void;
+    onDelete?: () => void;
 }
 
 function calculateStreak(entries: EventEntry[], userId: number | null): number {
@@ -57,7 +61,7 @@ function getLast7Days(entries: EventEntry[], userId: number | null): boolean[] {
     });
 }
 
-export default function PrivateEventView({event, onLeft}: Props) {
+export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Props) {
     const [newEntry, setNewEntry] = useState("");
     const [showForm, setShowForm] = useState(false);
     const [submitting, setSubmitting] = useState(false);
@@ -348,7 +352,14 @@ export default function PrivateEventView({event, onLeft}: Props) {
                         )}
                     </div>
 
-                    {!isHost && (
+                    {isHost ? (
+                        <div className="bg-[#1e1e1e] rounded-xl border border-white/5 p-5 flex flex-col gap-3">
+                            <div className="flex gap-2">
+                                <EditButton handleClick={() => onEdit?.()}/>
+                                <DeleteButton handleClick={() => onDelete?.()}/>
+                            </div>
+                        </div>
+                    ) : (
                         <div className="bg-[#1e1e1e] rounded-xl border border-white/5 p-5 flex flex-col gap-3">
                             <button
                                 onClick={handleLeave}

@@ -1,9 +1,7 @@
 import type { EventType } from "../../types/eventTypes.ts";
 import Sidebar from "../Sidebar.tsx";
-import EditButton from "../buttons/EditButton.tsx";
 import {useState} from "react";
 import EditEventForm from "./EditEventForm.tsx";
-import DeleteButton from "../buttons/DeleteButton.tsx";
 import {eliminateEvent} from "../../api/event.ts";
 import {useNavigate} from "react-router-dom";
 import PopUpError from "../PopUpError.tsx";
@@ -34,30 +32,31 @@ export default function InPersonEventDetail({ event }: Props) {
     const handleEventDeletion = async () => {
         try {
             await eliminateEvent(event.id);
-            navigate("/event");
+            navigate(`/profile/${userId}?tab=events`);
         }catch {
             setError(true);
         }
     }
 
     return (
-        <div className="card bg-base-200 border border-base-300 max-w-4xl mx-auto shadow-xl overflow-hidden">
+        <div className="min-h-screen bg-[#141414] flex">
             <Sidebar/>
-            {isOwner && <div className="absolute top-4 right-4 flex gap-2 z-10">
-                <EditButton handleClick={() => setEditEvent(true)}/>
-                <DeleteButton handleClick={handleEventDeletion}/>
-            </div>}
-            {isMember || isOwner ? (
-                <InPersonPrivateView event={event} isHost={isOwner} onLeft={handleInvalidate} />
-            ) : (
-                <InPersonPublicView
-                    event={event}
-                    signUp={signUp ?? null}
-                    onJoined={handleInvalidate}
-                />
-            )}
-            {error && <PopUpError message="Failed to update event"/>}
-            {editEvent && <EditEventForm event={event} onClose={() => setEditEvent(false)}/>}
+            <main className="flex-1 ml-60">
+                {isMember || isOwner ? (
+                    <InPersonPrivateView event={event} isHost={isOwner} onLeft={handleInvalidate} onEdit={() => setEditEvent(true)} onDelete={handleEventDeletion} />
+                ) : (
+                    <InPersonPublicView
+                        event={event}
+                        signUp={signUp ?? null}
+                        onJoined={handleInvalidate}
+                    />
+                )}
+                {error && <PopUpError message="Failed to update event"/>}
+                {editEvent && <EditEventForm event={event} onClose={() => {
+                    setEditEvent(false);
+                    queryClient.invalidateQueries({ queryKey: ['event', event.id] });
+                }}/>}
+            </main>
         </div>
     );
 }

@@ -38,7 +38,7 @@ export default function NewComment(props: Props){
 
     return (
         <dialog className="modal modal-open backdrop-blur-sm">
-            <form className="modal-box bg-base-100 p-0 overflow-hidden max-w-lg w-full" onSubmit={handleSubmit}>
+            <form className="modal-box bg-[#141414] p-0 overflow-hidden max-w-lg w-full" onSubmit={handleSubmit}>
 
                 <div className="p-4 flex gap-4">
                     <div className="avatar placeholder">

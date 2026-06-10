@@ -8,9 +8,10 @@ import NewComment from "../create/NewComment.tsx";
 type Props = PostType & {
     isForPostPage: boolean,
     onCommentCreate?: () => void,
+    onCommentClick?: () => void,
 }
 
-export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, canDelete, deletePost, isForPostPage, onCommentCreate, images } : Props){
+export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, canDelete, deletePost, isForPostPage, onCommentCreate, onCommentClick, images } : Props){
     const url = import.meta.env.VITE_API_URL;
     const [createComment, setCreateComment] = useState(false);
     const navigate: NavigateFunction = useNavigate();
@@ -73,19 +74,26 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
             )}
 
             <div
-                className="flex items-center gap-5 text-white/40"
+                className="flex items-center gap-6 text-white/40 border-t border-white/5 pt-3 mt-2"
                 onClick={(e) => e.stopPropagation()}
             >
                 <LikeButton postId={id} initialIsLiked={isLiked}/>
                 <DislikeButton postId={id} initialIsDisliked={isDisliked}/>
                 <button
                     type="button"
-                    className="flex cursor-pointer items-center gap-1 transition-colors hover:text-[#8A9A5B]"
-                    onClick={() => setCreateComment(true)}
+                    className="flex cursor-pointer items-center gap-1 transition-all duration-300 rounded-full p-0.5 text-base-content/70 hover:text-[#8A9A5B]"
+                    aria-label="Comment"
+                    onClick={() => {
+                        if (isForPostPage && onCommentClick) {
+                            onCommentClick();
+                        } else {
+                            setCreateComment(true);
+                        }
+                    }}
                 >
-                    <MessageCircle size={20} strokeWidth={1.5}/>
+                    <MessageCircle size={16} strokeWidth={1.5} className="transition-transform active:scale-125"/>
                 </button>
-                {createComment && (
+                {(!isForPostPage || !onCommentClick) && createComment && (
                     <NewComment
                         postId={id}
                         postAuthorUsername={username}
