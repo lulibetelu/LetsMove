@@ -6,6 +6,7 @@ import {useQuery} from "@tanstack/react-query";
 import {formatDate} from "../../resusable-functions/formatDate.ts";
 import {formatTime} from "../../resusable-functions/formatTime.ts";
 import PopUpError from "../PopUpError.tsx";
+import ProfileLink from "../profile/ProfileLink.tsx";
 
 interface Props {
     event: EventType;
@@ -88,7 +89,7 @@ export default function InPersonPublicView({event, signUp, onJoined}: Props) {
                         <div className="flex items-center gap-2">
                             <UserCircle size={18} strokeWidth={1.5} className="text-white/30"/>
                             <span className="text-sm text-white/40">Hosted by</span>
-                            <span className="text-sm font-semibold text-[#8A9A5B]">{event.host.username}</span>
+                            <ProfileLink username={event.host.username} userId={event.host.id}/>
                         </div>
                     </div>
 
@@ -119,7 +120,7 @@ export default function InPersonPublicView({event, signUp, onJoined}: Props) {
                                 {acceptedParticipants.map((p: EventSignUp) => (
                                     <div key={p.userId} className="flex items-center gap-2 bg-[#1e1e1e] border border-white/5 rounded-full px-3 py-1.5">
                                         <UserCircle size={16} strokeWidth={1.5} className="text-white/30"/>
-                                        <span className="text-xs font-medium text-white/60">{p.user.username}</span>
+                                        <ProfileLink username={p.user.username} userId={p.user.id} color={"white/70"} textSize={"xs"}/>
                                     </div>
                                 ))}
                             </div>
@@ -151,7 +152,7 @@ export default function InPersonPublicView({event, signUp, onJoined}: Props) {
                             <UserCircle size={14} strokeWidth={1.5} className="text-white/30 shrink-0"/>
                             <div>
                                 <p className="text-[10px] font-bold uppercase tracking-widest text-white/20">Hosted by</p>
-                                <p className="text-sm text-white/70">{event.host.username}</p>
+                                <ProfileLink username={event.host.username} userId={event.host.id} color={"white/50"}/>
                             </div>
                         </div>
 

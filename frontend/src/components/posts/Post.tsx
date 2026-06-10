@@ -1,5 +1,5 @@
 import type { PostType } from '../../types/postTypes.ts'
-import {Link, type NavigateFunction, useNavigate} from 'react-router-dom';
+import {type NavigateFunction, useNavigate} from 'react-router-dom';
 import {CircleUserRound, MessageCircle, Trash2} from 'lucide-react';
 import LikeButton from "../buttons/LikeButton.tsx";
 import DislikeButton from "../buttons/DislikeButton.tsx";

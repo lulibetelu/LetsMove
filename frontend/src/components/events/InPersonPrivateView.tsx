@@ -11,6 +11,7 @@ import DeleteButton from "../buttons/DeleteButton.tsx";
 import ImagePicker from "../ImagePicker.tsx";
 import type {ImageEvent} from "../../types/imageType.ts";
 import type {ImageInput} from "../../types/imageType.ts";
+import ProfileLink from "../profile/ProfileLink.tsx";
 
 interface Props {
     event: EventType;
@@ -102,7 +103,7 @@ export default function InPersonPrivateView({event, isHost, onLeft, onEdit, onDe
                 <div className="flex items-center gap-2">
                     <UserCircle size={16} strokeWidth={1.5} className="text-white/30"/>
                     <span className="text-sm text-white/40">Hosted by</span>
-                    <span className="text-sm font-semibold text-[#8A9A5B]">{event.host.username}</span>
+                    <ProfileLink username={event.host.username} userId={event.host.id}/>
                 </div>
             </div>
 
@@ -138,7 +139,7 @@ export default function InPersonPrivateView({event, isHost, onLeft, onEdit, onDe
                                 {acceptedParticipants.map((p: EventSignUp) => (
                                     <div key={p.userId} className="flex items-center gap-2 bg-[#1e1e1e] border border-white/5 rounded-full px-3 py-1.5">
                                         <UserCircle size={16} strokeWidth={1.5} className="text-white/30"/>
-                                        <span className="text-xs font-medium text-white/60">{p.user.username}</span>
+                                        <ProfileLink username={p.user.username} userId={p.user.id} color={"white/70"} textSize={"xs"}/>
                                     </div>
                                 ))}
                             </div>
