@@ -17,7 +17,10 @@ import { EventModule } from './event/event.module';
 import { EventSignUpModule } from './event-sign-up/event-sign-up.module';
 import { EventEntryModule } from './eventEntry/event-entry.module';
 import { ImageModule } from './images/image.module';
+import { ChatGateway } from './chat/chat.gateway';
 import { GroupModule } from './group/group.module';
+import { MessageModule } from './message/message.module';
+import { ChatModule } from './chat/chat.module';
 import { SavedEventModule } from './saved-event/saved-event.module';
 
 @Module({
@@ -41,6 +44,8 @@ import { SavedEventModule } from './saved-event/saved-event.module';
     EventEntryModule,
     ImageModule,
     GroupModule,
+    MessageModule,
+    ChatModule,
     SavedEventModule,
   ],
   controllers: [AppController],

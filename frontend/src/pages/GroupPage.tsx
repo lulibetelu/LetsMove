@@ -1,12 +1,13 @@
-import { useState } from "react";
+import {useState} from "react";
 import Sidebar from "../components/Sidebar.tsx";
 import GroupList from "../components/groups/GroupList.tsx";
 import GroupDetail from "../components/groups/GroupDetail.tsx";
 import NewGroup from "../components/groups/NewGroup.tsx";
 import { useGroups } from "../hooks/groups/useGroups.ts";
+import {GroupChat} from "../components/groups/Chat/GroupChat.tsx";
 
 export default function GroupPage() {
-    const { data: groups, isLoading, isError } = useGroups();
+    const {data: groups, isLoading, isError} = useGroups();
     const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [showCreateForm, setShowCreateForm] = useState(false);
@@ -18,7 +19,7 @@ export default function GroupPage() {
     if (isError) {
         return (
             <div className="min-h-screen bg-[#141414] flex">
-                <Sidebar />
+                <Sidebar/>
                 <div className="flex-1 ml-60 flex items-center justify-center">
                     <p className="text-white/40 text-sm">Could not load groups</p>
                 </div>
@@ -28,7 +29,7 @@ export default function GroupPage() {
 
     return (
         <div className="min-h-screen bg-[#141414] flex">
-            <Sidebar />
+            <Sidebar/>
 
             <div className="flex-1 ml-60 flex">
                 <div className="w-96 shrink-0 border-r border-white/5 flex flex-col bg-[#1e1e1e]">
@@ -44,11 +45,12 @@ export default function GroupPage() {
 
                 <div className="flex-1 flex flex-col">
                     {selectedGroupId ? (
-                        <GroupDetail groupId={selectedGroupId} />
+                        <GroupChat groupId={selectedGroupId}/>
                     ) : (
                         <div className="flex-1 flex items-center justify-center">
                             <div className="text-center">
-                                <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
+                                <div
+                                    className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
                                     <svg
                                         width="28"
                                         height="28"
@@ -58,10 +60,10 @@ export default function GroupPage() {
                                         strokeWidth="1.5"
                                         className="text-white/20"
                                     >
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                        <circle cx="9" cy="7" r="4" />
-                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="9" cy="7" r="4"/>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                                     </svg>
                                 </div>
                                 <p className="text-white/30 text-sm">Select a group</p>
@@ -70,13 +72,11 @@ export default function GroupPage() {
                     )}
                 </div>
             </div>
-
             <button
                 type="button"
                 aria-label="Create group"
                 onClick={() => setShowCreateForm(true)}
-                className="
-                    fixed bottom-6 right-6
+                className="fixed bottom-6 right-6
                     w-16 h-16
                     rounded-full
                     bg-[#96a55a]
@@ -90,8 +90,7 @@ export default function GroupPage() {
                     hover:scale-110
                     hover:rotate-90
                     active:scale-95
-                    cursor-pointer
-                "
+                    cursor-pointer"
             >
                 +
             </button>

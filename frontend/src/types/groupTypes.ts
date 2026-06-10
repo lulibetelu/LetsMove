@@ -1,6 +1,6 @@
 import type {ImageInput} from "./imageType.ts";
 
-interface Member {
+export interface Member {
     memberId: number,
     isAdmin: boolean,
 }
@@ -16,4 +16,13 @@ export interface UpdateGroup {
     description?: string;
     membersToUpdate?: Member[];
     membersIdToRemove?: number[]
+}
+
+export interface Group {
+    id: number;
+    name: string;
+    description: string;
+    imageId: number;
+    groupMembers: Member[];
+
 }

@@ -8,6 +8,7 @@ import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { GroupRepositoryService } from '../repository/groups/group.repository.service';
 import { ImageService } from '../images/image.service';
+import { Member } from './entities/group.entity';
 
 @Injectable()
 export class GroupService {
@@ -72,5 +73,13 @@ export class GroupService {
       throw new UnauthorizedException('only admin can delete group');
 
     return this.groupRepository.delete(groupId);
+  }
+
+  async isMember(userId: number, groupId: number) {
+    const group = await this.findOne(groupId, userId);
+    const filteredGroup: { userId: number; isAdmin: boolean }[] =
+      group.groupMembers.filter((member) => member.userId === userId);
+
+    return filteredGroup.length > 0;
   }
 }
