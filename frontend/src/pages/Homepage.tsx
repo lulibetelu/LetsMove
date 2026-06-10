@@ -9,7 +9,7 @@ import {usePosts} from "../hooks/posts/usePosts.ts";
 
 export default function Homepage() {
     const [createPost, setCreatePost] = useState<boolean>(false);
-    const { posts, deletePost, observerRef, error } = usePosts();
+    const { posts, deletePost, observerRef, error, isLoading } = usePosts();
 
 
     return(
@@ -30,7 +30,7 @@ export default function Homepage() {
                                 />
                             </div>
                         </header>
-                        <Posts userId={null} posts={posts} deletePost={deletePost} observerRef={observerRef}/>
+                        <Posts userId={null} posts={posts} deletePost={deletePost} observerRef={observerRef} isLoading={isLoading}/>
                         <div>
                             {error && <PopUpError message='Failed to load posts, please try again later'/>}
                         </div>

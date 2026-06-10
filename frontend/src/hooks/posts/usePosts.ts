@@ -11,6 +11,7 @@ export function usePosts(){
         fetchNextPage,
         hasNextPage,
         isError,
+        isLoading,
     } = useInfiniteQuery({
         queryKey: ['posts'],
         queryFn: (async ({pageParam}) => {
@@ -54,5 +55,5 @@ export function usePosts(){
 
     const error = isError || mutation.isError;
 
-    return { posts, deletePost, observerRef, error}
+    return { posts, deletePost, observerRef, isLoading, error}
 }
