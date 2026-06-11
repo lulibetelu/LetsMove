@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class FilterEventDto {
   @IsOptional()
@@ -12,4 +12,12 @@ export class FilterEventDto {
   @IsOptional()
   @IsString()
   sport?: string;
+
+  @IsOptional()
+  @IsNumber()
+  saved?: number;
+
+  @IsOptional()
+  @IsNumber()
+  joined?: number;
 }
