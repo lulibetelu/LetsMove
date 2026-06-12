@@ -10,6 +10,15 @@ import {getCurrentUserId} from "./user.ts";
 import type {ImageInput} from "../types/imageType.ts";
 import api, { handleApiError } from "./client.ts";
 
+export async function findFeed(page: number) {
+    try {
+        const { data } = await api.get('event/feed', { params: { page: page.toString() } });
+        return data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
 export async function findEvents(page:number, filters:EventFilters){
     const params = {
         page: page.toString(),
