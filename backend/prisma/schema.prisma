@@ -66,7 +66,7 @@ model Preference {
 
 model Location {
   id        Int     @id @default(autoincrement())
-  location  String
+  location  String  @unique
   latitude  Float
   longitude Float
 
