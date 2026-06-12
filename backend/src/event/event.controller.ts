@@ -68,6 +68,16 @@ export class EventController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('feed')
+  async getFeed(
+    @Req() req: Request,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number = 1,
+  ) {
+    const userId = req.user.sub;
+    return this.eventService.getFeed(userId, page);
+  }
+
+  @UseGuards(AuthGuard)
   @Get('host')
   async findAllFromUser(@Req() req: Request) {
     const userId = req.user.sub;

@@ -178,18 +178,31 @@ async function main() {
 
   // --- Users ---
   const userInfo = [
-    { username: 'john_doe', email: 'john@example.com', password: 'pass1234' },
-    { username: 'jane_smith', email: 'jane@example.com', password: 'pass1234' },
-    { username: 'carlos_m', email: 'carlos@example.com', password: 'pass1234' },
-    { username: 'ana_perez', email: 'ana@example.com', password: 'pass1234' },
-    { username: 'mike_j', email: 'mike@example.com', password: 'pass1234' },
+    { username: 'john_doe', email: 'john@example.com', password: 'pass1234', homeLocationName: 'La Plata' },
+    { username: 'jane_smith', email: 'jane@example.com', password: 'pass1234', homeLocationName: 'General Pueyrredón' },
+    { username: 'carlos_m', email: 'carlos@example.com', password: 'pass1234', homeLocationName: 'Avellaneda' },
+    { username: 'ana_perez', email: 'ana@example.com', password: 'pass1234', homeLocationName: 'La Matanza' },
+    { username: 'mike_j', email: 'mike@example.com', password: 'pass1234', homeLocationName: 'Bahía Blanca' },
+    { username: 'lucia_g', email: 'lucia@example.com', password: 'pass1234', homeLocationName: 'Tandil' },
+    { username: 'martin_r', email: 'martin@example.com', password: 'pass1234', homeLocationName: 'Tigre' },
+    { username: 'sofia_k', email: 'sofia@example.com', password: 'pass1234', homeLocationName: 'Quilmes' },
+    { username: 'federico_l', email: 'fede@example.com', password: 'pass1234', homeLocationName: 'Pilar' },
+    { username: 'valentina_m', email: 'vale@example.com', password: 'pass1234', homeLocationName: 'Morón' },
+    { username: 'agustin_p', email: 'agustin@example.com', password: 'pass1234', homeLocationName: 'Campana' },
+    { username: 'camila_t', email: 'camila@example.com', password: 'pass1234', homeLocationName: 'Lanús' },
+    { username: 'diego_h', email: 'diego@example.com', password: 'pass1234', homeLocationName: 'San Isidro' },
+    { username: 'florencia_b', email: 'flor@example.com', password: 'pass1234', homeLocationName: 'Vicente López' },
+    { username: 'nicolas_v', email: 'nico@example.com', password: 'pass1234', homeLocationName: 'Berazategui' },
   ];
 
-  for (const userData of userInfo) {
+  for (const { homeLocationName, ...userData } of userInfo) {
     await prisma.user.upsert({
       where: { email: userData.email },
       update: {},
-      create: userData,
+      create: {
+        ...userData,
+        homeLocation: { connect: { location: homeLocationName } },
+      },
     });
   }
 
@@ -202,6 +215,16 @@ async function main() {
     { username: 'carlos_m', sports: ['Football', 'Basketball', 'Cycling'] },
     { username: 'ana_perez', sports: ['Volleyball', 'Running'] },
     { username: 'mike_j', sports: ['Basketball', 'Cycling'] },
+    { username: 'lucia_g', sports: ['Running', 'Cycling'] },
+    { username: 'martin_r', sports: ['Football', 'Swimming'] },
+    { username: 'sofia_k', sports: ['Tennis', 'Volleyball'] },
+    { username: 'federico_l', sports: ['Cycling', 'Running'] },
+    { username: 'valentina_m', sports: ['Basketball', 'Volleyball'] },
+    { username: 'agustin_p', sports: ['Football', 'Tennis'] },
+    { username: 'camila_t', sports: ['Football', 'Running'] },
+    { username: 'diego_h', sports: ['Swimming', 'Cycling'] },
+    { username: 'florencia_b', sports: ['Volleyball', 'Running'] },
+    { username: 'nicolas_v', sports: ['Basketball', 'Tennis'] },
   ];
 
   for (const { username, sports } of preferences) {
@@ -862,6 +885,261 @@ async function main() {
     }
   }
 
+  // --- Events ---
+  const now = Date.now();
+  const day = 24 * 60 * 60 * 1000;
+
+  const eventsData = [
+    {
+      host: 'john_doe',
+      title: 'Sunday Football at Parque Saavedra',
+      description: 'Partido de fútbol 5 en el Parque Saavedra, La Plata. Todos los niveles son bienvenidos, solo traigan agua y ganas de correr.',
+      sport: 'Football',
+      locationName: 'La Plata',
+      eventType: 'InPerson' as const,
+      startingDate: new Date(now + 7 * day),
+      isPrivate: false,
+      coverDescription: 'Football match at the park',
+      participants: ['carlos_m', 'martin_r', 'agustin_p', 'camila_t'],
+      galleryDescriptions: ['Players warming up', 'Goal of the day'],
+    },
+    {
+      host: 'jane_smith',
+      title: 'Tennis doubles in Mar del Plata',
+      description: 'Buscamos gente para jugar dobles en el club. Nivel intermedio, cancha de polvo de ladrillo.',
+      sport: 'Tennis',
+      locationName: 'General Pueyrredón',
+      eventType: 'InPerson' as const,
+      startingDate: new Date(now + 8 * day),
+      isPrivate: false,
+      coverDescription: 'Tennis court',
+      participants: ['sofia_k', 'nicolas_v'],
+      galleryDescriptions: ['Court view', 'After match'],
+    },
+    {
+      host: 'carlos_m',
+      title: 'Basketball 3x3 Tournament',
+      description: 'Torneo de básquet 3x3 en el polideportivo de Avellaneda. Premio para el equipo ganador.',
+      sport: 'Basketball',
+      locationName: 'Avellaneda',
+      eventType: 'InPerson' as const,
+      startingDate: new Date(now + 6 * day),
+      isPrivate: false,
+      coverDescription: 'Basketball tournament poster',
+      participants: ['mike_j', 'valentina_m', 'nicolas_v'],
+      galleryDescriptions: ['First match', 'Final game'],
+    },
+    {
+      host: 'ana_perez',
+      title: 'Volleyball friendly match',
+      description: 'Partido amistoso de vóley en el club de La Matanza. Necesitamos 2 jugadores más para completar los equipos.',
+      sport: 'Volleyball',
+      locationName: 'La Matanza',
+      eventType: 'InPerson' as const,
+      startingDate: new Date(now + 5 * day),
+      isPrivate: true,
+      coverDescription: 'Volleyball net',
+      participants: [],
+      pendingParticipants: ['sofia_k', 'valentina_m', 'florencia_b'],
+    },
+    {
+      host: 'martin_r',
+      title: 'Beach football in Tigre',
+      description: 'Fútbol playa en el Parque de la Costa. Vamos a hacer un partido 5vs5, después bajamos algo a la parrilla.',
+      sport: 'Football',
+      locationName: 'Tigre',
+      eventType: 'InPerson' as const,
+      startingDate: new Date(now + 9 * day),
+      isPrivate: false,
+      coverDescription: 'Beach football',
+      participants: ['john_doe', 'agustin_p', 'camila_t', 'carlos_m'],
+      galleryDescriptions: ['Team photo', 'The grill after'],
+    },
+    {
+      host: 'federico_l',
+      title: 'Morning cycling through Pilar',
+      description: 'Salida de ciclismo de 40km por los caminos de Pilar. Ritmo tranquilo, ideal para arrancar el finde.',
+      sport: 'Cycling',
+      locationName: 'Pilar',
+      eventType: 'InPerson' as const,
+      startingDate: new Date(now + 6 * day + 7 * 60 * 60 * 1000), // 7am
+      isPrivate: false,
+      coverDescription: 'Cycling route',
+      participants: ['lucia_g', 'mike_j', 'diego_h'],
+      galleryDescriptions: ['Start point', 'Halfway stop'],
+    },
+    {
+      host: 'sofia_k',
+      title: 'Tennis singles match',
+      description: 'Busco rival para jugar un partido de singles en Quilmes. Nivel intermedio-avanzado.',
+      sport: 'Tennis',
+      locationName: 'Quilmes',
+      eventType: 'InPerson' as const,
+      startingDate: new Date(now + 4 * day + 18 * 60 * 60 * 1000),
+      isPrivate: false,
+      coverDescription: 'Tennis singles',
+      participants: ['nicolas_v'],
+      galleryDescriptions: [],
+    },
+    {
+      host: 'john_doe',
+      title: '10K Running Challenge - June',
+      description: 'Corré 10km durante el mes. Cada uno registra su progreso con fotos o comentarios. Al final del mes compartimos los resultados.',
+      sport: 'Running',
+      locationName: null,
+      eventType: 'Asynchronous' as const,
+      startingDate: new Date(now + 3 * day),
+      endingDate: new Date(now + 33 * day),
+      isPrivate: false,
+      coverDescription: 'Running challenge',
+      participants: ['lucia_g', 'ana_perez', 'federico_l', 'camila_t', 'florencia_b'],
+      entries: [
+        { username: 'john_doe', content: 'First run of the challenge: 5km in 28 minutes. Feeling good!', daysAgo: 1 },
+        { username: 'lucia_g', content: 'Completed 8km today. New personal best pace!', daysAgo: 1 },
+        { username: 'ana_perez', content: 'Morning run 6km. Beautiful sunrise today.', daysAgo: 2 },
+        { username: 'camila_t', content: '10km done in 55 minutes. Goal achieved!', daysAgo: 0 },
+        { username: 'federico_l', content: 'Slow 5km today, recovering from a cold.', daysAgo: 3 },
+      ],
+    },
+    {
+      host: 'mike_j',
+      title: '100km Cycling Challenge',
+      description: 'Ciclistas de Bahía Blanca y alrededores: sumemos 100km entre todos durante las próximas dos semanas. Cada uno aporta lo que pueda.',
+      sport: 'Cycling',
+      locationName: null,
+      eventType: 'Asynchronous' as const,
+      startingDate: new Date(now + 2 * day),
+      endingDate: new Date(now + 16 * day),
+      isPrivate: false,
+      coverDescription: 'Cycling challenge',
+      participants: ['carlos_m', 'lucia_g', 'federico_l', 'diego_h'],
+      entries: [
+        { username: 'mike_j', content: 'Morning ride: 35km along the coast. Strong wind but great views.', daysAgo: 1 },
+        { username: 'carlos_m', content: '25km after work. Legs are feeling strong!', daysAgo: 2 },
+        { username: 'lucia_g', content: '15km commute to work and back. Every km counts!', daysAgo: 1 },
+        { username: 'diego_h', content: '30km ride through San Isidro. Gorgeous day for cycling.', daysAgo: 0 },
+      ],
+    },
+    {
+      host: 'jane_smith',
+      title: '5K Swim Challenge',
+      description: '5 kilómetros acumulados de natación en piscina. Dos semanas para completarlo. Registren sus avances acá.',
+      sport: 'Swimming',
+      locationName: null,
+      eventType: 'Asynchronous' as const,
+      startingDate: new Date(now + 4 * day),
+      endingDate: new Date(now + 18 * day),
+      isPrivate: false,
+      coverDescription: 'Swimming challenge',
+      participants: ['martin_r', 'diego_h'],
+      entries: [
+        { username: 'jane_smith', content: '1500m today: 500m crawl, 500m backstroke, 500m breaststroke.', daysAgo: 1 },
+        { username: 'martin_r', content: '1000m in 25 minutes. Working on my technique.', daysAgo: 2 },
+        { username: 'diego_h', content: '1200m today. Tried the new swimming drills.', daysAgo: 0 },
+      ],
+    },
+  ];
+
+  for (const eventData of eventsData) {
+    const hostId = userMap[eventData.host];
+    const sportId = sportMap[eventData.sport];
+    const location = eventData.locationName
+      ? await prisma.location.findUnique({ where: { location: eventData.locationName } })
+      : null;
+    const locationId = location?.id ?? null;
+
+    const coverImage = await prisma.image.create({
+      data: { url: `https://picsum.photos/seed/${eventData.title.replace(/\s+/g, '-').toLowerCase()}/800/600` },
+    });
+
+    const event = await prisma.event.create({
+      data: {
+        hostId,
+        title: eventData.title,
+        description: eventData.description,
+        startingDate: eventData.startingDate,
+        endingDate: eventData.endingDate ?? null,
+        locationId,
+        eventType: eventData.eventType,
+        sportId,
+        isPrivate: eventData.isPrivate,
+      },
+    });
+
+    await prisma.imageEvent.create({
+      data: {
+        eventId: event.id,
+        imageId: coverImage.id,
+        description: eventData.coverDescription,
+      },
+    });
+
+    const acceptedParticipants = eventData.participants ?? [];
+    for (const username of acceptedParticipants) {
+      const userId = userMap[username];
+      if (userId) {
+        await prisma.eventSignUp.upsert({
+          where: { userId_eventId: { userId, eventId: event.id } },
+          update: {},
+          create: {
+            userId,
+            eventId: event.id,
+            state: 'Accepted',
+            joinedAt: new Date(now - Math.random() * 5 * day),
+          },
+        });
+      }
+    }
+
+    const pendingUsers = (eventData as any).pendingParticipants ?? [];
+    for (const username of pendingUsers) {
+      const userId = userMap[username];
+      if (userId) {
+        await prisma.eventSignUp.upsert({
+          where: { userId_eventId: { userId, eventId: event.id } },
+          update: {},
+          create: {
+            userId,
+            eventId: event.id,
+            state: 'Requested',
+          },
+        });
+      }
+    }
+
+    if (eventData.eventType === 'InPerson') {
+      const galleryDescs = (eventData as any).galleryDescriptions ?? [];
+      for (let i = 0; i < galleryDescs.length; i++) {
+        const galleryImage = await prisma.image.create({
+          data: { url: `https://picsum.photos/seed/${eventData.title.replace(/\s+/g, '-').toLowerCase()}-gallery-${i}/800/600` },
+        });
+        await prisma.imageEvent.create({
+          data: {
+            eventId: event.id,
+            imageId: galleryImage.id,
+            description: galleryDescs[i],
+          },
+        });
+      }
+    }
+
+    const entries = (eventData as any).entries ?? [];
+    for (const entry of entries) {
+      const userId = userMap[entry.username];
+      if (userId) {
+        await prisma.eventEntry.create({
+          data: {
+            userId,
+            eventId: event.id,
+            content: entry.content,
+            createdAt: new Date(now - entry.daysAgo * day),
+          },
+        });
+      }
+    }
+  }
+
+  console.log(`✅ ${eventsData.length} events seeded`);
   console.log('✅ Seed complete');
 }
 
