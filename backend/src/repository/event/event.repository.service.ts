@@ -250,6 +250,7 @@ export class EventRepositoryService {
       ? {
           title: {
             contains: filter.title,
+            mode: 'insensitive' as const,
           },
         }
       : {};
@@ -260,6 +261,7 @@ export class EventRepositoryService {
             is: {
               username: {
                 contains: filter.host,
+                mode: 'insensitive' as const,
               },
             },
           },
@@ -272,6 +274,7 @@ export class EventRepositoryService {
             is: {
               name: {
                 contains: filter.sport,
+                mode: 'insensitive' as const,
               },
             },
           },
