@@ -83,8 +83,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       images: messageData.images,
       sentDate: new Date(),
     };
-    const createdMessage: Message =
-      await this.messageService.create(createMessageDto);
+    const createdMessage: Message = await this.messageService.create(
+      createMessageDto,
+      userId,
+    );
 
     this.server
       .to(messageData.groupId.toString())

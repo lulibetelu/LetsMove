@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+  import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { RegisterDto } from '../../register/dto/register.dto';
 import { UpdateRegisterDto } from '../../register/dto/update.register.dto';
@@ -47,8 +47,13 @@ export class UserRepositoryService {
   }
 
   async createUser(registerDto: RegisterDto) {
+    const { locationId, ...userData } = registerDto;
     return this.prismaService.user.create({
-      data: registerDto,
+      // el connect verifica que exista una location con id=locationId, sino falla
+      data: {
+        ...userData,
+        ...(locationId && { homeLocation: { connect: { id: locationId } } }),
+      },
       select: {
         id: true,
         username: true,
