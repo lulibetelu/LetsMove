@@ -19,3 +19,9 @@ export interface NewPostCredentials {
     images?: ImageInput[]
 }
 
+export interface PostCreationResponse {
+    id: number;
+    content: string;
+    createdAt: Date;
+    userId: number;
+}

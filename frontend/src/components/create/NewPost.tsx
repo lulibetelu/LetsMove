@@ -1,5 +1,5 @@
 import {CircleUserRound} from 'lucide-react';
-import type {NewPostCredentials} from "../../types/postTypes.ts";
+import type {NewPostCredentials, PostCreationResponse} from "../../types/postTypes.ts";
 import {create} from "../../api/post.ts";
 import {useEffect, useState} from "react";
 import {useUsername} from "../../hooks/UseUsername.ts";
@@ -10,12 +10,13 @@ import type {ImageInput} from "../../types/imageType.ts";
 import ImagePicker from "../ImagePicker.tsx";
 
 
-export default function NewPost({ onClose }: { onClose: () => void}){
+
+export default function NewPost({ onClose }: { onClose: (wasCreated:boolean) => void}){
     const [content, setContent] = useState<string>("");
     const [error, setError] = useState<boolean>(false);
     const [sports, setSports] = useState<Sport[]>([]);
-    const [selectedSports, setSelectedSports] = useState<Sport[]>([])
-    const [images, setImages] = useState<ImageInput[]>([])
+    const [selectedSports, setSelectedSports] = useState<Sport[]>([]);
+    const [images, setImages] = useState<ImageInput[]>([]);
 
     const { username, loading } = useUsername();
 
@@ -34,9 +35,8 @@ export default function NewPost({ onClose }: { onClose: () => void}){
                 sport.id,
             );
             const postCredentials: NewPostCredentials = {content, selectedSportsId, images};
-            const createPost = await create(postCredentials);
-            console.log("CREATE POST:", createPost);
-            onClose();
+            const createPost: PostCreationResponse = await create(postCredentials);
+            onClose(true);
         } catch {
             setError(true);
         }
@@ -126,7 +126,7 @@ export default function NewPost({ onClose }: { onClose: () => void}){
                 </div>
             </form>
             <form method="dialog" className="modal-backdrop">
-                <button onClick={onClose}>Cerrar</button>
+                <button onClick={() => onClose(false)}>Cerrar</button>
             </form>
         </dialog>
     );
