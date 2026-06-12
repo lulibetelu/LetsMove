@@ -14,7 +14,6 @@ export default function Sidebar() {
         { path: "/event", icon: PartyPopper, label: "Eventos"},
         { path: "/events", icon: CalendarDays, label: "Calendario" },
         { path: "/group", icon: Users, label: "Grupos" },
-        { path: currentUserId ? `/profile/${currentUserId}` : "/login", icon: User, label: "Perfil" },
         { path: "/settings", icon: Settings, label: "Configuración" },
         { path: "/notifications", icon: Bell, label: "Notificaciones" },
     ];
@@ -46,16 +45,18 @@ export default function Sidebar() {
             </nav>
 
             {currentUserId && currentUsername && (
-                <div className="mt-auto pt-4 border-t border-white/5">
-                    <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-white/5">
-                        <div className="w-8 h-8 rounded-full bg-[#8A9A5B]/20 flex items-center justify-center shrink-0">
-                            <span className="text-sm font-semibold text-[#8A9A5B]">
-                                {currentUsername[0].toUpperCase()}
-                            </span>
+                <Link to={`/profile/${currentUserId}`}>
+                    <div className="mt-auto pt-4 border-t border-white/5">
+                        <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all">
+                            <div className="w-8 h-8 rounded-full bg-[#8A9A5B]/20 flex items-center justify-center shrink-0">
+                                <span className="text-sm font-semibold text-[#8A9A5B]">
+                                    {currentUsername[0].toUpperCase()}
+                                </span>
+                            </div>
+                            <span className="text-sm text-white/70 hover:text-white/90 truncate">{currentUsername}</span>
                         </div>
-                        <span className="text-sm text-white/70 truncate">{currentUsername}</span>
                     </div>
-                </div>
+                </Link>
             )}
         </aside>
     );
