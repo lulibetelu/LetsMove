@@ -40,6 +40,10 @@ export function getCurrentUserId(): number|null {
     return decodeToken()?.sub ?? null;
 }
 
+export function getCurrentUsername(): string | null {
+    return decodeToken()?.username ?? null;
+}
+
 function decodeToken(): { sub: number; username: string } | null {
     try {
         const token = localStorage.getItem('token');

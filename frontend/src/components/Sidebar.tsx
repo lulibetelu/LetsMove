@@ -1,10 +1,11 @@
 import {Home, CalendarDays, Users, User, Settings, Bell, PartyPopper} from 'lucide-react';
 import {Link, useLocation} from "react-router-dom";
-import {getCurrentUserId} from "../api/user.ts";
+import {getCurrentUserId, getCurrentUsername} from "../api/user.ts";
 
 export default function Sidebar() {
     const location = useLocation();
     const currentUserId = getCurrentUserId();
+    const currentUsername = getCurrentUsername();
 
     const isActive = (path: string) => location.pathname === path;
 
@@ -43,6 +44,19 @@ export default function Sidebar() {
                     );
                 })}
             </nav>
+
+            {currentUserId && currentUsername && (
+                <div className="mt-auto pt-4 border-t border-white/5">
+                    <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-white/5">
+                        <div className="w-8 h-8 rounded-full bg-[#8A9A5B]/20 flex items-center justify-center shrink-0">
+                            <span className="text-sm font-semibold text-[#8A9A5B]">
+                                {currentUsername[0].toUpperCase()}
+                            </span>
+                        </div>
+                        <span className="text-sm text-white/70 truncate">{currentUsername}</span>
+                    </div>
+                </div>
+            )}
         </aside>
     );
 }
