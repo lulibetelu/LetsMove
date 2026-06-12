@@ -8,7 +8,9 @@ export function useEvents() {
     const [filters, setFilters] = useState<EventFilters>({
         title: '',
         host: '',
-        sport: ''
+        sport: '',
+        joined: undefined,
+        saved: undefined
     });
 
     const refetchData = (newEventFilters: EventFilters)=> {
@@ -22,7 +24,7 @@ export function useEvents() {
         isFetchingNextPage,
         isError,
     } = useInfiniteQuery({
-        queryKey: ["events", filters.host,filters.title, filters.sport],
+        queryKey: ["events", filters.host, filters.title, filters.sport, filters.joined, filters.saved],
         queryFn: async ({pageParam}) => {
             const events = await findEvents(pageParam, filters)
             return events;

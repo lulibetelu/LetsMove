@@ -7,23 +7,34 @@ import NewEvent from "../components/create/NewEvent.tsx";
 import {useEvents} from "../hooks/events/useEvents.ts";
 import CustomButton from "../components/CustomButton.tsx";
 import Filters from "../components/Filters.tsx";
-import type {EventFilters} from "../types/eventTypes.ts";
+import type {EventFilters, FormFilters} from "../types/eventTypes.ts";
 import {useNavigate} from "react-router-dom";
+import {getCurrentUserId} from "../api/user.ts";
+
+
 
 export default function EventFeed(){
     const {events, observerRef, error, isFetchingNextPage, refetchData, filters} = useEvents();
     const [showFilters, setShowFilters] = useState(false);
     const [searchTitle, setSearchTitle] = useState<string>("");
     const navigate = useNavigate();
+    const currentUserId: number | null= getCurrentUserId();
+
 
     //lo que usas para indicar qué div es el que usas para pedir los proximos eventos.
     const [showCreateEventForm, setShowCreateEventForm] = useState(false);
 
-    const handleSubmit = ({host,sport}: {host:string,sport:string}) => {
+    const handleSubmit = (formFilters: FormFilters) => {
+        if (currentUserId == null) return <PopUpError message={"something went wrong"}/>
+        const joinedInId = formFilters.joined ?  currentUserId : undefined;
+        const savedInId = formFilters.saved ? currentUserId : undefined;
+
         const eventFilters: EventFilters = {
             title: searchTitle,
-            host: host,
-            sport: sport
+            host: formFilters.host,
+            sport: formFilters.sport,
+            joined: joinedInId,
+            saved: savedInId,
         }
         refetchData(eventFilters)
     }
@@ -103,7 +114,7 @@ export default function EventFeed(){
                 ><Plus size={18} /></button>
                 {showCreateEventForm && <NewEvent onClose={() => setShowCreateEventForm(false)} onEventCreated={(id) => navigate(`/event/${id}`)} />}
                 </div>
-            {showFilters && <Filters filters={filters} onClose={() => setShowFilters(false)} onSubmit={(hostAndSport:{host:string, sport: string}) =>handleSubmit(hostAndSport)}/>}
+            {showFilters && <Filters filters={filters} onClose={() => setShowFilters(false)} onSubmit={(formFilters:FormFilters) =>handleSubmit(formFilters)}/>}
         </div>
     )
 }

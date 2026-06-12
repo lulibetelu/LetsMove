@@ -3,7 +3,7 @@ import {useState} from "react";
 import Dropdown from "./Dropdown.tsx";
 import {sportsToString} from "../resusable-functions/sportFunctions.ts";
 import {useSports} from "../hooks/useSports.ts";
-import type {EventFilters} from "../types/eventTypes.ts";
+import type {EventFilters, FormFilters} from "../types/eventTypes.ts";
 
 interface Props {
     onClose: () => void,
@@ -14,16 +14,29 @@ interface Props {
 export default function Filters(props: Props) {
     const [hostFilter, setHostFilter] = useState<string>(props.filters.host);
     const [sportFilter, setSportFiler] = useState<string>(props.filters.sport)
+    const [savedFilter, setSavedFiler] = useState<boolean|undefined>(props.filters.saved? true: undefined)
+    const [joinedFilter, setJoinedFilter] = useState<boolean|undefined>(props.filters.joined? true: undefined)
     const {sports, sportError, isPending} = useSports();
-    const showClearFilter = hostFilter.length !== 0 || sportFilter.length !== 0
+    const showClearFilter = hostFilter.length !== 0 || sportFilter.length !== 0 || savedFilter !== undefined || joinedFilter !== undefined
 
     const handleSubmit = (e: React.SubmitEvent) => {
         e.preventDefault();
-        props.onSubmit({host: hostFilter, sport: sportFilter})
+        debugger
+        const submitFilters: FormFilters = {
+            host: hostFilter,
+            sport: sportFilter,
+            saved: savedFilter,
+            joined: joinedFilter
+        }
+        props.onSubmit(submitFilters)
         props.onClose()
     }
 
     const clearFilters = () => {
+        setHostFilter("")
+        setSportFiler("")
+        setSavedFiler(undefined)
+        setJoinedFilter(undefined)
         props.onSubmit({host: "", sport: ""})
         props.onClose()
     }
@@ -56,6 +69,22 @@ export default function Filters(props: Props) {
                         </label>
                         <Dropdown dataList={sportsToString(sports)} error={sportError} isPending={isPending}
                                   value={sportFilter} handleChange={(newSport) => setSportFiler(newSport)}/>
+                    </div>
+                    <div>
+                        <label className="label">
+                            <span className="label-text font-medium">Saved</span>
+                            <button type="button" onClick={() => setSavedFiler(prev => prev? undefined: true)}>
+                                {savedFilter? <GreenRightToggle/> : <ToggleLeftIcon/>}
+                            </button>
+                        </label>
+                    </div>
+                    <div>
+                        <label className="label">
+                            <span className="label-text font-medium">Joined</span>
+                            <button type="button" onClick={() => setJoinedFilter(prev => prev? undefined: true)}>
+                                {joinedFilter? <GreenRightToggle/> : <ToggleLeftIcon/>}
+                            </button>
+                        </label>
                     </div>
                     {showClearFilter &&  <button
                         type="button"
@@ -106,5 +135,23 @@ export default function Filters(props: Props) {
                 <button onClick={props.onClose}>Cerrar</button>
             </form>
         </dialog>
+    );
+}
+
+function ToggleLeftIcon() {
+    return (
+        <svg width="36" height="20" viewBox="0 0 36 20" fill="none">
+            <rect x="0.5" y="0.5" width="35" height="19" rx="9.5" fill="#333" stroke="#555"/>
+            <circle cx="10" cy="10" r="7" fill="#666"/>
+        </svg>
+    );
+}
+
+function GreenRightToggle() {
+    return (
+        <svg width="36" height="20" viewBox="0 0 36 20" fill="none">
+            <rect x="0.5" y="0.5" width="35" height="19" rx="9.5" fill="#96a55a" stroke="#96a55a"/>
+            <circle cx="26" cy="10" r="7" fill="white"/>
+        </svg>
     );
 }
