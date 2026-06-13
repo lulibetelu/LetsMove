@@ -9,13 +9,17 @@ interface CalendarCellProps {
 
 export default function CalendarCell({ day, isToday, events }: CalendarCellProps) {
     if (day === null) {
-        return <div className="min-h-24 border border-white/5 bg-[#0e0e0e]" />;
+        return <div className="min-h-28 border border-white/5 bg-[#0e0e0e]" />;
     }
 
     return (
-        <div className={`min-h-24 border border-white/5 p-1.5 ${isToday ? "bg-[#8A9A5B]/10" : ""}`}>
+        <div
+            className={`min-h-28 border border-white/5 p-1.5 transition-colors ${
+                isToday ? "bg-[#8A9A5B]/10" : "hover:bg-white/[3%]"
+            }`}
+        >
       <span
-          className={`mb-1 flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium ${
+          className={`mb-1 flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium ${
               isToday ? "bg-[#8A9A5B] text-white" : "text-white/50"
           }`}
       >

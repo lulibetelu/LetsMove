@@ -23,7 +23,9 @@ export default function CalendarView({ events }: CalendarViewProps) {
                 onPrevious={goToPreviousMonth}
                 onNext={goToNextMonth}
             />
-            <CalendarGrid currentDate={currentDate} events={events} />
+            <div className="rounded-xl overflow-hidden border border-white/5 bg-[#1e1e1e]">
+                <CalendarGrid currentDate={currentDate} events={events} />
+            </div>
         </div>
     );
 }
