@@ -49,7 +49,6 @@ export async function getUserProfile(id: number): Promise<UserProfile | null> {
         };
     } catch (error) {
         handleApiError(error);
-        return null;
     }
 }
 export function getCurrentUserId(): number|null {
