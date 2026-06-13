@@ -54,6 +54,7 @@ export async function createEvent(data: EventRawData){
 }
 
 function formatEventData(data: EventRawData): CreateEventType {
+    const coverImage = data.images?.[0];
     if (data.type === "InPerson") {
         return {
             title: data.title,
@@ -62,7 +63,8 @@ function formatEventData(data: EventRawData): CreateEventType {
             startingDate: new Date(data.startingDate),
             location: data.location,
             isPrivate: data.isPrivate,
-            sportName: data.sport
+            sportName: data.sport,
+            coverImage,
         }
     }
 
@@ -73,7 +75,8 @@ function formatEventData(data: EventRawData): CreateEventType {
         startingDate: new Date(data.startingDate),
         endingDate: new Date(data.endingDate),
         isPrivate: data.isPrivate,
-        sportName: data.sport
+        sportName: data.sport,
+        coverImage,
     }
 }
 

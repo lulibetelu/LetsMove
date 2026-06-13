@@ -9,7 +9,8 @@ export interface User{
 export interface RegisterCredentials{
     username: string,
     email: string,
-    password: string
+    password: string,
+    locationId?: number
 }
 
 export interface LoginCredentials{

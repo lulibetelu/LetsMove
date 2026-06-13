@@ -19,7 +19,7 @@ export class EventService {
   async create(hostId: number, createEventDto: CreateEventDto) {
     let image: { id: number; description?: string } | undefined;
 
-    if (!createEventDto.coverImage?.description) {
+    if (createEventDto.coverImage && !createEventDto.coverImage.description) {
       throw new BadRequestException('Cada imagen debe tener una descripción');
     }
 

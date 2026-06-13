@@ -21,17 +21,20 @@ export default function ImagePicker({images, onChange, allowDescription = false,
         const remaining = max ? max - images.length : files.length;
         const allowed = files.slice(0, remaining);
 
-        allowed.forEach(file => {
-            const reader = new FileReader();
-
-            reader.onload = () => {
-                const img: ImageInput = {content: reader.result as string};
-                if (forcedDescription) img.description = forcedDescription;
-                onChange([...images, img]);
-            };
-
-            reader.readAsDataURL(file);
+        Promise.all(
+            allowed.map(file => new Promise<ImageInput>((resolve) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const img: ImageInput = {content: reader.result as string};
+                    if (forcedDescription) img.description = forcedDescription;
+                    resolve(img);
+                };
+                reader.readAsDataURL(file);
+            }))
+        ).then(newImages => {
+            onChange([...images, ...newImages]);
         });
+
         e.target.value = '';
         setOpen(false);
     };

@@ -94,7 +94,12 @@ export default function Event({event}: Props) {
                     {event.location && (
                         <p className="flex items-center gap-1.5 text-xs text-white/40">
                             <MapPin size={12} className="text-[#8A9A5B] shrink-0"/>
-                            {event.location?.location}
+                            {event.location.location}
+                            {event.distanceKm != null && (
+                                <span className="text-white/30 ml-1">
+                                    · {event.distanceKm < 1 ? `${Math.round(event.distanceKm * 1000)}m` : `${event.distanceKm.toFixed(1)}km`}
+                                </span>
+                            )}
                         </p>
                     )}
                 </div>

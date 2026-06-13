@@ -4,26 +4,34 @@ import {createUser, loginUser} from '../api/user.ts'
 import type {LoginCredentials, RegisterCredentials} from "../types/userTypes.ts";
 import PopUpError from "../components/PopUpError.tsx";
 import CustomInput from "../components/create/CustomInput.tsx";
+import Dropdown from "../components/Dropdown.tsx";
+import {useLocations} from "../hooks/useLocations.ts";
 import {UserPlus} from "lucide-react";
 
 export default function RegisterPage(){
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [locationName, setLocationName] = useState('');
     const [error, setError] = useState<string|null>(null);
+    const {locations, isPending: locLoading, locationError} = useLocations();
 
     const navigate = useNavigate();
 
     const handleSubmit : React.SubmitEventHandler<HTMLFormElement> = async (event) => {
-        //Prevents the page from reloading on submit
         event.preventDefault();
         setError(null);
         try {
-            const credentials: RegisterCredentials = {username, email, password};
+            const selectedLocation = locations.find(l => l.location === locationName);
+            const credentials: RegisterCredentials = {
+                username,
+                email,
+                password,
+                locationId: selectedLocation?.id,
+            };
             const userResponse = await createUser(credentials);
             console.log("USER RESPONSE " + userResponse.message)
 
-            // para que el usuario no tenga que logearse dsp de haberse registrado
             const loginCredentials: LoginCredentials = {email, password};
             const token = await loginUser(loginCredentials);
             localStorage.setItem('token', token)
@@ -81,6 +89,18 @@ export default function RegisterPage(){
                                 value: password,
                                 onChange: (e) => {setPassword(e.target.value)}
                             }}></CustomInput>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <label className="label">
+                            <span className="label-text font-medium">Home Location</span>
+                        </label>
+                        <Dropdown
+                            dataList={locations.map(l => l.location)}
+                            error={locationError}
+                            isPending={locLoading}
+                            value={locationName}
+                            handleChange={setLocationName}
+                        />
                     </div>
                     <div>
                         {error!=null && <PopUpError message={error}/>}

@@ -17,6 +17,7 @@ export interface EventType{
     location?: LocationType,
     imageEvents?: ImageEvent[],
     isPrivate: boolean,
+    distanceKm?: number,
 }
 
 export interface EventSignUp {
@@ -51,7 +52,7 @@ export interface CreateEventType {
     location?: string,
     isPrivate: boolean,
     sportName: string
-    images?: ImageInput[]
+    coverImage?: ImageInput
 
 }
 export interface UpdateEventRawData{

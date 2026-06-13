@@ -5,6 +5,7 @@ import {createEvent} from "../../api/event.ts";
 import type {EventRawData} from "../../types/eventTypes.ts";
 import Dropdown from "../Dropdown.tsx";
 import {useSports} from "../../hooks/useSports.ts";
+import {useLocations} from "../../hooks/useLocations.ts";
 import {sportsToString} from "../../resusable-functions/sportFunctions.ts";
 import type {ImageInput} from "../../types/imageType.ts";
 import ImagePicker from "../ImagePicker.tsx";
@@ -28,6 +29,7 @@ export default function NewEvent(props: Props){
     const [error, setError] = useState<string | null>(null);
     const [validationError, setValidationError] = useState<string>("");
     const {sports, isPending, sportError} = useSports();
+    const {locations, isPending: locLoading, locationError} = useLocations();
 
     const [images, setImages] = useState<ImageInput[]>([])
 
@@ -299,13 +301,12 @@ return (
                             Location
                         </span>
                         </label>
-
-                        <input
-                            type="text"
-                            placeholder="Sports center, park, gym..."
-                            className="input input-bordered w-full focus:outline-none focus:border-[#96a55a]"
+                        <Dropdown
+                            dataList={locations.map(l => l.location)}
+                            error={locationError}
+                            isPending={locLoading}
                             value={location}
-                            onChange={(e) => setLocation(e.target.value)}
+                            handleChange={setLocation}
                         />
                     </div>
                 )}
