@@ -1,4 +1,4 @@
-import type {LoginCredentials, RegisterCredentials, User} from "../types/userTypes.ts";
+import type {LoginCredentials, RegisterCredentials, User, UserProfile} from "../types/userTypes.ts";
 import api, { handleApiError } from "./client.ts";
 
 interface LoginResponse{
@@ -34,6 +34,22 @@ export async function getUsernameFromId(id?: number): Promise<string | null> {
         } catch (error) {
             handleApiError(error);
         }
+    }
+}
+
+export async function getUserProfile(id: number): Promise<UserProfile | null> {
+    try {
+        const { data } = await api.get<UserProfile>('register/' + id);
+        return {
+            ...data,
+            friends: [
+                ...(data.friendsAsUser1 ?? []).map(f => f.user2),
+                ...(data.friendsAsUser2 ?? []).map(f => f.user1),
+            ],
+        };
+    } catch (error) {
+        handleApiError(error);
+        return null;
     }
 }
 export function getCurrentUserId(): number|null {

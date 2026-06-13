@@ -44,8 +44,8 @@ model User {
 model Sport {
   id          Int          @id @default(autoincrement())
   name        String       @unique
-  preferences Preference[] @ignore
-  postSport   PostSport[]  @ignore
+  preferences Preference[]
+  postSport   PostSport[]
 
   events Event[]
 }
@@ -75,7 +75,7 @@ model Location {
   location      String
   latitude      Float
   longitude     Float
-  userLocations UserLocation[] @ignore
+  userLocations UserLocation[]
 
   events Event[]
 }

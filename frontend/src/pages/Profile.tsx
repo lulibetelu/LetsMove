@@ -1,11 +1,11 @@
 import {MapPin, Users, Edit3, UserCircle, Activity, UserPlus, Hourglass, X, LogOut} from 'lucide-react';
 import Posts from "../components/posts/Posts.tsx";
-import {useNavigate, useParams, useSearchParams} from "react-router-dom";
-import {useUsername} from "../hooks/UseUsername.ts";
+import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend.ts";
 import type { FriendRequestType } from '../types/friendRequestType.ts';
-import {getCurrentUserId, getUsernameFromId} from "../api/user.ts";
+import {getCurrentUserId} from "../api/user.ts";
+import {useUserProfile} from "../hooks/useUserProfile.ts";
 import Sidebar from "../components/Sidebar.tsx";
 import ActivityTabBar from "../components/ActivityTabBar.tsx";
 import Events from "../components/events/Events.tsx";
@@ -17,12 +17,13 @@ export default function Profile() {
     const { id } = useParams();
     const numericId = Number(id);
     const isValid = !isNaN(numericId);
-    const { username, loading } = useUsername(numericId);
+
+    const { data: profile, isLoading: profileLoading, isError } = useUserProfile(numericId);
     const currentUserId = getCurrentUserId();
+
     const [friendReq, setFriendReq] = useState<boolean>(false);
     const [friendAdded, setFriendAdded] = useState<boolean>(false);
-    const [userExists, setUserExists] = useState<boolean | null>(null);
-    const { posts, deletePost,observerRef, isLoading } = useProfilePosts(numericId);
+    const { posts, deletePost,observerRef, isLoading: postsLoading } = useProfilePosts(numericId);
     const [searchParams, setSearchParams] = useSearchParams();
     const [tab, setTab] = useState<'posts' | 'events'>(searchParams.get('tab') === 'events' ? 'events' : 'posts');
     const {events} = useProfileEvents(numericId);
@@ -35,10 +36,7 @@ export default function Profile() {
 
     useEffect(() => {
         findUniqueFriend(numericId)
-            // data es un array de Friend[] porque como la amistad es bidireccional hay que checkear la relacion
-            // user1,user2 y user2,user1 y eso genera algunos quilombos, pero en realidad esto solo devuelve un elemento
             .then((data: FriendRequestType[]) => {
-                // some recorre el array data y devuelve true si algun elemento es true
                 const hasRequested: boolean = data.some(f => f.state === 'Requested');
                 setFriendReq(hasRequested);
 
@@ -62,78 +60,37 @@ export default function Profile() {
         }
     }
 
-
     useEffect(() => {
         if (!isValid) {
             navigate("/error", { state: { message: "ID inválido" } });
             return;
         }
-
-        getUsernameFromId(numericId)
-            .then(() => setUserExists(true))
-            .catch(() => navigate("/error", { state: { message: "El usuario no existe" } }));
-    }, [numericId, isValid, navigate]);
-
-// Mientras verifica, no renderizar nada (o un spinner)
-    if (userExists === null) return null;
-
-
-    // Datos mockeados para que veas el diseño
-    const mockFriends = [
-        { id: 1, name: "Friend One", location: "Escobar, Buenos Aires" },
-        { id: 2, name: "Friend Two", location: "Pilar, Buenos Aires" },
-        { id: 3, name: "Friend Three", location: "Pilar, Buenos Aires" },
-    ];
-
-    if (!isValid) {
-        navigate("/error", {
-            state: {
-                title: "",
-                message: "",
-            }
-        });
-        return null;
-    }else {
-        try {
-            getUsernameFromId(numericId);
-        }catch {
-            navigate("/error", {
-                state: {
-                    title: "",
-                    message: "El usuario ingresado no existe",
-                }
-            });
-            return null;
+        if (isError) {
+            navigate("/error", { state: { message: "El usuario no existe" } });
         }
-    }
+    }, [isValid, isError, navigate]);
+
+    if (profileLoading || !profile) return null;
+
+    const interests = profile.preferences.map(p => p.sport.name).join(", ");
+    const location = profile.userLocations[0]?.location.location ?? null;
 
     return (
-        // Contenedor principal sin bordes laterales, usando el max-width para que no se estire infinito en monitores gigantes
         <div className="min-h-screen bg-[#141414] flex">
             <Sidebar/>
 
             <main className="flex-1 ml-60">
                 <div className="w-full max-w-5xl mx-auto pb-10">
-                    {/*header*/}
                     <div className="flex flex-col md:flex-row items-start md:items-center gap-6 p-8 border-b border-white/5">
                         <div className="w-28 h-28 rounded-full ring-2 ring-[#8A9A5B] ring-offset-2 ring-offset-[#141414] flex items-center justify-center bg-[#2a2a2a] shrink-0">
                             <UserCircle size={72} strokeWidth={0.8} className="text-white/20"/>
                         </div>
 
-
                         <div className="flex-1 space-y-3 mt-2">
                             <div className="flex items-center gap-4 flex-wrap">
 
-                                {/*username*/}
-                                <h1 className="text-2xl font-bold text-white/90">{loading? 'loading' : username}</h1>
+                                <h1 className="text-2xl font-bold text-white/90">{profile.username}</h1>
 
-                                {/*botones de amistad y edicion*/}
-                                {/*la logica de esto es asi:
-                                        1. somos amigos? si si, el usuario que navega puede eliminar la amistad
-                                                         si no, el usuario no puede hacer que sean amigos, asi que no hace nada
-                                        2. te mande request? si si, se pone en pending y gris y si pasas por arriba te permite cancelar la request
-                                                             si no, el boton esta en verda y aparece Add friend
-                                */}
                                 {(currentUserId != numericId) ?
                                     ( friendAdded? (
                                         <button
@@ -188,26 +145,30 @@ export default function Profile() {
                             </div>
 
                             <div className="space-y-1.5 text-sm text-white/60">
-                                <p className="flex items-center gap-2">
-                                    <Activity size={15} className="text-[#8A9A5B]" />
-                                    <span className="text-white/80 font-medium">Interests:</span> Padel, Tennis, Soccer
-                                </p>
-                                <p className="flex items-center gap-2">
-                                    <MapPin size={15} className="text-[#8A9A5B]" />
-                                    <span className="text-white/80 font-medium">Lives in:</span> Pilar, Buenos Aires, Argentina
-                                </p>
-                                <p className="mt-2">
-                                    <span className="text-white/80 font-medium block mb-0.5">Biography:</span>
-                                    "I am very very very gud at Soccer. Fr bro"
-                                </p>
+                                {interests && (
+                                    <p className="flex items-center gap-2">
+                                        <Activity size={15} className="text-[#8A9A5B]" />
+                                        <span className="text-white/80 font-medium">Interests:</span> {interests}
+                                    </p>
+                                )}
+                                {location && (
+                                    <p className="flex items-center gap-2">
+                                        <MapPin size={15} className="text-[#8A9A5B]" />
+                                        <span className="text-white/80 font-medium">Lives in:</span> {location}
+                                    </p>
+                                )}
+                                {profile.biography && (
+                                    <p className="mt-2">
+                                        <span className="text-white/80 font-medium block mb-0.5">Biography:</span>
+                                        "{profile.biography}"
+                                    </p>
+                                )}
                             </div>
                         </div>
                     </div>
 
-                    {/* 2. Cuerpo de la página (Grid de 2 columnas en desktop) */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-8 mt-8">
 
-                        {/* Columna Izquierda: Actividad (Ocupa 2 espacios) */}
                         <div className="lg:col-span-2">
                             <h2 className="text-base font-semibold text-white/50 uppercase tracking-widest mb-4 px-0">
                                 Activity
@@ -221,7 +182,7 @@ export default function Profile() {
                                     }}
                                 />
                                 {tab === 'posts' ? (
-                                    <Posts userId={numericId} posts={posts} deletePost={deletePost} observerRef={observerRef} isLoading={isLoading}/>
+                                    <Posts userId={numericId} posts={posts} deletePost={deletePost} observerRef={observerRef} isLoading={postsLoading}/>
                                 ) : (
                                     <Events eventArray={events}/>
                                 )}
@@ -231,26 +192,29 @@ export default function Profile() {
 
                         <div className="space-y-6">
 
-                            {/* Columna Derecha: Amigos y Eventos (Ocupa 1 espacio) */}
                             <div className="bg-[#1e1e1e] rounded-xl p-5 border border-white/5">
 
-                                {/* Lista de Amigos */}
                                 <h3 className="font-semibold text-sm text-white/50 uppercase tracking-widest mb-4 flex items-center gap-2">
                                     <Users size={15} className="text-[#8A9A5B]" />
-                                    John's Friends
+                                    {profile.username}'s Friends
                                 </h3>
                                 <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
-                                    {mockFriends.map((friend) => (
-                                        <div key={friend.id} className="flex items-center gap-3">
-                                            <div className="w-9 h-9 rounded-full bg-[#2a2a2a] flex items-center justify-center shrink-0">
-                                                <UserCircle size={20} className="text-white/20" />
-                                            </div>
-                                            <div>
-                                                <p className="text-sm font-semibold text-white/80 leading-none">{friend.name}</p>
-                                                <p className="text-xs text-white/40 mt-1">{friend.location}</p>
-                                            </div>
-                                        </div>
-                                    ))}
+                                    {profile.friends.length === 0 ? (
+                                        <p className="text-sm text-white/40">No friends yet</p>
+                                    ) : (
+                                        profile.friends.map((friend) => (
+                                            <Link
+                                                key={friend.id}
+                                                to={`/profile/${friend.id}`}
+                                                className="flex items-center gap-3 hover:bg-white/5 transition-all rounded-lg px-2 py-1.5"
+                                            >
+                                                <div className="w-9 h-9 rounded-full bg-[#2a2a2a] flex items-center justify-center shrink-0">
+                                                    <UserCircle size={20} className="text-white/20" />
+                                                </div>
+                                                <p className="text-sm font-semibold text-white/80 leading-none">{friend.username}</p>
+                                            </Link>
+                                        ))
+                                    )}
                                 </div>
                             </div>
                         </div>
