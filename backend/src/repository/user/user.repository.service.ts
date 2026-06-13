@@ -27,6 +27,12 @@ export class UserRepositoryService {
         id: true,
         username: true,
         biography: true,
+        preferences: true,
+        userLocations: {
+          include: {
+            location: true,
+          },
+        },
       },
     });
   }

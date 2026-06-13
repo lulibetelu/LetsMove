@@ -1,4 +1,4 @@
-import {Home, CalendarDays, Users, User, Settings, Bell, PartyPopper} from 'lucide-react';
+import {Home, CalendarDays, Users, Settings, Bell, PartyPopper} from 'lucide-react';
 import {Link, useLocation} from "react-router-dom";
 import {getCurrentUserId, getCurrentUsername} from "../api/user.ts";
 
