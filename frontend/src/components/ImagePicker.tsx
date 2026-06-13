@@ -8,9 +8,10 @@ interface Props {
     allowDescription?: boolean;
     max?: number;
     forcedDescription?: string;
+    layout?: 'grid' | 'row';
 }
 
-export default function ImagePicker({images, onChange, allowDescription = false, max, forcedDescription}: Props) {
+export default function ImagePicker({images, onChange, allowDescription = false, max, forcedDescription, layout = 'grid'}: Props) {
     const [open, setOpen] = useState(false);
     const [urlInput, setUrlInput] = useState('');
     // este es el componente que viene hecho del browser que te abre el filesystem para elegir imagenes
@@ -65,15 +66,15 @@ export default function ImagePicker({images, onChange, allowDescription = false,
                 <button
                     type="button"
                     onClick={() => setOpen(!open)}
-                    className="flex items-center gap-1.5 text-xs text-white/30 hover:text-white/50 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-dashed border-white/20 hover:border-white/30 text-white/40 hover:text-white/60 text-sm transition-all"
                 >
-                    <Image size={14}/> Agregar fotos
+                    <Image size={16}/> Agregar fotos
                 </button>
             )}
 
             {/* Popover */}
             {open && (
-                <div className="bg-[#1e1e1e] border border-white/10 rounded-xl p-4 flex flex-col gap-3">
+                <div className="bg-[#1e1e1e] border border-white/10 rounded-xl p-4 flex flex-col gap-3 shadow-xl">
 
                     {/* Subir desde dispositivo */}
                     <button
@@ -118,38 +119,64 @@ export default function ImagePicker({images, onChange, allowDescription = false,
             )}
 
             {/* Preview de imágenes seleccionadas */}
-            {images.length > 0 && (
-                <div className="flex flex-col gap-2">
+            {images.length > 0 && layout === 'row' && (
+                <div className="flex gap-2 overflow-x-auto pb-1">
                     {images.map((img, i) => (
-                        <div key={i} className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10">
-                            <div className="w-8 h-8 rounded-lg overflow-hidden shrink-0 bg-white/10">
+                        <div key={i} className="relative group shrink-0">
+                            <div className="w-14 h-14 rounded-lg overflow-hidden border border-white/10 bg-white/5">
                                 <img
                                     src={img.content ?? img.url}
                                     alt=""
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                            <span className="text-xs text-white/40 truncate flex-1">
-                                {img.url ?? `Imagen ${i + 1}`}
-                            </span>
-                            {allowDescription && !forcedDescription && (
-                                <select
-                                    value={img.description ?? ''}
-                                    onChange={(e) => handleDescriptionChange(i, e.target.value)}
-                                    className="text-xs bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-white/60 focus:outline-none"
+                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 rounded-lg flex items-center justify-center transition-opacity">
+                                <button
+                                    type="button"
+                                    onClick={() => handleRemove(i)}
+                                    className="p-0.5 rounded-full bg-red-500/80 hover:bg-red-500 text-white transition-all active:scale-90"
                                 >
-                                    <option value="">Sin descripción</option>
-                                    <option value="Cover">Cover</option>
-                                    <option value="Gallery">Gallery</option>
-                                </select>
+                                    <X size={12}/>
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+            {images.length > 0 && layout === 'grid' && (
+                <div className="grid grid-cols-3 gap-2">
+                    {images.map((img, i) => (
+                        <div key={i} className="relative group rounded-xl overflow-hidden bg-white/5 border border-white/10">
+                            <div className="aspect-square">
+                                <img
+                                    src={img.content ?? img.url}
+                                    alt=""
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            {/* Hover overlay */}
+                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button
+                                    type="button"
+                                    onClick={() => handleRemove(i)}
+                                    className="p-1.5 rounded-full bg-red-500/80 hover:bg-red-500 text-white transition-all active:scale-90"
+                                >
+                                    <X size={16}/>
+                                </button>
+                            </div>
+                            {allowDescription && !forcedDescription && (
+                                <div className="absolute bottom-0 left-0 right-0 p-1">
+                                    <select
+                                        value={img.description ?? ''}
+                                        onChange={(e) => handleDescriptionChange(i, e.target.value)}
+                                        className="w-full text-xs bg-black/60 border border-white/10 rounded-lg px-1.5 py-1 text-white/80 focus:outline-none cursor-pointer"
+                                    >
+                                        <option value="">Sin descripción</option>
+                                        <option value="Cover">Cover</option>
+                                        <option value="Gallery">Gallery</option>
+                                    </select>
+                                </div>
                             )}
-                            <button
-                                type="button"
-                                onClick={() => handleRemove(i)}
-                                className="text-white/20 hover:text-red-400 transition-colors shrink-0"
-                            >
-                                <X size={14}/>
-                            </button>
                         </div>
                     ))}
                 </div>

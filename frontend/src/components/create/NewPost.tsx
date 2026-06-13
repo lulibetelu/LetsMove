@@ -58,7 +58,7 @@ export default function NewPost({ onClose }: { onClose: () => void}){
         <dialog className="modal modal-open backdrop-blur-sm">
             <form className="modal-box bg-[#141414] p-0 overflow-hidden max-w-lg w-full flex flex-col h-auto max-h-[80vh]" onSubmit={handleSubmit}>
 
-                <div className="p-4 flex gap-4 items-center">
+                <div className="p-4 flex gap-4 items-center shrink-0">
                     <div className="avatar placeholder">
                         <div className="w-12 h-12 rounded-full bg-base-300 text-base-content/70 flex items-center justify-center">
                             <CircleUserRound size={24} strokeWidth={1.5} />
@@ -69,50 +69,52 @@ export default function NewPost({ onClose }: { onClose: () => void}){
                     </div>
                 </div>
 
-                <textarea
-                    name="content"
-                    aria-label="Post content"
-                    className="textarea textarea-ghost w-full text-lg resize-none focus:outline-none focus:bg-transparent min-h-[120px]"
-                    placeholder="What do you want to talk about?"
-                    value={content}
-                    onChange ={(e) => {
-                        setContent(e.target.value)
-                    }}
-                ></textarea>
+                <div className="flex-1 overflow-y-auto px-4">
+                    <textarea
+                        name="content"
+                        aria-label="Post content"
+                        className="textarea textarea-ghost w-full text-lg resize-none focus:outline-none focus:bg-transparent min-h-[120px]"
+                        placeholder="What do you want to talk about?"
+                        value={content}
+                        onChange ={(e) => {
+                            setContent(e.target.value)
+                        }}
+                    ></textarea>
 
-                <div className="px-4 pb-4">
-                    <p className="text-sm font-semibold mb-3 text-base-content/80">
-                        Select related sports <span className="text-error">*</span>
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                        {sports.map((sport) => {
-                            const isSelected = selectedSports.some(s => s.id === sport.id);
-                            return (
-                                <button
-                                    type="button"
-                                    key={sport.id}
-                                    onClick={() => toggleSport(sport.id, sport.name)}
-                                    className={`badge badge-lg cursor-pointer transition-colors border-none text-sm py-4 px-4 font-medium ${
-                                        isSelected
-                                            ? 'bg-[#8A9A5B] text-white hover:bg-[#728249]'
-                                            : 'bg-base-200 text-base-content/70 hover:bg-base-300'
-                                    }`}
-                                >
-                                    {sport.name}
-                                </button>
-                            );
-                        })}
-                    </div>
+                    <div className="pb-4">
+                        <p className="text-sm font-semibold mb-3 text-base-content/80">
+                            Select related sports <span className="text-error">*</span>
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                            {sports.map((sport) => {
+                                const isSelected = selectedSports.some(s => s.id === sport.id);
+                                return (
+                                    <button
+                                        type="button"
+                                        key={sport.id}
+                                        onClick={() => toggleSport(sport.id, sport.name)}
+                                        className={`badge badge-lg cursor-pointer transition-colors border-none text-sm py-4 px-4 font-medium ${
+                                            isSelected
+                                                ? 'bg-[#8A9A5B] text-white hover:bg-[#728249]'
+                                                : 'bg-base-200 text-base-content/70 hover:bg-base-300'
+                                        }`}
+                                    >
+                                        {sport.name}
+                                    </button>
+                                );
+                            })}
+                        </div>
                         {selectedSports.length === 0 && (
-                        <p className="text-xs text-error mt-2">You must select at least one sport to post.</p>
-                    )}
+                            <p className="text-xs text-error mt-2">You must select at least one sport to post.</p>
+                        )}
+                    </div>
+
+                    <div className="pb-4">
+                        <ImagePicker images={images} onChange={setImages} layout="row"/>
+                    </div>
                 </div>
 
-                <div className="flex justify-between items-center w-full p-3 border-t border-base-200 bg-base-50 mt-auto">
-
-                    <div className="flex gap-2">
-                        <ImagePicker images={images} onChange={setImages}/>
-                    </div>
+                <div className="flex justify-end items-center w-full p-3 border-t border-base-200 bg-base-50 shrink-0">
                     <button
                         type="submit"
                         disabled={selectedSports.length === 0}
