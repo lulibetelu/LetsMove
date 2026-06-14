@@ -5,21 +5,18 @@ import { useState} from "react";
 import PopUpError from "../components/PopUpError.tsx";
 import NewPost from "../components/create/NewPost.tsx";
 import {usePosts} from "../hooks/posts/usePosts.ts";
-import {useNavigate} from "react-router-dom";
-import {getCurrentUserId} from "../api/user.ts";
+import {useQueryClient} from "@tanstack/react-query";
 
 
 export default function Homepage() {
     const [createPost, setCreatePost] = useState<boolean>(false);
     const { posts, deletePost, observerRef, error, isLoading } = usePosts();
-    const navigate = useNavigate();
-    const currentUserId: number|null = getCurrentUserId();
+    const queryClient = useQueryClient();
 
     const handleOnClose = (wasCreated: boolean) => {
         setCreatePost(false);
         if (wasCreated) {
-            const navigatePath = currentUserId ? `/profile/${currentUserId}` : "/error";
-            navigate(navigatePath);
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
         }
     }
 

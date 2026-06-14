@@ -28,7 +28,7 @@ export default function NewPost({ onClose }: { onClose: (wasCreated:boolean) => 
             );
             const postCredentials: NewPostCredentials = {content, selectedSportsId, images};
             await create(postCredentials);
-            onClose();
+            onClose(true);
         } catch {
             setError(true);
         }
