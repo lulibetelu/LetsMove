@@ -1,4 +1,4 @@
-  import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { RegisterDto } from '../../register/dto/register.dto';
 import { UpdateRegisterDto } from '../../register/dto/update.register.dto';
@@ -29,11 +29,6 @@ export class UserRepositoryService {
             sport: true,
           },
         },
-        userLocations: {
-          include: {
-            location: true,
-          },
-        },
         friendsAsUser1: {
           where: { state: 'Accepted' },
           select: {
@@ -44,6 +39,11 @@ export class UserRepositoryService {
           where: { state: 'Accepted' },
           select: {
             user1: { select: { id: true, username: true } },
+          },
+        },
+        homeLocation: {
+          select: {
+            location: true,
           },
         },
       },
