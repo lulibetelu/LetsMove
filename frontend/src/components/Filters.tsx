@@ -21,7 +21,6 @@ export default function Filters(props: Props) {
 
     const handleSubmit = (e: React.SubmitEvent) => {
         e.preventDefault();
-        debugger
         const submitFilters: FormFilters = {
             host: hostFilter,
             sport: sportFilter,
