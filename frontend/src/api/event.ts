@@ -25,6 +25,8 @@ export async function findEvents(page:number, filters:EventFilters){
         ...(filters.title && { title: filters.title }),
         ...(filters.host && { host: filters.host }),
         ...(filters.sport && { sport: filters.sport }),
+        ...(filters.joined && { joined: filters.joined }),
+        ...(filters.saved && { saved: filters.saved }),
     };
     try {
         const { data } = await api.get('event/limited', { params });

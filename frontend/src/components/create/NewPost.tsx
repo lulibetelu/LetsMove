@@ -1,5 +1,5 @@
 import {CircleUserRound} from 'lucide-react';
-import type {NewPostCredentials} from "../../types/postTypes.ts";
+import type {NewPostCredentials, PostCreationResponse} from "../../types/postTypes.ts";
 import {create} from "../../api/post.ts";
 import {useState} from "react";
 import {useUsername} from "../../hooks/UseUsername.ts";
@@ -10,7 +10,8 @@ import Dropdown from "../Dropdown.tsx";
 import {useSports} from "../../hooks/useSports.ts";
 import {sportsToString} from "../../resusable-functions/sportFunctions.ts";
 
-export default function NewPost({ onClose }: { onClose: () => void}){
+
+export default function NewPost({ onClose }: { onClose: (wasCreated:boolean) => void}){
     const [content, setContent] = useState<string>("");
     const [error, setError] = useState<boolean>(false);
     const [images, setImages] = useState<ImageInput[]>([]);
@@ -90,7 +91,7 @@ export default function NewPost({ onClose }: { onClose: () => void}){
                 {error && <PopUpError message='Failed to create post'/>}
             </form>
             <form method="dialog" className="modal-backdrop">
-                <button onClick={onClose}>Cerrar</button>
+                <button onClick={() => onClose(false)}>Cerrar</button>
             </form>
         </dialog>
     );

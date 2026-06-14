@@ -77,7 +77,17 @@ export interface EventFilters{
     title : string,
     host : string,
     sport : string,
+    saved?: number,
+    joined?: number,
 }
+
+export interface FormFilters{
+    host: string;
+    sport: string;
+    saved?: boolean;
+    joined?: boolean;
+}
+
 
 
 export interface EventEntry {

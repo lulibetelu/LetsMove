@@ -281,11 +281,40 @@ export class EventRepositoryService {
         }
       : {};
 
+    const savedClause = filter.saved
+      ? {
+          savedEvents: {
+            some: {
+              userId: filter.saved,
+            },
+          },
+        }
+      : {};
+
+    const joinedClause = filter.joined
+      ? {
+          OR: [
+            {
+              eventSignUp: {
+                some: {
+                  userId: filter.joined,
+                },
+              },
+            },
+            {
+              hostId: filter.joined,
+            },
+          ],
+        }
+      : {};
+
     return this.prismaService.event.findMany({
       where: {
         ...titleClause,
         ...hostClause,
         ...sportClause,
+        ...savedClause,
+        ...joinedClause,
       },
       include: {
         host: {

@@ -5,12 +5,23 @@ import { useState} from "react";
 import PopUpError from "../components/PopUpError.tsx";
 import NewPost from "../components/create/NewPost.tsx";
 import {usePosts} from "../hooks/posts/usePosts.ts";
+import {useNavigate} from "react-router-dom";
+import {getCurrentUserId} from "../api/user.ts";
 
 
 export default function Homepage() {
     const [createPost, setCreatePost] = useState<boolean>(false);
-    const { posts, deletePost, observerRef, error } = usePosts();
+    const { posts, deletePost, observerRef, error, isLoading } = usePosts();
+    const navigate = useNavigate();
+    const currentUserId: number|null = getCurrentUserId();
 
+    const handleOnClose = (wasCreated: boolean) => {
+        setCreatePost(false);
+        if (wasCreated) {
+            const navigatePath = currentUserId ? `/profile/${currentUserId}` : "/error";
+            navigate(navigatePath);
+        }
+    }
 
     return(
         <div className="min-h-screen bg-[#141414] flex">
@@ -30,7 +41,7 @@ export default function Homepage() {
                                 />
                             </div>
                         </header>
-                        <Posts userId={null} posts={posts} deletePost={deletePost} observerRef={observerRef}/>
+                        <Posts userId={null} posts={posts} deletePost={deletePost} observerRef={observerRef} isLoading={isLoading}/>
                         <div>
                             {error && <PopUpError message='Failed to load posts, please try again later'/>}
                         </div>
@@ -63,7 +74,7 @@ export default function Homepage() {
                     cursor-pointer
                   "
                 ><Plus size={18} /></button>
-                {createPost && <NewPost onClose={() => setCreatePost(false)}/>}
+                {createPost && <NewPost onClose={(wasCreated: boolean) => handleOnClose(wasCreated)}/>}
             </div>
         </div>
     );

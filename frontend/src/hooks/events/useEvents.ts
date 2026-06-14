@@ -8,7 +8,9 @@ export function useEvents() {
     const [filters, setFilters] = useState<EventFilters>({
         title: '',
         host: '',
-        sport: ''
+        sport: '',
+        joined: undefined,
+        saved: undefined
     });
 
     const hasAnyFilter = filters.title || filters.host || filters.sport;

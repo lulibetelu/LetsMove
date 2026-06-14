@@ -38,7 +38,7 @@ model User {
   events       Event[]
   eventSignUp  EventSignUp[]
   eventEntries EventEntry[]
-  savedEvents SavedEvent[]
+  savedEvents  SavedEvent[]
 
   groupMember GroupMember[]
 }
@@ -222,7 +222,7 @@ model Event {
   sportId      Int
   sport        Sport         @relation(fields: [sportId], references: [id], onDelete: Cascade)
   eventEntries EventEntry[]
-  savedEvents SavedEvent[]
+  savedEvents  SavedEvent[]
 }
 
 enum EventType {
