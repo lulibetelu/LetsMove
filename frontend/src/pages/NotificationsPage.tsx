@@ -11,10 +11,8 @@ import EventParticipantRequest from "../components/events/EventParticipantReques
 export default function NotificationsPage(){
     const [friendRequests, setFriendRequests] = useState<FriendRequestType[]>([]);
     const [loading, setLoading] = useState(true);
-    const [render, setRender] = useState(false);
     const [pendingParticipants, setPendingParticipants] = useState<PendingParticipant[]>([])
 
-    //Component renders and then runs useEffect. Notice that useEffect has two setStates, which also cause a re-render.
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -47,18 +45,32 @@ export default function NotificationsPage(){
         };
 
         fetchData();
-    }, [render]);
+    }, []);
 
-    function handleFriendChange (isAccepted: boolean, senderId: number) {
-        setRender(prev => !prev);
-        if (isAccepted) return acceptFriendRequest(senderId);
-        return rejectFriendRequest(senderId);
+    async function handleFriendChange(isAccepted: boolean, senderId: number) {
+        try {
+            if (isAccepted) {
+                await acceptFriendRequest(senderId);
+            } else {
+                await rejectFriendRequest(senderId);
+            }
+            setFriendRequests(prev => prev.filter(fr => fr.sender !== senderId));
+        } catch (e) {
+            console.error('Failed to handle friend request:', e);
+        }
     }
 
-    const handleParticipantChange = (isAccepted: boolean, userId: number, eventId: number) => {
-        setRender(prev => !prev);
-        if (isAccepted) return acceptParticipant(userId, eventId);
-        return rejectParticipant(userId, eventId);
+    const handleParticipantChange = async (isAccepted: boolean, userId: number, eventId: number) => {
+        try {
+            if (isAccepted) {
+                await acceptParticipant(userId, eventId);
+            } else {
+                await rejectParticipant(userId, eventId);
+            }
+            setPendingParticipants(prev => prev.filter(p => p.userId !== userId || p.eventId !== eventId));
+        } catch (e) {
+            console.error('Failed to handle participant request:', e);
+        }
     };
 
     const totalNotifications = friendRequests.length + pendingParticipants.length;

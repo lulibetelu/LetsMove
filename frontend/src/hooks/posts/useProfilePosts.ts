@@ -11,6 +11,7 @@ export function useProfilePosts(userId: number){
         fetchNextPage,
         hasNextPage,
         isError,
+        isLoading,
     } = useInfiniteQuery({
         queryKey: ['profilePosts', userId],
         queryFn: (async ({pageParam}) => {
@@ -53,7 +54,7 @@ export function useProfilePosts(userId: number){
 
     const error = isError || mutation.isError;
 
-    return { posts, deletePost, observerRef, error}
+    return { posts, deletePost, observerRef, error, isLoading}
 
     //yo se que es bastante al pedo esto porque solo cambia la query. Podria hacerse algo ahi pero ueno.
 

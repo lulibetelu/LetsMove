@@ -23,13 +23,12 @@ model User {
   password       String
   biography      String?
   preferences    Preference[]
-  userLocations  UserLocation[] @ignore
+  userLocations  UserLocation[]
   posts          Post[]
   postsLiked     PostLiked[]
   postsDisliked  PostDisliked[]
-  // prisma es una mierda, ejemplo 1:
-  friendsAsUser1 Friends[]      @relation("friend1") @ignore
-  friendsAsUser2 Friends[]      @relation("friend2") @ignore
+  friendsAsUser1 Friends[]      @relation("friend1")
+  friendsAsUser2 Friends[]      @relation("friend2")
 
   comments  Comment[]
   postScore PostScore[]
@@ -37,7 +36,7 @@ model User {
   events       Event[]
   eventSignUp  EventSignUp[]
   eventEntries EventEntry[]
-  savedEvents SavedEvent[]
+  savedEvents  SavedEvent[]
 
   groupMember GroupMember[]
 }
@@ -45,8 +44,8 @@ model User {
 model Sport {
   id          Int          @id @default(autoincrement())
   name        String       @unique
-  preferences Preference[] @ignore
-  postSport   PostSport[]  @ignore
+  preferences Preference[]
+  postSport   PostSport[]
 
   events Event[]
 }
@@ -76,7 +75,7 @@ model Location {
   location      String
   latitude      Float
   longitude     Float
-  userLocations UserLocation[] @ignore
+  userLocations UserLocation[]
 
   events Event[]
 }
@@ -228,7 +227,7 @@ model Event {
   sportId      Int
   sport        Sport         @relation(fields: [sportId], references: [id], onDelete: Cascade)
   eventEntries EventEntry[]
-  savedEvents SavedEvent[]
+  savedEvents  SavedEvent[]
 }
 
 enum EventType {

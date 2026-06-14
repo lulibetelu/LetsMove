@@ -7,6 +7,7 @@ import {findEventParticipants} from "../../api/event.ts";
 import {formatDate} from "../../resusable-functions/formatDate.ts";
 import {formatTime} from "../../resusable-functions/formatTime.ts";
 import PopUpError from "../PopUpError.tsx";
+import ProfileLink from "../profile/ProfileLink.tsx";
 
 interface Props {
     event: EventType;
@@ -94,7 +95,7 @@ export default function PublicEventView({event, signUp, onJoined}: Props) {
                         <div className="flex items-center gap-2">
                             <UserCircle size={18} strokeWidth={1.5} className="text-white/30"/>
                             <span className="text-sm text-white/40">Organizado por</span>
-                            <span className="text-sm font-semibold text-[#8A9A5B]">{event.host.username}</span>
+                            <ProfileLink username={event.host.username} userId={event.host.id}/>
                         </div>
                     </div>
 
@@ -125,7 +126,7 @@ export default function PublicEventView({event, signUp, onJoined}: Props) {
                                 {acceptedParticipants.map((p: EventSignUp) => (
                                     <div key={p.userId} className="flex items-center gap-2 bg-[#1e1e1e] border border-white/5 rounded-full px-3 py-1.5">
                                         <UserCircle size={16} strokeWidth={1.5} className="text-white/30"/>
-                                        <span className="text-xs font-medium text-white/60">{p.user.username}</span>
+                                        <ProfileLink username={p.user.username} userId={p.user.id} textSize={"xs"} color={"white/50"}/>
                                     </div>
                                 ))}
                             </div>
