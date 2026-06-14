@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateEventDto } from '../../event/dto/create-event.dto';
-import { EventType, Location } from '@prisma/client';
+import { EventType } from '@prisma/client';
 import { UpdateEventDto } from '../../event/dto/update-event.dto';
 import { CreateEventEntryDto } from '../../eventEntry/dto/create-event-entry-dto';
 import { EventSignUpRepositoryService } from '../eventSignUp/event-sign-up.repository.service';
@@ -250,6 +250,7 @@ export class EventRepositoryService {
       ? {
           title: {
             contains: filter.title,
+            mode: 'insensitive' as const,
           },
         }
       : {};
@@ -260,6 +261,7 @@ export class EventRepositoryService {
             is: {
               username: {
                 contains: filter.host,
+                mode: 'insensitive' as const,
               },
             },
           },
@@ -272,6 +274,7 @@ export class EventRepositoryService {
             is: {
               name: {
                 contains: filter.sport,
+                mode: 'insensitive' as const,
               },
             },
           },
@@ -340,6 +343,105 @@ export class EventRepositoryService {
       take: 15,
       skip: (page - 1) * 15,
     });
+  }
+
+  async findFeed(userId: number, page: number) {
+    const pageSize = 15;
+
+    const user = await this.prismaService.user.findUnique({
+      where: { id: userId },
+      select: {
+        preferences: { select: { sportId: true } },
+        homeLocation: true,
+      },
+    });
+
+    const preferredSportIds = new Set(
+      user?.preferences.map((p) => p.sportId) ?? [],
+    );
+    const userLoc = user?.homeLocation;
+
+    const BATCH_SIZE = 500;
+    const events = await this.prismaService.event.findMany({
+      include: {
+        host: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+        imageEvents: {
+          include: {
+            image: {
+              select: { id: true, url: true },
+            },
+          },
+        },
+        location: true,
+        sport: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: BATCH_SIZE,
+    });
+
+    const scored = events.map((event) => {
+      const sportMatch = preferredSportIds.has(event.sportId) ? 1 : 0;
+
+      let proximityBonus = 0;
+      let distanceKm: number | null = null;
+      if (userLoc && event.location) {
+        distanceKm = this.haversine(
+          userLoc.latitude,
+          userLoc.longitude,
+          event.location.latitude,
+          event.location.longitude,
+        );
+        proximityBonus = 1 / (1 + distanceKm / 50);
+      }
+
+      const daysFromCreation = event.createdAt
+        ? (Date.now() - event.createdAt.getTime()) / (1000 * 60 * 60 * 24)
+        : 0;
+      const recencyBonus = 1 / (1 + daysFromCreation / 30);
+
+      const score = sportMatch * 50 + proximityBonus * 50 + recencyBonus * 10;
+
+      return { ...event, score, distanceKm };
+    });
+
+    scored.sort((a, b) => b.score - a.score);
+
+    const start = (page - 1) * pageSize;
+    return scored.slice(start, start + pageSize);
+  }
+
+  private haversine(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number,
+  ): number {
+    const R = 6371;
+    const dLat = this.toRad(lat2 - lat1);
+    const dLon = this.toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.toRad(lat1)) *
+        Math.cos(this.toRad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  private toRad(deg: number): number {
+    return deg * (Math.PI / 180);
   }
 
   private async findLocationId(locationName: string | undefined) {

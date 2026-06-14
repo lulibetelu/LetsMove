@@ -57,7 +57,7 @@ export default function Filters(props: Props) {
                             type="text"
                             name="title"
                             placeholder="Type a username..."
-                            className="input input-bordered w-full focus:outline-none focus:border-[#96a55a]"
+                            className="input input-bordered bg-white/5 w-full focus:outline-none focus:border-[#96a55a]"
                             value={hostFilter}
                             onChange={(e) => setHostFilter(e.target.value)}
                         />
@@ -88,19 +88,19 @@ export default function Filters(props: Props) {
                     {showClearFilter &&  <button
                         type="button"
                         onClick={clearFilters}
-                        className="btn btn-ghost rounded-full"
+                        className="btn bg-white/5 hover:bg-white/10 text-white/70 hover:text-white rounded-full border-none"
                     >
                         Clear Filters
                     </button>}
                 </div>
 
                 {/* Footer */}
-                <div className="flex justify-between items-center w-full p-4 border-t border-base-200 bg-base-50 mt-auto">
+                <div className="flex justify-between items-center w-full p-4 border-t border-white/10 mt-auto">
 
                     <button
                         type="button"
                         onClick={props.onClose}
-                        className="btn btn-ghost rounded-full"
+                        className="btn bg-white/5 hover:bg-white/10 text-white/70 hover:text-white rounded-full border-none"
                     >
                         Cancel
                     </button>

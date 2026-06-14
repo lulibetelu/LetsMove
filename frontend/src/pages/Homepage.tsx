@@ -28,16 +28,16 @@ export default function Homepage() {
             <Sidebar/>
                 <main className="flex-1 ml-60 flex justify-center">
                     <div className="w-full max-w-2xl min-h-screen relative pb-24">
-                        <header className="sticky top-0 z-40 bg-[#141414]/90 backdrop-blur-md px-4 py-5 flex justify-center border-b-2 border-base-content/10">
+                        <header className="sticky top-0 z-40 bg-[#141414]/90 backdrop-blur-md px-4 py-5 flex justify-center border-b-2 border-white/10">
                             <div className="w-full max-w-md relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <Search size={18} className="text-base-content/50" />
+                                    <Search size={18} className="text-white/50" />
                                 </div>
                                 <input
                                     type="text"
                                     aria-label="Search posts"
                                     placeholder="search"
-                                    className="input input-bordered w-full rounded-full pl-12 h-10 bg-base-200/50 focus:bg-base-100 transition-colors"
+                                    className="input input-bordered w-full rounded-full pl-12 h-10 bg-white/5 focus:bg-white/10 transition-colors"
                                 />
                             </div>
                         </header>

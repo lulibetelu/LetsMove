@@ -39,7 +39,7 @@ export default function FriendRequest(props: FriendRequestProps) {
                 </button>
                 <button
                     type="button"
-                    className="btn btn-ghost btn-circle hover:bg-error/20"
+                    className="btn bg-white/5 hover:bg-error/20 text-white/70 hover:text-white btn-circle border-none"
                     onClick={handleRejectClick}
                     aria-label="Rechazar"
                 >

@@ -73,7 +73,7 @@ export default function Profile() {
     if (profileLoading || !profile) return null;
 
     const interests = profile.preferences.map(p => p.sport.name).join(", ");
-    const location = profile.userLocations[0]?.location.location ?? null;
+    const location = profile.homeLocation?.location ?? null;
     console.log(profile.friends)
     return (
         <div className="min-h-screen bg-[#141414] flex">

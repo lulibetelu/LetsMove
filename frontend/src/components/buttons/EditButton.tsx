@@ -15,10 +15,10 @@ export default function EditButton(props: Props){
         bg-[#141414]
         hover:bg-[#96a55a]
 
-        text-base-content/70
+        text-white/70
         hover:text-white
 
-        border border-base-content/10
+        border border-white/10
         hover:border-[#96a55a]
 
         text-sm font-semibold

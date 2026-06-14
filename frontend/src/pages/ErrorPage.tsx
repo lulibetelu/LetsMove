@@ -8,7 +8,7 @@ export default function ErrorPage() {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center p-4">
 
-            <div className="max-w-md w-full bg-base-200/50 p-8 rounded-2xl text-center border border-error/20">
+            <div className="max-w-md w-full bg-white/5 p-8 rounded-2xl text-center border border-error/20">
 
                 <div className="flex justify-center mb-6">
                     <div className="bg-error/10 p-4 rounded-full">
@@ -17,13 +17,13 @@ export default function ErrorPage() {
                 </div>
 
                 <h1 className="text-2xl font-bold mb-2">{title}</h1>
-                <p className="text-base-content/70 mb-8 leading-relaxed">
+                <p className="text-white/70 mb-8 leading-relaxed">
                     {message}
                 </p>
 
                 <Link
                     to="/"
-                    className="btn btn-neutral w-full flex items-center gap-2"
+                    className="btn bg-white/10 hover:bg-white/20 text-white w-full flex items-center gap-2 border-none"
                 >
                     <Home size={18} />
                     Volver al inicio

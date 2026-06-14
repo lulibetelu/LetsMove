@@ -25,7 +25,7 @@ export default function DislikeButton(props: Props){
         <button
             type="button"
             className={`group flex cursor-pointer items-center gap-1 transition-all duration-300 rounded-full p-0.5 ${isDisliked ? 'text-[#8A9A5B]'
-                : 'text-base-content/70 hover:text-[#8A9A5B]'}`}
+                : 'text-white/70 hover:text-[#8A9A5B]'}`}
             aria-label={isDisliked ? "Quitar no me gusta" : "No me gusta"} onClick={handleClick}>
             <ThumbsDown
                 size={16}

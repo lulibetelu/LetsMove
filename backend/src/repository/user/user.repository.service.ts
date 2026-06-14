@@ -29,11 +29,6 @@ export class UserRepositoryService {
             sport: true,
           },
         },
-        userLocations: {
-          include: {
-            location: true,
-          },
-        },
         friendsAsUser1: {
           where: { state: 'Accepted' },
           select: {
@@ -44,6 +39,11 @@ export class UserRepositoryService {
           where: { state: 'Accepted' },
           select: {
             user1: { select: { id: true, username: true } },
+          },
+        },
+        homeLocation: {
+          select: {
+            location: true,
           },
         },
       },
@@ -69,8 +69,13 @@ export class UserRepositoryService {
   }
 
   async createUser(registerDto: RegisterDto) {
+    const { locationId, ...userData } = registerDto;
     return this.prismaService.user.create({
-      data: registerDto,
+      // el connect verifica que exista una location con id=locationId, sino falla
+      data: {
+        ...userData,
+        ...(locationId && { homeLocation: { connect: { id: locationId } } }),
+      },
       select: {
         id: true,
         username: true,

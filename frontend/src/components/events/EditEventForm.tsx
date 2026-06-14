@@ -145,7 +145,7 @@ export default function EditEventForm({event, onClose}:Props){
             >
 
                 {/* Header */}
-                <div className="p-4 flex gap-4 items-center border-b border-base-200">
+                <div className="p-4 flex gap-4 items-center border-b border-white/10">
                     <div className="avatar placeholder">
                         <div className="w-12 h-12 rounded-full bg-[#96a55a]/20 text-[#96a55a] flex items-center justify-center">
                             <Pencil size={22} strokeWidth={1.8} />
@@ -154,7 +154,7 @@ export default function EditEventForm({event, onClose}:Props){
 
                     <div>
                         <h2 className="font-semibold text-lg">Edit Event</h2>
-                        <p className="text-sm text-base-content/60">
+                        <p className="text-sm text-white/60">
                             Update your event information
                         </p>
                     </div>
@@ -176,9 +176,9 @@ export default function EditEventForm({event, onClose}:Props){
                             value={event.title}
                             disabled
                             className="
-                        input input-bordered w-full
-                        bg-base-200
-                        text-base-content/50
+                        input input-bordered bg-white/5 w-full
+                        
+                        text-white/50
                         cursor-not-allowed
                     "
                         />
@@ -197,9 +197,9 @@ export default function EditEventForm({event, onClose}:Props){
                             value={event.eventType}
                             disabled
                             className="
-                        input input-bordered w-full
-                        bg-base-200
-                        text-base-content/50
+                        input input-bordered bg-white/5 w-full
+                        
+                        text-white/50
                         cursor-not-allowed
                     "
                         />
@@ -215,7 +215,7 @@ export default function EditEventForm({event, onClose}:Props){
 
                         <textarea
                             className="
-                        textarea textarea-bordered
+                        textarea textarea-bordered bg-white/5
                         w-full min-h-[120px]
 
                         focus:outline-none
@@ -243,7 +243,7 @@ export default function EditEventForm({event, onClose}:Props){
                             timeFormat="h:mm aa"
                             timeIntervals={15}
                             minDate={new Date()}
-                            className="input input-bordered w-full"
+                            className="input input-bordered bg-white/5 w-full"
                             wrapperClassName="w-full"
                         />
                     </div>
@@ -263,7 +263,7 @@ export default function EditEventForm({event, onClose}:Props){
                                 value={location}
                                 onChange={(e) => setLocation(e.target.value)}
                                 className="
-                            input input-bordered
+                            input input-bordered bg-white/5
                             w-full
 
                             focus:outline-none
@@ -292,11 +292,11 @@ export default function EditEventForm({event, onClose}:Props){
                                 minDate={startingDate}
                                 isClearable
                                 placeholderText="No end date"
-                                className="input input-bordered w-full"
+                                className="input input-bordered bg-white/5 w-full"
                                 wrapperClassName="w-full"
                             />
 
-                            <p className="text-xs text-base-content/50 mt-2">
+                            <p className="text-xs text-white/50 mt-2">
                                 Asynchronous events can define an optional ending date.
                             </p>
                         </div>
@@ -317,7 +317,7 @@ export default function EditEventForm({event, onClose}:Props){
                                 className={`flex-1 btn rounded-xl border-none ${
                                     !isPrivate
                                         ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
-                                        : "bg-base-200 text-base-content/70 hover:bg-base-300"
+                                        : "bg-white/10 text-white/70 hover:bg-white/20"
                                 }`}
                             >
                                 Public
@@ -329,7 +329,7 @@ export default function EditEventForm({event, onClose}:Props){
                                 className={`flex-1 btn rounded-xl border-none ${
                                     isPrivate
                                         ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
-                                        : "bg-base-200 text-base-content/70 hover:bg-base-300"
+                                        : "bg-white/10 text-white/70 hover:bg-white/20"
                                 }`}
                             >
                                 Private
@@ -339,12 +339,12 @@ export default function EditEventForm({event, onClose}:Props){
                 </div>
 
                 {/* Footer */}
-                <div className="flex justify-between items-center w-full p-4 border-t border-base-200 bg-base-50 mt-auto">
+                <div className="flex justify-between items-center w-full p-4 border-t border-white/10 mt-auto">
 
                     <button
                         type="button"
                         onClick={onClose}
-                        className="btn btn-ghost rounded-full"
+                        className="btn bg-white/5 hover:bg-white/10 text-white/70 hover:text-white rounded-full border-none"
                     >
                         Cancel
                     </button>

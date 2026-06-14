@@ -1,6 +1,5 @@
 import type {Preference} from "./preferenceType.ts";
-import type {UserLocation} from "./locationTypes.ts";
-
+import type {Location} from "./locationTypes.ts"
 export interface User{
     id: number,
     username: string,
@@ -13,7 +12,7 @@ export interface UserProfile {
     username: string;
     biography: string | null;
     preferences: Preference[];
-    userLocations: UserLocation[];
+    homeLocation: Location;
     friendsAsUser1?: { user2: {id: number, username: string, } }[];
     friendsAsUser2?: { user1: {id: number, username: string, } }[];
     friends: User[];
@@ -22,7 +21,8 @@ export interface UserProfile {
 export interface RegisterCredentials{
     username: string,
     email: string,
-    password: string
+    password: string,
+    locationId?: number
 }
 
 export interface LoginCredentials{

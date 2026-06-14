@@ -7,7 +7,15 @@ interface LoginResponse{
 
 export async function createUser(credentials: RegisterCredentials){
     try {
-        const { data } = await api.post('register', credentials);
+        const body: Record<string, unknown> = {
+            username: credentials.username,
+            email: credentials.email,
+            password: credentials.password,
+        };
+        if (credentials.locationId) {
+            body.locationId = credentials.locationId;
+        }
+        const { data } = await api.post('register', body);
         return data;
     } catch (error) {
         handleApiError(error);
