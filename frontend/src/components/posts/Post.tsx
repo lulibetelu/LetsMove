@@ -81,7 +81,7 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
                 <DislikeButton postId={id} initialIsDisliked={isDisliked}/>
                 <button
                     type="button"
-                    className="flex cursor-pointer items-center gap-1 transition-all duration-300 rounded-full p-0.5 text-base-content/70 hover:text-[#8A9A5B]"
+                    className="flex cursor-pointer items-center gap-1 transition-all duration-300 rounded-full p-0.5 text-white/70 hover:text-[#8A9A5B]"
                     aria-label="Comment"
                     onClick={() => {
                         if (isForPostPage && onCommentClick) {

@@ -91,8 +91,8 @@ export default function RegisterPage(){
                             }}></CustomInput>
                     </div>
                     <div className="flex flex-col gap-1">
-                        <label className="label">
-                            <span className="label-text font-medium">Home Location</span>
+                        <label className="text-xs font-semibold tracking-widest uppercase text-[#8A9A5B]">
+                            Home Location
                         </label>
                         <Dropdown
                             dataList={locations.map(l => l.location)}
@@ -100,6 +100,7 @@ export default function RegisterPage(){
                             isPending={locLoading}
                             value={locationName}
                             handleChange={setLocationName}
+                            placeholder="Choose location"
                         />
                     </div>
                     <div>
