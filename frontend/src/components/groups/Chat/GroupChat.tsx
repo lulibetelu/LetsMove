@@ -1,13 +1,19 @@
 import {useCallback, useEffect, useState} from "react";
+import {ChevronRight, Users} from "lucide-react";
 import {socket} from "../../../api/sockets/config.ts";
 import {useMessages} from "../../../hooks/groups/useMessages.ts";
+import useGroup from "../../../hooks/groups/useGroup.ts";
 import ChatMessages from "./ChatMessages.tsx";
 
+const VITE_API_URL = import.meta.env.VITE_API_URL;
+
 interface Props {
-    groupId: number
+    groupId: number;
+    onShowDetail?: () => void;
 }
 
-export function GroupChat({groupId}: Props) {
+export function GroupChat({groupId, onShowDetail}: Props) {
+    const {data: group, isLoading} = useGroup(groupId);
     const {messages, handleUpdate} = useMessages(groupId);
     const [message, setMessage] = useState('');
 
@@ -53,8 +59,33 @@ export function GroupChat({groupId}: Props) {
         }
     };
 
+    const imageUrl = group?.imageId ? `${VITE_API_URL}image/${group.imageId}` : null;
+
     return (
         <div className="flex-1 flex flex-col max-h-screen overflow-hidden">
+            <button
+                type="button"
+                onClick={onShowDetail}
+                className="flex items-center gap-3 px-5 py-3 bg-[#1e1e1e] border-b border-white/5 hover:bg-white/[0.04] transition-colors shrink-0 text-left"
+            >
+                {isLoading ? (
+                    <div className="w-9 h-9 rounded-full bg-white/5 shrink-0 animate-pulse" />
+                ) : imageUrl ? (
+                    <img
+                        src={imageUrl}
+                        alt={group.name}
+                        className="w-9 h-9 rounded-full object-cover shrink-0"
+                    />
+                ) : (
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#8A9A5B] to-[#6b7a46] flex items-center justify-center shrink-0">
+                        <Users size={16} className="text-white/80" />
+                    </div>
+                )}
+                <span className="flex-1 text-sm font-semibold text-white/90 truncate">
+                    {isLoading ? <span className="text-white/40">Loading...</span> : group.name}
+                </span>
+                <ChevronRight size={16} className="text-white/30 shrink-0" />
+            </button>
             <ChatMessages messages={messages ?? []}/>
             <div className="flex items-center gap-2 border-t border-white/5 px-4 py-3">
                 <input

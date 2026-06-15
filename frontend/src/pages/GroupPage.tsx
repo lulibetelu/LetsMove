@@ -10,8 +10,14 @@ import {GroupChat} from "../components/groups/Chat/GroupChat.tsx";
 export default function GroupPage() {
     const {data: groups, isLoading, isError} = useGroups();
     const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
+    const [viewMode, setViewMode] = useState<'chat' | 'detail'>('chat');
     const [searchQuery, setSearchQuery] = useState("");
     const [showCreateForm, setShowCreateForm] = useState(false);
+
+    const handleSelectGroup = (id: number | null) => {
+        setSelectedGroupId(id);
+        setViewMode('chat');
+    };
 
     const filteredGroups = (groups ?? []).filter((g: { name: string }) =>
         g.name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -37,7 +43,7 @@ export default function GroupPage() {
                     <GroupList
                         groups={filteredGroups}
                         selectedGroupId={selectedGroupId}
-                        onSelectGroup={setSelectedGroupId}
+                        onSelectGroup={handleSelectGroup}
                         searchQuery={searchQuery}
                         onSearchChange={setSearchQuery}
                         isLoading={isLoading}
@@ -46,7 +52,11 @@ export default function GroupPage() {
 
                 <div className="flex-1 flex flex-col">
                     {selectedGroupId ? (
-                        <GroupChat groupId={selectedGroupId}/>
+                        viewMode === 'chat' ? (
+                            <GroupChat groupId={selectedGroupId} onShowDetail={() => setViewMode('detail')} />
+                        ) : (
+                            <GroupDetail groupId={selectedGroupId} onBackToChat={() => setViewMode('chat')} />
+                        )
                     ) : (
                         <div className="flex-1 flex items-center justify-center">
                             <div className="text-center">
