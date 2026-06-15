@@ -25,7 +25,11 @@ export default function EventFeed(){
     const [showCreateEventForm, setShowCreateEventForm] = useState(false);
 
     const handleSubmit = (formFilters: FormFilters) => {
-        if (currentUserId == null) return <PopUpError message={"something went wrong"}/>
+        if (currentUserId == null) return navigate("/error", {
+            state: {
+                message: "current userId not found"
+            }
+        })
         const joinedInId = formFilters.joined ?  currentUserId : undefined;
         const savedInId = formFilters.saved ? currentUserId : undefined;
 

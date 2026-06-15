@@ -15,7 +15,7 @@ export default function Events({eventArray}: Props){
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
         {eventArray
             .map((event: EventType) => {
-            return (<Event event={event} />)
+            return (<Event key={event.id} event={event} />)
             })}
         </div>
     )

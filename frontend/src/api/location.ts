@@ -1,20 +1,20 @@
-import type {LocationType} from "../types/fileTypes.ts";
+import type {Location} from "../types/locationTypes.ts";
 import api, { handleApiError } from "./client.ts";
 
 
 
-export async function findAllLocations(): Promise<LocationType[]> {
+export async function findAllLocations(): Promise<Location[]> {
     try {
-        const { data } = await api.get<LocationType[]>('location');
+        const { data } = await api.get<Location[]>('location');
         return data;
     } catch (error) {
         handleApiError(error);
     }
 }
 
-export async function searchLocations(query: string): Promise<LocationType[]> {
+export async function searchLocations(query: string): Promise<Location[]> {
     try {
-        const { data } = await api.get<LocationType[]>('location/search', {
+        const { data } = await api.get<Location[]>('location/search', {
             params: { q: query },
         });
         return data;

@@ -14,6 +14,7 @@ import PopUpError from "../PopUpError.tsx";
 import EditButton from "../buttons/EditButton.tsx";
 import DeleteButton from "../buttons/DeleteButton.tsx";
 import ProfileLink from "../profile/ProfileLink.tsx";
+import ImageViewer from "../ImageViewer.tsx";
 interface Props {
     event: EventType;
     onLeft: () => void;
@@ -68,6 +69,8 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
     const [submitting, setSubmitting] = useState(false);
     const [leaveLoading, setLeaveLoading] = useState(false);
     const [leaveError, setLeaveError] = useState<string | null>(null);
+    const [coverViewerOpen, setCoverViewerOpen] = useState(false);
+    const [entryViewer, setEntryViewer] = useState<{ entryIndex: number; imageIndex: number } | null>(null);
     const currentUserId = getCurrentUserId();
     const isHost = currentUserId === event.hostId;
     const queryClient = useQueryClient();
@@ -134,7 +137,12 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
             {/* Cover */}
             <div className="relative w-full h-64 rounded-2xl overflow-hidden mb-6">
                 {coverImage ? (
-                    <img src={coverImage.image.url ?? `${url}image/${coverImage.image.id}` } alt={event.title} className="w-full h-full object-cover"/>
+                    <img
+                        src={coverImage.image.url ?? `${url}image/${coverImage.image.id}`}
+                        alt={event.title}
+                        onClick={() => setCoverViewerOpen(true)}
+                        className="w-full h-full object-cover cursor-pointer"
+                    />
                 ) : (
                     <div className="w-full h-full" style={{background: "linear-gradient(135deg, #8A9A5B 0%, #6b7a46 100%)"}}>
                         <div className="absolute inset-0 flex items-center justify-center opacity-10">
@@ -227,7 +235,7 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                     )}
 
                     <div className="flex flex-col gap-3">
-                        {entries.map(entry => (
+                        {entries.map((entry, ei) => (
                             <div key={entry.id} className="bg-[#1e1e1e] rounded-xl border border-white/5 p-4 flex flex-col gap-3">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
@@ -248,13 +256,34 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                                 {entry.images.length > 0 && (
                                     <div className="grid grid-cols-2 gap-2">
                                         {entry.images.map((img, i) => (
-                                            <img key={i} src={img.image.url ?? `${url}image/${img.image.id}`} alt="" className="w-full h-32 object-cover rounded-lg"/>
+                                            <img
+                                                key={i}
+                                                src={img.image.url ?? `${url}image/${img.image.id}`}
+                                                alt=""
+                                                onClick={() => setEntryViewer({ entryIndex: ei, imageIndex: i })}
+                                                className="w-full h-32 object-cover rounded-lg cursor-pointer"
+                                            />
                                         ))}
                                     </div>
                                 )}
                             </div>
                         ))}
                     </div>
+                    {coverViewerOpen && coverImage && (
+                        <ImageViewer
+                            images={[{ src: coverImage.image.url ?? `${url}image/${coverImage.image.id}` }]}
+                            onClose={() => setCoverViewerOpen(false)}
+                        />
+                    )}
+                    {entryViewer && (
+                        <ImageViewer
+                            images={entries[entryViewer.entryIndex].images.map(img => ({
+                                src: img.image.url ?? `${url}image/${img.image.id}`
+                            }))}
+                            initialIndex={entryViewer.imageIndex}
+                            onClose={() => setEntryViewer(null)}
+                        />
+                    )}
 
                     <div ref={observerRef} className="h-10"/>
                 </div>

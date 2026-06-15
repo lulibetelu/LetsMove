@@ -29,7 +29,10 @@ export class MessageController {
     @Query('groupId', ParseIntPipe) groupId: number,
   ) {
     const userId: number = req.user.sub;
-    const isMember: boolean = await this.groupService.isMember(userId, groupId);
+    const isMember: boolean | undefined = await this.groupService.isMember(
+      userId,
+      groupId,
+    );
 
     if (!isMember)
       throw new UnauthorizedException('Requester must be group member');
