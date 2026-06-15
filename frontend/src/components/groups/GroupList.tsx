@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import GroupCard from "./GroupCard.tsx";
 
 interface GroupListProps {
@@ -13,6 +13,7 @@ interface GroupListProps {
     searchQuery: string;
     onSearchChange: (query: string) => void;
     isLoading: boolean;
+    onCreateGroup?: () => void;
 }
 
 export default function GroupList({
@@ -22,11 +23,20 @@ export default function GroupList({
     searchQuery,
     onSearchChange,
     isLoading,
+    onCreateGroup,
 }: GroupListProps) {
     return (
         <>
-            <div className="p-4 border-b border-white/5">
+            <div className="p-4 border-b border-white/5 flex items-center justify-between">
                 <h2 className="text-lg font-bold text-white/90">Groups</h2>
+                <button
+                    type="button"
+                    aria-label="Create group"
+                    onClick={onCreateGroup}
+                    className="w-8 h-8 rounded-full bg-[#96a55a] hover:bg-[#a8b96a] text-white flex items-center justify-center transition-all duration-300 ease-out hover:scale-110 hover:rotate-90 active:scale-95 cursor-pointer"
+                >
+                    <Plus size={16} />
+                </button>
             </div>
 
             <div className="px-4 py-3">
