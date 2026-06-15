@@ -23,6 +23,8 @@ import { MessageModule } from './message/message.module';
 import { ChatModule } from './chat/chat.module';
 import { SavedEventModule } from './saved-event/saved-event.module';
 import { LocationModule } from './location/location.module';
+import { MailController } from './mailNotification/mail.controller';
+import { MailModule } from './mailNotification/mail.module';
 
 @Module({
   imports: [
@@ -49,6 +51,7 @@ import { LocationModule } from './location/location.module';
     ChatModule,
     SavedEventModule,
     LocationModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

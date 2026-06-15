@@ -17,6 +17,12 @@
     "prisma:seed": "npm run prisma:seed -w backend"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^2.3.6",
+    "handlebars": "^4.7.9",
+    "nodemailer": "^9.0.0",
     "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^8.0.1"
   }
 }
