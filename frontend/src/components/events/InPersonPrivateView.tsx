@@ -12,6 +12,7 @@ import ImagePicker from "../ImagePicker.tsx";
 import type {ImageEvent} from "../../types/imageType.ts";
 import type {ImageInput} from "../../types/imageType.ts";
 import ProfileLink from "../profile/ProfileLink.tsx";
+import ImageViewer from "../ImageViewer.tsx";
 
 interface Props {
     event: EventType;
@@ -27,6 +28,8 @@ export default function InPersonPrivateView({event, isHost, onLeft, onEdit, onDe
     const [galleryImages, setGalleryImages] = useState<ImageInput[]>([]);
     const [uploading, setUploading] = useState(false);
     const [galleryError, setGalleryError] = useState<string | null>(null);
+    const [coverViewerOpen, setCoverViewerOpen] = useState(false);
+    const [galleryViewerIndex, setGalleryViewerIndex] = useState<number | null>(null);
     const queryClient = useQueryClient();
     const url = import.meta.env.VITE_API_URL;
 
@@ -82,7 +85,12 @@ export default function InPersonPrivateView({event, isHost, onLeft, onEdit, onDe
             {/* Cover */}
             <div className="relative w-full h-64 rounded-2xl overflow-hidden mb-6">
                 {coverImage ? (
-                    <img src={coverImage.image.url ?? `${url}image/${coverImage.image.id}`} alt={event.title} className="w-full h-full object-cover"/>
+                    <img
+                        src={coverImage.image.url ?? `${url}image/${coverImage.image.id}`}
+                        alt={event.title}
+                        onClick={() => setCoverViewerOpen(true)}
+                        className="w-full h-full object-cover cursor-pointer"
+                    />
                 ) : (
                     <div className="w-full h-full" style={{background: "linear-gradient(135deg, #8A9A5B 0%, #6b7a46 100%)"}}>
                         <div className="absolute inset-0 flex items-center justify-center opacity-10">
@@ -153,16 +161,32 @@ export default function InPersonPrivateView({event, isHost, onLeft, onEdit, onDe
                         {/* Existing gallery images */}
                         {existingGallery && existingGallery.length > 0 && (
                             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                                {existingGallery.map((imgEvent: ImageEvent) => (
+                                {existingGallery.map((imgEvent: ImageEvent, i: number) => (
                                     <div key={imgEvent.image.id} className="aspect-square rounded-xl overflow-hidden bg-[#1e1e1e] border border-white/5">
                                         <img
                                             src={imgEvent.image.url ?? `${url}image/${imgEvent.image.id}`}
                                             alt=""
-                                            className="w-full h-full object-cover"
+                                            onClick={() => setGalleryViewerIndex(i)}
+                                            className="w-full h-full object-cover cursor-pointer"
                                         />
                                     </div>
                                 ))}
                             </div>
+                        )}
+                        {coverViewerOpen && coverImage && (
+                            <ImageViewer
+                                images={[{ src: coverImage.image.url ?? `${url}image/${coverImage.image.id}` }]}
+                                onClose={() => setCoverViewerOpen(false)}
+                            />
+                        )}
+                        {galleryViewerIndex !== null && existingGallery && (
+                            <ImageViewer
+                                images={existingGallery.map((imgEvent: ImageEvent) => ({
+                                    src: imgEvent.image.url ?? `${url}image/${imgEvent.image.id}`
+                                }))}
+                                initialIndex={galleryViewerIndex}
+                                onClose={() => setGalleryViewerIndex(null)}
+                            />
                         )}
 
                         {/* Upload area */}
