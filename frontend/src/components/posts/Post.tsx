@@ -1,10 +1,11 @@
 import type { PostType } from '../../types/postTypes.ts'
-import {Link, type NavigateFunction, useNavigate} from 'react-router-dom';
+import {type NavigateFunction, useNavigate} from 'react-router-dom';
 import {CircleUserRound, MessageCircle, Trash2} from 'lucide-react';
 import LikeButton from "../buttons/LikeButton.tsx";
 import DislikeButton from "../buttons/DislikeButton.tsx";
 import {useState} from "react";
 import NewComment from "../create/NewComment.tsx";
+import ProfileLink from "../profile/ProfileLink.tsx";
 type Props = PostType & {
     isForPostPage: boolean,
     onCommentCreate?: () => void,
@@ -41,13 +42,7 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
         >
             <div className="flex items-center gap-3 mb-3">
                 <CircleUserRound size={20} strokeWidth={1.5} className="text-white/40" />
-                 <Link
-                     to={`/profile/${userId}`}
-                     onClick={(e) => e.stopPropagation()}
-                     className="text-sm font-semibold text-[#8A9A5B] hover:text-[#a8bb72] transition-colors"
-                 >
-                     {username}
-                 </Link>
+                 <ProfileLink username={username} userId={userId}/>
                 {canDelete && (
                     <button
                         type="button"
@@ -81,7 +76,7 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
                 <DislikeButton postId={id} initialIsDisliked={isDisliked}/>
                 <button
                     type="button"
-                    className="flex cursor-pointer items-center gap-1 transition-all duration-300 rounded-full p-0.5 text-base-content/70 hover:text-[#8A9A5B]"
+                    className="flex cursor-pointer items-center gap-1 transition-all duration-300 rounded-full p-0.5 text-white/70 hover:text-[#8A9A5B]"
                     aria-label="Comment"
                     onClick={() => {
                         if (isForPostPage && onCommentClick) {

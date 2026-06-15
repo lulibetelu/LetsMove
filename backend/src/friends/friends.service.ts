@@ -34,9 +34,6 @@ export class FriendsService {
       sender,
       receiver,
     );
-    if (friendship.length === 0) {
-      throw new NotFoundException("Friendship doesn't exist");
-    }
     return friendship;
   }
 

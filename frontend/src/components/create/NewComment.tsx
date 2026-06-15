@@ -5,7 +5,7 @@ import PopUpError from "../PopUpError.tsx";
 import type {CreateComment} from "../../types/commentTypes.ts";
 import {createComment} from "../../api/comment.ts";
 
-export interface Props{
+interface Props{
     onClose: () => void,
     onCommentCreated: () => void,
     postAuthorUsername: string,
@@ -42,7 +42,7 @@ export default function NewComment(props: Props){
 
                 <div className="p-4 flex gap-4">
                     <div className="avatar placeholder">
-                        <div className="w-12 h-12 rounded-full bg-base-300 text-base-content/70 flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-full bg-white/10 text-white/70 flex items-center justify-center">
                             <CircleUserRound size={24} strokeWidth={1.5} />
                         </div>
                     </div>
@@ -54,26 +54,26 @@ export default function NewComment(props: Props){
                 <textarea
                     name="content"
                     aria-label="Post content"
-                    className="textarea textarea-ghost w-full text-lg resize-none focus:outline-none focus:bg-transparent"
+                    className="textarea textarea-ghost bg-white/5 w-full text-lg resize-none focus:outline-none focus:bg-white/5"
                     placeholder={`Answer ${props.postAuthorUsername}`}
                     onChange ={(e) => {
                         setContent(e.target.value)
                     }}
                 ></textarea>
 
-                <div className="flex justify-between items-center w-full p-3 border-t border-base-200 bg-base-50">
+                <div className="flex justify-between items-center w-full p-3 border-t border-white/10">
 
                     <div className="flex gap-2">
                         <button
                             type="button"
-                            className="btn btn-ghost btn-circle btn-sm text-base-content/70 hover:text-base-content"
+                            className="btn bg-white/5 hover:bg-white/10 text-white/70 hover:text-white btn-circle btn-sm border-none"
                             aria-label="Add image"
                         ><Image size={20} strokeWidth={1.5} />
                         </button>
                     </div>
                     <button
                         type="submit"
-                        className="btn btn-neutral btn-sm px-6 rounded-full font-medium"
+                        className="btn bg-white/10 hover:bg-white/20 text-white btn-sm px-6 rounded-full font-medium border-none"
                     >
                         Comment
                     </button>

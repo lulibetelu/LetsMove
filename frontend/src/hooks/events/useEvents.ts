@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 import {useInfiniteQuery} from "@tanstack/react-query";
-import {findEvents} from "../../api/event.ts";
+import {findEvents, findFeed} from "../../api/event.ts";
 import type {EventFilters, EventType} from "../../types/eventTypes.ts";
 
 export function useEvents() {
@@ -8,8 +8,12 @@ export function useEvents() {
     const [filters, setFilters] = useState<EventFilters>({
         title: '',
         host: '',
-        sport: ''
+        sport: '',
+        joined: undefined,
+        saved: undefined
     });
+
+    const hasAnyFilter = filters.title || filters.host || filters.sport;
 
     const refetchData = (newEventFilters: EventFilters)=> {
         setFilters(newEventFilters)
@@ -23,13 +27,17 @@ export function useEvents() {
         isError,
         isLoading
     } = useInfiniteQuery({
-        queryKey: ["events", filters.host,filters.title, filters.sport],
+        queryKey: hasAnyFilter
+            ? ["events", filters.host, filters.title, filters.sport]
+            : ["events", "feed"],
         queryFn: async ({pageParam}) => {
-            const events = await findEvents(pageParam, filters)
-            return events;
+            if (hasAnyFilter) {
+                return findEvents(pageParam, filters);
+            }
+            return findFeed(pageParam);
         },
         getNextPageParam: (lastPage, allPages) => {
-            if (!lastPage || lastPage.length < 10) return undefined;
+            if (!lastPage || lastPage.length < (hasAnyFilter ? 10 : 15)) return undefined;
             return allPages.length + 1;
         },
         initialPageParam: 1,

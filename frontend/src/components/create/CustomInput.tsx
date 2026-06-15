@@ -9,7 +9,7 @@ export default function CustomInput({ label, input} : CustomInputProps) {
             <input
                 type= {input.type}
                 placeholder= {input.placeHolder}
-                className="input input-bordered"
+                className="input input-bordered bg-white/5"
                 value={input.value}
                 onChange={input.onChange}
             />

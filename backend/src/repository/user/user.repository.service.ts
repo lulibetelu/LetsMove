@@ -19,16 +19,38 @@ export class UserRepositoryService {
     });
   }
   async findById(userId: number) {
-    return this.prismaService.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
         id: userId,
       },
-      select: {
-        id: true,
-        username: true,
-        biography: true,
+      include: {
+        preferences: {
+          include: {
+            sport: true,
+          },
+        },
+        friendsAsUser1: {
+          where: { state: 'Accepted' },
+          select: {
+            user2: { select: { id: true, username: true } },
+          },
+        },
+        friendsAsUser2: {
+          where: { state: 'Accepted' },
+          select: {
+            user1: { select: { id: true, username: true } },
+          },
+        },
+        homeLocation: {
+          select: {
+            location: true,
+          },
+        },
       },
     });
+    if (!user) return null;
+    const { password, email, ...result } = user;
+    return result;
   }
 
   async findByEmail(userEmail: string) {
@@ -47,8 +69,13 @@ export class UserRepositoryService {
   }
 
   async createUser(registerDto: RegisterDto) {
+    const { locationId, ...userData } = registerDto;
     return this.prismaService.user.create({
-      data: registerDto,
+      // el connect verifica que exista una location con id=locationId, sino falla
+      data: {
+        ...userData,
+        ...(locationId && { homeLocation: { connect: { id: locationId } } }),
+      },
       select: {
         id: true,
         username: true,

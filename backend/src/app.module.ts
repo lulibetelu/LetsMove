@@ -22,6 +22,7 @@ import { GroupModule } from './group/group.module';
 import { MessageModule } from './message/message.module';
 import { ChatModule } from './chat/chat.module';
 import { SavedEventModule } from './saved-event/saved-event.module';
+import { LocationModule } from './location/location.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { SavedEventModule } from './saved-event/saved-event.module';
     MessageModule,
     ChatModule,
     SavedEventModule,
+    LocationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

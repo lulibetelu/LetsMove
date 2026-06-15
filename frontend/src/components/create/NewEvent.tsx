@@ -5,6 +5,7 @@ import {createEvent} from "../../api/event.ts";
 import type {EventRawData} from "../../types/eventTypes.ts";
 import Dropdown from "../Dropdown.tsx";
 import {useSports} from "../../hooks/useSports.ts";
+import {useLocations} from "../../hooks/useLocations.ts";
 import {sportsToString} from "../../resusable-functions/sportFunctions.ts";
 import type {ImageInput} from "../../types/imageType.ts";
 import ImagePicker from "../ImagePicker.tsx";
@@ -28,6 +29,7 @@ export default function NewEvent(props: Props){
     const [error, setError] = useState<string | null>(null);
     const [validationError, setValidationError] = useState<string>("");
     const {sports, isPending, sportError} = useSports();
+    const {locations, isPending: locLoading, locationError} = useLocations();
 
     const [images, setImages] = useState<ImageInput[]>([])
 
@@ -160,7 +162,7 @@ return (
         >
 
             {/* Header */}
-            <div className="p-4 flex gap-4 items-center border-b border-base-200">
+                    <div className="p-4 flex gap-4 items-center border-b border-white/10">
                 <div className="avatar placeholder">
                     <div className="w-12 h-12 rounded-full bg-[#96a55a]/20 text-[#96a55a] flex items-center justify-center">
                         <CalendarDays size={24} strokeWidth={1.8} />
@@ -169,7 +171,7 @@ return (
 
                 <div>
                     <h2 className="font-semibold text-lg">Create Event</h2>
-                    <p className="text-sm text-base-content/60">
+                    <p className="text-sm text-white/60">
                         Organize something for the community
                     </p>
                 </div>
@@ -188,7 +190,7 @@ return (
                         type="text"
                         name="title"
                         placeholder="Football match at the park..."
-                        className="input input-bordered w-full focus:outline-none focus:border-[#96a55a]"
+                        className="input input-bordered bg-white/5 w-full focus:outline-none focus:border-[#96a55a]"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                     />
@@ -203,7 +205,7 @@ return (
                     <textarea
                         name="description"
                         placeholder="Describe your event..."
-                        className="textarea textarea-bordered w-full min-h-[120px] focus:outline-none focus:border-[#96a55a]"
+                        className="textarea textarea-bordered bg-white/5 w-full min-h-[120px] focus:outline-none focus:border-[#96a55a]"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
@@ -220,29 +222,29 @@ return (
                     </label>
 
                     <div className="flex gap-3">
-                        <button
-                            type="button"
-                            onClick={() => setType("InPerson")}
-                            className={`flex-1 btn rounded-xl border-none ${
-                                type === "InPerson"
-                                    ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
-                                    : "bg-base-200 text-base-content/70 hover:bg-base-300"
-                            }`}
-                        >
-                            In Person
-                        </button>
+                            <button
+                                type="button"
+                                onClick={() => setType("InPerson")}
+                                className={`flex-1 btn rounded-xl border-none ${
+                                    type === "InPerson"
+                                        ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
+                                        : "bg-white/10 text-white/70 hover:bg-white/20"
+                                }`}
+                            >
+                                In Person
+                            </button>
 
-                        <button
-                            type="button"
-                            onClick={() => setType("Asynchronous")}
-                            className={`flex-1 btn rounded-xl border-none ${
-                                type === "Asynchronous"
-                                    ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
-                                    : "bg-base-200 text-base-content/70 hover:bg-base-300"
-                            }`}
-                        >
-                            Asynchronous
-                        </button>
+                            <button
+                                type="button"
+                                onClick={() => setType("Asynchronous")}
+                                className={`flex-1 btn rounded-xl border-none ${
+                                    type === "Asynchronous"
+                                        ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
+                                        : "bg-white/10 text-white/70 hover:bg-white/20"
+                                }`}
+                            >
+                                Asynchronous
+                            </button>
                     </div>
                 </div>
 
@@ -263,7 +265,7 @@ return (
                         timeIntervals={15}
                         minDate={new Date()}
                         placeholderText="Select starting date and time"
-                        className="input input-bordered w-full"
+                        className="input input-bordered bg-white/5 w-full"
                         wrapperClassName="w-full"
                     />
                 </div>
@@ -286,7 +288,7 @@ return (
                         minDate={startingDate ?? new Date()}
                         isClearable
                         placeholderText="No end date"
-                        className="input input-bordered w-full"
+                        className="input input-bordered bg-white/5 w-full"
                         wrapperClassName="w-full"
                     />
                 </div>)}
@@ -299,20 +301,20 @@ return (
                             Location
                         </span>
                         </label>
-
-                        <input
-                            type="text"
-                            placeholder="Sports center, park, gym..."
-                            className="input input-bordered w-full focus:outline-none focus:border-[#96a55a]"
+                        <Dropdown
+                            dataList={locations.map(l => l.location)}
+                            error={locationError}
+                            isPending={locLoading}
                             value={location}
-                            onChange={(e) => setLocation(e.target.value)}
+                            handleChange={setLocation}
+                            placeholder="Choose location"
                         />
                     </div>
                 )}
 
                 {/* Async Info */}
                 {type === "Asynchronous" && (
-                    <div className="bg-[#96a55a]/10 border border-[#96a55a]/20 rounded-xl p-3 text-sm text-base-content/70">
+                    <div className="bg-[#96a55a]/10 border border-[#96a55a]/20 rounded-xl p-3 text-sm text-white/70">
                         Participants will be able to complete this event remotely
                         and asynchronously.
                     </div>
@@ -327,29 +329,29 @@ return (
                     </label>
 
                     <div className="flex gap-3">
-                        <button
-                            type="button"
-                            onClick={() => setIsPrivate(false)}
-                            className={`flex-1 btn rounded-xl border-none ${
-                                 !isPrivate
-                                    ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
-                                    : "bg-base-200 text-base-content/70 hover:bg-base-300"
-                            }`}
-                        >
-                            Public
-                        </button>
+                            <button
+                                type="button"
+                                onClick={() => setIsPrivate(false)}
+                                className={`flex-1 btn rounded-xl border-none ${
+                                     !isPrivate
+                                        ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
+                                        : "bg-white/10 text-white/70 hover:bg-white/20"
+                                }`}
+                            >
+                                Public
+                            </button>
 
-                        <button
-                            type="button"
-                            onClick={() => setIsPrivate(true)}
-                            className={`flex-1 btn rounded-xl border-none ${
-                                isPrivate
-                                    ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
-                                    : "bg-base-200 text-base-content/70 hover:bg-base-300"
-                            }`}
-                        >
-                            Private
-                        </button>
+                            <button
+                                type="button"
+                                onClick={() => setIsPrivate(true)}
+                                className={`flex-1 btn rounded-xl border-none ${
+                                    isPrivate
+                                        ? "bg-[#96a55a] hover:bg-[#7f8d4c] text-white"
+                                        : "bg-white/10 text-white/70 hover:bg-white/20"
+                                }`}
+                            >
+                                Private
+                            </button>
                     </div>
                 </div>
 
@@ -369,15 +371,15 @@ return (
             </div>
 
             {/* Footer */}
-            <div className="flex justify-between items-center w-full p-4 border-t border-base-200 bg-base-50 mt-auto">
+            <div className="flex justify-between items-center w-full p-4 border-t border-white/10 mt-auto">
 
-                <button
-                    type="button"
-                    onClick={props.onClose}
-                    className="btn btn-ghost rounded-full"
-                >
-                    Cancel
-                </button>
+                    <button
+                        type="button"
+                        onClick={props.onClose}
+                        className="btn bg-white/5 hover:bg-white/10 text-white/70 hover:text-white rounded-full border-none"
+                    >
+                        Cancel
+                    </button>
 
                 <button
                     type="submit"

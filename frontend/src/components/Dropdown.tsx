@@ -7,11 +7,13 @@ interface Props {
     dataList: string[],
     error: Error | null,
     isPending: boolean,
-    value: string,
-    handleChange: (sport: string) => void
+    value: string | string[],
+    handleChange: (value: string | string[]) => void
+    multiple?: boolean,
+    placeholder?: string
 }
 
-export default function Dropdown({dataList, error, isPending, value, handleChange}: Props) {
+export default function Dropdown({dataList, error, isPending, value, handleChange, multiple, placeholder}: Props) {
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
     const containerRef = useRef<HTMLDivElement>(null);
@@ -20,6 +22,10 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
     const popoverRef = useRef<HTMLDivElement>(null);
     const [coords, setCoords] = useState({top: 0, left: 0, width: 0});
     const [highlighted, setHighlighted] = useState(-1);
+
+    const isMulti = multiple === true;
+    const selectedValues = isMulti ? (value as string[]) : [];
+    const singleValue = isMulti ? "" : (value as string);
 
     const filtered = dataList.filter(name =>
         name.toLowerCase().includes(search.toLowerCase())
@@ -44,8 +50,8 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
     }, []);
 
     const recalcCoords = () => {
-        if (inputRef.current) {
-            const rect = inputRef.current.getBoundingClientRect();
+        if (containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
             setCoords({top: rect.bottom + 4, left: rect.left, width: rect.width});
         }
     };
@@ -57,20 +63,45 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
         setOpen(true);
     };
 
-    const selectOption = (option: string) => {
-        handleChange(option);
-        setSearch("");
+    const toggleOption = (option: string) => {
+        const next = selectedValues.includes(option)
+            ? selectedValues.filter(v => v !== option)
+            : [...selectedValues, option];
+        handleChange(next);
         setHighlighted(-1);
-        setOpen(false);
-        inputRef.current?.blur();
+        inputRef.current?.focus();
+    };
+
+    const selectOption = (option: string) => {
+        if (isMulti) {
+            toggleOption(option);
+        } else {
+            handleChange(option);
+            setSearch("");
+            setHighlighted(-1);
+            setOpen(false);
+            inputRef.current?.blur();
+        }
     };
 
     const clearValue = () => {
-        handleChange("");
+        if (isMulti) {
+            handleChange([]);
+        } else {
+            handleChange("");
+        }
         setSearch("");
         setHighlighted(-1);
         inputRef.current?.focus();
     };
+
+    const removeItem = (item: string) => {
+        const next = selectedValues.filter(v => v !== item);
+        handleChange(next);
+        inputRef.current?.focus();
+    };
+
+    const hasSelection = isMulti ? selectedValues.length > 0 : !!singleValue;
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (!open) return;
@@ -84,6 +115,8 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
         } else if (e.key === "Enter" && highlighted >= 0) {
             e.preventDefault();
             selectOption(filtered[highlighted]);
+        } else if (e.key === "Backspace" && !search && isMulti && selectedValues.length > 0) {
+            removeItem(selectedValues[selectedValues.length - 1]);
         }
     };
 
@@ -112,28 +145,66 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
         <div ref={containerRef} className="relative w-full">
 
             <div className="relative">
-                <input
-                    ref={inputRef}
-                    type="text"
-                    value={open ? search : value || ""}
-                    placeholder="Choose sport"
-                    onFocus={openDropdown}
-                    onChange={(e) => {
-                        if (!open) openDropdown();
-                        setSearch(e.target.value);
-                        setHighlighted(-1);
-                    }}
-                    onKeyDown={handleKeyDown}
-                    readOnly={!open && !!value}
-                    className="
-                        input input-bordered w-full pr-10
-                        focus:outline-none focus:border-[#96a55a]
-                        cursor-pointer
-                    "
-                />
+                {isMulti ? (
+                    <div
+                        className="input input-bordered bg-white/5 w-full pr-10 min-h-[48px] h-auto py-1.5 flex flex-wrap gap-1.5 items-center cursor-text focus-within:border-[#96a55a]"
+                        onClick={() => { if (!open) openDropdown(); }}
+                    >
+                        {selectedValues.map(v => (
+                            <span
+                                key={v}
+                                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#8A9A5B]/20 text-[#8A9A5B] text-xs font-medium"
+                            >
+                                {v}
+                                <button
+                                    type="button"
+                                    tabIndex={-1}
+                                    onMouseDown={(e) => { e.stopPropagation(); removeItem(v); }}
+                                    className="hover:text-white transition-colors"
+                                >
+                                    <X size={12} />
+                                </button>
+                            </span>
+                        ))}
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            value={search}
+                            placeholder={selectedValues.length === 0 ? (placeholder || "Select sports") : ""}
+                            onFocus={openDropdown}
+                            onChange={(e) => {
+                                if (!open) openDropdown();
+                                setSearch(e.target.value);
+                                setHighlighted(-1);
+                            }}
+                            onKeyDown={handleKeyDown}
+                            className="flex-1 min-w-[80px] bg-transparent border-none outline-none text-sm text-white placeholder:text-white/30"
+                        />
+                    </div>
+                ) : (
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        value={open ? search : singleValue || ""}
+                        placeholder={placeholder || "Choose sport"}
+                        onFocus={openDropdown}
+                        onChange={(e) => {
+                            if (!open) openDropdown();
+                            setSearch(e.target.value);
+                            setHighlighted(-1);
+                        }}
+                        onKeyDown={handleKeyDown}
+                        readOnly={!open && !!singleValue}
+                        className="
+                            input input-bordered bg-white/5 w-full pr-10
+                            focus:outline-none focus:border-[#96a55a]
+                            cursor-pointer
+                        "
+                    />
+                )}
 
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
-                    {value && !open && (
+                    {hasSelection && !open && (
                         <button
                             type="button"
                             tabIndex={-1}
@@ -163,7 +234,7 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
             {open && !isPending && createPortal(
                 <div
                     ref={popoverRef}
-                    className="fixed z-[9999] rounded-xl border border-white/10 bg-base-100 shadow-xl overflow-hidden"
+                    className="fixed z-[9999] rounded-xl border border-white/10 bg-[#1e1e1e] shadow-xl overflow-hidden"
                     style={{top: coords.top, left: coords.left, width: coords.width}}
                 >
                     {filtered.length === 0 ? (
@@ -172,24 +243,34 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
                         </div>
                     ) : (
                         <ul ref={listRef} className="max-h-48 overflow-y-auto py-1">
-                            {filtered.map((option, i) => (
-                                <li
-                                    key={option}
-                                    onClick={() => selectOption(option)}
-                                    onMouseEnter={() => setHighlighted(i)}
-                                    className={`
-                                        px-4 py-2.5 text-sm cursor-pointer transition-colors
-                                        ${highlighted === i
-                                            ? "bg-white/10 text-white"
-                                            : value === option
-                                                ? "text-[#8A9A5B] font-medium"
-                                                : "text-white/70 hover:bg-white/5"
-                                        }
-                                    `}
-                                >
-                                    {option}
-                                </li>
-                            ))}
+                            {filtered.map((option, i) => {
+                                const isSelected = isMulti ? selectedValues.includes(option) : singleValue === option;
+                                return (
+                                    <li
+                                        key={option}
+                                        onClick={() => selectOption(option)}
+                                        onMouseEnter={() => setHighlighted(i)}
+                                        className={`
+                                            px-4 py-2.5 text-sm cursor-pointer transition-colors flex items-center gap-2
+                                            ${highlighted === i
+                                                ? "bg-white/10 text-white"
+                                                : isSelected
+                                                    ? "text-[#8A9A5B] font-medium"
+                                                    : "text-white/70 hover:bg-white/5"
+                                            }
+                                        `}
+                                    >
+                                        {isMulti && (
+                                            <span className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${
+                                                isSelected ? "bg-[#8A9A5B] border-[#8A9A5B]" : "border-white/20"
+                                            }`}>
+                                                {isSelected && <span className="text-white text-[10px] font-bold">✓</span>}
+                                            </span>
+                                        )}
+                                        {option}
+                                    </li>
+                                );
+                            })}
                         </ul>
                     )}
                 </div>,

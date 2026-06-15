@@ -10,12 +10,23 @@ import {getCurrentUserId} from "./user.ts";
 import type {ImageInput} from "../types/imageType.ts";
 import api, { handleApiError } from "./client.ts";
 
+export async function findFeed(page: number) {
+    try {
+        const { data } = await api.get('event/feed', { params: { page: page.toString() } });
+        return data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
 export async function findEvents(page:number, filters:EventFilters){
     const params = {
         page: page.toString(),
         ...(filters.title && { title: filters.title }),
         ...(filters.host && { host: filters.host }),
         ...(filters.sport && { sport: filters.sport }),
+        ...(filters.joined && { joined: filters.joined }),
+        ...(filters.saved && { saved: filters.saved }),
     };
     try {
         const { data } = await api.get('event/limited', { params });
@@ -45,6 +56,7 @@ export async function createEvent(data: EventRawData){
 }
 
 function formatEventData(data: EventRawData): CreateEventType {
+    const coverImage = data.images?.[0];
     if (data.type === "InPerson") {
         return {
             title: data.title,
@@ -53,7 +65,8 @@ function formatEventData(data: EventRawData): CreateEventType {
             startingDate: new Date(data.startingDate),
             location: data.location,
             isPrivate: data.isPrivate,
-            sportName: data.sport
+            sportName: data.sport,
+            coverImage,
         }
     }
 
@@ -64,7 +77,8 @@ function formatEventData(data: EventRawData): CreateEventType {
         startingDate: new Date(data.startingDate),
         endingDate: new Date(data.endingDate),
         isPrivate: data.isPrivate,
-        sportName: data.sport
+        sportName: data.sport,
+        coverImage,
     }
 }
 

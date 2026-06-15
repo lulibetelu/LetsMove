@@ -22,14 +22,15 @@ model User {
   email          String         @unique
   password       String
   biography      String?
+  homeLocationId Int?
+  homeLocation   Location?     @relation(fields: [homeLocationId], references: [id])
   preferences    Preference[]
-  userLocations  UserLocation[] @ignore
   posts          Post[]
   postsLiked     PostLiked[]
   postsDisliked  PostDisliked[]
   // prisma es una mierda, ejemplo 1:
-  friendsAsUser1 Friends[]      @relation("friend1") @ignore
-  friendsAsUser2 Friends[]      @relation("friend2") @ignore
+  friendsAsUser1 Friends[]      @relation("friend1")
+  friendsAsUser2 Friends[]      @relation("friend2")
 
   comments  Comment[]
   postScore PostScore[]
@@ -37,7 +38,7 @@ model User {
   events       Event[]
   eventSignUp  EventSignUp[]
   eventEntries EventEntry[]
-  savedEvents SavedEvent[]
+  savedEvents  SavedEvent[]
 
   groupMember GroupMember[]
 }
@@ -45,8 +46,8 @@ model User {
 model Sport {
   id          Int          @id @default(autoincrement())
   name        String       @unique
-  preferences Preference[] @ignore
-  postSport   PostSport[]  @ignore
+  preferences Preference[]
+  postSport   PostSport[]
 
   events Event[]
 }
@@ -63,21 +64,13 @@ model Preference {
   @@unique([userId, sportId])
 }
 
-model UserLocation {
-  id         Int      @id @default(autoincrement())
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     Int
-  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
-  locationId Int
-}
-
 model Location {
-  id            Int            @id @default(autoincrement())
-  location      String
-  latitude      Float
-  longitude     Float
-  userLocations UserLocation[] @ignore
+  id        Int     @id @default(autoincrement())
+  location  String  @unique
+  latitude  Float
+  longitude Float
 
+  users  User[]
   events Event[]
 }
 
@@ -217,6 +210,7 @@ model Event {
   title        String
   description  String
   chatId       Int? // falta la tabla chat
+  createdAt    DateTime      @default(now())
   startingDate DateTime
   locationId   Int?
   location     Location?     @relation(fields: [locationId], references: [id], onDelete: Cascade)
@@ -228,7 +222,7 @@ model Event {
   sportId      Int
   sport        Sport         @relation(fields: [sportId], references: [id], onDelete: Cascade)
   eventEntries EventEntry[]
-  savedEvents SavedEvent[]
+  savedEvents  SavedEvent[]
 }
 
 enum EventType {

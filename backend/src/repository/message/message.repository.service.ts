@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateMessageDto } from '../../message/dto/create-message.dto';
 
@@ -11,11 +11,22 @@ export class MessageRepositoryService {
     imageIds: number[],
     userId: number,
   ) {
+    const groupMember = await this.prismaService.groupMember.findUnique({
+      where: {
+        groupId_userId: {
+          groupId: createMessageDto.groupId,
+          userId: userId,
+        },
+      },
+    });
+
+    if (!groupMember) throw new NotFoundException('User is not a member of this group');
+
     const messageCreated = await this.prismaService.message.create({
       data: {
         groupId: createMessageDto.groupId,
         content: createMessageDto.content,
-        groupMemberId: userId,
+        groupMemberId: groupMember.id,
         date: createMessageDto.sentDate,
       },
       include: {

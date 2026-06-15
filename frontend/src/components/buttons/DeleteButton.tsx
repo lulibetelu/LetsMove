@@ -15,10 +15,10 @@ export default function DeleteButton(props:Props){
         bg-[#141414]
         hover:bg-[#f51414]
 
-        text-base-content/70
+        text-white/70
         hover:text-white
 
-        border border-base-content/10
+        border border-white/10
         hover:border-[#f51414]
 
         text-sm font-semibold

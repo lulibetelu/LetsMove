@@ -19,7 +19,7 @@ export class EventService {
   async create(hostId: number, createEventDto: CreateEventDto) {
     let image: { id: number; description?: string } | undefined;
 
-    if (!createEventDto.coverImage?.description) {
+    if (createEventDto.coverImage && !createEventDto.coverImage.description) {
       throw new BadRequestException('Cada imagen debe tener una descripción');
     }
 
@@ -78,6 +78,10 @@ export class EventService {
 
   async findLimited(page: number, filters: FilterEventDto) {
     return this.eventRepositoryService.findLimited(page, filters);
+  }
+
+  async getFeed(userId: number, page: number) {
+    return this.eventRepositoryService.findFeed(userId, page);
   }
 
   async remove(id: number, removerId: number) {

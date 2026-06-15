@@ -54,17 +54,31 @@ export class EventController {
     @Query('title') title: string,
     @Query('host') host: string,
     @Query('sport') sport: string,
+    @Query('saved', new ParseIntPipe({ optional: true })) saved: number,
+    @Query('joined', new ParseIntPipe({ optional: true })) joined: number,
   ) {
     const filters: FilterEventDto = {
       title: title,
       host: host,
       sport: sport,
+      saved: saved,
+      joined: joined,
     };
     const promise = await this.eventService.findLimited(page, filters);
 
     //No quiero que no me tire un arreglo vacio
     if (!promise) throw new NotFoundException();
     return promise;
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('feed')
+  async getFeed(
+    @Req() req: Request,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number = 1,
+  ) {
+    const userId = req.user.sub;
+    return this.eventService.getFeed(userId, page);
   }
 
   @UseGuards(AuthGuard)
