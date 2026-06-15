@@ -33,9 +33,9 @@ export default function GroupList({
                     type="button"
                     aria-label="Create group"
                     onClick={onCreateGroup}
-                    className="w-8 h-8 rounded-full bg-[#96a55a] hover:bg-[#a8b96a] text-white flex items-center justify-center transition-all duration-300 ease-out hover:scale-110 hover:rotate-90 active:scale-95 cursor-pointer"
+                    className="w-9 h-9 rounded-full bg-[#96a55a] hover:bg-[#a8b96a] text-white flex items-center justify-center transition-all duration-300 ease-out hover:scale-110 hover:rotate-90 active:scale-95 cursor-pointer"
                 >
-                    <Plus size={16} />
+                    <Plus size={18} />
                 </button>
             </div>
 

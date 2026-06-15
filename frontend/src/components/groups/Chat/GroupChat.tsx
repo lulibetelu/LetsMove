@@ -66,7 +66,7 @@ export function GroupChat({groupId, onShowDetail}: Props) {
             <button
                 type="button"
                 onClick={onShowDetail}
-                className="flex items-center gap-3 px-5 py-3 bg-[#1e1e1e] border-b border-white/5 hover:bg-white/[0.04] transition-colors shrink-0 text-left"
+                className="flex items-center gap-3 px-5 py-4 bg-[#1e1e1e] border-b border-white/5 hover:bg-white/[0.04] transition-colors shrink-0 text-left"
             >
                 {isLoading ? (
                     <div className="w-9 h-9 rounded-full bg-white/5 shrink-0 animate-pulse" />
