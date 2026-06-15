@@ -2,6 +2,8 @@ import {useEffect, useRef} from "react";
 import type {Message} from "../../../types/messageType.ts";
 import {getCurrentUserId} from "../../../api/user.ts";
 
+const VITE_API_URL = import.meta.env.VITE_API_URL;
+
 interface Props {
     messages: Message[] | undefined;
 }
@@ -47,13 +49,17 @@ export default function ChatMessages({messages}: Props) {
                                     ? "bg-[#8A9A5B]/20 border border-[#8A9A5B]/30"
                                     : "bg-[#1e1e1e] border border-white/5"
                             }`}>
-                                {message.images?.url && (
-                                    <img
-                                        src={message.images.url}
-                                        alt={message.images.description ?? "Message image"}
-                                        className="rounded-md mb-2 max-h-60 w-full object-cover"
-                                    />
-                                )}
+                                {message.images?.map((img) => {
+                                    const src = img.image?.url || `${VITE_API_URL}image/${img.imageId}`;
+                                    return (
+                                        <img
+                                            key={img.imageId}
+                                            src={src}
+                                            alt="Message image"
+                                            className="rounded-md mb-2 max-h-60 w-full object-cover"
+                                        />
+                                    );
+                                })}
                                 {message.content && (
                                     <p className="text-white/90 text-sm whitespace-pre-wrap break-words">{message.content}</p>
                                 )}

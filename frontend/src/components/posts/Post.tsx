@@ -102,4 +102,5 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
             </div>
         </article>
 
-    )}
+    )
+}

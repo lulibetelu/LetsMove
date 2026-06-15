@@ -20,7 +20,8 @@ export class MessageRepositoryService {
       },
     });
 
-    if (!groupMember) throw new NotFoundException('User is not a member of this group');
+    if (!groupMember)
+      throw new NotFoundException('User is not a member of this group');
 
     const messageCreated = await this.prismaService.message.create({
       data: {
@@ -28,6 +29,13 @@ export class MessageRepositoryService {
         content: createMessageDto.content,
         groupMemberId: groupMember.id,
         date: createMessageDto.sentDate,
+        ...(imageIds.length > 0 && {
+          images: {
+            create: imageIds.map((imageId) => ({
+              imageId,
+            })),
+          },
+        }),
       },
       include: {
         groupMember: {
@@ -37,17 +45,15 @@ export class MessageRepositoryService {
             },
           },
         },
+        images: {
+          include: {
+            image: {
+              select: { url: true },
+            },
+          },
+        },
       },
     });
-
-    if (imageIds.length > 0) {
-      await this.prismaService.imageMessage.createMany({
-        data: imageIds.map((imageId) => ({
-          messageId: messageCreated.id,
-          imageId,
-        })),
-      });
-    }
     return messageCreated;
   }
 
@@ -61,6 +67,13 @@ export class MessageRepositoryService {
           include: {
             user: {
               select: { username: true },
+            },
+          },
+        },
+        images: {
+          include: {
+            image: {
+              select: { url: true },
             },
           },
         },

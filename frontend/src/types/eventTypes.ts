@@ -1,5 +1,5 @@
 import type {User} from "./userTypes.ts";
-import type {LocationType} from "./fileTypes.ts";
+import type {Location} from "./locationTypes.ts";
 import type {ImageEvent, ImageInput, ImageRelation} from "./imageType.ts";
 
 
@@ -14,7 +14,7 @@ export interface EventType{
     endingDate?: Date,
     eventType: string,
     host: User,
-    location?: LocationType,
+    location?: Location,
     imageEvents?: ImageEvent[],
     isPrivate: boolean,
     distanceKm?: number,
