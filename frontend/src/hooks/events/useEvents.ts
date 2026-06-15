@@ -25,6 +25,7 @@ export function useEvents() {
         hasNextPage,
         isFetchingNextPage,
         isError,
+        isLoading
     } = useInfiniteQuery({
         queryKey: hasAnyFilter
             ? ["events", filters.host, filters.title, filters.sport]
@@ -57,5 +58,5 @@ export function useEvents() {
         return () => observer.disconnect();
     }, [hasNextPage, fetchNextPage]);
 
-    return {events, observerRef, error: isError, isFetchingNextPage, refetchData, filters};
+    return {events, observerRef, error: isError, isFetchingNextPage, refetchData, filters, isLoading};
 }
