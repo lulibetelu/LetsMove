@@ -79,11 +79,14 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
                     className="flex cursor-pointer items-center gap-1 transition-all duration-300 rounded-full p-0.5 text-white/70 hover:text-[#8A9A5B]"
                     aria-label="Comment"
                     onClick={() => {
-                        if (isForPostPage && onCommentClick) {
-                            onCommentClick();
-                        } else {
-                            setCreateComment(true);
-                        }
+                        navigate(`/post/${id}`, {
+                            state: {data}
+                        });
+                        // if (isForPostPage && onCommentClick) {
+                        //     onCommentClick();
+                        // } else {
+                        //     setCreateComment(true);
+                        // }
                     }}
                 >
                     <MessageCircle size={16} strokeWidth={1.5} className="transition-transform active:scale-125"/>
