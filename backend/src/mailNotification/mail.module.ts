@@ -5,6 +5,7 @@ import { join } from 'path';
 import { MailService } from './mail.service';
 import { MailController } from './mail.controller';
 import 'dotenv/config';
+import { EventModule } from '../event/event.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import 'dotenv/config';
         adapter: new HandlebarsAdapter(),
       },
     }),
+    EventModule,
   ],
   controllers: [MailController],
   providers: [MailService],

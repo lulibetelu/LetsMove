@@ -17,17 +17,17 @@ import { EventModule } from './event/event.module';
 import { EventSignUpModule } from './event-sign-up/event-sign-up.module';
 import { EventEntryModule } from './eventEntry/event-entry.module';
 import { ImageModule } from './images/image.module';
-import { ChatGateway } from './chat/chat.gateway';
 import { GroupModule } from './group/group.module';
 import { MessageModule } from './message/message.module';
 import { ChatModule } from './chat/chat.module';
 import { SavedEventModule } from './saved-event/saved-event.module';
 import { LocationModule } from './location/location.module';
-import { MailController } from './mailNotification/mail.controller';
 import { MailModule } from './mailNotification/mail.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     RegisterModule,
     ConfigModule.forRoot({
       isGlobal: true,
