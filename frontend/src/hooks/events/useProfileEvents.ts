@@ -12,6 +12,7 @@ export function useProfileEvents(profileUserId: number){
         fetchNextPage,
         hasNextPage,
         isError,
+        isLoading,
     }= useInfiniteQuery({
         queryKey: ['profileEvents', profileUserId],
         queryFn: (async ({pageParam}) => {
@@ -42,5 +43,5 @@ export function useProfileEvents(profileUserId: number){
 
     const error: boolean = isError
 
-    return { events, observerRef, error}
+    return { events, observerRef, error, isLoading}
 }

@@ -18,6 +18,7 @@ import EventFeed from "./pages/EventFeed.tsx";
 import EventPage from "./pages/EventPage.tsx";
 import GroupPage from "./pages/GroupPage.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import CalendarPage from "./pages/CalendatPage.tsx";
 
 //define a partir de donde le pegué en la URL qué componente va a renderizar react
 const router = createBrowserRouter([
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
                 path: "/group",
                 element: <GroupPage/>
             },
+            {
+                path: "/calendar",
+                element: <CalendarPage/>
+            }
         ]
     },
     {
