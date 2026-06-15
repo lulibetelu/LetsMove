@@ -11,7 +11,7 @@ export class MailService {
     private readonly mailerService: MailerService,
     private readonly eventService: EventService,
   ) {}
-  @Cron(CronExpression.EVERY_5_MINUTES)
+  @Cron(CronExpression.EVERY_DAY_AT_5PM)
   async sendEventReminders() {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
