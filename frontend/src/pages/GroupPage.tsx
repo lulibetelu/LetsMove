@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import Sidebar from "../components/Sidebar.tsx";
 import GroupList from "../components/groups/GroupList.tsx";
-import GroupDetail from "../components/groups/GroupDetail.tsx";
 import NewGroup from "../components/groups/NewGroup.tsx";
 import { useGroups } from "../hooks/groups/useGroups.ts";
 import {GroupChat} from "../components/groups/Chat/GroupChat.tsx";
