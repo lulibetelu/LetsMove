@@ -17,6 +17,14 @@
     "prisma:seed": "npm run prisma:seed -w backend"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^2.3.6",
+    "@nestjs/schedule": "^6.1.3",
+    "handlebars": "^4.7.9",
+    "nodemailer": "^9.0.0",
     "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/cron": "^2.0.1",
+    "@types/nodemailer": "^8.0.1"
   }
 }

@@ -114,4 +114,8 @@ export class EventService {
   async getGalleryImages(eventId: number) {
     return this.eventRepositoryService.getGalleryImages(eventId);
   }
+
+  async getEventsBetweenDates(start: Date, end: Date) {
+    return this.eventRepositoryService.getEventsBetweenDates(start, end);
+  }
 }

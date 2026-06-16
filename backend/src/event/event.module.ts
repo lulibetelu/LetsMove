@@ -8,5 +8,6 @@ import { ImageModule } from '../images/image.module';
   imports: [EventRepositoryModule, ImageModule],
   controllers: [EventController],
   providers: [EventService],
+  exports: [EventService],
 })
 export class EventModule {}

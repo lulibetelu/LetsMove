@@ -606,4 +606,22 @@ export class EventRepositoryService {
       orderBy: { id: 'desc' },
     });
   }
+
+  async getEventsBetweenDates(start: Date, end: Date) {
+    return this.prismaService.event.findMany({
+      where: {
+        startingDate: { gte: start, lte: end },
+      },
+      include: {
+        eventSignUp: {
+          include: {
+            user: true,
+          },
+        },
+        location: {
+          select: { location: true },
+        },
+      },
+    });
+  }
 }
