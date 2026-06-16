@@ -59,7 +59,6 @@ export default function EditGroup({groupId, group, onClose, onUpdated, onDeleted
     const filteredFriends = friends.filter(
         (f) =>
             !members.some((m) => m.userId === f.id) &&
-            !selectedFriendIds.includes(f.id) &&
             f.username.toLowerCase().includes(friendSearch.toLowerCase()),
     );
 
@@ -202,7 +201,7 @@ export default function EditGroup({groupId, group, onClose, onUpdated, onDeleted
                         <label className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-2 block">
                             Group photo
                         </label>
-                        <ImagePicker images={images} onChange={setImages}/>
+                        <ImagePicker images={images} onChange={setImages} max={1}/>
                     </div>
 
                     <div>

@@ -1,16 +1,22 @@
 import { useState } from "react";
-import { Plus } from "lucide-react";
 import Sidebar from "../components/Sidebar.tsx";
 import GroupList from "../components/groups/GroupList.tsx";
 import NewGroup from "../components/groups/NewGroup.tsx";
 import { useGroups } from "../hooks/groups/useGroups.ts";
 import {GroupChat} from "../components/groups/Chat/GroupChat.tsx";
+import GroupDetail from "../components/groups/GroupDetail.tsx";
 
 export default function GroupPage() {
     const {data: groups, isLoading, isError} = useGroups();
     const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
+    const [viewMode, setViewMode] = useState<'chat' | 'detail'>('chat');
     const [searchQuery, setSearchQuery] = useState("");
     const [showCreateForm, setShowCreateForm] = useState(false);
+
+    const handleSelectGroup = (id: number | null) => {
+        setSelectedGroupId(id);
+        setViewMode('chat');
+    };
 
     const filteredGroups = (groups ?? []).filter((g: { name: string }) =>
         g.name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -36,7 +42,8 @@ export default function GroupPage() {
                     <GroupList
                         groups={filteredGroups}
                         selectedGroupId={selectedGroupId}
-                        onSelectGroup={setSelectedGroupId}
+                        onSelectGroup={handleSelectGroup}
+                        onCreateGroup={() => setShowCreateForm(true)}
                         searchQuery={searchQuery}
                         onSearchChange={setSearchQuery}
                         isLoading={isLoading}
@@ -45,7 +52,11 @@ export default function GroupPage() {
 
                 <div className="flex-1 flex flex-col">
                     {selectedGroupId ? (
-                        <GroupChat groupId={selectedGroupId}/>
+                        viewMode === 'chat' ? (
+                            <GroupChat groupId={selectedGroupId} onShowDetail={() => setViewMode('detail')} onGroupDeleted={() => setSelectedGroupId(null)} />
+                        ) : (
+                            <GroupDetail groupId={selectedGroupId} onBackToChat={() => setViewMode('chat')} onGroupDeleted={() => setSelectedGroupId(null)} />
+                        )
                     ) : (
                         <div className="flex-1 flex items-center justify-center">
                             <div className="text-center">
@@ -72,29 +83,6 @@ export default function GroupPage() {
                     )}
                 </div>
             </div>
-            <button
-                type="button"
-                aria-label="Create group"
-                onClick={() => setShowCreateForm(true)}
-                className="
-                    fixed bottom-6 right-6
-                    w-10 h-10
-                    rounded-full
-                    bg-[#96a55a]
-                    hover:bg-[#a8b96a]
-                    text-white
-                    flex items-center justify-center
-                    shadow-lg
-                    hover:shadow-2xl
-                    transition-all duration-300 ease-out
-                    hover:scale-110
-                    hover:rotate-90
-                    active:scale-95
-                    cursor-pointer"
-            >
-                <Plus size={18} />
-            </button>
-
             {showCreateForm && (
                 <NewGroup
                     onClose={() => setShowCreateForm(false)}

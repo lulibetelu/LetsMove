@@ -1,5 +1,5 @@
 import {CircleUserRound} from 'lucide-react';
-import type {NewPostCredentials, PostCreationResponse} from "../../types/postTypes.ts";
+import type {NewPostCredentials} from "../../types/postTypes.ts";
 import {create} from "../../api/post.ts";
 import {useState} from "react";
 import {useUsername} from "../../hooks/UseUsername.ts";
@@ -64,7 +64,7 @@ export default function NewPost({ onClose }: { onClose: (wasCreated:boolean) => 
                         error={sportError}
                         isPending={isPending}
                         value={selectedSports}
-                        handleChange={(v) => setSelectedSports(v as string[])}
+                        handleChange={setSelectedSports}
                         multiple
                     />
 

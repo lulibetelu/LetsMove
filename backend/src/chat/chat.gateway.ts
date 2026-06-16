@@ -77,7 +77,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     const userId: number = client.data.user.sub;
 
-    if (messageData.content.length === 0) return;
+    if (messageData.content.length === 0 && !messageData.images?.length) return;
 
     const createMessageDto: CreateMessageDto = {
       groupId: messageData.groupId,

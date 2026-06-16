@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Shield, Users } from "lucide-react";
+import { ArrowLeft, Shield, Users } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import useGroup from "../../hooks/groups/useGroup.ts";
 import { getUsernameFromId, getCurrentUserId } from "../../api/user.ts";
@@ -10,13 +10,14 @@ import EditGroup from "./EditGroup.tsx";
 
 interface GroupDetailProps {
     groupId: number;
+    onBackToChat?: () => void;
     onGroupDeleted?: () => void;
     onGroupUpdated?: () => void;
 }
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
-export default function GroupDetail({ groupId, onGroupDeleted, onGroupUpdated }: GroupDetailProps) {
+export default function GroupDetail({ groupId, onBackToChat, onGroupDeleted, onGroupUpdated }: GroupDetailProps) {
     const { data: group, isLoading, isError } = useGroup(groupId);
     const [memberNames, setMemberNames] = useState<Record<number, string>>({});
     const [showEditModal, setShowEditModal] = useState(false);
@@ -76,6 +77,16 @@ export default function GroupDetail({ groupId, onGroupDeleted, onGroupUpdated }:
                     </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#141414] to-transparent" />
+                {onBackToChat && (
+                    <button
+                        type="button"
+                        onClick={onBackToChat}
+                        className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/40 text-white/70 hover:text-white hover:bg-black/60 transition-all text-sm"
+                    >
+                        <ArrowLeft size={16} />
+                        Back to chat
+                    </button>
+                )}
                 <div className="absolute bottom-4 left-6">
                     <h1 className="text-2xl font-bold text-white">{group.name}</h1>
                     {isCurrentUserAdmin && (

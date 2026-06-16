@@ -30,11 +30,19 @@ function calculateStreak(entries: EventEntry[], userId: number | null): number {
         .map(e => new Date(e.createdAt).toDateString());
 
     const uniqueDays = [...new Set(userEntries)];
-
-    let streak = 0;
     const today = new Date();
 
-    for (let i = 0; i < uniqueDays.length; i++) {
+    const hasToday = uniqueDays.includes(today.toDateString());
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const hasYesterday = uniqueDays.includes(yesterday.toDateString());
+
+    if (!hasToday && !hasYesterday) return 0;
+
+    let streak = 0;
+    const startFrom = hasToday ? 0 : 1;
+
+    for (let i = startFrom; ; i++) {
         const expected = new Date(today);
         expected.setDate(today.getDate() - i);
         if (uniqueDays.includes(expected.toDateString())) {
@@ -55,12 +63,29 @@ function getLast7Days(entries: EventEntry[], userId: number | null): boolean[] {
         .map(e => new Date(e.createdAt).toDateString());
 
     const uniqueDays = new Set(userEntryDays);
+    const result = Array(7).fill(false);
+    const today = new Date();
 
-    return Array.from({length: 7}, (_, i) => {
-        const day = new Date();
-        day.setDate(day.getDate() - (6 - i));
-        return uniqueDays.has(day.toDateString());
-    });
+    const hasToday = uniqueDays.has(today.toDateString());
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const hasYesterday = uniqueDays.has(yesterday.toDateString());
+
+    if (!hasToday && !hasYesterday) return result;
+
+    const startFrom = hasToday ? 0 : 1;
+
+    for (let i = startFrom; i < 7; i++) {
+        const day = new Date(today);
+        day.setDate(today.getDate() - i);
+        if (uniqueDays.has(day.toDateString())) {
+            result[day.getDay()] = true;
+        } else {
+            break;
+        }
+    }
+
+    return result;
 }
 
 export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Props) {
@@ -105,11 +130,7 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
     const streak = calculateStreak(entries, currentUserId);
     const last7Days = getLast7Days(entries, currentUserId);
 
-    const today = new Date().getDay();
-    const orderedLabels = Array.from({length: 7}, (_, i) => {
-        const dayIndex = (today - 6 + i + 7) % 7;
-        return ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"][dayIndex];
-    });
+    const orderedLabels = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
     const coverImage = event.imageEvents?.find(img => img.description === "Cover");
 
