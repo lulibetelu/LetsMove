@@ -7,7 +7,7 @@ import type {EventFilters, FormFilters} from "../types/eventTypes.ts";
 
 interface Props {
     onClose: () => void,
-    onSubmit    : (hostAndSport: {host:string, sport:string}) => void,
+    onSubmit    : (formFilters: FormFilters) => void,
     filters: EventFilters
 }
 
