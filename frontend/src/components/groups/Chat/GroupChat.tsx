@@ -11,10 +11,11 @@ const VITE_API_URL = import.meta.env.VITE_API_URL;
 interface Props {
     groupId: number;
     onShowDetail?: () => void;
+    onGroupDeleted?: () => void;
 }
 
-export function GroupChat({groupId, onShowDetail}: Props) {
-    const {data: group, isLoading} = useGroup(groupId);
+export function GroupChat({groupId, onShowDetail, onGroupDeleted}: Props) {
+    const {data: group, isLoading, isError} = useGroup(groupId);
     const {messages, handleUpdate} = useMessages(groupId);
     const [message, setMessage] = useState('');
     const [imageInputs, setImageInputs] = useState<ImageInput[]>([]);
@@ -50,6 +51,12 @@ export function GroupChat({groupId, onShowDetail}: Props) {
     const handleImageMenuToggle = () => {
         setShowImageMenu(prev => !prev);
     };
+
+    useEffect(() => {
+        if (!isLoading && (isError || !group)) {
+            onGroupDeleted?.();
+        }
+    }, [isLoading, isError, group, onGroupDeleted]);
 
     useEffect(() => {
         function onConnect() {

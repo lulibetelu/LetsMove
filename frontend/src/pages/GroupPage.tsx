@@ -53,9 +53,9 @@ export default function GroupPage() {
                 <div className="flex-1 flex flex-col">
                     {selectedGroupId ? (
                         viewMode === 'chat' ? (
-                            <GroupChat groupId={selectedGroupId} onShowDetail={() => setViewMode('detail')} />
+                            <GroupChat groupId={selectedGroupId} onShowDetail={() => setViewMode('detail')} onGroupDeleted={() => setSelectedGroupId(null)} />
                         ) : (
-                            <GroupDetail groupId={selectedGroupId} onBackToChat={() => setViewMode('chat')} />
+                            <GroupDetail groupId={selectedGroupId} onBackToChat={() => setViewMode('chat')} onGroupDeleted={() => setSelectedGroupId(null)} />
                         )
                     ) : (
                         <div className="flex-1 flex items-center justify-center">
