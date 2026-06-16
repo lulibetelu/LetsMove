@@ -59,7 +59,6 @@ export default function EditGroup({groupId, group, onClose, onUpdated, onDeleted
     const filteredFriends = friends.filter(
         (f) =>
             !members.some((m) => m.userId === f.id) &&
-            !selectedFriendIds.includes(f.id) &&
             f.username.toLowerCase().includes(friendSearch.toLowerCase()),
     );
 
