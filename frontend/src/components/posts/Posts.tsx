@@ -11,7 +11,7 @@ interface PostsProps {
     isLoading: boolean
 }
 
-export default function Posts({userId, posts, deletePost, observerRef, isLoading}: PostsProps) {
+export default function Posts({userId, posts, deletePost, observerRef}: PostsProps) {
     const currentUserId = getCurrentUserId();
     const canDelete = currentUserId === userId;
 
@@ -36,7 +36,7 @@ export default function Posts({userId, posts, deletePost, observerRef, isLoading
                 </div>
             ))}
                 <div ref={observerRef} className="h-20 w-full flex items-center justify-center">
-                    {isLoading && <span className="loading loading-spinner loading-md text-[#8A9A5B]"></span>}
+                    {/*{isLoading&& <span className="loading loading-spinner loading-md text-[#8A9A5B]"></span>}*/}
                 </div>
         </div>
     )
