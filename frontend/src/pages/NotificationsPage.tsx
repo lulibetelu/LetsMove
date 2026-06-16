@@ -84,10 +84,10 @@ export default function NotificationsPage(){
                 <div className="w-full max-w-2xl min-h-screen pb-24">
 
                     <header className="sticky px-6 pt-10 pb-6">
-                        <h1 className="text-2xl font-bold text-white/90">Notificaciones</h1>
+                        <h1 className="text-2xl font-bold text-white/90">Notifications</h1>
                         {totalNotifications > 0 && (
                             <p className="text-sm text-white/40 mt-1">
-                                {totalNotifications} {totalNotifications > 1 ? "pendientes" : "pendiente"}
+                                {totalNotifications} pending
                             </p>
                         )}
                     </header>
@@ -99,7 +99,7 @@ export default function NotificationsPage(){
                     ) : totalNotifications === 0 ? (
                             <div className="flex flex-col items-center justify-center py-24 gap-3 text-white/30">
                                 <Bell size={40} strokeWidth={1} />
-                                <p className="text-sm">No tenés notificaciones por ahora</p>
+                                <p className="text-sm">You have no notifications yet</p>
                             </div>
                         ) : (
                             <div className="flex flex-col">
