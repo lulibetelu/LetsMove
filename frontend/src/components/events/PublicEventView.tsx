@@ -79,12 +79,12 @@ export default function PublicEventView({event, signUp, onJoined}: Props) {
                 )}
                 <div className="absolute top-4 left-4 flex items-center gap-2">
                     <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm text-white/80 border border-white/10">
-                        {event.eventType === 'InPerson' ? 'Presencial' : 'Online'}
+                        {event.eventType === 'InPerson' ? 'In Person' : 'Online'}
                     </span>
                     {event.isPrivate && (
                         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm border border-white/10">
                             <Lock size={11} className="text-white/70"/>
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/70">Privado</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/70">Private</span>
                         </div>
                     )}
                 </div>
@@ -93,29 +93,29 @@ export default function PublicEventView({event, signUp, onJoined}: Props) {
             {/* Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                {/* Columna izquierda */}
+                {/* Left column */}
                 <div className="lg:col-span-2 flex flex-col gap-6">
 
-                    {/* Título y host */}
+                    {/* Title and host */}
                     <div>
                         <h1 className="text-3xl font-bold text-white/90 leading-tight mb-3">{event.title}</h1>
                         <div className="flex items-center gap-2">
                             <UserCircle size={18} strokeWidth={1.5} className="text-white/30"/>
-                            <span className="text-sm text-white/40">Organizado por</span>
+                            <span className="text-sm text-white/40">Hosted by</span>
                             <ProfileLink username={event.host.username} userId={event.host.id}/>
                         </div>
                     </div>
 
-                    {/* Descripción */}
+                    {/* Description */}
                     <div className="flex flex-col gap-2">
-                        <h2 className="text-xs font-bold uppercase tracking-widest text-white/30">Descripción</h2>
+                        <h2 className="text-xs font-bold uppercase tracking-widest text-white/30">Description</h2>
                         <p className="text-sm text-white/60 leading-relaxed">{event.description}</p>
                     </div>
 
-                    {/* Participantes */}
+                    {/* Participants */}
                     <div className="flex flex-col gap-3">
                         <div className="flex items-center gap-2">
-                            <h2 className="text-xs font-bold uppercase tracking-widest text-white/30">Participantes</h2>
+                            <h2 className="text-xs font-bold uppercase tracking-widest text-white/30">Participants</h2>
                             {acceptedParticipants.length > 0 && (
                                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#8A9A5B]/10 text-[#8A9A5B]">
                                     {acceptedParticipants.length}
@@ -126,7 +126,7 @@ export default function PublicEventView({event, signUp, onJoined}: Props) {
                         {acceptedParticipants.length === 0 ? (
                             <div className="flex items-center gap-2 text-white/20 py-4">
                                 <Users size={18} strokeWidth={1}/>
-                                <p className="text-sm">Todavía no hay participantes</p>
+                                <p className="text-sm">No participants yet</p>
                             </div>
                         ) : (
                             <div className="flex flex-wrap gap-3">
@@ -141,29 +141,29 @@ export default function PublicEventView({event, signUp, onJoined}: Props) {
                     </div>
                 </div>
 
-                {/* Sidebar derecho */}
+                {/* Right sidebar */}
                 <div className="flex flex-col gap-4">
                     <div className="bg-[#1e1e1e] rounded-xl border border-white/5 p-5 flex flex-col gap-4">
 
-                        {/* Fechas */}
+                        {/* Dates */}
                         <div className="flex flex-col gap-3">
                             <div className="flex flex-col gap-0.5">
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#8A9A5B]">
-                                    {event.endingDate ? "Desde" : "Fecha"}
+                                    {event.endingDate ? "From" : "Date"}
                                 </span>
                                 <p className="text-sm text-white/70">{formatDate(event.startingDate)}</p>
                                 <p className="text-xs text-white/40">{formatTime(event.startingDate)}</p>
                             </div>
                             {event.endingDate && (
                                 <div className="flex flex-col gap-0.5">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#8A9A5B]">Hasta</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#8A9A5B]">To</span>
                                     <p className="text-sm text-white/70">{formatDate(event.endingDate)}</p>
                                     <p className="text-xs text-white/40">{formatTime(event.endingDate)}</p>
                                 </div>
                             )}
                         </div>
 
-                        {/* Ubicación */}
+                        {/* Location */}
                         {event.location && (
                             <div className="flex items-start gap-2 pt-3 border-t border-white/5">
                                 <MapPin size={14} className="text-[#8A9A5B] shrink-0 mt-0.5"/>
@@ -206,7 +206,7 @@ export default function PublicEventView({event, signUp, onJoined}: Props) {
                                     className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-all active:scale-[0.97] disabled:opacity-50 disabled:pointer-events-none"
                                     style={{background: "linear-gradient(135deg, #8A9A5B, #6b7a46)"}}
                                 >
-                                    {loading ? "Loading..." : "Unirse"}
+                                    {loading ? "Loading..." : "Join Event"}
                                 </button>
                             )}
                             {error && <PopUpError message={error} />}

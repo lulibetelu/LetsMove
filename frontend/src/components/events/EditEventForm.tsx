@@ -380,7 +380,7 @@ export default function EditEventForm({event, onClose}:Props){
             </form>
 
             <form method="dialog" className="modal-backdrop">
-                <button onClick={onClose}>Cerrar</button>
+                <button onClick={onClose}>Close</button>
             </form>
         </dialog>
     )

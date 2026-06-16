@@ -108,7 +108,7 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
     const today = new Date().getDay();
     const orderedLabels = Array.from({length: 7}, (_, i) => {
         const dayIndex = (today - 6 + i + 7) % 7;
-        return ["D", "L", "M", "X", "J", "V", "S"][dayIndex];
+        return ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"][dayIndex];
     });
 
     const coverImage = event.imageEvents?.find(img => img.description === "Cover");
@@ -152,23 +152,23 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                 )}
                 <div className="absolute top-4 left-4 flex items-center gap-2">
                     <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm text-white/80 border border-white/10">
-                        {event.eventType === 'InPerson' ? 'Presencial' : 'Online'}
+                        {event.eventType === 'InPerson' ? 'In Person' : 'Online'}
                     </span>
                     {event.isPrivate && (
                         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm border border-white/10">
                             <Lock size={11} className="text-white/70"/>
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/70">Privado</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-white/70">Private</span>
                         </div>
                     )}
                 </div>
             </div>
 
-            {/* Título y host */}
+            {/* Title and host */}
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-white/90 leading-tight mb-2">{event.title}</h1>
                 <div className="flex items-center gap-2">
                     <UserCircle size={16} strokeWidth={1.5} className="text-white/30"/>
-                    <span className="text-sm text-white/40">Organizado por</span>
+                    <span className="text-sm text-white/40">Hosted by</span>
                     <ProfileLink username={event.host.username} userId={event.host.id}/>
                 </div>
             </div>
@@ -180,14 +180,14 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
 
                     <div className="flex items-center justify-between">
                         <h2 className="text-base font-semibold text-white/50 uppercase tracking-widest">
-                            Progreso
+                            Progress
                         </h2>
                         <button
                             onClick={() => setShowForm(!showForm)}
                             className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold text-white transition-all active:scale-95"
                             style={{background: "linear-gradient(135deg, #8A9A5B, #6b7a46)"}}
                         >
-                            <Plus size={14}/> Subir progreso
+                            <Plus size={14}/> Upload progress
                         </button>
                     </div>
 
@@ -197,7 +197,7 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                             <textarea
                                 value={newEntry}
                                 onChange={(e) => setNewEntry(e.target.value)}
-                                placeholder="Contá tu progreso de hoy..."
+                                placeholder="Share your progress today..."
                                 rows={3}
                                 className="w-full bg-[#141414] border border-white/10 rounded-xl px-4 py-3 text-sm text-white/80 placeholder:text-white/25 focus:outline-none focus:border-[#8A9A5B]/50 resize-none transition-colors"
                             />
@@ -208,7 +208,7 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                                         onClick={() => {setShowForm(false); setNewEntry(""); setImages([])}}
                                         className="px-4 py-1.5 rounded-full text-xs font-semibold border border-white/10 text-white/40 hover:text-white/60 transition-all"
                                     >
-                                        Cancelar
+                                        Cancel
                                     </button>
                                     <button
                                         onClick={handleSubmitEntry}
@@ -216,7 +216,7 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                                         className="px-4 py-1.5 rounded-full text-xs font-semibold text-white transition-all active:scale-95 disabled:opacity-40"
                                         style={{background: "linear-gradient(135deg, #8A9A5B, #6b7a46)"}}
                                     >
-                                        {submitting ? "Publicando..." : "Publicar"}
+                                        {submitting ? "Posting..." : "Post"}
                                     </button>
                                 </div>
                             </div>
@@ -224,13 +224,13 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                     )}
 
                     {isError && (
-                        <p className="text-sm text-red-400/70 text-center py-4">Error al cargar las entradas</p>
+                        <p className="text-sm text-red-400/70 text-center py-4">Error loading entries</p>
                     )}
 
                     {entries.length === 0 && !isError && (
                         <div className="flex flex-col items-center justify-center py-16 gap-3 text-white/20">
                             <CalendarDays size={40} strokeWidth={1}/>
-                            <p className="text-sm">Todavía no hay entradas de progreso</p>
+                            <p className="text-sm">No progress entries yet</p>
                         </div>
                     )}
 
@@ -288,12 +288,12 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                     <div ref={observerRef} className="h-10"/>
                 </div>
 
-                {/* Sidebar derecho */}
+                {/* Right sidebar */}
                 <div className="flex flex-col gap-5">
 
                     {/* Streak */}
                     <div className="bg-[#1e1e1e] rounded-xl border border-white/5 p-5 flex flex-col gap-4">
-                        <h3 className="text-xs font-bold uppercase tracking-widest text-white/30">Tu racha</h3>
+                        <h3 className="text-xs font-bold uppercase tracking-widest text-white/30">Your streak</h3>
                         <div className="flex items-center gap-3">
                             <Flame
                                 size={36}
@@ -303,7 +303,7 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                             <div>
                                 <p className="text-3xl font-bold text-white/90">{streak}</p>
                                 <p className="text-xs text-white/30">
-                                    {streak === 1 ? "día consecutivo" : "días consecutivos"}
+                                    {streak === 1 ? "consecutive day" : "consecutive days"}
                                 </p>
                             </div>
                         </div>
@@ -327,20 +327,20 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                         </div>
                     </div>
 
-                    {/* Info del evento */}
+                    {/* Event info */}
                     <div className="bg-[#1e1e1e] rounded-xl border border-white/5 p-5 flex flex-col gap-3">
-                        <h3 className="text-xs font-bold uppercase tracking-widest text-white/30">Evento</h3>
+                        <h3 className="text-xs font-bold uppercase tracking-widest text-white/30">Event</h3>
                         <div className="flex flex-col gap-3">
                             <div className="flex flex-col gap-0.5">
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#8A9A5B]">
-                                    {event.endingDate ? "Desde" : "Fecha"}
+                                    {event.endingDate ? "From" : "Date"}
                                 </span>
                                 <p className="text-sm text-white/70">{formatDate(event.startingDate)}</p>
                                 <p className="text-xs text-white/40">{formatTime(event.startingDate)}</p>
                             </div>
                             {event.endingDate && (
                                 <div className="flex flex-col gap-0.5">
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#8A9A5B]">Hasta</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#8A9A5B]">To</span>
                                     <p className="text-sm text-white/70">{formatDate(event.endingDate)}</p>
                                     <p className="text-xs text-white/40">{formatTime(event.endingDate)}</p>
                                 </div>
@@ -354,10 +354,10 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                         )}
                     </div>
 
-                    {/* Participantes */}
+                    {/* Participants */}
                     <div className="bg-[#1e1e1e] rounded-xl border border-white/5 p-5 flex flex-col gap-3">
                         <div className="flex items-center gap-2">
-                            <h3 className="text-xs font-bold uppercase tracking-widest text-white/30">Participantes</h3>
+                            <h3 className="text-xs font-bold uppercase tracking-widest text-white/30">Participants</h3>
                             {acceptedParticipants.length > 0 && (
                                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#8A9A5B]/10 text-[#8A9A5B]">
                                     {acceptedParticipants.length}
@@ -368,7 +368,7 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                         {acceptedParticipants.length === 0 ? (
                             <div className="flex items-center gap-2 text-white/20 py-2">
                                 <Users size={16} strokeWidth={1}/>
-                                <p className="text-xs">Todavía no hay participantes</p>
+                                <p className="text-xs">No participants yet</p>
                             </div>
                         ) : (
                             <div className="flex flex-col gap-2 max-h-48 overflow-y-auto">
