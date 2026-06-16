@@ -6,6 +6,7 @@ import DislikeButton from "../buttons/DislikeButton.tsx";
 import {useState} from "react";
 import NewComment from "../create/NewComment.tsx";
 import ProfileLink from "../profile/ProfileLink.tsx";
+import ImageViewer from "../ImageViewer.tsx";
 type Props = PostType & {
     isForPostPage: boolean,
     onCommentCreate?: () => void,
@@ -15,6 +16,7 @@ type Props = PostType & {
 export default function Post({ user: {username}, content, id, userId, isLiked, isDisliked, canDelete, deletePost, isForPostPage, onCommentCreate, onCommentClick, images } : Props){
     const url = import.meta.env.VITE_API_URL;
     const [createComment, setCreateComment] = useState(false);
+    const [viewerIndex, setViewerIndex] = useState<number | null>(null);
     const navigate: NavigateFunction = useNavigate();
     const handleClick = () => {
         if (onCommentCreate) {
@@ -32,6 +34,7 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
         user: {username: username},
         isLiked: isLiked,
         isDisliked: isDisliked,
+        images: images
 
     }
 
@@ -63,9 +66,22 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
             {images && images.length > 0 && (
                 <div className="grid grid-cols-2 gap-2 mb-4">
                     {images.map((img, i) => (
-                        <img key={i} src={img.image.url ?? `${url}image/${img.image.id}`} alt="" className="w-full h-48 object-cover rounded-xl"/>
+                        <img
+                            key={i}
+                            src={img.image.url ?? `${url}image/${img.image.id}`}
+                            alt=""
+                            onClick={(e) => { e.stopPropagation(); setViewerIndex(i); }}
+                            className="w-full h-48 object-cover rounded-xl cursor-pointer"
+                        />
                     ))}
                 </div>
+            )}
+            {viewerIndex !== null && images && (
+                <ImageViewer
+                    images={images.map(img => ({ src: img.image.url ?? `${url}image/${img.image.id}` }))}
+                    initialIndex={viewerIndex}
+                    onClose={() => setViewerIndex(null)}
+                />
             )}
 
             <div

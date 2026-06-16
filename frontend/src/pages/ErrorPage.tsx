@@ -6,7 +6,7 @@ export default function ErrorPage() {
     const title = location.state?.title || "¡Ups! Algo salió mal";
     const message = location.state?.message || "La página que buscás no existe o la ruta es incorrecta.";
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4">
+        <div className="min-h-screen flex flex-col bg-[#141414] items-center justify-center p-4">
 
             <div className="max-w-md w-full bg-white/5 p-8 rounded-2xl text-center border border-error/20">
 

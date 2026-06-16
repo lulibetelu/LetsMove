@@ -57,7 +57,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     const userId: number = client.data.user.sub;
 
-    const isMember: boolean = await this.groupService.isMember(userId, groupId);
+    const isMember: boolean | undefined = await this.groupService.isMember(
+      userId,
+      groupId,
+    );
     if (!isMember) {
       client.emit('error', { message: 'usuario no pertence al grupo' });
       return;

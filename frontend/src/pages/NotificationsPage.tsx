@@ -87,7 +87,7 @@ export default function NotificationsPage(){
                         <h1 className="text-2xl font-bold text-white/90">Notificaciones</h1>
                         {totalNotifications > 0 && (
                             <p className="text-sm text-white/40 mt-1">
-                                {totalNotifications} pendiente {totalNotifications > 1 ? "s" : ""} pendiente {friendRequests.length > 1 ? "s" : ""}
+                                {totalNotifications} {totalNotifications > 1 ? "pendientes" : "pendiente"}
                             </p>
                         )}
                     </header>

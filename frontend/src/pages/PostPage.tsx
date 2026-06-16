@@ -113,6 +113,7 @@ export default function PostPage(){
                             isForPostPage={true}
                             onCommentCreate={handleCommentCreation}
                             onCommentClick={focusReply}
+                            images={data.images}
                         />
                     </div>
 
