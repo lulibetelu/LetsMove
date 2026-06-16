@@ -64,7 +64,7 @@ export default function NewPost({ onClose }: { onClose: (wasCreated:boolean) => 
                         error={sportError}
                         isPending={isPending}
                         value={selectedSports}
-                        handleChange={(v) => setSelectedSports(v as string[])}
+                        handleChange={setSelectedSports}
                         multiple
                     />
 

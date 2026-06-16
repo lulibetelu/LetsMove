@@ -3,15 +3,27 @@ import {createPortal} from "react-dom";
 import {ChevronDown, X} from "lucide-react";
 import PopUpError from "./PopUpError.tsx";
 
-interface Props {
-    dataList: string[],
-    error: Error | null,
-    isPending: boolean,
-    value: string | string[],
-    handleChange: (value: string | string[]) => void
-    multiple?: boolean,
-    placeholder?: string
+interface SingleProps {
+    dataList: string[];
+    error: Error | null;
+    isPending: boolean;
+    value: string;
+    handleChange: (value: string) => void;
+    multiple?: false;
+    placeholder?: string;
 }
+
+interface MultiProps {
+    dataList: string[];
+    error: Error | null;
+    isPending: boolean;
+    value: string[];
+    handleChange: (value: string[]) => void;
+    multiple: true;
+    placeholder?: string;
+}
+
+type Props = SingleProps | MultiProps;
 
 export default function Dropdown({dataList, error, isPending, value, handleChange, multiple, placeholder}: Props) {
     const [open, setOpen] = useState(false);
@@ -26,6 +38,7 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
     const isMulti = multiple === true;
     const selectedValues = isMulti ? (value as string[]) : [];
     const singleValue = isMulti ? "" : (value as string);
+    const onChange = handleChange as (value: string | string[]) => void;
 
     const filtered = dataList.filter(name =>
         name.toLowerCase().includes(search.toLowerCase())
@@ -67,7 +80,7 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
         const next = selectedValues.includes(option)
             ? selectedValues.filter(v => v !== option)
             : [...selectedValues, option];
-        handleChange(next);
+        onChange(next);
         setHighlighted(-1);
         inputRef.current?.focus();
     };
@@ -76,7 +89,7 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
         if (isMulti) {
             toggleOption(option);
         } else {
-            handleChange(option);
+            onChange(option);
             setSearch("");
             setHighlighted(-1);
             setOpen(false);
@@ -86,9 +99,9 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
 
     const clearValue = () => {
         if (isMulti) {
-            handleChange([]);
+            onChange([]);
         } else {
-            handleChange("");
+            onChange("");
         }
         setSearch("");
         setHighlighted(-1);
@@ -97,7 +110,7 @@ export default function Dropdown({dataList, error, isPending, value, handleChang
 
     const removeItem = (item: string) => {
         const next = selectedValues.filter(v => v !== item);
-        handleChange(next);
+        onChange(next);
         inputRef.current?.focus();
     };
 
