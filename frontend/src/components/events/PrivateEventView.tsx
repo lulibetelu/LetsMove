@@ -140,6 +140,7 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
         try {
             await createEventEntry(event.id, newEntry.trim(), images);
             setNewEntry("");
+            setImages([]);
             setShowForm(false);
             queryClient.invalidateQueries({queryKey: ['eventEntries', event.id]});
         } finally {
