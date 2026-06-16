@@ -1,4 +1,9 @@
-import type {ImageInput} from "./imageType.ts";
+export interface MessageImage {
+    imageId: number;
+    image: {
+        url: string | null;
+    } | null;
+}
 
 export interface Message{
     id: number;
@@ -6,7 +11,7 @@ export interface Message{
     content: string;
     groupMemberId: number;
     date: Date;
-    images?: ImageInput[]
+    images?: MessageImage[]
     groupMember: {
         id: number,
         userId: number,
