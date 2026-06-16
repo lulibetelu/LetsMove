@@ -54,8 +54,8 @@ export default function NewEvent(props: Props){
             return false;
         }
 
-        if (data.type === "Asynchronous" && !data.endingDate && isPrivate) {
-            setValidationError("Ending date is required for private asynchronous events");
+        if (data.type === "Asynchronous" && !data.endingDate) {
+            setValidationError("Ending date is required for asynchronous events");
             return false;
         }
 
@@ -274,7 +274,7 @@ return (
                 {type === "Asynchronous" && (<div>
                     <label className="label">
                     <span className="label-text font-medium">
-                        Ending Date (optional)
+                        Ending Date
                     </span>
                     </label>
 
@@ -286,8 +286,7 @@ return (
                         timeFormat="h:mm aa"
                         timeIntervals={15}
                         minDate={startingDate ?? new Date()}
-                        isClearable
-                        placeholderText="No end date"
+                        placeholderText="Select ending date and time"
                         className="input input-bordered bg-white/5 w-full"
                         wrapperClassName="w-full"
                     />

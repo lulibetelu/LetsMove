@@ -43,6 +43,11 @@ export class EventRepositoryService {
       if (location === null) throw new BadRequestException('no such location');
       locationId = location.id;
     }
+    if (createEventDto.type === 'Asynchronous' && !createEventDto.endingDate) {
+      throw new BadRequestException(
+        'Ending date is required for asynchronous events',
+      );
+    }
     if (!createEventDto.sportName)
       throw new BadRequestException('sport name is missing');
 
@@ -206,6 +211,15 @@ export class EventRepositoryService {
       updateEventDto.location !== undefined
     ) {
       throw new BadRequestException('asynchronous events do not have location');
+    }
+
+    if (
+      event.eventType === 'Asynchronous' &&
+      updateEventDto.endingDate === undefined
+    ) {
+      throw new BadRequestException(
+        'Ending date is required for asynchronous events',
+      );
     }
 
     const data: {
