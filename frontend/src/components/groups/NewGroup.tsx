@@ -181,9 +181,6 @@ export default function NewGroup({ onClose, onGroupCreated }: NewGroupProps) {
                                             <span className="text-sm text-white/70 truncate">
                                                 {friend.username}
                                             </span>
-                                            <span className="ml-auto text-[10px] text-white/20">
-                                                ID: {friend.id}
-                                            </span>
                                         </button>
                                     );
                                 })
