@@ -1,4 +1,5 @@
 import {
+  IsDate,
   IsEmail,
   IsInt,
   IsNotEmpty,
@@ -25,4 +26,8 @@ export class RegisterDto {
   @IsOptional()
   @IsInt()
   locationId?: number;
+
+  @IsNotEmpty()
+  @IsDate()
+  birthday: Date;
 }

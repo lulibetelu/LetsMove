@@ -89,7 +89,7 @@ export class EventRepositoryService {
     return event;
   }
 
-  async findAll(requesterId: number) {
+  async findAll() {
     return this.prismaService.event.findMany({
       include: {
         imageEvents: {
@@ -131,6 +131,7 @@ export class EventRepositoryService {
             },
           },
         },
+        sport: true,
         location: true,
         // chat: true,
       },

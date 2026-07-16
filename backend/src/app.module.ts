@@ -24,6 +24,7 @@ import { SavedEventModule } from './saved-event/saved-event.module';
 import { LocationModule } from './location/location.module';
 import { MailModule } from './mailNotification/mail.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { AiDataModule } from './ai-recommendation/ai.data.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     SavedEventModule,
     LocationModule,
     MailModule,
+    AiDataModule,
   ],
   controllers: [AppController],
   providers: [AppService],

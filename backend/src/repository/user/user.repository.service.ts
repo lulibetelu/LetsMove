@@ -15,6 +15,7 @@ export class UserRepositoryService {
         id: true,
         username: true,
         biography: true,
+        birthday: true,
       },
     });
   }
@@ -64,6 +65,7 @@ export class UserRepositoryService {
         biography: true,
         password: true,
         email: true,
+        birthday: true,
       },
     });
   }

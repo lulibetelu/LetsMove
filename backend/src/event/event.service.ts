@@ -5,6 +5,7 @@ import { FilterEventDto } from './dto/filter-event.dto';
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ImageService } from '../images/image.service';
@@ -38,12 +39,14 @@ export class EventService {
     );
   }
 
-  async findAll(requesterId: number) {
-    return this.eventRepositoryService.findAll(requesterId);
+  async findAll() {
+    return this.eventRepositoryService.findAll();
   }
 
   async findOne(id: number) {
-    return this.eventRepositoryService.findOneById(id);
+    const prismaPromise = await this.eventRepositoryService.findOneById(id);
+    if (!prismaPromise) throw new NotFoundException();
+    return prismaPromise;
   }
 
   async findAllFromUser(userId: number) {

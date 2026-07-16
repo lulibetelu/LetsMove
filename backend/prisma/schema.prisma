@@ -20,10 +20,11 @@ model User {
   id             Int            @id @default(autoincrement())
   username       String         @unique
   email          String         @unique
+  birthday       DateTime
   password       String
   biography      String?
-  homeLocationId Int?
-  homeLocation   Location?     @relation(fields: [homeLocationId], references: [id])
+  homeLocationId Int
+  homeLocation   Location       @relation(fields: [homeLocationId], references: [id])
   preferences    Preference[]
   posts          Post[]
   postsLiked     PostLiked[]
@@ -65,8 +66,8 @@ model Preference {
 }
 
 model Location {
-  id        Int     @id @default(autoincrement())
-  location  String  @unique
+  id        Int    @id @default(autoincrement())
+  location  String @unique
   latitude  Float
   longitude Float
 
