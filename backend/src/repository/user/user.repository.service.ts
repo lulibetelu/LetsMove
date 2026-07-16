@@ -71,12 +71,13 @@ export class UserRepositoryService {
   }
 
   async createUser(registerDto: RegisterDto) {
-    const { locationId, ...userData } = registerDto;
+    const { locationId, birthday, ...userData } = registerDto;
     return this.prismaService.user.create({
       // el connect verifica que exista una location con id=locationId, sino falla
       data: {
         ...userData,
-        ...(locationId && { homeLocation: { connect: { id: locationId } } }),
+        birthday,
+        homeLocation: { connect: { id: locationId } },
       },
       select: {
         id: true,

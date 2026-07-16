@@ -3,7 +3,6 @@ import {
   IsEmail,
   IsInt,
   IsNotEmpty,
-  IsOptional,
   IsString,
   MinLength,
 } from 'class-validator';
@@ -23,9 +22,9 @@ export class RegisterDto {
   @MinLength(8)
   password: string;
 
-  @IsOptional()
   @IsInt()
-  locationId?: number;
+  @IsNotEmpty()
+  locationId: number;
 
   @IsNotEmpty()
   @IsDate()

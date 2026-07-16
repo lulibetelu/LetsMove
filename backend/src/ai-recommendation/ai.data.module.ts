@@ -5,6 +5,7 @@ import { AiDataService } from './ai.data.service';
 
 @Module({
   imports: [RegisterModule, EventModule],
+  providers: [AiDataService],
   exports: [AiDataService],
 })
 export class AiDataModule {}

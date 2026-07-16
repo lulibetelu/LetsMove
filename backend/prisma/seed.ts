@@ -178,21 +178,21 @@ async function main() {
 
   // --- Users ---
   const userInfo = [
-    { username: 'john_doe', email: 'john@example.com', password: 'pass1234', homeLocationName: 'La Plata' },
-    { username: 'jane_smith', email: 'jane@example.com', password: 'pass1234', homeLocationName: 'General Pueyrredón' },
-    { username: 'carlos_m', email: 'carlos@example.com', password: 'pass1234', homeLocationName: 'Avellaneda' },
-    { username: 'ana_perez', email: 'ana@example.com', password: 'pass1234', homeLocationName: 'La Matanza' },
-    { username: 'mike_j', email: 'mike@example.com', password: 'pass1234', homeLocationName: 'Bahía Blanca' },
-    { username: 'lucia_g', email: 'lucia@example.com', password: 'pass1234', homeLocationName: 'Tandil' },
-    { username: 'martin_r', email: 'martin@example.com', password: 'pass1234', homeLocationName: 'Tigre' },
-    { username: 'sofia_k', email: 'sofia@example.com', password: 'pass1234', homeLocationName: 'Quilmes' },
-    { username: 'federico_l', email: 'fede@example.com', password: 'pass1234', homeLocationName: 'Pilar' },
-    { username: 'valentina_m', email: 'vale@example.com', password: 'pass1234', homeLocationName: 'Morón' },
-    { username: 'agustin_p', email: 'agustin@example.com', password: 'pass1234', homeLocationName: 'Campana' },
-    { username: 'camila_t', email: 'camila@example.com', password: 'pass1234', homeLocationName: 'Lanús' },
-    { username: 'diego_h', email: 'diego@example.com', password: 'pass1234', homeLocationName: 'San Isidro' },
-    { username: 'florencia_b', email: 'flor@example.com', password: 'pass1234', homeLocationName: 'Vicente López' },
-    { username: 'nicolas_v', email: 'nico@example.com', password: 'pass1234', homeLocationName: 'Berazategui' },
+    { username: 'john_doe', email: 'john@example.com', password: 'pass1234', birthday: new Date('1995-03-15'), homeLocationName: 'La Plata' },
+    { username: 'jane_smith', email: 'jane@example.com', password: 'pass1234', birthday: new Date('1998-07-22'), homeLocationName: 'General Pueyrredón' },
+    { username: 'carlos_m', email: 'carlos@example.com', password: 'pass1234', birthday: new Date('1992-11-08'), homeLocationName: 'Avellaneda' },
+    { username: 'ana_perez', email: 'ana@example.com', password: 'pass1234', birthday: new Date('1997-01-30'), homeLocationName: 'La Matanza' },
+    { username: 'mike_j', email: 'mike@example.com', password: 'pass1234', birthday: new Date('1994-05-12'), homeLocationName: 'Bahía Blanca' },
+    { username: 'lucia_g', email: 'lucia@example.com', password: 'pass1234', birthday: new Date('1999-09-03'), homeLocationName: 'Tandil' },
+    { username: 'martin_r', email: 'martin@example.com', password: 'pass1234', birthday: new Date('1993-12-25'), homeLocationName: 'Tigre' },
+    { username: 'sofia_k', email: 'sofia@example.com', password: 'pass1234', birthday: new Date('1996-04-17'), homeLocationName: 'Quilmes' },
+    { username: 'federico_l', email: 'fede@example.com', password: 'pass1234', birthday: new Date('1991-08-28'), homeLocationName: 'Pilar' },
+    { username: 'valentina_m', email: 'vale@example.com', password: 'pass1234', birthday: new Date('2000-02-14'), homeLocationName: 'Morón' },
+    { username: 'agustin_p', email: 'agustin@example.com', password: 'pass1234', birthday: new Date('1995-06-10'), homeLocationName: 'Campana' },
+    { username: 'camila_t', email: 'camila@example.com', password: 'pass1234', birthday: new Date('1998-10-05'), homeLocationName: 'Lanús' },
+    { username: 'diego_h', email: 'diego@example.com', password: 'pass1234', birthday: new Date('1994-03-20'), homeLocationName: 'San Isidro' },
+    { username: 'florencia_b', email: 'flor@example.com', password: 'pass1234', birthday: new Date('1997-07-09'), homeLocationName: 'Vicente López' },
+    { username: 'nicolas_v', email: 'nico@example.com', password: 'pass1234', birthday: new Date('1993-11-01'), homeLocationName: 'Berazategui' },
   ];
 
   for (const { homeLocationName, ...userData } of userInfo) {
