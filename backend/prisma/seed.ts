@@ -6,26 +6,34 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 const locationsData = [
-  { location: 'Adolfo Gonzales Chaves', latitude: -37.96462, longitude: -60.24828 },
+  {
+    location: 'Adolfo Gonzales Chaves',
+    latitude: -37.96462,
+    longitude: -60.24828,
+  },
   { location: 'Saladillo', latitude: -35.67681, longitude: -59.70266 },
   { location: 'Las Flores', latitude: -36.01583, longitude: -59.17646 },
   { location: 'Rojas', latitude: -34.19282, longitude: -60.78802 },
   { location: 'Escobar', latitude: -34.32868, longitude: -58.77118 },
   { location: 'José C. Paz', latitude: -34.51185, longitude: -58.77763 },
   { location: 'Bahía Blanca', latitude: -38.58419, longitude: -62.16942 },
-  { location: 'San Antonio de Areco', latitude: -34.22076, longitude: -59.51944 },
+  {
+    location: 'San Antonio de Areco',
+    latitude: -34.22076,
+    longitude: -59.51944,
+  },
   { location: 'Maipú', latitude: -36.88693, longitude: -57.58612 },
   { location: 'General Alvarado', latitude: -38.20263, longitude: -58.07181 },
   { location: 'General Pueyrredón', latitude: -37.96568, longitude: -57.74303 },
   { location: 'Mar Chiquita', latitude: -37.49864, longitude: -57.64327 },
-  { location: 'Villa Gesell', latitude: -37.36707, longitude: -57.06340 },
+  { location: 'Villa Gesell', latitude: -37.36707, longitude: -57.0634 },
   { location: 'Pinamar', latitude: -37.11107, longitude: -56.87028 },
-  { location: 'General Lavalle', latitude: -36.65075, longitude: -56.94100 },
+  { location: 'General Lavalle', latitude: -36.65075, longitude: -56.941 },
   { location: 'La Costa', latitude: -36.69717, longitude: -56.71594 },
-  { location: 'Magdalena', latitude: -35.18510, longitude: -57.68613 },
+  { location: 'Magdalena', latitude: -35.1851, longitude: -57.68613 },
   { location: 'Vicente López', latitude: -34.52653, longitude: -58.50449 },
   { location: 'Rauch', latitude: -36.57219, longitude: -58.94414 },
-  { location: 'Moreno', latitude: -34.61068, longitude: -58.81090 },
+  { location: 'Moreno', latitude: -34.61068, longitude: -58.8109 },
   { location: 'La Matanza', latitude: -34.77035, longitude: -58.62545 },
   { location: 'Tandil', latitude: -37.33643, longitude: -59.18198 },
   { location: 'Coronel Suárez', latitude: -37.53486, longitude: -61.88909 },
@@ -33,10 +41,14 @@ const locationsData = [
   { location: 'Berazategui', latitude: -34.81824, longitude: -58.15546 },
   { location: 'General Paz', latitude: -35.46618, longitude: -58.38965 },
   { location: 'General Guido', latitude: -36.66603, longitude: -57.99574 },
-  { location: 'General Juan Madariaga', latitude: -37.15352, longitude: -57.23066 },
+  {
+    location: 'General Juan Madariaga',
+    latitude: -37.15352,
+    longitude: -57.23066,
+  },
   { location: 'Tornquist', latitude: -38.25764, longitude: -62.29057 },
   { location: 'Coronel Pringles', latitude: -38.14792, longitude: -61.26442 },
-  { location: 'Villarino', latitude: -39.12857, longitude: -62.72460 },
+  { location: 'Villarino', latitude: -39.12857, longitude: -62.7246 },
   { location: 'General Pinto', latitude: -34.66962, longitude: -62.03985 },
   { location: 'San Cayetano', latitude: -38.38907, longitude: -59.58633 },
   { location: 'Tres Arroyos', latitude: -38.51181, longitude: -60.23742 },
@@ -51,10 +63,10 @@ const locationsData = [
   { location: 'Ensenada', latitude: -34.84215, longitude: -57.97911 },
   { location: 'Pergamino', latitude: -33.83607, longitude: -60.54478 },
   { location: 'Puán', latitude: -38.07608, longitude: -63.05743 },
-  { location: 'General Villegas', latitude: -34.77026, longitude: -62.95420 },
+  { location: 'General Villegas', latitude: -34.77026, longitude: -62.9542 },
   { location: 'San Fernando', latitude: -34.15584, longitude: -58.53458 },
   { location: 'Tigre', latitude: -34.38202, longitude: -58.58817 },
-  { location: 'Ezeiza', latitude: -34.87610, longitude: -58.56470 },
+  { location: 'Ezeiza', latitude: -34.8761, longitude: -58.5647 },
   { location: 'Castelli', latitude: -36.04149, longitude: -57.65743 },
   { location: 'Almirante Brown', latitude: -34.83562, longitude: -58.36737 },
   { location: 'Presidente Perón', latitude: -34.92985, longitude: -58.39808 },
@@ -65,7 +77,7 @@ const locationsData = [
   { location: 'Bragado', latitude: -35.06141, longitude: -60.60405 },
   { location: 'General Las Heras', latitude: -34.90942, longitude: -58.99545 },
   { location: 'Carlos Casares', latitude: -35.74992, longitude: -61.37438 },
-  { location: 'Marcos Paz', latitude: -34.81400, longitude: -58.84783 },
+  { location: 'Marcos Paz', latitude: -34.814, longitude: -58.84783 },
   { location: 'General Viamonte', latitude: -34.99778, longitude: -61.04966 },
   { location: 'Carlos Tejedor', latitude: -35.37974, longitude: -62.42979 },
   { location: '25 de Mayo', latitude: -35.52721, longitude: -60.23028 },
@@ -77,30 +89,38 @@ const locationsData = [
   { location: 'Monte', latitude: -35.50983, longitude: -58.76724 },
   { location: 'Roque Pérez', latitude: -35.48164, longitude: -59.35751 },
   { location: 'Olavarría', latitude: -36.85763, longitude: -60.67021 },
-  { location: 'Merlo', latitude: -34.71100, longitude: -58.74196 },
+  { location: 'Merlo', latitude: -34.711, longitude: -58.74196 },
   { location: 'Esteban Echeverría', latitude: -34.83121, longitude: -58.47695 },
   { location: 'Arrecifes', latitude: -34.01181, longitude: -60.06266 },
   { location: 'Capitán Sarmiento', latitude: -34.14984, longitude: -59.85401 },
-  { location: 'Carmen de Areco', latitude: -34.40680, longitude: -59.88441 },
+  { location: 'Carmen de Areco', latitude: -34.4068, longitude: -59.88441 },
   { location: 'Salto', latitude: -34.27108, longitude: -60.30529 },
-  { location: 'Exaltación de la Cruz', latitude: -34.29513, longitude: -59.15595 },
+  {
+    location: 'Exaltación de la Cruz',
+    latitude: -34.29513,
+    longitude: -59.15595,
+  },
   { location: 'San Miguel', latitude: -34.55213, longitude: -58.69178 },
-  { location: 'San Andrés de Giles', latitude: -34.43773, longitude: -59.47320 },
+  { location: 'San Andrés de Giles', latitude: -34.43773, longitude: -59.4732 },
   { location: 'Mercedes', latitude: -34.69732, longitude: -59.42048 },
   { location: 'Pilar', latitude: -34.44816, longitude: -58.90333 },
   { location: 'Luján', latitude: -34.56732, longitude: -59.15846 },
   { location: 'Hurlingham', latitude: -34.59928, longitude: -58.64953 },
   { location: 'Morón', latitude: -34.64939, longitude: -58.61983 },
-  { location: 'Chacabuco', latitude: -34.61820, longitude: -60.35431 },
-  { location: 'Malvinas Argentinas', latitude: -34.48731, longitude: -58.71214 },
-  { location: 'Tres Lomas', latitude: -36.49710, longitude: -62.86391 },
+  { location: 'Chacabuco', latitude: -34.6182, longitude: -60.35431 },
+  {
+    location: 'Malvinas Argentinas',
+    latitude: -34.48731,
+    longitude: -58.71214,
+  },
+  { location: 'Tres Lomas', latitude: -36.4971, longitude: -62.86391 },
   { location: 'Ayacucho', latitude: -37.03543, longitude: -58.44256 },
   { location: 'Guaminí', latitude: -36.89068, longitude: -62.41853 },
   { location: 'General San Martín', latitude: -34.55277, longitude: -58.56428 },
   { location: 'Lincoln', latitude: -35.07045, longitude: -61.68246 },
   { location: 'Laprida', latitude: -37.51651, longitude: -60.76815 },
   { location: 'San Isidro', latitude: -34.48689, longitude: -58.53721 },
-  { location: 'Benito Juárez', latitude: -37.58611, longitude: -59.88840 },
+  { location: 'Benito Juárez', latitude: -37.58611, longitude: -59.8884 },
   { location: 'Colón', latitude: -33.88586, longitude: -61.06248 },
   { location: 'Ituzaingó', latitude: -34.63607, longitude: -58.68876 },
   { location: 'General Rodríguez', latitude: -34.65062, longitude: -58.98785 },
@@ -108,7 +128,7 @@ const locationsData = [
   { location: 'Tres de Febrero', latitude: -34.59601, longitude: -58.57919 },
   { location: 'Florencio Varela', latitude: -34.87774, longitude: -58.25855 },
   { location: 'Navarro', latitude: -35.03048, longitude: -59.42936 },
-  { location: 'Cañuelas', latitude: -35.14480, longitude: -58.69109 },
+  { location: 'Cañuelas', latitude: -35.1448, longitude: -58.69109 },
   { location: 'San Vicente', latitude: -35.07151, longitude: -58.43181 },
   { location: 'Lobos', latitude: -35.21959, longitude: -59.14574 },
   { location: 'General Alvear', latitude: -36.03471, longitude: -60.13315 },
@@ -129,17 +149,25 @@ const locationsData = [
   { location: 'Zárate', latitude: -33.99709, longitude: -59.12822 },
   { location: 'Ramallo', latitude: -33.58719, longitude: -60.05751 },
   { location: 'San Nicolás', latitude: -33.48299, longitude: -60.29315 },
-  { location: 'Lanús', latitude: -34.70565, longitude: -58.39470 },
+  { location: 'Lanús', latitude: -34.70565, longitude: -58.3947 },
   { location: 'Leandro N. Alem', latitude: -34.49857, longitude: -61.61259 },
-  { location: 'General Arenales', latitude: -34.23790, longitude: -61.28338 },
+  { location: 'General Arenales', latitude: -34.2379, longitude: -61.28338 },
   { location: 'Rivadavia', latitude: -35.58106, longitude: -63.09476 },
-  { location: 'Patagones', latitude: -40.19638, longitude: -62.85080 },
-  { location: 'Coronel de Marina Leonardo Rosales', latitude: -38.84908, longitude: -61.83558 },
+  { location: 'Patagones', latitude: -40.19638, longitude: -62.8508 },
+  {
+    location: 'Coronel de Marina Leonardo Rosales',
+    latitude: -38.84908,
+    longitude: -61.83558,
+  },
   { location: 'Baradero', latitude: -33.93196, longitude: -59.49279 },
   { location: 'San Pedro', latitude: -33.78099, longitude: -59.78263 },
-  { location: 'Florentino Ameghino', latitude: -34.87411, longitude: -62.40172 },
-  { location: 'Lomas de Zamora', latitude: -34.75497, longitude: -58.42410 },
-  { location: 'Avellaneda', latitude: -34.67820, longitude: -58.34114 },
+  {
+    location: 'Florentino Ameghino',
+    latitude: -34.87411,
+    longitude: -62.40172,
+  },
+  { location: 'Lomas de Zamora', latitude: -34.75497, longitude: -58.4241 },
+  { location: 'Avellaneda', latitude: -34.6782, longitude: -58.34114 },
   { location: 'La Plata', latitude: -35.00385, longitude: -58.01778 },
 ];
 
@@ -149,7 +177,11 @@ async function main() {
     await prisma.location.upsert({
       where: { location: loc.location },
       update: {},
-      create: { location: loc.location, latitude: loc.latitude, longitude: loc.longitude },
+      create: {
+        location: loc.location,
+        latitude: loc.latitude,
+        longitude: loc.longitude,
+      },
     });
   }
   console.log(`✅ ${locationsData.length} locations seeded`);
@@ -178,21 +210,111 @@ async function main() {
 
   // --- Users ---
   const userInfo = [
-    { username: 'john_doe', email: 'john@example.com', password: 'pass1234', birthday: new Date('1995-03-15'), homeLocationName: 'La Plata' },
-    { username: 'jane_smith', email: 'jane@example.com', password: 'pass1234', birthday: new Date('1998-07-22'), homeLocationName: 'General Pueyrredón' },
-    { username: 'carlos_m', email: 'carlos@example.com', password: 'pass1234', birthday: new Date('1992-11-08'), homeLocationName: 'Avellaneda' },
-    { username: 'ana_perez', email: 'ana@example.com', password: 'pass1234', birthday: new Date('1997-01-30'), homeLocationName: 'La Matanza' },
-    { username: 'mike_j', email: 'mike@example.com', password: 'pass1234', birthday: new Date('1994-05-12'), homeLocationName: 'Bahía Blanca' },
-    { username: 'lucia_g', email: 'lucia@example.com', password: 'pass1234', birthday: new Date('1999-09-03'), homeLocationName: 'Tandil' },
-    { username: 'martin_r', email: 'martin@example.com', password: 'pass1234', birthday: new Date('1993-12-25'), homeLocationName: 'Tigre' },
-    { username: 'sofia_k', email: 'sofia@example.com', password: 'pass1234', birthday: new Date('1996-04-17'), homeLocationName: 'Quilmes' },
-    { username: 'federico_l', email: 'fede@example.com', password: 'pass1234', birthday: new Date('1991-08-28'), homeLocationName: 'Pilar' },
-    { username: 'valentina_m', email: 'vale@example.com', password: 'pass1234', birthday: new Date('2000-02-14'), homeLocationName: 'Morón' },
-    { username: 'agustin_p', email: 'agustin@example.com', password: 'pass1234', birthday: new Date('1995-06-10'), homeLocationName: 'Campana' },
-    { username: 'camila_t', email: 'camila@example.com', password: 'pass1234', birthday: new Date('1998-10-05'), homeLocationName: 'Lanús' },
-    { username: 'diego_h', email: 'diego@example.com', password: 'pass1234', birthday: new Date('1994-03-20'), homeLocationName: 'San Isidro' },
-    { username: 'florencia_b', email: 'flor@example.com', password: 'pass1234', birthday: new Date('1997-07-09'), homeLocationName: 'Vicente López' },
-    { username: 'nicolas_v', email: 'nico@example.com', password: 'pass1234', birthday: new Date('1993-11-01'), homeLocationName: 'Berazategui' },
+    {
+      username: 'john_doe',
+      email: 'john@example.com',
+      password: 'pass1234',
+      birthday: new Date('1995-03-15'),
+      homeLocationName: 'La Plata',
+    },
+    {
+      username: 'jane_smith',
+      email: 'jane@example.com',
+      password: 'pass1234',
+      birthday: new Date('1998-07-22'),
+      homeLocationName: 'General Pueyrredón',
+    },
+    {
+      username: 'carlos_m',
+      email: 'carlos@example.com',
+      password: 'pass1234',
+      birthday: new Date('1992-11-08'),
+      homeLocationName: 'Avellaneda',
+    },
+    {
+      username: 'ana_perez',
+      email: 'ana@example.com',
+      password: 'pass1234',
+      birthday: new Date('1997-01-30'),
+      homeLocationName: 'La Matanza',
+    },
+    {
+      username: 'mike_j',
+      email: 'mike@example.com',
+      password: 'pass1234',
+      birthday: new Date('1994-05-12'),
+      homeLocationName: 'Bahía Blanca',
+    },
+    {
+      username: 'lucia_g',
+      email: 'lucia@example.com',
+      password: 'pass1234',
+      birthday: new Date('1999-09-03'),
+      homeLocationName: 'Tandil',
+    },
+    {
+      username: 'martin_r',
+      email: 'martin@example.com',
+      password: 'pass1234',
+      birthday: new Date('1993-12-25'),
+      homeLocationName: 'Tigre',
+    },
+    {
+      username: 'sofia_k',
+      email: 'sofia@example.com',
+      password: 'pass1234',
+      birthday: new Date('1996-04-17'),
+      homeLocationName: 'Quilmes',
+    },
+    {
+      username: 'federico_l',
+      email: 'fede@example.com',
+      password: 'pass1234',
+      birthday: new Date('1991-08-28'),
+      homeLocationName: 'Pilar',
+    },
+    {
+      username: 'valentina_m',
+      email: 'vale@example.com',
+      password: 'pass1234',
+      birthday: new Date('2000-02-14'),
+      homeLocationName: 'Morón',
+    },
+    {
+      username: 'agustin_p',
+      email: 'agustin@example.com',
+      password: 'pass1234',
+      birthday: new Date('1995-06-10'),
+      homeLocationName: 'Campana',
+    },
+    {
+      username: 'camila_t',
+      email: 'camila@example.com',
+      password: 'pass1234',
+      birthday: new Date('1998-10-05'),
+      homeLocationName: 'Lanús',
+    },
+    {
+      username: 'diego_h',
+      email: 'diego@example.com',
+      password: 'pass1234',
+      birthday: new Date('1994-03-20'),
+      homeLocationName: 'San Isidro',
+    },
+    {
+      username: 'florencia_b',
+      email: 'flor@example.com',
+      password: 'pass1234',
+      birthday: new Date('1997-07-09'),
+      homeLocationName: 'Vicente López',
+    },
+    {
+      username: 'nicolas_v',
+      email: 'nico@example.com',
+      password: 'pass1234',
+      birthday: new Date('1993-11-01'),
+      homeLocationName: 'Berazategui',
+    },
   ];
 
   for (const { homeLocationName, ...userData } of userInfo) {
@@ -808,7 +930,8 @@ async function main() {
     {
       host: 'john_doe',
       title: 'Sunday Football at Parque Saavedra',
-      description: 'Partido de fútbol 5 en el Parque Saavedra, La Plata. Todos los niveles son bienvenidos, solo traigan agua y ganas de correr.',
+      description:
+        'Partido de fútbol 5 en el Parque Saavedra, La Plata. Todos los niveles son bienvenidos, solo traigan agua y ganas de correr.',
       sport: 'Football',
       locationName: 'La Plata',
       eventType: 'InPerson' as const,
@@ -821,7 +944,8 @@ async function main() {
     {
       host: 'jane_smith',
       title: 'Tennis doubles in Mar del Plata',
-      description: 'Buscamos gente para jugar dobles en el club. Nivel intermedio, cancha de polvo de ladrillo.',
+      description:
+        'Buscamos gente para jugar dobles en el club. Nivel intermedio, cancha de polvo de ladrillo.',
       sport: 'Tennis',
       locationName: 'General Pueyrredón',
       eventType: 'InPerson' as const,
@@ -834,7 +958,8 @@ async function main() {
     {
       host: 'carlos_m',
       title: 'Basketball 3x3 Tournament',
-      description: 'Torneo de básquet 3x3 en el polideportivo de Avellaneda. Premio para el equipo ganador.',
+      description:
+        'Torneo de básquet 3x3 en el polideportivo de Avellaneda. Premio para el equipo ganador.',
       sport: 'Basketball',
       locationName: 'Avellaneda',
       eventType: 'InPerson' as const,
@@ -847,7 +972,8 @@ async function main() {
     {
       host: 'ana_perez',
       title: 'Volleyball friendly match',
-      description: 'Partido amistoso de vóley en el club de La Matanza. Necesitamos 2 jugadores más para completar los equipos.',
+      description:
+        'Partido amistoso de vóley en el club de La Matanza. Necesitamos 2 jugadores más para completar los equipos.',
       sport: 'Volleyball',
       locationName: 'La Matanza',
       eventType: 'InPerson' as const,
@@ -857,10 +983,12 @@ async function main() {
       participants: [],
       pendingParticipants: ['sofia_k', 'valentina_m', 'florencia_b'],
     },
+
     {
       host: 'martin_r',
       title: 'Beach football in Tigre',
-      description: 'Fútbol playa en el Parque de la Costa. Vamos a hacer un partido 5vs5, después bajamos algo a la parrilla.',
+      description:
+        'Fútbol playa en el Parque de la Costa. Vamos a hacer un partido 5vs5, después bajamos algo a la parrilla.',
       sport: 'Football',
       locationName: 'Tigre',
       eventType: 'InPerson' as const,
@@ -873,7 +1001,8 @@ async function main() {
     {
       host: 'federico_l',
       title: 'Morning cycling through Pilar',
-      description: 'Salida de ciclismo de 40km por los caminos de Pilar. Ritmo tranquilo, ideal para arrancar el finde.',
+      description:
+        'Salida de ciclismo de 40km por los caminos de Pilar. Ritmo tranquilo, ideal para arrancar el finde.',
       sport: 'Cycling',
       locationName: 'Pilar',
       eventType: 'InPerson' as const,
@@ -886,7 +1015,8 @@ async function main() {
     {
       host: 'sofia_k',
       title: 'Tennis singles match',
-      description: 'Busco rival para jugar un partido de singles en Quilmes. Nivel intermedio-avanzado.',
+      description:
+        'Busco rival para jugar un partido de singles en Quilmes. Nivel intermedio-avanzado.',
       sport: 'Tennis',
       locationName: 'Quilmes',
       eventType: 'InPerson' as const,
@@ -899,7 +1029,8 @@ async function main() {
     {
       host: 'john_doe',
       title: '10K Running Challenge - June',
-      description: 'Corré 10km durante el mes. Cada uno registra su progreso con fotos o comentarios. Al final del mes compartimos los resultados.',
+      description:
+        'Corré 10km durante el mes. Cada uno registra su progreso con fotos o comentarios. Al final del mes compartimos los resultados.',
       sport: 'Running',
       locationName: null,
       eventType: 'Asynchronous' as const,
@@ -907,19 +1038,47 @@ async function main() {
       endingDate: new Date(now + 33 * day),
       isPrivate: false,
       coverDescription: 'Running challenge',
-      participants: ['lucia_g', 'ana_perez', 'federico_l', 'camila_t', 'florencia_b'],
+      participants: [
+        'lucia_g',
+        'ana_perez',
+        'federico_l',
+        'camila_t',
+        'florencia_b',
+      ],
       entries: [
-        { username: 'john_doe', content: 'First run of the challenge: 5km in 28 minutes. Feeling good!', daysAgo: 1 },
-        { username: 'lucia_g', content: 'Completed 8km today. New personal best pace!', daysAgo: 1 },
-        { username: 'ana_perez', content: 'Morning run 6km. Beautiful sunrise today.', daysAgo: 2 },
-        { username: 'camila_t', content: '10km done in 55 minutes. Goal achieved!', daysAgo: 0 },
-        { username: 'federico_l', content: 'Slow 5km today, recovering from a cold.', daysAgo: 3 },
+        {
+          username: 'john_doe',
+          content:
+            'First run of the challenge: 5km in 28 minutes. Feeling good!',
+          daysAgo: 1,
+        },
+        {
+          username: 'lucia_g',
+          content: 'Completed 8km today. New personal best pace!',
+          daysAgo: 1,
+        },
+        {
+          username: 'ana_perez',
+          content: 'Morning run 6km. Beautiful sunrise today.',
+          daysAgo: 2,
+        },
+        {
+          username: 'camila_t',
+          content: '10km done in 55 minutes. Goal achieved!',
+          daysAgo: 0,
+        },
+        {
+          username: 'federico_l',
+          content: 'Slow 5km today, recovering from a cold.',
+          daysAgo: 3,
+        },
       ],
     },
     {
       host: 'mike_j',
       title: '100km Cycling Challenge',
-      description: 'Ciclistas de Bahía Blanca y alrededores: sumemos 100km entre todos durante las próximas dos semanas. Cada uno aporta lo que pueda.',
+      description:
+        'Ciclistas de Bahía Blanca y alrededores: sumemos 100km entre todos durante las próximas dos semanas. Cada uno aporta lo que pueda.',
       sport: 'Cycling',
       locationName: null,
       eventType: 'Asynchronous' as const,
@@ -929,16 +1088,34 @@ async function main() {
       coverDescription: 'Cycling challenge',
       participants: ['carlos_m', 'lucia_g', 'federico_l', 'diego_h'],
       entries: [
-        { username: 'mike_j', content: 'Morning ride: 35km along the coast. Strong wind but great views.', daysAgo: 1 },
-        { username: 'carlos_m', content: '25km after work. Legs are feeling strong!', daysAgo: 2 },
-        { username: 'lucia_g', content: '15km commute to work and back. Every km counts!', daysAgo: 1 },
-        { username: 'diego_h', content: '30km ride through San Isidro. Gorgeous day for cycling.', daysAgo: 0 },
+        {
+          username: 'mike_j',
+          content:
+            'Morning ride: 35km along the coast. Strong wind but great views.',
+          daysAgo: 1,
+        },
+        {
+          username: 'carlos_m',
+          content: '25km after work. Legs are feeling strong!',
+          daysAgo: 2,
+        },
+        {
+          username: 'lucia_g',
+          content: '15km commute to work and back. Every km counts!',
+          daysAgo: 1,
+        },
+        {
+          username: 'diego_h',
+          content: '30km ride through San Isidro. Gorgeous day for cycling.',
+          daysAgo: 0,
+        },
       ],
     },
     {
       host: 'jane_smith',
       title: '5K Swim Challenge',
-      description: '5 kilómetros acumulados de natación en piscina. Dos semanas para completarlo. Registren sus avances acá.',
+      description:
+        '5 kilómetros acumulados de natación en piscina. Dos semanas para completarlo. Registren sus avances acá.',
       sport: 'Swimming',
       locationName: null,
       eventType: 'Asynchronous' as const,
@@ -948,9 +1125,22 @@ async function main() {
       coverDescription: 'Swimming challenge',
       participants: ['martin_r', 'diego_h'],
       entries: [
-        { username: 'jane_smith', content: '1500m today: 500m crawl, 500m backstroke, 500m breaststroke.', daysAgo: 1 },
-        { username: 'martin_r', content: '1000m in 25 minutes. Working on my technique.', daysAgo: 2 },
-        { username: 'diego_h', content: '1200m today. Tried the new swimming drills.', daysAgo: 0 },
+        {
+          username: 'jane_smith',
+          content:
+            '1500m today: 500m crawl, 500m backstroke, 500m breaststroke.',
+          daysAgo: 1,
+        },
+        {
+          username: 'martin_r',
+          content: '1000m in 25 minutes. Working on my technique.',
+          daysAgo: 2,
+        },
+        {
+          username: 'diego_h',
+          content: '1200m today. Tried the new swimming drills.',
+          daysAgo: 0,
+        },
       ],
     },
   ];
@@ -959,12 +1149,16 @@ async function main() {
     const hostId = userMap[eventData.host];
     const sportId = sportMap[eventData.sport];
     const location = eventData.locationName
-      ? await prisma.location.findUnique({ where: { location: eventData.locationName } })
+      ? await prisma.location.findUnique({
+          where: { location: eventData.locationName },
+        })
       : null;
     const locationId = location?.id ?? null;
 
     const coverImage = await prisma.image.create({
-      data: { url: `https://picsum.photos/seed/${eventData.title.replace(/\s+/g, '-').toLowerCase()}/800/600` },
+      data: {
+        url: `https://picsum.photos/seed/${eventData.title.replace(/\s+/g, '-').toLowerCase()}/800/600`,
+      },
     });
 
     const event = await prisma.event.create({
@@ -1026,7 +1220,9 @@ async function main() {
       const galleryDescs = (eventData as any).galleryDescriptions ?? [];
       for (let i = 0; i < galleryDescs.length; i++) {
         const galleryImage = await prisma.image.create({
-          data: { url: `https://picsum.photos/seed/${eventData.title.replace(/\s+/g, '-').toLowerCase()}-gallery-${i}/800/600` },
+          data: {
+            url: `https://picsum.photos/seed/${eventData.title.replace(/\s+/g, '-').toLowerCase()}-gallery-${i}/800/600`,
+          },
         });
         await prisma.imageEvent.create({
           data: {

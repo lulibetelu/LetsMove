@@ -15,3 +15,11 @@ interface Interests {
   sport: string;
   level: string;
 }
+
+export interface RecommendationUser {
+  id: number;
+  username: string;
+  birthday: Date;
+  location: string;
+  preferences: { sport: string; level: string }[];
+}

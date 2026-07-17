@@ -8,11 +8,12 @@ generator client {
   // added because of nest-prisma documentation (v7 prisma version)
   moduleFormat    = "cjs"
   provider        = "prisma-client-js"
-  previewFeatures = ["relationJoins"]
+  previewFeatures = ["relationJoins", "postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider   = "postgresql"
+  extensions = [vector]
 }
 
 // profile picture is missing
@@ -42,6 +43,7 @@ model User {
   savedEvents  SavedEvent[]
 
   groupMember GroupMember[]
+  embedding   Unsupported("vector(3072)")?
 }
 
 model Sport {
@@ -205,25 +207,26 @@ model ImageMessage {
 }
 
 model Event {
-  id           Int           @id @default(autoincrement())
+  id           Int                          @id @default(autoincrement())
   hostId       Int
-  host         User          @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  host         User                         @relation(fields: [hostId], references: [id], onDelete: Cascade)
   title        String
   description  String
   chatId       Int? // falta la tabla chat
-  createdAt    DateTime      @default(now())
+  createdAt    DateTime                     @default(now())
   startingDate DateTime
   locationId   Int?
-  location     Location?     @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  location     Location?                    @relation(fields: [locationId], references: [id], onDelete: Cascade)
   endingDate   DateTime?
   eventType    EventType
   imageEvents  ImageEvent[]
   eventSignUp  EventSignUp[]
   isPrivate    Boolean
   sportId      Int
-  sport        Sport         @relation(fields: [sportId], references: [id], onDelete: Cascade)
+  sport        Sport                        @relation(fields: [sportId], references: [id], onDelete: Cascade)
   eventEntries EventEntry[]
   savedEvents  SavedEvent[]
+  embedding    Unsupported("vector(3072)")?
 }
 
 enum EventType {
