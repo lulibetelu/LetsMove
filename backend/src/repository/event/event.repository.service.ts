@@ -89,6 +89,13 @@ export class EventRepositoryService {
     return event;
   }
 
+  async updateEventVector(eventId: number, vector: number[]) {
+    const vectorStr = `[${vector.join(',')}]`;
+    return this.prismaService.$executeRaw`UPDATE "Event"
+    SET embedding = ${vectorStr}::vector
+    WHERE id = ${eventId};`;
+  }
+
   async findAll() {
     return this.prismaService.event.findMany({
       include: {

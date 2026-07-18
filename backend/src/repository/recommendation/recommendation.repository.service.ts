@@ -1,12 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { RecommendationUser } from '../../ai-recommendation/ai-user-type';
+import {
+  RecommendationEvent,
+  RecommendationUser,
+} from '../../ai-recommendation/ai-user-type';
+
+interface Vector {
+  embedding: number[] | string;
+}
 
 @Injectable()
 export class RecommendationRepositoryService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async updateVector(userId: number, vector: number[]) {
+  async updateUserVector(userId: number, vector: number[]) {
     const vectorStr = `[${vector.join(',')}]`;
 
     return this.prismaService.$executeRaw`UPDATE "User"
@@ -14,7 +21,15 @@ export class RecommendationRepositoryService {
     WHERE id = ${userId};`;
   }
 
-  async getVector(userId: number) {
+  async updateEventVector(eventId: number, vector: number[]) {
+    const vectorStr = `[${vector.join(',')}]`;
+
+    return this.prismaService.$executeRaw`UPDATE "Event"
+    SET embedding = ${vectorStr}::vector
+    WHERE id = ${eventId};`;
+  }
+
+  async getUserVector(userId: number) {
     const result = await this.prismaService.$queryRaw<Vector[]>`
     SELECT embedding FROM "User" WHERE id = ${userId};`;
     // Si el usuario no existe o el embedding está en null, devolvemos null
@@ -60,8 +75,27 @@ export class RecommendationRepositoryService {
       preferences: row.preferences ?? [],
     }));
   }
-}
 
-interface Vector {
-  embedding: number[] | string;
+  async getEventRecommendations(
+    userId: number,
+    userVector: number[],
+  ): Promise<RecommendationEvent[]> {
+    const vectorStr = `[${userVector.join(',')}]`;
+
+    const rows = await this.prismaService.$queryRaw<RecommendationEvent[]>`
+      SELECT e.id, e.title, e."startingDate",
+             json_build_object('username', u.username) AS host,
+             l.location,
+             s.name AS sport
+      FROM "Event" e
+             JOIN "User" u ON e."hostId" = u.id
+             LEFT JOIN "Location" l ON e."locationId" = l.id
+             JOIN "Sport" s ON e."sportId" = s.id
+      WHERE e.embedding IS NOT NULL
+        AND e."hostId" <> ${userId}
+      ORDER BY e.embedding <=> ${vectorStr}::vector ASC
+        LIMIT 5;`;
+
+    return rows;
+  }
 }

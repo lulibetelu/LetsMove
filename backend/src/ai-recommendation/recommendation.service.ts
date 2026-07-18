@@ -1,6 +1,6 @@
-import { AiEventType, AiUserType } from './ai-user-type';
+import { AiUserType } from './ai-user-type';
 import { RegisterService } from '../register/register.service';
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { EventService } from '../event/event.service';
 import { GeminiService } from './gemini/gemini.service';
 import { RecommendationRepositoryService } from '../repository/recommendation/recommendation.repository.service';
@@ -9,6 +9,7 @@ import { RecommendationRepositoryService } from '../repository/recommendation/re
 export class RecommendationService {
   constructor(
     private readonly registerService: RegisterService,
+    @Inject(forwardRef(() => EventService))
     private readonly eventService: EventService,
     private readonly geminiService: GeminiService,
     private readonly recommendationRepository: RecommendationRepositoryService,
@@ -25,16 +26,6 @@ export class RecommendationService {
     };
   }
 
-  private async getEventData(eventId: number): Promise<AiEventType> {
-    const event = await this.eventService.findOne(eventId);
-    return {
-      sport: event.sport.name,
-      location: event.location?.location,
-      description: event.description,
-      eventType: event.eventType,
-    };
-  }
-
   private generateUserText(userData: AiUserType): string {
     const sportsStrings = userData.interests.map(
       (i) => `${i.sport} at a/an ${i.level} level`,
@@ -47,14 +38,6 @@ export class RecommendationService {
       sportsList = `${sportsStrings.join(', ')}, and ${lastSport} `;
     }
     return `User is ${userData.age} years old and lives in ${userData.location}. They practice the following sports: ${sportsList}`;
-  }
-
-  private async generateEventText(eventId: number): Promise<string> {
-    const eventData = await this.getEventData(eventId);
-    if (eventData.eventType == 'InPerson') {
-      return `This is an in-person ${eventData.sport} event happening at ${eventData.location}. Description: ${eventData.description}.`;
-    }
-    return `This is an asynchronous ${eventData.sport} event with no fixed location, meaning participants can join remotely or on their own schedule. Description: ${eventData.description}.`;
   }
 
   private calculateAge(birthday: Date): number {
@@ -78,13 +61,13 @@ export class RecommendationService {
     const userText: string = this.generateUserText(userData);
 
     const vector = await this.geminiService.generateEmbedding(userText);
-    await this.recommendationRepository.updateVector(userId, vector);
+    await this.recommendationRepository.updateUserVector(userId, vector);
     return vector;
   }
 
   async getFriendRecommendations(userId: number) {
     // 1. Intentamos obtener el vector que ya está guardado en la DB
-    let userVector = await this.recommendationRepository.getVector(userId);
+    let userVector = await this.recommendationRepository.getUserVector(userId);
 
     // 2. CASO BORDE: ¿Qué pasa si el vector es null?
     // (Ej: un usuario viejo o alguien que se registró y falló Gemini en su momento)
@@ -97,6 +80,19 @@ export class RecommendationService {
 
     // 3. Ahora que tenemos el userVector seguro, hacemos el match matemático
     return this.recommendationRepository.getUserRecommendations(
+      userId,
+      userVector,
+    );
+  }
+  async getEventRecommendation(userId: number) {
+    let userVector = await this.recommendationRepository.getUserVector(userId);
+
+    if (!userVector) {
+      userVector = await this.updateUserEmbedding(userId);
+      if (!userVector) return [];
+    }
+
+    return this.recommendationRepository.getEventRecommendations(
       userId,
       userVector,
     );
