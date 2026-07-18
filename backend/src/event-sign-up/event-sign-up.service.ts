@@ -24,6 +24,20 @@ export class EventSignUpService {
       );
     }
     if (event.isPrivate) {
+      const existing = await this.signUpRepositoryService.findOne(
+        userId,
+        createEventSignUpDto.eventId,
+      );
+      if (existing?.state === 'Rejected') {
+        return this.signUpRepositoryService.updateState(
+          userId,
+          createEventSignUpDto.eventId,
+          'Requested',
+        );
+      }
+      if (existing) {
+        return existing;
+      }
       return this.signUpRepositoryService.create(
         createEventSignUpDto,
         userId,

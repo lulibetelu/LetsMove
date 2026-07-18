@@ -120,7 +120,7 @@ export default function NewGroup({ onClose, onGroupCreated }: NewGroupProps) {
                         <label className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-2 block">
                             Group photo
                         </label>
-                        <ImagePicker images={images} onChange={setImages} />
+                        <ImagePicker images={images} onChange={setImages} max={1}/>
                     </div>
 
                     <div>

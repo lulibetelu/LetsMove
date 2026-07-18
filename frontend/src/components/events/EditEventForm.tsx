@@ -290,15 +290,10 @@ export default function EditEventForm({event, onClose}:Props){
                                 timeFormat="h:mm aa"
                                 timeIntervals={15}
                                 minDate={startingDate}
-                                isClearable
-                                placeholderText="No end date"
+                                placeholderText="Select ending date and time"
                                 className="input input-bordered bg-white/5 w-full"
                                 wrapperClassName="w-full"
                             />
-
-                            <p className="text-xs text-white/50 mt-2">
-                                Asynchronous events can define an optional ending date.
-                            </p>
                         </div>
                     )}
 

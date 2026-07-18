@@ -77,4 +77,12 @@ export class EventSignUpRepositoryService {
       },
     });
   }
+  public updateState(userId: number, eventId: number, state: string) {
+    return this.prismaService.eventSignUp.update({
+      where: {
+        userId_eventId: { userId, eventId },
+      },
+      data: { state },
+    });
+  }
 }
