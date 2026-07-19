@@ -71,6 +71,7 @@ export default function LoginPage(){
                     <button className="btn border-none bg-[#8A9A5B] hover:bg-[#728249] text-white w-full mt-2 shadow-md transition-all active:scale-[0.98]"
                     > Login
                         </button>
+                    <div className="g-signin2" data-onsuccess="onSignIn"></div>
                     <div className='flex flex-col items-center gap-2 mt-4'>
                         <p className="text-sm opacity-70">Don't have an account?</p>
                         <Link to='/register' className='text-[#8A9A5B] font-semibold hover:underline transition-all'>Register</Link>
