@@ -6,6 +6,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class RegisterDto {
   @IsString()
@@ -27,6 +28,7 @@ export class RegisterDto {
   locationId: number;
 
   @IsNotEmpty()
+  @Type(() => Date)
   @IsDate()
   birthday: Date;
 }

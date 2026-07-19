@@ -1,7 +1,6 @@
 import { AiUserType } from './ai-user-type';
 import { RegisterService } from '../register/register.service';
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { EventService } from '../event/event.service';
+import { Injectable } from '@nestjs/common';
 import { GeminiService } from './gemini/gemini.service';
 import { RecommendationRepositoryService } from '../repository/recommendation/recommendation.repository.service';
 
@@ -9,8 +8,6 @@ import { RecommendationRepositoryService } from '../repository/recommendation/re
 export class RecommendationService {
   constructor(
     private readonly registerService: RegisterService,
-    @Inject(forwardRef(() => EventService))
-    private readonly eventService: EventService,
     private readonly geminiService: GeminiService,
     private readonly recommendationRepository: RecommendationRepositoryService,
   ) {}
