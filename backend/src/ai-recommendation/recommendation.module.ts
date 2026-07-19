@@ -5,6 +5,7 @@ import { RecommendationService } from './recommendation.service';
 import { RecommendationController } from './recommendation.controller';
 import { GeminiModule } from './gemini/gemini.module';
 import { RecommendationRepositoryModule } from '../repository/recommendation/recommendation.module';
+import { EventRepositoryModule } from '../repository/event/event.repository.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { RecommendationRepositoryModule } from '../repository/recommendation/rec
     EventModule,
     GeminiModule,
     RecommendationRepositoryModule,
+    EventRepositoryModule,
   ],
   controllers: [RecommendationController],
   providers: [RecommendationService],

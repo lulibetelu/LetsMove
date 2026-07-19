@@ -1,8 +1,9 @@
 import { GoogleGenAI } from '@google/genai';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class GeminiService {
+  private readonly logger = new Logger('GeminiService');
   private ai = new GoogleGenAI({});
 
   // Recibe texto plano, devuelve el vector matemático
@@ -13,5 +14,15 @@ export class GeminiService {
     });
     // @ts-ignore
     return response.embeddings![0].values;
+  }
+
+  async generateText(prompt: string): Promise<string> {
+    this.logger.log(`Calling Gemini generateText with model gemini-2.0-flash`);
+    const response = await this.ai.models.generateContent({
+      model: 'gemini-3.5-flash',
+      contents: prompt,
+    });
+    this.logger.log(`Gemini response text: ${response.text}`);
+    return response.text ?? '';
   }
 }

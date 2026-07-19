@@ -9,7 +9,9 @@ describe('PostActionValidatorService', () => {
       providers: [PostActionValidatorService],
     }).compile();
 
-    service = module.get<PostActionValidatorService>(PostActionValidatorService);
+    service = module.get<PostActionValidatorService>(
+      PostActionValidatorService,
+    );
   });
 
   it('should be defined', () => {

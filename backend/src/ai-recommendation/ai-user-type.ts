@@ -32,3 +32,7 @@ export interface RecommendationEvent {
   location?: string;
   sport: string;
 }
+
+export interface RecommendationExplanation {
+  explanation: string;
+}
