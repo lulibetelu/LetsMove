@@ -68,7 +68,7 @@ export default function ImagePicker({images, onChange, allowDescription = false,
                     onClick={() => setOpen(!open)}
                     className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-dashed border-white/20 hover:border-white/30 text-white/40 hover:text-white/60 text-sm transition-all"
                 >
-                    <Image size={16}/> Agregar fotos
+                    <Image size={16}/> Add images
                 </button>
             )}
 
@@ -82,7 +82,7 @@ export default function ImagePicker({images, onChange, allowDescription = false,
                         onClick={() => fileInputRef.current?.click()}
                         className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-sm text-white/60 hover:text-white/80 transition-all"
                     >
-                        <Upload size={15}/> Subir desde dispositivo
+                        <Upload size={15}/> Upload from device
                     </button>
                     <input
                         ref={fileInputRef}
@@ -99,7 +99,7 @@ export default function ImagePicker({images, onChange, allowDescription = false,
                             <Link size={13} className="text-white/30 shrink-0"/>
                             <input
                                 type="text"
-                                placeholder="Pegar URL de imagen..."
+                                placeholder="Paste image's URL"
                                 value={urlInput}
                                 onChange={(e) => setUrlInput(e.target.value)}
                                 className="bg-transparent text-sm text-white/70 placeholder:text-white/25 focus:outline-none w-full"
@@ -112,7 +112,7 @@ export default function ImagePicker({images, onChange, allowDescription = false,
                             className="px-3 py-2 rounded-xl text-xs font-semibold text-white disabled:opacity-30 transition-all"
                             style={{background: "linear-gradient(135deg, #8A9A5B, #6b7a46)"}}
                         >
-                            Agregar
+                            Add
                         </button>
                     </div>
                 </div>
@@ -171,7 +171,7 @@ export default function ImagePicker({images, onChange, allowDescription = false,
                                         onChange={(e) => handleDescriptionChange(i, e.target.value)}
                                         className="w-full text-xs bg-black/60 border border-white/10 rounded-lg px-1.5 py-1 text-white/80 focus:outline-none cursor-pointer"
                                     >
-                                        <option value="">Sin descripción</option>
+                                        <option value="">Without description</option>
                                         <option value="Cover">Cover</option>
                                         <option value="Gallery">Gallery</option>
                                     </select>

@@ -72,11 +72,11 @@ export default function ChooseInterestsPage(){
                     </div>
 
                     <h2 className="relative text-3xl font-bold tracking-tight">
-                        Elija sus deportes favoritos
+                        Choose your favorite sports
                     </h2>
 
                     <p className="relative text-white/70 text-sm mt-1.5 font-light">
-                        Clickee hasta encontrar su nivel
+                        Click until finding your level
                     </p>
 
                     <div className="absolute bottom-0 left-0 right-0 h-6 bg-[#1e1e1e] rounded-t-[50%]" />

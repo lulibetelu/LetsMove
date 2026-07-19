@@ -38,9 +38,9 @@ export default function LoginPage(){
                         <LogIn size={28} strokeWidth={1.8} />
                     </div>
 
-                    <h2 className="relative text-3xl font-bold tracking-tight">¡Bienvenido!</h2>
+                    <h2 className="relative text-3xl font-bold tracking-tight">Welcome!</h2>
                     <p className="relative text-white/70 text-sm mt-1.5 font-light">
-                        Conectate con gente para hacer deporte.
+                        Connect with people over sports
                     </p>
                     <div className="absolute bottom-0 left-0 right-0 h-6 bg-[#1e1e1e] rounded-t-[50%]" />
                 </div>

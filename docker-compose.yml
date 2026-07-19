@@ -10,7 +10,7 @@ services:
 
   # ── 1. Database service ────────────────────────────────────────────────────
   db:
-    image: postgres:16-alpine          # Official PostgreSQL image (no build needed)
+    image: pgvector/pgvector:pg16        # Official PostgreSQL image (no build needed)
     container_name: demo_db
     restart: unless-stopped
     environment:

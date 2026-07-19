@@ -33,7 +33,7 @@ export default function FriendRequest(props: FriendRequestProps) {
                     type="button"
                     className="p-2 rounded-full hover:bg-[#8A9A5B]/15 transition-colors"
                     onClick={handleAcceptClick}
-                    aria-label="Aceptar"
+                    aria-label="Accept"
                 >
                     <Check size={18} strokeWidth={1.8} className="text-[#8A9A5B]" />
                 </button>
@@ -41,7 +41,7 @@ export default function FriendRequest(props: FriendRequestProps) {
                     type="button"
                     className="btn bg-white/5 hover:bg-error/20 text-white/70 hover:text-white btn-circle border-none"
                     onClick={handleRejectClick}
-                    aria-label="Rechazar"
+                    aria-label="Reject"
                 >
                     <X size={18} strokeWidth={1.8} className="text-red-400/70" />
                 </button>

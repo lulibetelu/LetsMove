@@ -9,8 +9,6 @@ import {
   Req,
   ParseIntPipe,
   ConflictException,
-  Inject,
-  forwardRef,
   NotFoundException,
 } from '@nestjs/common';
 import { LikeService } from './like.service';
@@ -56,7 +54,10 @@ export class LikeController {
 
   @Get('/post/:id')
   @UseGuards(AuthGuard)
-  async findOne(@Req() req: Request, @Param('id', ParseIntPipe) postId: number) {
+  async findOne(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) postId: number,
+  ) {
     const userId = req.user.sub;
     const promise = await this.likeService.findOne(userId, postId);
 
