@@ -22,6 +22,9 @@ export default function RegisterPage(){
     const [email, setEmail] = useState(googleData?.email ?? '');
     const [password, setPassword] = useState('');
     const [locationName, setLocationName] = useState('');
+    const [birthMonth, setBirthMonth] = useState('');
+    const [birthDay, setBirthDay] = useState('');
+    const [birthYear, setBirthYear] = useState('');
     const [error, setError] = useState<string|null>(null);
     const {locations, isPending: locLoading, locationError} = useLocations();
 
@@ -38,6 +41,9 @@ export default function RegisterPage(){
                 password: isGoogleUser ? '' : password,
                 locationId: selectedLocation?.id,
             };
+            if (birthMonth && birthDay && birthYear) {
+                credentials.birthday = `${birthYear}-${birthMonth}-${birthDay}`;
+            }
             await createUser(credentials);
 
             if (isGoogleUser) {
@@ -110,6 +116,43 @@ export default function RegisterPage(){
                                 onChange: isGoogleUser ? () => {} : (e) => {setPassword(e.target.value)},
                                 readOnly: isGoogleUser,
                             }}></CustomInput>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <label className="text-xs font-semibold tracking-widest uppercase text-[#8A9A5B]">
+                            Birthday
+                        </label>
+                        <div className="flex gap-2">
+                            <select
+                                className="select select-bordered bg-[#2a2a2a] text-white flex-1"
+                                value={birthMonth}
+                                onChange={(e) => setBirthMonth(e.target.value)}
+                            >
+                                <option value="" disabled>Month</option>
+                                {['January','February','March','April','May','June','July','August','September','October','November','December'].map((m, i) => (
+                                    <option key={i} value={String(i + 1).padStart(2, '0')}>{m}</option>
+                                ))}
+                            </select>
+                            <select
+                                className="select select-bordered bg-[#2a2a2a] text-white flex-1"
+                                value={birthDay}
+                                onChange={(e) => setBirthDay(e.target.value)}
+                            >
+                                <option value="" disabled>Day</option>
+                                {Array.from({ length: 31 }, (_, i) => (
+                                    <option key={i + 1} value={String(i + 1).padStart(2, '0')}>{i + 1}</option>
+                                ))}
+                            </select>
+                            <select
+                                className="select select-bordered bg-[#2a2a2a] text-white flex-1"
+                                value={birthYear}
+                                onChange={(e) => setBirthYear(e.target.value)}
+                            >
+                                <option value="" disabled>Year</option>
+                                {Array.from({ length: 101 }, (_, i) => new Date().getFullYear() - i).map(y => (
+                                    <option key={y} value={y}>{y}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
                     <div className="flex flex-col gap-1">
                         <label className="text-xs font-semibold tracking-widest uppercase text-[#8A9A5B]">

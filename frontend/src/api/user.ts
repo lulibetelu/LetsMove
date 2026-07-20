@@ -19,6 +19,9 @@ export async function createUser(credentials: RegisterCredentials){
             email: credentials.email,
             password: credentials.password,
         };
+        if (credentials.birthday) {
+            body.birthday = credentials.birthday;
+        }
         if (credentials.locationId) {
             body.locationId = credentials.locationId;
         }
