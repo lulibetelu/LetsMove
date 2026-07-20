@@ -39,11 +39,9 @@ export default function RegisterPage(){
                 username,
                 email,
                 password: isGoogleUser ? '' : password,
-                locationId: selectedLocation?.id,
+                locationId: selectedLocation!.id,
+                birthday: `${birthYear}-${birthMonth}-${birthDay}`
             };
-            if (birthMonth && birthDay && birthYear) {
-                credentials.birthday = `${birthYear}-${birthMonth}-${birthDay}`;
-            }
             await createUser(credentials);
 
             if (isGoogleUser) {

@@ -22,8 +22,8 @@ export interface RegisterCredentials{
     username: string,
     email: string,
     password: string,
-    birthday?: string,
-    locationId?: number
+    birthday: string,
+    locationId: number
 }
 
 export interface LoginCredentials{

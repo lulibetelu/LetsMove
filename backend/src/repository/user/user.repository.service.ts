@@ -76,7 +76,6 @@ export class UserRepositoryService {
       data: {
         ...userData,
         password: password ?? '',
-        ...(locationId && { homeLocation: { connect: { id: locationId } } }),
         birthday,
         homeLocation: { connect: { id: locationId } },
       },
