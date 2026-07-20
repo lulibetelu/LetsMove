@@ -5,6 +5,8 @@ import {Link, useNavigate} from "react-router-dom";
 import PopUpError from "../components/PopUpError.tsx";
 import CustomInput from "../components/create/CustomInput.tsx";
 import {LogIn} from "lucide-react";
+import {GoogleLogin} from "@react-oauth/google";
+import {useGoogleAuth} from "../hooks/useGoogleAuth.ts";
 
 export default function LoginPage(){
     const [email, setEmail] = useState('');
@@ -12,6 +14,8 @@ export default function LoginPage(){
     const [error, setError] = useState<string|null>(null);
 
     const navigate = useNavigate();
+    const googleAuth = useGoogleAuth();
+
     const handleSubmit:React.SubmitEventHandler= async (event) => {
         event.preventDefault()
         const credentials: LoginCredentials = {email, password}
@@ -23,6 +27,24 @@ export default function LoginPage(){
             if (e instanceof Error) setError(e.message);
         }
     }
+
+    const handleGoogleSuccess = (credentialResponse: { credential?: string }) => {
+        if (!credentialResponse.credential) return;
+        googleAuth.mutate(credentialResponse.credential, {
+            onSuccess: (data) => {
+                if (data.exists && data.access_token) {
+                    localStorage.setItem('token', data.access_token);
+                    navigate("/homepage");
+                } else if (!data.exists) {
+                    sessionStorage.setItem('googleCredential', credentialResponse.credential!);
+                    navigate("/register", { state: { email: data.email, name: data.name } });
+                }
+            },
+            onError: (e) => {
+                setError(e.message);
+            },
+        });
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#141414]">
@@ -71,7 +93,25 @@ export default function LoginPage(){
                     <button className="btn border-none bg-[#8A9A5B] hover:bg-[#728249] text-white w-full mt-2 shadow-md transition-all active:scale-[0.98]"
                     > Login
                         </button>
-                    <div className="g-signin2" data-onsuccess="onSignIn"></div>
+
+                    <div className="flex items-center gap-3 w-full mt-2">
+                        <div className="flex-1 h-px bg-white/10" />
+                        <span className="text-xs text-white/40 uppercase tracking-wider">or</span>
+                        <div className="flex-1 h-px bg-white/10" />
+                    </div>
+
+                    <div className="w-full mt-2 flex justify-center">
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={() => setError("Google login failed")}
+                            theme="filled_black"
+                            size="large"
+                            width="100%"
+                            text="signin_with"
+                            shape="rectangular"
+                        />
+                    </div>
+
                     <div className='flex flex-col items-center gap-2 mt-4'>
                         <p className="text-sm opacity-70">Don't have an account?</p>
                         <Link to='/register' className='text-[#8A9A5B] font-semibold hover:underline transition-all'>Register</Link>

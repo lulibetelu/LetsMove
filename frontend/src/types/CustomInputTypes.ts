@@ -5,6 +5,7 @@ export interface InputProps {
     placeHolder: string,
     value: string,
     onChange: ChangeEventHandler<HTMLInputElement>,
+    readOnly?: boolean,
 }
 
 export interface CustomInputProps {

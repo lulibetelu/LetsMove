@@ -12,6 +12,7 @@ export default function CustomInput({ label, input} : CustomInputProps) {
                 className="input input-bordered bg-white/5"
                 value={input.value}
                 onChange={input.onChange}
+                readOnly={input.readOnly}
             />
         </div>
     );

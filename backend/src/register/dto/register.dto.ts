@@ -5,6 +5,7 @@ import {
   IsOptional,
   IsString,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
 
 export class RegisterDto {
@@ -17,10 +18,12 @@ export class RegisterDto {
   @IsNotEmpty()
   email: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
+  // esto lo que hace es que si password es == a '', se skipea la ultima validacion
+  @ValidateIf((_, value) => value !== '')
   @MinLength(8)
-  password: string;
+  password?: string;
 
   @IsOptional()
   @IsInt()

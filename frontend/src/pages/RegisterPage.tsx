@@ -1,16 +1,25 @@
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {useState} from "react";
 import {createUser, loginUser} from '../api/user.ts'
-import type {LoginCredentials, RegisterCredentials} from "../types/userTypes.ts";
+import api from '../api/client.ts'
+import type {RegisterCredentials} from "../types/userTypes.ts";
 import PopUpError from "../components/PopUpError.tsx";
 import CustomInput from "../components/create/CustomInput.tsx";
 import Dropdown from "../components/Dropdown.tsx";
 import {useLocations} from "../hooks/useLocations.ts";
 import {UserPlus} from "lucide-react";
 
+interface GoogleAuthResponse {
+    access_token?: string;
+}
+
 export default function RegisterPage(){
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
+    const location = useLocation();
+    const googleData = location.state as { email?: string; name?: string } | null;
+    const isGoogleUser = Boolean(googleData?.email);
+
+    const [username, setUsername] = useState(googleData?.name ?? '');
+    const [email, setEmail] = useState(googleData?.email ?? '');
     const [password, setPassword] = useState('');
     const [locationName, setLocationName] = useState('');
     const [error, setError] = useState<string|null>(null);
@@ -26,15 +35,24 @@ export default function RegisterPage(){
             const credentials: RegisterCredentials = {
                 username,
                 email,
-                password,
+                password: isGoogleUser ? '' : password,
                 locationId: selectedLocation?.id,
             };
-            const userResponse = await createUser(credentials);
-            console.log("USER RESPONSE " + userResponse.message)
+            await createUser(credentials);
 
-            const loginCredentials: LoginCredentials = {email, password};
-            const token = await loginUser(loginCredentials);
-            localStorage.setItem('token', token)
+            if (isGoogleUser) {
+                const googleToken = sessionStorage.getItem('googleCredential');
+                if (googleToken) {
+                    const { data } = await api.post<GoogleAuthResponse>('auth', { token: googleToken });
+                    if (data.access_token) {
+                        localStorage.setItem('token', data.access_token);
+                    }
+                    sessionStorage.removeItem('googleCredential');
+                }
+            } else {
+                const token = await loginUser({email, password});
+                localStorage.setItem('token', token);
+            }
 
             navigate("/interests");
         } catch (e) {
@@ -71,7 +89,8 @@ export default function RegisterPage(){
                                 type: 'text',
                                 placeHolder: 'your username',
                                 value: username,
-                                onChange: (e) => {setUsername(e.target.value)}
+                                onChange: (e) => {setUsername(e.target.value)},
+                                readOnly: isGoogleUser,
                             }}></CustomInput>
                     </div>
                     <div className="flex flex-col gap-1">
@@ -79,15 +98,17 @@ export default function RegisterPage(){
                                 type: 'email',
                                 placeHolder: 'your email',
                                 value: email,
-                                onChange: (e) => {setEmail(e.target.value)}
+                                onChange: (e) => {setEmail(e.target.value)},
+                                readOnly: isGoogleUser,
                             }}></CustomInput>
                     </div>
                     <div className="flex flex-col gap-1">
                         <CustomInput label = 'Password' input = {{
                                 type: 'password',
                                 placeHolder: 'your password',
-                                value: password,
-                                onChange: (e) => {setPassword(e.target.value)}
+                                value: isGoogleUser ? '********' : password,
+                                onChange: isGoogleUser ? () => {} : (e) => {setPassword(e.target.value)},
+                                readOnly: isGoogleUser,
                             }}></CustomInput>
                     </div>
                     <div className="flex flex-col gap-1">
@@ -122,5 +143,3 @@ export default function RegisterPage(){
     );
 
 }
-
-//esto es muu feo y yo se que se puede modularizar y hacer legible. No se si para hacerlo. Solo para aprenderlo
