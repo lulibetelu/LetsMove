@@ -10,11 +10,12 @@ export class EmailVerificationController {
 
   @Get()
   async verify(@Query('token') token: string, @Res() res: Response) {
+    const frontendUrl = process.env.URL ?? 'http://localhost:5173';
     try {
       await this.emailVerificationService.verifyEmail(token);
-      res.redirect(`${process.env.URL}/login`);
+      return res.redirect(`${frontendUrl}/login`);
     } catch {
-      res.redirect(`${process.env.URL}/error`);
+      return res.redirect(`${frontendUrl}/error`);
     }
   }
 }

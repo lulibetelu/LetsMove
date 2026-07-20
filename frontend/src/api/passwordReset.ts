@@ -1,4 +1,4 @@
-import api, { handleApiError } from "./client";
+import api, { handleApiError } from "./client.ts";
 
 export async function requestPasswordReset(email: string) {
   try {
