@@ -25,6 +25,7 @@ import { LocationModule } from './location/location.module';
 import { MailModule } from './mailNotification/mail.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RecommendationModule } from './ai-recommendation/recommendation.module';
+import { EmailVerificationModule } from './email-verification/email-verification.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { RecommendationModule } from './ai-recommendation/recommendation.module'
     SavedEventModule,
     LocationModule,
     MailModule,
+    EmailVerificationModule,
     RecommendationModule,
   ],
   controllers: [AppController],

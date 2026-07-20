@@ -11,6 +11,21 @@ export class MailService {
     private readonly mailerService: MailerService,
     private readonly eventService: EventService,
   ) {}
+  async sendVerificationEmail(email: string, username: string, token: string) {
+    const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:3000';
+    const verificationUrl = `${backendUrl}/email-verification?token=${token}`;
+
+    await this.mailerService.sendMail({
+      to: email,
+      subject: "Verify your email - Let's Move",
+      template: 'EmailVerification',
+      context: {
+        userName: username,
+        verificationUrl,
+      },
+    });
+  }
+
   @Cron(CronExpression.EVERY_DAY_AT_5PM)
   async sendEventReminders() {
     const tomorrow = new Date();

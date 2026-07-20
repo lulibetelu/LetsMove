@@ -66,6 +66,7 @@ export class UserRepositoryService {
         password: true,
         email: true,
         birthday: true,
+        isVerified: true,
       },
     });
   }
@@ -105,6 +106,17 @@ export class UserRepositoryService {
         id: true,
         username: true,
         biography: true,
+      },
+    });
+  }
+
+  async markVerified(userId: number) {
+    return this.prismaService.user.update({
+      where: { id: userId },
+      data: { isVerified: true },
+      select: {
+        id: true,
+        username: true,
       },
     });
   }

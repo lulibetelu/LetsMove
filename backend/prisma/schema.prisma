@@ -44,6 +44,7 @@ model User {
 
   groupMember GroupMember[]
   embedding   Unsupported("vector(3072)")?
+  isVerified  Boolean                      @default(false)
 }
 
 model Sport {
