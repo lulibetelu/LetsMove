@@ -22,7 +22,6 @@ export class GeminiService {
       model: 'gemini-3.5-flash',
       contents: prompt,
     });
-    this.logger.log(`Gemini response text: ${response.text}`);
     return response.text ?? '';
   }
 }

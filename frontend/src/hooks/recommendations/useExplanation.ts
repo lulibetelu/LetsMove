@@ -4,19 +4,19 @@ import {
   explainEventRecommendation,
 } from "../../api/recommendation.ts";
 
-export function useUserExplanation(userId: number | null, enabled: boolean) {
+export function useUserExplanation(userId: number, enabled: boolean) {
   return useQuery({
     queryKey: ["explanation", "user", userId],
-    queryFn: () => explainUserRecommendation(userId!),
+    queryFn: () => explainUserRecommendation(userId),
     enabled: enabled && userId !== null,
     staleTime: 10 * 60 * 1000,
   });
 }
 
-export function useEventExplanation(eventId: number | null, enabled: boolean) {
+export function useEventExplanation(eventId: number, enabled: boolean) {
   return useQuery({
     queryKey: ["explanation", "event", eventId],
-    queryFn: () => explainEventRecommendation(eventId!),
+    queryFn: () => explainEventRecommendation(eventId),
     enabled: enabled && eventId !== null,
     staleTime: 10 * 60 * 1000,
   });
