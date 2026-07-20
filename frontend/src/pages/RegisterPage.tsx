@@ -1,18 +1,30 @@
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {useState} from "react";
 import {createUser, loginUser} from '../api/user.ts'
-import type {LoginCredentials, RegisterCredentials} from "../types/userTypes.ts";
+import api from '../api/client.ts'
+import type {RegisterCredentials} from "../types/userTypes.ts";
 import PopUpError from "../components/PopUpError.tsx";
 import CustomInput from "../components/create/CustomInput.tsx";
 import Dropdown from "../components/Dropdown.tsx";
 import {useLocations} from "../hooks/useLocations.ts";
 import {UserPlus} from "lucide-react";
 
+interface GoogleAuthResponse {
+    access_token?: string;
+}
+
 export default function RegisterPage(){
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
+    const location = useLocation();
+    const googleData = location.state as { email?: string; name?: string } | null;
+    const isGoogleUser = Boolean(googleData?.email);
+
+    const [username, setUsername] = useState(googleData?.name ?? '');
+    const [email, setEmail] = useState(googleData?.email ?? '');
     const [password, setPassword] = useState('');
     const [locationName, setLocationName] = useState('');
+    const [birthMonth, setBirthMonth] = useState('');
+    const [birthDay, setBirthDay] = useState('');
+    const [birthYear, setBirthYear] = useState('');
     const [error, setError] = useState<string|null>(null);
     const {locations, isPending: locLoading, locationError} = useLocations();
 
@@ -26,15 +38,25 @@ export default function RegisterPage(){
             const credentials: RegisterCredentials = {
                 username,
                 email,
-                password,
-                locationId: selectedLocation?.id,
+                password: isGoogleUser ? '' : password,
+                locationId: selectedLocation!.id,
+                birthday: `${birthYear}-${birthMonth}-${birthDay}`
             };
-            const userResponse = await createUser(credentials);
-            console.log("USER RESPONSE " + userResponse.message)
+            await createUser(credentials);
 
-            const loginCredentials: LoginCredentials = {email, password};
-            const token = await loginUser(loginCredentials);
-            localStorage.setItem('token', token)
+            if (isGoogleUser) {
+                const googleToken = sessionStorage.getItem('googleCredential');
+                if (googleToken) {
+                    const { data } = await api.post<GoogleAuthResponse>('auth', { token: googleToken });
+                    if (data.access_token) {
+                        localStorage.setItem('token', data.access_token);
+                    }
+                    sessionStorage.removeItem('googleCredential');
+                }
+            } else {
+                const token = await loginUser({email, password});
+                localStorage.setItem('token', token);
+            }
 
             navigate("/interests");
         } catch (e) {
@@ -71,7 +93,8 @@ export default function RegisterPage(){
                                 type: 'text',
                                 placeHolder: 'your username',
                                 value: username,
-                                onChange: (e) => {setUsername(e.target.value)}
+                                onChange: (e) => {setUsername(e.target.value)},
+                                readOnly: isGoogleUser,
                             }}></CustomInput>
                     </div>
                     <div className="flex flex-col gap-1">
@@ -79,16 +102,55 @@ export default function RegisterPage(){
                                 type: 'email',
                                 placeHolder: 'your email',
                                 value: email,
-                                onChange: (e) => {setEmail(e.target.value)}
+                                onChange: (e) => {setEmail(e.target.value)},
+                                readOnly: isGoogleUser,
                             }}></CustomInput>
                     </div>
                     <div className="flex flex-col gap-1">
                         <CustomInput label = 'Password' input = {{
                                 type: 'password',
                                 placeHolder: 'your password',
-                                value: password,
-                                onChange: (e) => {setPassword(e.target.value)}
+                                value: isGoogleUser ? '********' : password,
+                                onChange: isGoogleUser ? () => {} : (e) => {setPassword(e.target.value)},
+                                readOnly: isGoogleUser,
                             }}></CustomInput>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <label className="text-xs font-semibold tracking-widest uppercase text-[#8A9A5B]">
+                            Birthday
+                        </label>
+                        <div className="flex gap-2">
+                            <select
+                                className="select select-bordered bg-[#2a2a2a] text-white flex-1"
+                                value={birthMonth}
+                                onChange={(e) => setBirthMonth(e.target.value)}
+                            >
+                                <option value="" disabled>Month</option>
+                                {['January','February','March','April','May','June','July','August','September','October','November','December'].map((m, i) => (
+                                    <option key={i} value={String(i + 1).padStart(2, '0')}>{m}</option>
+                                ))}
+                            </select>
+                            <select
+                                className="select select-bordered bg-[#2a2a2a] text-white flex-1"
+                                value={birthDay}
+                                onChange={(e) => setBirthDay(e.target.value)}
+                            >
+                                <option value="" disabled>Day</option>
+                                {Array.from({ length: 31 }, (_, i) => (
+                                    <option key={i + 1} value={String(i + 1).padStart(2, '0')}>{i + 1}</option>
+                                ))}
+                            </select>
+                            <select
+                                className="select select-bordered bg-[#2a2a2a] text-white flex-1"
+                                value={birthYear}
+                                onChange={(e) => setBirthYear(e.target.value)}
+                            >
+                                <option value="" disabled>Year</option>
+                                {Array.from({ length: 101 }, (_, i) => new Date().getFullYear() - i).map(y => (
+                                    <option key={y} value={y}>{y}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
                     <div className="flex flex-col gap-1">
                         <label className="text-xs font-semibold tracking-widest uppercase text-[#8A9A5B]">
@@ -122,5 +184,3 @@ export default function RegisterPage(){
     );
 
 }
-
-//esto es muu feo y yo se que se puede modularizar y hacer legible. No se si para hacerlo. Solo para aprenderlo

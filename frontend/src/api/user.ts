@@ -5,6 +5,13 @@ interface LoginResponse{
     access_token: string
 }
 
+interface GoogleAuthResponse {
+    exists: boolean;
+    access_token?: string;
+    email?: string;
+    name?: string;
+}
+
 export async function createUser(credentials: RegisterCredentials){
     try {
         const body: Record<string, unknown> = {
@@ -12,6 +19,9 @@ export async function createUser(credentials: RegisterCredentials){
             email: credentials.email,
             password: credentials.password,
         };
+        if (credentials.birthday) {
+            body.birthday = credentials.birthday;
+        }
         if (credentials.locationId) {
             body.locationId = credentials.locationId;
         }
@@ -65,6 +75,15 @@ export function getCurrentUserId(): number|null {
 
 export function getCurrentUsername(): string | null {
     return decodeToken()?.username ?? null;
+}
+
+export async function googleLogin(token: string): Promise<GoogleAuthResponse> {
+    try {
+        const { data } = await api.post<GoogleAuthResponse>('auth', { token });
+        return data;
+    } catch (error) {
+        handleApiError(error);
+    }
 }
 
 function decodeToken(): { sub: number; username: string } | null {
