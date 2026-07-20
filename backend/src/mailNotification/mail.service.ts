@@ -11,6 +11,21 @@ export class MailService {
     private readonly mailerService: MailerService,
     private readonly eventService: EventService,
   ) {}
+  async sendPasswordResetEmail(email: string, username: string, token: string) {
+    const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:3000';
+    const resetUrl = `${backendUrl}/password-reset/reset?token=${token}`;
+
+    await this.mailerService.sendMail({
+      to: email,
+      subject: "Reset your password - Let's Move",
+      template: 'PasswordReset',
+      context: {
+        userName: username,
+        resetUrl,
+      },
+    });
+  }
+
   async sendVerificationEmail(email: string, username: string, token: string) {
     const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:3000';
     const verificationUrl = `${backendUrl}/email-verification?token=${token}`;

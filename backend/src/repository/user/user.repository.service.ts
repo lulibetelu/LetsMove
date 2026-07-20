@@ -110,6 +110,17 @@ export class UserRepositoryService {
     });
   }
 
+  async updatePassword(userId: number, newPassword: string) {
+    return this.prismaService.user.update({
+      where: { id: userId },
+      data: { password: newPassword },
+      select: {
+        id: true,
+        username: true,
+      },
+    });
+  }
+
   async markVerified(userId: number) {
     return this.prismaService.user.update({
       where: { id: userId },

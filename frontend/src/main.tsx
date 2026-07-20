@@ -13,6 +13,7 @@ import Homepage from './pages/Homepage.tsx';
 import Profile from "./pages/Profile.tsx";
 import NotificationsPage from "./pages/NotificationsPage.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
+import PasswordResetPage from "./pages/PasswordResetPage.tsx";
 import PostPage from "./pages/PostPage.tsx";
 import EventFeed from "./pages/EventFeed.tsx";
 import EventPage from "./pages/EventPage.tsx";
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
     {
         path: "/error",
         element: <ErrorPage/>
+    },
+    {
+        path: "/password-reset",
+        element: <PasswordResetPage/>
     },
     {
         element: <ProtectedRoute />,

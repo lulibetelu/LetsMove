@@ -26,6 +26,7 @@ import { MailModule } from './mailNotification/mail.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RecommendationModule } from './ai-recommendation/recommendation.module';
 import { EmailVerificationModule } from './email-verification/email-verification.module';
+import { PasswordResetModule } from './password-reset/password-reset.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { EmailVerificationModule } from './email-verification/email-verification
     LocationModule,
     MailModule,
     EmailVerificationModule,
+    PasswordResetModule,
     RecommendationModule,
   ],
   controllers: [AppController],
