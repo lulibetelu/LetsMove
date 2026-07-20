@@ -6,6 +6,7 @@ import PopUpError from "../components/PopUpError.tsx";
 import NewPost from "../components/create/NewPost.tsx";
 import {usePosts} from "../hooks/posts/usePosts.ts";
 import {useQueryClient} from "@tanstack/react-query";
+import RecommendationSidebar from "../components/recommendations/RecommendationSidebar.tsx";
 
 
 export default function Homepage() {
@@ -45,6 +46,7 @@ export default function Homepage() {
                     </div>
 
                 </main>
+            <RecommendationSidebar />
             <div className="flex justify-end items-end h-screen">
                 <button type="button" onClick={() => setCreatePost(true)} className="
                     fixed bottom-6 right-6

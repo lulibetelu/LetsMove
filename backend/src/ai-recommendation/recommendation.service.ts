@@ -1,15 +1,19 @@
-import { AiUserType } from './ai-user-type';
+import { AiUserType, RecommendationExplanation } from './ai-user-type';
 import { RegisterService } from '../register/register.service';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { GeminiService } from './gemini/gemini.service';
 import { RecommendationRepositoryService } from '../repository/recommendation/recommendation.repository.service';
+import { EventRepositoryService } from '../repository/event/event.repository.service';
 
 @Injectable()
 export class RecommendationService {
+  private readonly logger = new Logger('RecommendationService');
+
   constructor(
     private readonly registerService: RegisterService,
     private readonly geminiService: GeminiService,
     private readonly recommendationRepository: RecommendationRepositoryService,
+    private readonly eventRepository: EventRepositoryService,
   ) {}
   private async getUserData(userId: number): Promise<AiUserType> {
     const user = await this.registerService.findOne(userId);
@@ -93,5 +97,76 @@ export class RecommendationService {
       userId,
       userVector,
     );
+  }
+
+  private formatUserForPrompt(userData: AiUserType): string {
+    const sports = userData.interests.map((i) => `${i.sport} (${i.level})`);
+    return `${userData.age} years old, lives in ${userData.location}, practices: ${sports.join(', ') || 'none'}`;
+  }
+
+  async explainUserRecommendation(
+    currentUserId: number,
+    recommendedUserId: number,
+  ): Promise<RecommendationExplanation> {
+    try {
+      const currentUserData = await this.getUserData(currentUserId);
+      const recommendedUserData = await this.getUserData(recommendedUserId);
+
+      const prompt = `You are a social app assistant. Explain in 1-2 short sentences why User B was recommended to User A based on their profiles. Be friendly and concise. Don't mention the user's name.
+
+User A: ${this.formatUserForPrompt(currentUserData)}
+User B: ${this.formatUserForPrompt(recommendedUserData)}
+
+Explanation:`;
+
+      const explanation = await this.geminiService.generateText(prompt);
+      return { explanation };
+    } catch (error) {
+      this.logger.error(
+        `Failed to generate user recommendation explanation for user ${currentUserId} -> ${recommendedUserId}`,
+        error,
+      );
+      return {
+        explanation:
+          'This recommendation is based on shared interests and preferences.',
+      };
+    }
+  }
+
+  async explainEventRecommendation(
+    currentUserId: number,
+    eventId: number,
+  ): Promise<RecommendationExplanation> {
+    try {
+      const currentUserData = await this.getUserData(currentUserId);
+      const event = await this.eventRepository.findOneById(eventId);
+
+      if (!event) {
+        throw new NotFoundException('Event not found');
+      }
+
+      const eventLocation = event.location?.location ?? 'Online';
+      const prompt = `You are a social app assistant. Explain in 1-2 short sentences why this event was recommended to the user. Be friendly and concise.
+
+User: ${this.formatUserForPrompt(currentUserData)}
+Event: "${event.title}" - ${event.sport.name} event, ${eventLocation}, hosted by ${event.host.username}
+
+Explanation:`;
+
+      const explanation = await this.geminiService.generateText(prompt);
+      return { explanation };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      this.logger.error(
+        `Failed to generate event recommendation explanation for user ${currentUserId} -> event ${eventId}`,
+        error,
+      );
+      return {
+        explanation:
+          'This recommendation is based on shared interests and preferences.',
+      };
+    }
   }
 }
