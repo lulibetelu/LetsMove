@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { OAuth2Client } from 'google-auth-library';
+import { OAuth2Client, TokenPayload } from 'google-auth-library';
 import { UserRepositoryService } from '../repository/user/user.repository.service';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class AuthService {
   }
 
   async verifyGoogleUserExists(idToken: string) {
-    let payload;
+    let payload: TokenPayload | undefined;
     try {
       const ticket = await this.client.verifyIdToken({
         idToken,
@@ -23,6 +23,10 @@ export class AuthService {
       });
       payload = ticket.getPayload();
     } catch {
+      throw new UnauthorizedException('Invalid Google token');
+    }
+
+    if (!payload?.email) {
       throw new UnauthorizedException('Invalid Google token');
     }
 
