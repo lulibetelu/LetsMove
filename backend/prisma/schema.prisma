@@ -42,9 +42,10 @@ model User {
   eventEntries EventEntry[]
   savedEvents  SavedEvent[]
 
-  groupMember GroupMember[]
-  embedding   Unsupported("vector(3072)")?
-  isVerified  Boolean                      @default(false)
+  groupMember          GroupMember[]
+  embedding            Unsupported("vector(3072)")?
+  isVerified           Boolean                      @default(false)
+  notificationsEnabled Boolean                      @default(true)
 }
 
 model Sport {

@@ -74,6 +74,7 @@ export class MailService {
       };
 
       for (const signup of event.eventSignUp) {
+        if (!signup.user.notificationsEnabled) continue;
         await this.sendEventReminder(signup.user, filteredEvent);
       }
     }
