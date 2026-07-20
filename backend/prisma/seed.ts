@@ -195,6 +195,9 @@ async function main() {
     'Running',
     'Cycling',
     'Volleyball',
+    'Padel',
+    'Hockey',
+    'Rugby',
   ];
 
   for (const name of sportNames) {
@@ -333,16 +336,16 @@ async function main() {
   const userMap = Object.fromEntries(users.map((u) => [u.username, u.id]));
 
   const preferences = [
-    { username: 'john_doe', sports: ['Football', 'Running'] },
+    { username: 'john_doe', sports: ['Football', 'Running', 'Hockey'] },
     { username: 'jane_smith', sports: ['Tennis', 'Swimming'] },
     { username: 'carlos_m', sports: ['Football', 'Basketball', 'Cycling'] },
     { username: 'ana_perez', sports: ['Volleyball', 'Running'] },
-    { username: 'mike_j', sports: ['Basketball', 'Cycling'] },
+    { username: 'mike_j', sports: ['Basketball', 'Cycling', 'Rugby'] },
     { username: 'lucia_g', sports: ['Running', 'Cycling'] },
     { username: 'martin_r', sports: ['Football', 'Swimming'] },
     { username: 'sofia_k', sports: ['Tennis', 'Volleyball'] },
     { username: 'federico_l', sports: ['Cycling', 'Running'] },
-    { username: 'valentina_m', sports: ['Basketball', 'Volleyball'] },
+    { username: 'valentina_m', sports: ['Basketball', 'Volleyball', 'Hockey'] },
     { username: 'agustin_p', sports: ['Football', 'Tennis'] },
     { username: 'camila_t', sports: ['Football', 'Running'] },
     { username: 'diego_h', sports: ['Swimming', 'Cycling'] },
@@ -405,6 +408,11 @@ async function main() {
       username: 'john_doe',
       content: 'Sunday league football, we won 3-1!',
       sports: ['Football'],
+    },
+    {
+      username: 'john_doe',
+      content: 'First field hockey game of the season, what a rush',
+      sports: ['Hockey'],
     },
     // jane_smith (Tennis, Swimming) - 7 posts
     {
@@ -549,6 +557,11 @@ async function main() {
       username: 'mike_j',
       content: 'Free throw practice, 85% accuracy from the line',
       sports: ['Basketball'],
+    },
+    {
+      username: 'mike_j',
+      content: 'Rugby training was physical today, tackling drills nonstop',
+      sports: ['Rugby'],
     },
     // lucia_g (Running, Cycling) - 7 posts
     {
@@ -729,6 +742,11 @@ async function main() {
       username: 'valentina_m',
       content: 'Basketball and volleyball back to back, what a day',
       sports: ['Basketball', 'Volleyball'],
+    },
+    {
+      username: 'valentina_m',
+      content: 'Field hockey tournament this weekend, our team is ready',
+      sports: ['Hockey'],
     },
     // agustin_p (Football, Tennis) - 6 posts
     {
@@ -932,7 +950,7 @@ async function main() {
       host: 'john_doe',
       title: 'Sunday Football at Parque Saavedra',
       description:
-        'Partido de fútbol 5 en el Parque Saavedra, La Plata. Todos los niveles son bienvenidos, solo traigan agua y ganas de correr.',
+        '5-a-side football match at Parque Saavedra, La Plata. All skill levels welcome, just bring water and a willingness to run.',
       sport: 'Football',
       locationName: 'La Plata',
       eventType: 'InPerson' as const,
@@ -946,7 +964,7 @@ async function main() {
       host: 'jane_smith',
       title: 'Tennis doubles in Mar del Plata',
       description:
-        'Buscamos gente para jugar dobles en el club. Nivel intermedio, cancha de polvo de ladrillo.',
+        'Looking for people to play doubles at the club. Intermediate level, clay court.',
       sport: 'Tennis',
       locationName: 'General Pueyrredón',
       eventType: 'InPerson' as const,
@@ -960,7 +978,7 @@ async function main() {
       host: 'carlos_m',
       title: 'Basketball 3x3 Tournament',
       description:
-        'Torneo de básquet 3x3 en el polideportivo de Avellaneda. Premio para el equipo ganador.',
+        '3x3 basketball tournament at the Avellaneda sports center. Prize for the winning team.',
       sport: 'Basketball',
       locationName: 'Avellaneda',
       eventType: 'InPerson' as const,
@@ -974,7 +992,7 @@ async function main() {
       host: 'ana_perez',
       title: 'Volleyball friendly match',
       description:
-        'Partido amistoso de vóley en el club de La Matanza. Necesitamos 2 jugadores más para completar los equipos.',
+        'Friendly volleyball match at the La Matanza club. We need 2 more players to complete the teams.',
       sport: 'Volleyball',
       locationName: 'La Matanza',
       eventType: 'InPerson' as const,
@@ -989,7 +1007,7 @@ async function main() {
       host: 'martin_r',
       title: 'Beach football in Tigre',
       description:
-        'Fútbol playa en el Parque de la Costa. Vamos a hacer un partido 5vs5, después bajamos algo a la parrilla.',
+        'Beach football at Parque de la Costa. We are playing a 5v5 match, then throwing some meat on the grill.',
       sport: 'Football',
       locationName: 'Tigre',
       eventType: 'InPerson' as const,
@@ -1003,7 +1021,7 @@ async function main() {
       host: 'federico_l',
       title: 'Morning cycling through Pilar',
       description:
-        'Salida de ciclismo de 40km por los caminos de Pilar. Ritmo tranquilo, ideal para arrancar el finde.',
+        '40km cycling ride through the Pilar roads. Relaxed pace, perfect way to kick off the weekend.',
       sport: 'Cycling',
       locationName: 'Pilar',
       eventType: 'InPerson' as const,
@@ -1017,7 +1035,7 @@ async function main() {
       host: 'sofia_k',
       title: 'Tennis singles match',
       description:
-        'Busco rival para jugar un partido de singles en Quilmes. Nivel intermedio-avanzado.',
+        'Looking for an opponent for a singles match in Quilmes. Intermediate-advanced level.',
       sport: 'Tennis',
       locationName: 'Quilmes',
       eventType: 'InPerson' as const,
@@ -1031,7 +1049,7 @@ async function main() {
       host: 'john_doe',
       title: '10K Running Challenge - June',
       description:
-        'Corré 10km durante el mes. Cada uno registra su progreso con fotos o comentarios. Al final del mes compartimos los resultados.',
+        'Run 10km throughout the month. Everyone logs their progress with photos or comments. At the end of the month we share results.',
       sport: 'Running',
       locationName: null,
       eventType: 'Asynchronous' as const,
@@ -1079,7 +1097,7 @@ async function main() {
       host: 'mike_j',
       title: '100km Cycling Challenge',
       description:
-        'Ciclistas de Bahía Blanca y alrededores: sumemos 100km entre todos durante las próximas dos semanas. Cada uno aporta lo que pueda.',
+        'Cyclists from Bahia Blanca and surrounding areas: let us reach 100km together over the next two weeks. Everyone contributes what they can.',
       sport: 'Cycling',
       locationName: null,
       eventType: 'Asynchronous' as const,
@@ -1116,7 +1134,7 @@ async function main() {
       host: 'jane_smith',
       title: '5K Swim Challenge',
       description:
-        '5 kilómetros acumulados de natación en piscina. Dos semanas para completarlo. Registren sus avances acá.',
+        '5 cumulative kilometers of pool swimming. Two weeks to complete it. Log your progress here.',
       sport: 'Swimming',
       locationName: null,
       eventType: 'Asynchronous' as const,
