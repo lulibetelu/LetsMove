@@ -6,6 +6,7 @@ import PopUpError from "../components/PopUpError.tsx";
 import NewPost from "../components/create/NewPost.tsx";
 import {usePosts} from "../hooks/posts/usePosts.ts";
 import {useQueryClient} from "@tanstack/react-query";
+import RecommendationSidebar from "../components/recommendations/RecommendationSidebar.tsx";
 
 
 export default function Homepage() {
@@ -43,36 +44,34 @@ export default function Homepage() {
                             {error && <PopUpError message='Failed to load posts, please try again later'/>}
                         </div>
                     </div>
-
                 </main>
-            <div className="flex justify-end items-end h-screen">
-                <button type="button" onClick={() => setCreatePost(true)} className="
-                    fixed bottom-6 right-6
-                    w-10 h-10
-                    rounded-full
+            <RecommendationSidebar />
+            <button type="button" onClick={() => setCreatePost(true)} className="
+                fixed bottom-6 right-[19rem]
+                w-10 h-10
+                rounded-full
 
-                    bg-[#96a55a]
-                    hover:bg-[#a8b96a]
+                bg-[#96a55a]
+                hover:bg-[#a8b96a]
 
-                    text-white
+                text-white
 
-                    flex items-center justify-center
+                flex items-center justify-center
 
-                    shadow-lg
-                    hover:shadow-2xl
+                shadow-lg
+                hover:shadow-2xl
 
-                    transition-all duration-300 ease-out
+                transition-all duration-300 ease-out
 
-                    hover:scale-110
-                    hover:rotate-90
+                hover:scale-110
+                hover:rotate-90
 
-                    active:scale-95
+                active:scale-95
 
-                    cursor-pointer
-                  "
-                ><Plus size={18} /></button>
-                {createPost && <NewPost onClose={(wasCreated: boolean) => handleOnClose(wasCreated)}/>}
-            </div>
+                cursor-pointer
+              "
+            ><Plus size={18} /></button>
+            {createPost && <NewPost onClose={(wasCreated: boolean) => handleOnClose(wasCreated)}/>}
         </div>
     );
 }

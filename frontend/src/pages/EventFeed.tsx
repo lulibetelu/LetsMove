@@ -87,12 +87,10 @@ export default function EventFeed(){
 
                     <div ref={observerRef}/>
                 </div>
-            </main>
-            <div className="flex justify-end items-end h-screen">
                 <button type="button"
                         onClick={() => setShowCreateEventForm(true)}
                         className="
-                            fixed bottom-6 right-6
+                            fixed bottom-6 right-[0.8rem]
                             w-10 h-10
                             rounded-full
 
@@ -117,7 +115,7 @@ export default function EventFeed(){
                           "
                 ><Plus size={18} /></button>
                 {showCreateEventForm && <NewEvent onClose={() => setShowCreateEventForm(false)} onEventCreated={(id) => navigate(`/event/${id}`)} />}
-                </div>
+            </main>
             {showFilters && <Filters filters={filters} onClose={() => setShowFilters(false)} onSubmit={(formFilters:FormFilters) =>handleSubmit(formFilters)}/>}
         </div>
     )
