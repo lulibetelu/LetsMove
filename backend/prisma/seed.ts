@@ -323,6 +323,7 @@ async function main() {
       update: {},
       create: {
         ...userData,
+        isVerified: true,
         homeLocation: { connect: { location: homeLocationName } },
       },
     });

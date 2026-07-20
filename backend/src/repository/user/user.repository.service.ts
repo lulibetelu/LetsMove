@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { RegisterDto } from '../../register/dto/register.dto';
 import { UpdateRegisterDto } from '../../register/dto/update.register.dto';
@@ -16,6 +16,7 @@ export class UserRepositoryService {
         username: true,
         biography: true,
         birthday: true,
+        notificationsEnabled: true,
       },
     });
   }
@@ -66,6 +67,8 @@ export class UserRepositoryService {
         password: true,
         email: true,
         birthday: true,
+        isVerified: true,
+        notificationsEnabled: true,
       },
     });
   }
@@ -109,6 +112,45 @@ export class UserRepositoryService {
     });
   }
 
+  async updatePassword(userId: number, newPassword: string) {
+    return this.prismaService.user.update({
+      where: { id: userId },
+      data: { password: newPassword },
+      select: {
+        id: true,
+        username: true,
+      },
+    });
+  }
+
+  async markVerified(userId: number) {
+    return this.prismaService.user.update({
+      where: { id: userId },
+      data: { isVerified: true },
+      select: {
+        id: true,
+        username: true,
+      },
+    });
+  }
+
+  async toggleNotifications(userId: number) {
+    const current = await this.prismaService.user.findUnique({
+      where: { id: userId },
+      select: { notificationsEnabled: true },
+    });
+
+    if (!current) throw new NotFoundException('User not found');
+
+    const newState = !current.notificationsEnabled;
+
+    await this.prismaService.user.update({
+      where: { id: userId },
+      data: { notificationsEnabled: newState },
+    });
+
+    return { notificationsEnabled: newState };
+  }
   async removeById(id: number) {
     return this.prismaService.user.delete({
       where: { id: id },

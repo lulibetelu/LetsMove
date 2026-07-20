@@ -11,12 +11,14 @@ import Homepage from './pages/Homepage.tsx';
 import Profile from "./pages/Profile.tsx";
 import NotificationsPage from "./pages/NotificationsPage.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
+import PasswordResetPage from "./pages/PasswordResetPage.tsx";
 import PostPage from "./pages/PostPage.tsx";
 import EventFeed from "./pages/EventFeed.tsx";
 import EventPage from "./pages/EventPage.tsx";
 import GroupPage from "./pages/GroupPage.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import CalendarPage from "./pages/CalendatPage.tsx";
+import SettingsPage from "./pages/SettingsPage.tsx";
 import {GoogleOAuthProvider} from "@react-oauth/google";
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -39,6 +41,10 @@ const router = createBrowserRouter([
     {
         path: "/error",
         element: <ErrorPage/>
+    },
+    {
+        path: "/password-reset",
+        element: <PasswordResetPage/>
     },
     {
         element: <ProtectedRoute />,
@@ -78,6 +84,10 @@ const router = createBrowserRouter([
             {
                 path: "/calendar",
                 element: <CalendarPage/>
+            },
+            {
+                path: "/settings",
+                element: <SettingsPage/>
             }
         ]
     },

@@ -1,4 +1,4 @@
-import {Home, CalendarDays, Users, Bell, PartyPopper} from 'lucide-react';
+import {Home, CalendarDays, Users, Bell, PartyPopper, Settings} from 'lucide-react';
 import {Link, useLocation} from "react-router-dom";
 import {getCurrentUserId, getCurrentUsername} from "../api/user.ts";
 
@@ -15,6 +15,7 @@ export default function Sidebar() {
         { path: "/calendar", icon: CalendarDays, label: "Calendar" },
         { path: "/group", icon: Users, label: "Groups" },
         { path: "/notifications", icon: Bell, label: "Notifications" },
+        { path: "/settings", icon: Settings, label: "Settings" },
     ];
 
     return (
