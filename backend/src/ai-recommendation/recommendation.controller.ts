@@ -1,7 +1,8 @@
-import { Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Req, UseGuards } from '@nestjs/common';
 import { RecommendationService } from './recommendation.service';
 import { AuthGuard } from '../authentication/auth.guard';
 import type { Request } from 'express';
+import { ParseIntPipe } from '@nestjs/common';
 
 @Controller('recommendation')
 export class RecommendationController {
@@ -25,5 +26,25 @@ export class RecommendationController {
   getEventRecommendations(@Req() req: Request) {
     const userId: number = req.user.sub;
     return this.recommendationService.getEventRecommendation(userId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('user/explain/:id')
+  explainUserRecommendation(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const userId: number = req.user.sub;
+    return this.recommendationService.explainUserRecommendation(userId, id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('event/explain/:id')
+  explainEventRecommendation(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const userId: number = req.user.sub;
+    return this.recommendationService.explainEventRecommendation(userId, id);
   }
 }
