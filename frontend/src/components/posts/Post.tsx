@@ -51,7 +51,7 @@ export default function Post({ user: {username}, content, id, userId, isLiked, i
                         type="button"
                         onClick={(e) => { e.stopPropagation(); deletePost?.(); }}
                         className="ml-auto text-white/30 hover:text-red-400 transition-colors"
-                        aria-label="Eliminar post"
+                        aria-label="Delete post"
                     >
                         <Trash2 size={18} strokeWidth={1.5} />
                     </button>

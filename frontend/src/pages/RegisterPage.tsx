@@ -77,7 +77,7 @@ export default function RegisterPage(){
                     </div>
 
                     <h2 className="relative text-3xl font-bold tracking-tight">Register</h2>
-                    <p className="relative text-white/70 text-sm mt-1.5 font-light">Sumate a la comunidad</p>
+                    <p className="relative text-white/70 text-sm mt-1.5 font-light">Join the community</p>
 
                     <div className="absolute bottom-0 left-0 right-0 h-6 bg-[#1e1e1e] rounded-t-[50%]" />
 
@@ -121,7 +121,7 @@ export default function RegisterPage(){
                             isPending={locLoading}
                             value={locationName}
                             handleChange={setLocationName}
-                            placeholder="Choose location"
+                            placeholder="choose location"
                         />
                     </div>
                     <div>
@@ -129,9 +129,9 @@ export default function RegisterPage(){
                     </div>
                     <button type="submit" className="btn border-none bg-[#8A9A5B] hover:bg-[#728249] text-white w-full mt-2 shadow-md transition-all active:scale-[0.98]"> Register </button>
                     <div className='flex flex-col items-center justify-center gap-1 mt-2 text-center'>
-                        <p className="text-sm opacity-60">¿Ya tenés una cuenta?</p>
+                        <p className="text-sm opacity-60">Already have an account?</p>
                         <Link to='/login' className='text-[#8A9A5B] font-bold hover:text-[#728249] transition-colors'>
-                            Iniciá sesión acá
+                            Log in here
                         </Link>
                     </div>
 

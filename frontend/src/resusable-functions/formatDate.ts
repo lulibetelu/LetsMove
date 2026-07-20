@@ -12,9 +12,9 @@ export function formatRelative(date: Date | string): string {
     const diffMs = now.getTime() - d.getTime();
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffHours / 24);
-    if (diffHours < 1) return "hace menos de 1h";
-    if (diffHours < 24) return `hace ${diffHours}h`;
+    if (diffHours < 1) return "less than 1h ago";
+    if (diffHours < 24) return `${diffHours}h ago`;
 
-    if (diffDays === 1) return "ayer";
-    return `hace ${diffDays} días`;
+    if (diffDays === 1) return "yesterday";
+    return `${diffDays} days ago`;
 }

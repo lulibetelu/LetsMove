@@ -1,12 +1,13 @@
 import {
+  IsDate,
   IsEmail,
   IsInt,
   IsNotEmpty,
-  IsOptional,
   IsString,
   MinLength,
   ValidateIf,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class RegisterDto {
   @IsString()
@@ -25,7 +26,12 @@ export class RegisterDto {
   @MinLength(8)
   password?: string;
 
-  @IsOptional()
   @IsInt()
-  locationId?: number;
+  @IsNotEmpty()
+  locationId: number;
+
+  @IsNotEmpty()
+  @Type(() => Date)
+  @IsDate()
+  birthday: Date;
 }

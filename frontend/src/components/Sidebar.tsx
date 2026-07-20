@@ -1,4 +1,4 @@
-import {Home, CalendarDays, Users, Settings, Bell, PartyPopper} from 'lucide-react';
+import {Home, CalendarDays, Users, Bell, PartyPopper} from 'lucide-react';
 import {Link, useLocation} from "react-router-dom";
 import {getCurrentUserId, getCurrentUsername} from "../api/user.ts";
 
@@ -10,12 +10,11 @@ export default function Sidebar() {
     const isActive = (path: string) => location.pathname === path;
 
     const navItems = [
-        { path: "/homepage", icon: Home, label: "Inicio" },
-        { path: "/event", icon: PartyPopper, label: "Eventos"},
-        { path: "/calendar", icon: CalendarDays, label: "Calendario" },
-        { path: "/group", icon: Users, label: "Grupos" },
-        { path: "/settings", icon: Settings, label: "Configuración" },
-        { path: "/notifications", icon: Bell, label: "Notificaciones" },
+        { path: "/homepage", icon: Home, label: "Home" },
+        { path: "/event", icon: PartyPopper, label: "Events"},
+        { path: "/calendar", icon: CalendarDays, label: "Calendar" },
+        { path: "/group", icon: Users, label: "Groups" },
+        { path: "/notifications", icon: Bell, label: "Notifications" },
     ];
 
     return (

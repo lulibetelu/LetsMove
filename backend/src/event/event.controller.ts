@@ -35,10 +35,9 @@ export class EventController {
 
   @UseGuards(AuthGuard)
   @Get()
-  async findAll(@Req() req: Request) {
+  async findAll() {
     //Paso el Id para que en un futuro podamos usarlo para el feed de eventos "inteligente"
-    const requesterId = req.user.sub;
-    const promise = await this.eventService.findAll(requesterId);
+    const promise = await this.eventService.findAll();
 
     if (!promise || promise.length === 0)
       throw new NotFoundException('No events found');

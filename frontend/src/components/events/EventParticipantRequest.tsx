@@ -13,7 +13,7 @@ export default function EventParticipantRequest({participant, onChange}: Props) 
                 <CircleUserRound size={20} strokeWidth={1.5} className="text-white/40"/>
                 <div>
                     <span className="text-sm font-semibold text-[#8A9A5B]">{participant.user.username}</span>
-                    <span className="text-sm text-white/60"> quiere unirse a </span>
+                    <span className="text-sm text-white/60"> wants to join </span>
                     <span className="text-sm font-semibold text-white/80">{participant.eventTitle}</span>
                 </div>
             </div>
@@ -22,7 +22,7 @@ export default function EventParticipantRequest({participant, onChange}: Props) 
                     type="button"
                     className="p-2 rounded-full hover:bg-[#8A9A5B]/15 transition-colors"
                     onClick={() => onChange(true, participant.userId, participant.eventId)}
-                    aria-label="Aceptar"
+                    aria-label="Accept"
                 >
                     <Check size={18} strokeWidth={1.8} className="text-[#8A9A5B]"/>
                 </button>
@@ -30,7 +30,7 @@ export default function EventParticipantRequest({participant, onChange}: Props) 
                     type="button"
                     className="p-2 rounded-full hover:bg-red-400/10 transition-colors"
                     onClick={() => onChange(false, participant.userId, participant.eventId)}
-                    aria-label="Rechazar"
+                    aria-label="Reject"
                 >
                     <X size={18} strokeWidth={1.8} className="text-red-400/70"/>
                 </button>

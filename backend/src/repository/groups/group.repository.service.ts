@@ -118,7 +118,7 @@ export class GroupRepositoryService {
     );
   }
 
-  async deleteMembers(groupId: number, membersId: number[]){
+  async deleteMembers(groupId: number, membersId: number[]) {
     return this.prismaService.groupMember.deleteMany({
       where: {
         groupId: groupId,

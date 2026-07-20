@@ -63,7 +63,7 @@ export default function EventFeed(){
                             <input
                                 type="text"
                                 aria-label="Search events"
-                                placeholder="Buscar eventos..."
+                                placeholder="search events..."
                                 value={searchTitle}
                                 onChange={(e) => setSearchTitle(e.target.value)}
                                 className="w-full rounded-full pl-12 h-10 bg-white/5 border border-white/10 text-white/80 placeholder:text-white/30 text-sm focus:outline-none focus:border-[#8A9A5B]/50 transition-colors"

@@ -52,7 +52,7 @@ export default function Event({event}: Props) {
 
                 <div className="absolute top-3 left-3">
                     <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-sm text-white/80 border border-white/10">
-                        {event.eventType === "InPerson" ? "Presencial" : "Online"}
+                        {event.eventType === "InPerson" ? "In Person" : "Online"}
                     </span>
                 </div>
 

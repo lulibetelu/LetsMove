@@ -25,14 +25,14 @@ export class EventSignUpRepositoryService {
 
     return this.prismaService.eventSignUp.create({ data });
   }
-  public findAllFromUser(userId: number){
+  public findAllFromUser(userId: number) {
     return this.prismaService.eventSignUp.findMany({
       where: {
         userId: userId,
       },
     });
   }
-  public findAllFromEvent(eventId: number){
+  public findAllFromEvent(eventId: number) {
     return this.prismaService.eventSignUp.findMany({
       where: {
         eventId: eventId,
@@ -67,7 +67,7 @@ export class EventSignUpRepositoryService {
       },
     });
   }
-  public remove(userId: number, eventId: number){
+  public remove(userId: number, eventId: number) {
     return this.prismaService.eventSignUp.delete({
       where: {
         userId_eventId: {

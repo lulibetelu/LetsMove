@@ -13,7 +13,7 @@ export function useEvents() {
         saved: undefined
     });
 
-    const hasAnyFilter = filters.title || filters.host || filters.sport;
+    const hasAnyFilter = filters.title || filters.host || filters.sport || filters.joined || filters.saved;
 
     const refetchData = (newEventFilters: EventFilters)=> {
         setFilters(newEventFilters)
@@ -28,7 +28,7 @@ export function useEvents() {
         isLoading
     } = useInfiniteQuery({
         queryKey: hasAnyFilter
-            ? ["events", filters.host, filters.title, filters.sport]
+            ? ["events", filters.host, filters.title, filters.sport, filters.joined, filters.saved]
             : ["events", "feed"],
         queryFn: async ({pageParam}) => {
             if (hasAnyFilter) {

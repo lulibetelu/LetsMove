@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { DislikeService } from '../dislike/dislike.service';
-import { LikeService } from '../like/like.service';
+import { DislikeService } from '../dislike/dislike.service.js';
+import { LikeService } from '../like/like.service.js';
 
 @Injectable()
 export class PostActionValidatorService {

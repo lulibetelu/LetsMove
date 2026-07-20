@@ -5,6 +5,8 @@ import PopUpError from "../PopUpError.tsx";
 import {updateEvent} from "../../api/event.ts";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Dropdown from "../Dropdown.tsx";
+import {useLocations} from "../../hooks/useLocations.ts";
 
 interface Props {
     event: EventType
@@ -22,6 +24,8 @@ export default function EditEventForm({event, onClose}:Props){
     const [isPrivate, setIsPrivate] = useState(event.isPrivate);
     const [error, setError] = useState(false);
     const [validationError, setValidationError] = useState("");
+    const {locations, isPending: locLoading, locationError} = useLocations();
+
 
     const checkData = (data: UpdateEventRawData) => {
         if (!data.description) {
@@ -256,19 +260,13 @@ export default function EditEventForm({event, onClose}:Props){
                             Location
                         </span>
                             </label>
-
-                            <input
-                                type="text"
-                                placeholder="Sports center, park, gym..."
+                            <Dropdown
+                                dataList={locations.map(l => l.location)}
+                                error={locationError}
+                                isPending={locLoading}
                                 value={location}
-                                onChange={(e) => setLocation(e.target.value)}
-                                className="
-                            input input-bordered bg-white/5
-                            w-full
-
-                            focus:outline-none
-                            focus:border-[#96a55a]
-                        "
+                                handleChange={setLocation}
+                                placeholder="Choose location"
                             />
                         </div>
                     )}
@@ -375,7 +373,7 @@ export default function EditEventForm({event, onClose}:Props){
             </form>
 
             <form method="dialog" className="modal-backdrop">
-                <button onClick={onClose}>Cerrar</button>
+                <button onClick={onClose}>Close</button>
             </form>
         </dialog>
     )

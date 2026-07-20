@@ -5,16 +5,19 @@ import { FilterEventDto } from './dto/filter-event.dto';
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ImageService } from '../images/image.service';
 import { CreateImageDto } from '../images/dto/create-image.dto';
+import { GeminiService } from '../ai-recommendation/gemini/gemini.service';
 
 @Injectable()
 export class EventService {
   constructor(
     private eventRepositoryService: EventRepositoryService,
     private imageService: ImageService,
+    private geminiService: GeminiService,
   ) {}
   async create(hostId: number, createEventDto: CreateEventDto) {
     let image: { id: number; description?: string } | undefined;
@@ -31,19 +34,38 @@ export class EventService {
       };
     }
 
-    return await this.eventRepositoryService.createEvent(
+    const event = await this.eventRepositoryService.createEvent(
       hostId,
       createEventDto,
       image,
     );
+
+    this.generateEventEmbedding(event.id, createEventDto).catch(console.error);
+
+    return event;
   }
 
-  async findAll(requesterId: number) {
-    return this.eventRepositoryService.findAll(requesterId);
+  private async generateEventEmbedding(
+    eventId: number,
+    dto: CreateEventDto,
+  ): Promise<void> {
+    const text =
+      dto.type === 'InPerson'
+        ? `This is an in-person ${dto.sportName} event happening at ${dto.location}. Description: ${dto.description}.`
+        : `This is an asynchronous ${dto.sportName} event with no fixed location, meaning participants can join remotely or on their own schedule. Description: ${dto.description}.`;
+
+    const vector = await this.geminiService.generateEmbedding(text);
+    await this.eventRepositoryService.updateEventVector(eventId, vector);
+  }
+
+  async findAll() {
+    return this.eventRepositoryService.findAll();
   }
 
   async findOne(id: number) {
-    return this.eventRepositoryService.findOneById(id);
+    const prismaPromise = await this.eventRepositoryService.findOneById(id);
+    if (!prismaPromise) throw new NotFoundException();
+    return prismaPromise;
   }
 
   async findAllFromUser(userId: number) {
