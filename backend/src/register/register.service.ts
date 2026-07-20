@@ -39,11 +39,15 @@ export class RegisterService {
       { expiresIn: '24h' },
     );
 
-    await this.mailService.sendVerificationEmail(
-      registerDto.email,
-      user.username,
-      token,
-    );
+    try {
+      await this.mailService.sendVerificationEmail(
+        registerDto.email,
+        user.username,
+        token,
+      );
+    } catch (error) {
+      console.error('Failed to send verification email:', error);
+    }
 
     return user;
   }
