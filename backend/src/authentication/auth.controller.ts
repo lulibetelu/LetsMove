@@ -2,10 +2,7 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
-
-interface googleBody {
-  token: string;
-}
+import {GoogleTokenDto} from "./google.token.dto";
 
 @Controller('auth')
 export class AuthController {
@@ -18,7 +15,7 @@ export class AuthController {
   }
 
   @Post()
-  async verifyGoogleUserExists(@Body() body: googleBody) {
+  async verifyGoogleUserExists(@Body() body: GoogleTokenDto) {
     return this.authService.verifyGoogleUserExists(body.token);
   }
 }
