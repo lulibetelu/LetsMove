@@ -8,10 +8,15 @@ import {
   Delete,
   ParseIntPipe,
   NotFoundException,
+  UseGuards,
+  Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { RegisterService } from './register.service';
 import { RegisterDto } from './dto/register.dto';
 import { UpdateRegisterDto } from './dto/update.register.dto';
+import { AuthGuard } from '../authentication/auth.guard';
+import type { Request } from 'express';
 
 @Controller('register')
 export class RegisterController {
@@ -41,15 +46,26 @@ export class RegisterController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   update(
     @Param('id', new ParseIntPipe()) id: number,
     @Body() updateRegisterDto: UpdateRegisterDto,
+    @Req() req: Request,
   ) {
+    const userId = req.user.sub;
+    if (userId !== id) {
+      throw new UnauthorizedException('You can only update your own profile');
+    }
     return this.registerService.update(id, updateRegisterDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', new ParseIntPipe()) id: number) {
+  @UseGuards(AuthGuard)
+  remove(@Param('id', new ParseIntPipe()) id: number, @Req() req: Request) {
+    const userId = req.user.sub;
+    if (userId !== id) {
+      throw new UnauthorizedException('You can only delete your own account');
+    }
     return this.registerService.remove(id);
   }
 }
