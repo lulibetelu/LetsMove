@@ -74,7 +74,7 @@ export class MailService {
     else this.logger.log(`Email sent: ${JSON.stringify(result.data)}`);
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_5PM)
+  @Cron(CronExpression.EVERY_MINUTE)
   async sendEventReminders() {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
