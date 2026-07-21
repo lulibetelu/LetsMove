@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UpdateRegisterDto } from './dto/update.register.dto';
 import { RegisterDto } from './dto/register.dto';
 import { UserRepositoryService } from '../repository/user/user.repository.service';
@@ -14,6 +19,20 @@ export class RegisterService {
   ) {}
 
   async create(registerDto: RegisterDto) {
+    const existingEmail = await this.userRepositoryService.findByEmail(
+      registerDto.email,
+    );
+    if (existingEmail) {
+      throw new ConflictException('Email already exists');
+    }
+
+    const existingUsername = await this.userRepositoryService.findByUsername(
+      registerDto.username,
+    );
+    if (existingUsername) {
+      throw new ConflictException('Username already exists');
+    }
+
     const user = await this.userRepositoryService.createUser(registerDto);
 
     const token = await this.jwtService.signAsync(
@@ -21,12 +40,19 @@ export class RegisterService {
       { expiresIn: '24h' },
     );
 
-    await this.mailService.sendVerificationEmail(
-      registerDto.email,
-      user.username,
-      token,
-    );
-
+    try {
+      await this.mailService.sendVerificationEmail(
+        registerDto.email,
+        user.username,
+        token,
+      );
+    } catch (error) {
+      console.error('Failed to send verification email:', error);
+      await this.userRepositoryService.removeById(user.id);
+      throw new BadRequestException(
+        'Could not send verification email. Please try again later.',
+      );
+    }
     return user;
   }
 
