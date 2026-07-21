@@ -12,6 +12,7 @@ import Profile from "./pages/Profile.tsx";
 import NotificationsPage from "./pages/NotificationsPage.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import PasswordResetPage from "./pages/PasswordResetPage.tsx";
+import VerifyEmailPage from "./pages/VerifyEmailPage.tsx";
 import PostPage from "./pages/PostPage.tsx";
 import EventFeed from "./pages/EventFeed.tsx";
 import EventPage from "./pages/EventPage.tsx";
@@ -20,9 +21,11 @@ import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import CalendarPage from "./pages/CalendatPage.tsx";
 import SettingsPage from "./pages/SettingsPage.tsx";
 import {GoogleOAuthProvider} from "@react-oauth/google";
-
+import dns from 'node:dns';
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const queryClient = new QueryClient();
+
+dns.setDefaultResultOrder('ipv4first')
 
 //define a partir de donde le pegué en la URL qué componente va a renderizar react
 const router = createBrowserRouter([
@@ -45,6 +48,10 @@ const router = createBrowserRouter([
     {
         path: "/password-reset",
         element: <PasswordResetPage/>
+    },
+    {
+        path: "/verify-email",
+        element: <VerifyEmailPage/>
     },
     {
         element: <ProtectedRoute />,

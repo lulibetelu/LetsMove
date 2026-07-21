@@ -1,6 +1,6 @@
 import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {useState} from "react";
-import {createUser, loginUser} from '../api/user.ts'
+import {createUser} from '../api/user.ts'
 import api from '../api/client.ts'
 import type {RegisterCredentials} from "../types/userTypes.ts";
 import PopUpError from "../components/PopUpError.tsx";
@@ -54,12 +54,10 @@ export default function RegisterPage(){
                     }
                     sessionStorage.removeItem('googleCredential');
                 }
+                navigate("/interests");
             } else {
-                const token = await loginUser({email, password});
-                localStorage.setItem('token', token);
+                navigate("/verify-email", { state: { email } });
             }
-
-            navigate("/interests");
         } catch (e) {
             if (e instanceof Error) setError(e.message);
         }
