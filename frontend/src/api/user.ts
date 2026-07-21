@@ -25,6 +25,9 @@ export async function createUser(credentials: RegisterCredentials){
         if (credentials.locationId) {
             body.locationId = credentials.locationId;
         }
+        if (credentials.isGoogleUser !== undefined) {
+            body.isGoogleUser = credentials.isGoogleUser;
+        }
         const { data } = await api.post('register', body);
         return data;
     } catch (error) {
