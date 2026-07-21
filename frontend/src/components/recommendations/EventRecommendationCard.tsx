@@ -1,19 +1,24 @@
 import { useState } from "react";
 import { CalendarDays, MapPin, ChevronDown, ChevronUp, Sparkles } from "lucide-react";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import type { RecommendationEvent } from "../../types/recommendationTypes.ts";
 import { useEventExplanation } from "../../hooks/recommendations/useExplanation.ts";
 import { formatDate } from "../../resusable-functions/formatDate.ts";
+import {getCurrentUserId} from "../../api/user.ts";
 
 interface Props {
   event: RecommendationEvent;
 }
 
 export default function EventRecommendationCard({ event }: Props) {
+  const currentUserId = getCurrentUserId();
+  const navigate = useNavigate()
+  if (currentUserId == null) navigate("/login")
   const [showExplanation, setShowExplanation] = useState(false);
   const { data: explanation, isLoading } = useEventExplanation(
     event.id,
     showExplanation,
+      currentUserId
   );
 
   return (

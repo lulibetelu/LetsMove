@@ -1,9 +1,34 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { GoogleGenAI } from '@google/genai';
 import 'dotenv/config';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
+const ai = new GoogleGenAI({});
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function generateEmbedding(text: string): Promise<number[]> {
+  const response = await ai.models.embedContent({
+    model: 'gemini-embedding-001',
+    contents: text,
+  });
+  // @ts-ignore
+  return response.embeddings![0].values;
+}
+
+async function updateUserVector(userId: number, vector: number[]) {
+  const vectorStr = `[${vector.join(',')}]`;
+  return prisma.$executeRaw`UPDATE "User" SET embedding = ${vectorStr}::vector WHERE id = ${userId};`;
+}
+
+async function updateEventVector(eventId: number, vector: number[]) {
+  const vectorStr = `[${vector.join(',')}]`;
+  return prisma.$executeRaw`UPDATE "Event" SET embedding = ${vectorStr}::vector WHERE id = ${eventId};`;
+}
 
 const locationsData = [
   {
@@ -371,6 +396,65 @@ async function main() {
       });
     }
   }
+
+  // --- User Embeddings ---
+  let userEmbeddingSuccess = 0;
+  let userEmbeddingFailed = 0;
+
+  for (const user of users) {
+    try {
+      const userPrefs = await prisma.preference.findMany({
+        where: { userId: user.id },
+        include: { sport: { select: { name: true } } },
+      });
+
+      if (userPrefs.length === 0) {
+        console.log(
+          `⚠️  Skipping embedding for ${user.username}: no preferences`,
+        );
+        userEmbeddingFailed++;
+        continue;
+      }
+
+      const age = new Date().getFullYear() - user.birthday.getFullYear();
+      const sportsStrings = userPrefs.map(
+        (p) => `${p.sport.name} at a/an ${p.level} level`,
+      );
+
+      let sportsList = '';
+      if (sportsStrings.length === 2) {
+        sportsList = sportsStrings.join(' and ');
+      } else if (sportsStrings.length > 2) {
+        const lastSport = sportsStrings.pop();
+        sportsList = `${sportsStrings.join(', ')}, and ${lastSport}`;
+      } else {
+        sportsList = sportsStrings[0];
+      }
+
+      const userLocation = await prisma.location.findUnique({
+        where: { id: user.homeLocationId },
+      });
+
+      const text = `User is ${age} years old and lives in ${userLocation?.location ?? 'unknown'}. They practice the following sports: ${sportsList}`;
+
+      const vector = await generateEmbedding(text);
+      await updateUserVector(user.id, vector);
+      userEmbeddingSuccess++;
+      console.log(`✅ Embedding generated for user ${user.username}`);
+    } catch (error) {
+      console.error(
+        `❌ Failed to generate embedding for user ${user.username}:`,
+        error,
+      );
+      userEmbeddingFailed++;
+    }
+
+    await sleep(100);
+  }
+
+  console.log(
+    `📊 User embeddings: ${userEmbeddingSuccess}/${users.length} succeeded, ${userEmbeddingFailed} failed`,
+  );
 
   const postsData = [
     // john_doe (Football, Running) - 7 posts
@@ -1270,6 +1354,45 @@ async function main() {
   }
 
   console.log(`✅ ${eventsData.length} events seeded`);
+
+  // --- Event Embeddings ---
+  let eventEmbeddingSuccess = 0;
+  let eventEmbeddingFailed = 0;
+
+  const allEvents = await prisma.event.findMany({
+    include: {
+      sport: { select: { name: true } },
+      location: { select: { location: true } },
+    },
+  });
+
+  for (const event of allEvents) {
+    try {
+      const locationName = event.location?.location ?? 'Online';
+
+      const text =
+        event.eventType === 'InPerson'
+          ? `This is an in-person ${event.sport.name} event happening at ${locationName}. Description: ${event.description}.`
+          : `This is an asynchronous ${event.sport.name} event with no fixed location, meaning participants can join remotely or on their own schedule. Description: ${event.description}.`;
+
+      const vector = await generateEmbedding(text);
+      await updateEventVector(event.id, vector);
+      eventEmbeddingSuccess++;
+      console.log(`✅ Embedding generated for event "${event.title}"`);
+    } catch (error) {
+      console.error(
+        `❌ Failed to generate embedding for event "${event.title}":`,
+        error,
+      );
+      eventEmbeddingFailed++;
+    }
+
+    await sleep(100);
+  }
+
+  console.log(
+    `📊 Event embeddings: ${eventEmbeddingSuccess}/${allEvents.length} succeeded, ${eventEmbeddingFailed} failed`,
+  );
   console.log('✅ Seed complete');
 }
 
