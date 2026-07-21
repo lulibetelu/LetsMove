@@ -40,7 +40,8 @@ export default function RegisterPage(){
                 email,
                 password: isGoogleUser ? '' : password,
                 locationId: selectedLocation!.id,
-                birthday: `${birthYear}-${birthMonth}-${birthDay}`
+                birthday: `${birthYear}-${birthMonth}-${birthDay}`,
+                isGoogleUser
             };
             await createUser(credentials);
 

@@ -35,24 +35,27 @@ export class RegisterService {
 
     const user = await this.userRepositoryService.createUser(registerDto);
 
-    const token = await this.jwtService.signAsync(
-      { sub: user.id, email: registerDto.email },
-      { expiresIn: '24h' },
-    );
+    if (!registerDto.isGoogleUser) {
+      const token = await this.jwtService.signAsync(
+        { sub: user.id, email: registerDto.email },
+        { expiresIn: '24h' },
+      );
 
-    try {
-      await this.mailService.sendVerificationEmail(
-        registerDto.email,
-        user.username,
-        token,
-      );
-    } catch (error) {
-      console.error('Failed to send verification email:', error);
-      await this.userRepositoryService.removeById(user.id);
-      throw new BadRequestException(
-        'Could not send verification email. Please try again later.',
-      );
+      try {
+        await this.mailService.sendVerificationEmail(
+          registerDto.email,
+          user.username,
+          token,
+        );
+      } catch (error) {
+        console.error('Failed to send verification email:', error);
+        await this.userRepositoryService.removeById(user.id);
+        throw new BadRequestException(
+          'Could not send verification email. Please try again later.',
+        );
+      }
     }
+
     return user;
   }
 

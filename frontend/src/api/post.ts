@@ -10,8 +10,10 @@ export async function create(postCredentials: NewPostCredentials){
     }
 }
 
-export async function findAll(page?: number){
-    const params = page ? { page } : {};
+export async function findAll(page?: number, search?: string){
+    const params: Record<string, any> = {};
+    if (page) params.page = page;
+    if (search) params.search = search;
     try {
         const { data } = await api.get('posts', { params });
         return data;

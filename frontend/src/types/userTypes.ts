@@ -23,7 +23,8 @@ export interface RegisterCredentials{
     email: string,
     password: string,
     birthday: string,
-    locationId: number
+    locationId: number,
+    isGoogleUser?: boolean
 }
 
 export interface LoginCredentials{

@@ -74,12 +74,13 @@ export class UserRepositoryService {
   }
 
   async createUser(registerDto: RegisterDto) {
-    const { locationId, password, birthday, ...userData } = registerDto;
+    const { locationId, password, birthday, isGoogleUser, ...userData } = registerDto;
     return this.prismaService.user.create({
       data: {
         ...userData,
         password: password ?? '',
         birthday,
+        isVerified: !!isGoogleUser,
         homeLocation: { connect: { id: locationId } },
       },
       select: {

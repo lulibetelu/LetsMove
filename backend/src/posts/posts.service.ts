@@ -44,8 +44,8 @@ export class PostsService {
     );
   }
 
-  async findAll(currentUserId: number, page: number = 1) {
-    const posts = await this.postsRepository.findAll(currentUserId, page);
+  async findAll(currentUserId: number, page: number = 1, search?: string) {
+    const posts = await this.postsRepository.findAll(currentUserId, page, search);
     // if (posts.length === 0) {
     //   throw new NotFoundException(`User ${currentUserId} doesn't have posts`);
     // }
