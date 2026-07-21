@@ -1,6 +1,6 @@
-import {useEffect, useRef} from "react";
 import type {Message} from "../../../types/messageType.ts";
 import {getCurrentUserId} from "../../../api/user.ts";
+import {useScrollToMessage} from "../../../hooks/groups/useScrollToMessage.ts";
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
@@ -19,15 +19,7 @@ function formatMessageDate(date: Date) {
 
 export default function ChatMessages({messages}: Props) {
     const currentUserId = getCurrentUserId();
-    const bottomRef = useRef<HTMLDivElement>(null);
-
-    const sorted = messages
-        ? [...messages].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-        : [];
-
-    useEffect(() => {
-        bottomRef.current?.scrollIntoView({behavior: "smooth"});
-    }, [sorted.length]);
+    const {containerRef, bottomRef, sorted} = useScrollToMessage(messages);
 
     if (sorted.length === 0) {
         return (
@@ -38,7 +30,7 @@ export default function ChatMessages({messages}: Props) {
     }
 
     return (
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+        <div ref={containerRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
             {sorted.map((message) => {
                 const isOwn = message.groupMember.userId === currentUserId;
                 return (

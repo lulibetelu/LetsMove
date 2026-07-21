@@ -6,6 +6,7 @@ interface GroupCardProps {
         name: string;
         description: string;
         imageId: number | null;
+        unreadCount: number;
     };
     isSelected: boolean;
     onClick: () => void;
@@ -45,6 +46,12 @@ export default function GroupCard({ group, isSelected, onClick }: GroupCardProps
                     {group.description}
                 </p>
             </div>
+
+            {group.unreadCount > 0 && (
+                <span className="shrink-0 min-w-[20px] h-5 flex items-center justify-center rounded-full bg-[#8A9A5B] text-[10px] font-bold text-white px-1.5">
+                    {group.unreadCount}
+                </span>
+            )}
         </button>
     );
 }

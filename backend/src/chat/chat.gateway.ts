@@ -91,6 +91,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       userId,
     );
 
+    await this.groupService.markAsRead(userId, messageData.groupId);
+
     this.server
       .to(messageData.groupId.toString())
       .emit('newMessage', createdMessage);

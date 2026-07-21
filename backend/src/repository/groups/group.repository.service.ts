@@ -21,18 +21,36 @@ export class GroupRepositoryService {
   }
 
   async findAll(userId: number) {
-    const groups = await this.prismaService.groupMember.findMany({
+    const memberships = await this.prismaService.groupMember.findMany({
       where: { userId: userId },
-      select: { groupId: true },
+      select: { groupId: true, lastReadMessageId: true },
     });
-    const groupIds = groups.map((g) => g.groupId);
-    return this.prismaService.group.findMany({
-      where: {
-        id: {
-          in: groupIds,
-        },
-      },
+
+    const groupIds = memberships.map((m) => m.groupId);
+    const groups = await this.prismaService.group.findMany({
+      where: { id: { in: groupIds } },
     });
+
+    const unreadCounts = await Promise.all(
+      memberships.map(async (m) => {
+        const count = await this.prismaService.message.count({
+          where: {
+            groupId: m.groupId,
+            id: m.lastReadMessageId ? { gt: m.lastReadMessageId } : undefined,
+          },
+        });
+        return { groupId: m.groupId, unreadCount: count };
+      }),
+    );
+
+    const unreadMap = Object.fromEntries(
+      unreadCounts.map(({ groupId, unreadCount }) => [groupId, unreadCount]),
+    );
+
+    return groups.map((group) => ({
+      ...group,
+      unreadCount: unreadMap[group.id] ?? 0,
+    }));
   }
 
   async findOne(groupId: number) {
@@ -43,6 +61,7 @@ export class GroupRepositoryService {
           select: {
             userId: true,
             isAdmin: true,
+            lastReadMessageId: true,
           },
         },
       },
@@ -124,6 +143,19 @@ export class GroupRepositoryService {
         groupId: groupId,
         userId: { in: membersId },
       },
+    });
+  }
+
+  async markAsRead(userId: number, groupId: number) {
+    const lastMessage = await this.prismaService.message.findFirst({
+      where: { groupId },
+      orderBy: { id: 'desc' },
+      select: { id: true },
+    });
+
+    await this.prismaService.groupMember.update({
+      where: { groupId_userId: { groupId, userId } },
+      data: { lastReadMessageId: lastMessage?.id ?? 0 },
     });
   }
 }

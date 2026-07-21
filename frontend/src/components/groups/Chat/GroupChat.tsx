@@ -5,6 +5,9 @@ import {useMessages} from "../../../hooks/groups/useMessages.ts";
 import useGroup from "../../../hooks/groups/useGroup.ts";
 import ChatMessages from "./ChatMessages.tsx";
 import type {ImageInput} from "../../../types/imageType.ts";
+import {useQueryClient} from "@tanstack/react-query";
+import {getCurrentUserId} from "../../../api/user.ts";
+import {markGroupAsRead} from "../../../api/group.ts";
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
@@ -22,6 +25,15 @@ export function GroupChat({groupId, onShowDetail, onGroupDeleted}: Props) {
     const [showImageMenu, setShowImageMenu] = useState(false);
     const [urlInput, setUrlInput] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const queryClient = useQueryClient();
+    const userId = getCurrentUserId();
+
+    useEffect(() => {
+        if (!groupId) return;
+        markGroupAsRead(groupId).then(() => {
+            queryClient.invalidateQueries({ queryKey: ['groups', userId] });
+        });
+    }, [groupId]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files ?? []);

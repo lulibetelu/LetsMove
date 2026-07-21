@@ -285,6 +285,7 @@ model GroupMember {
   groupId  Int
   group    Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
   isAdmin  Boolean
+  lastReadMessageId  Int?
   messages Message[]
 
   @@unique([groupId, userId])

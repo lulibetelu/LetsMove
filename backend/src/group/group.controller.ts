@@ -58,4 +58,11 @@ export class GroupController {
     const userId = req.user.sub;
     return this.groupsService.remove(groupId, userId);
   }
+
+  @UseGuards(AuthGuard)
+  @Post(':id/read')
+  markAsRead(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
+    const userId = req.user.sub;
+    return this.groupsService.markAsRead(userId, id);
+  }
 }
