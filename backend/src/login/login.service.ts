@@ -16,6 +16,11 @@ export class LoginService {
     if (user.password !== pass) {
       throw new UnauthorizedException('Wrong password');
     }
+    if (!user.isVerified) {
+      throw new UnauthorizedException(
+        'Email not verified. Please check your inbox.',
+      );
+    }
     // payload ~= token, sub = subject
     // se crea el token con el id y el email del user
     const payload = {

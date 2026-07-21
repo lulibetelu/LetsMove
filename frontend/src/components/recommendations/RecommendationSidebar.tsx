@@ -5,6 +5,8 @@ import {
 } from "../../hooks/recommendations/useRecommendations.ts";
 import UserRecommendationCard from "./UserRecommendationCard.tsx";
 import EventRecommendationCard from "./EventRecommendationCard.tsx";
+import {getCurrentUserId} from "../../api/user.ts";
+import {useNavigate} from "react-router-dom";
 
 function SkeletonCard() {
   return (
@@ -25,8 +27,11 @@ function SkeletonCard() {
 }
 
 export default function RecommendationSidebar() {
-  const { data: users, isLoading: loadingUsers } = useUserRecommendations();
-  const { data: events, isLoading: loadingEvents } = useEventRecommendations();
+  const currentUserId = getCurrentUserId();
+  const navigate = useNavigate()
+  if (currentUserId == null) navigate("/login")
+  const { data: users, isLoading: loadingUsers } = useUserRecommendations(currentUserId);
+  const { data: events, isLoading: loadingEvents } = useEventRecommendations(currentUserId);
 
   const hasUsers = users && users.length > 0;
   const hasEvents = events && events.length > 0;

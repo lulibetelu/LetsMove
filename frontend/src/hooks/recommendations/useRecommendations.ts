@@ -4,18 +4,20 @@ import {
   getEventRecommendations,
 } from "../../api/recommendation.ts";
 
-export function useUserRecommendations() {
+export function useUserRecommendations(currentUserId: number | null) {
   return useQuery({
-    queryKey: ["recommendations", "users"],
+    queryKey: ["recommendations", "users", currentUserId],
     queryFn: getUserRecommendations,
     staleTime: 5 * 60 * 1000,
+    refetchOnMount: "always",
   });
 }
 
-export function useEventRecommendations() {
+export function useEventRecommendations(currentUserId: number | null) {
   return useQuery({
-    queryKey: ["recommendations", "events"],
+    queryKey: ["recommendations", "events", currentUserId],
     queryFn: getEventRecommendations,
     staleTime: 5 * 60 * 1000,
+    refetchOnMount: "always",
   });
 }
