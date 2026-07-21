@@ -62,17 +62,16 @@ export class MailService {
       verificationUrl,
     });
     this.logger.log('Attempting to send email:');
-    try {
-      await this.resend.emails.send({
-        from: this.fromEmail,
-        to: email,
-        subject: "Verify your email - Let's Move",
-        html,
-      });
-      this.logger.log('email sent');
-    } catch (err) {
-      this.logger.error('Email send failded: ' + err);
-    }
+    const result = await this.resend.emails.send({
+      from: this.fromEmail,
+      to: email,
+      subject: "Verify your email - Let's Move",
+      html,
+    });
+
+    if (result.error)
+      this.logger.log(`Failed to send email: ${JSON.stringify(result.error)}`);
+    else this.logger.log(`Email sent: ${JSON.stringify(result.data)}`);
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_5PM)
