@@ -3,7 +3,7 @@ import {findAll, removePost} from "../../api/post.ts";
 import type {PostType} from "../../types/postTypes.ts";
 import {useInfiniteQuery, useMutation} from "@tanstack/react-query";
 
-export function usePosts(){
+export function usePosts(search?: string){
     const observerRef = useRef<HTMLDivElement>(null);
 
     const {
@@ -12,10 +12,11 @@ export function usePosts(){
         hasNextPage,
         isError,
         isLoading,
+        refetch,
     } = useInfiniteQuery({
-        queryKey: ['posts'],
+        queryKey: ['posts', search ?? ''],
         queryFn: (async ({pageParam}) => {
-            const posts: PostType[] = await findAll(pageParam);
+            const posts: PostType[] = await findAll(pageParam, search);
             return posts;
         }),
         getNextPageParam: (lastPage, allPages) => {
@@ -55,5 +56,5 @@ export function usePosts(){
 
     const error = isError || mutation.isError;
 
-    return { posts, deletePost, observerRef, isLoading, error}
+    return { posts, deletePost, observerRef, isLoading, error, refetch}
 }

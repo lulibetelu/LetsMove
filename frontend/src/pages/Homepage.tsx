@@ -1,4 +1,4 @@
-import {Search, Plus} from 'lucide-react';
+import {Search, Plus, X} from 'lucide-react';
 import Sidebar from "../components/Sidebar.tsx"
 import Posts from "../components/posts/Posts.tsx";
 import { useState} from "react";
@@ -11,8 +11,20 @@ import RecommendationSidebar from "../components/recommendations/RecommendationS
 
 export default function Homepage() {
     const [createPost, setCreatePost] = useState<boolean>(false);
-    const { posts, deletePost, observerRef, error, isLoading } = usePosts();
+    const [searchInput, setSearchInput] = useState<string>("");
+    const [search, setSearch] = useState<string>("");
+    const { posts, deletePost, observerRef, error, isLoading } = usePosts(search || undefined);
     const queryClient = useQueryClient();
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        setSearch(searchInput);
+    }
+
+    const handleClearSearch = () => {
+        setSearchInput("");
+        setSearch("");
+    }
 
     const handleOnClose = (wasCreated: boolean) => {
         setCreatePost(false);
@@ -28,15 +40,28 @@ export default function Homepage() {
                     <div className="w-full max-w-2xl min-h-screen relative pb-24">
                         <header className="sticky top-0 z-40 bg-[#141414]/90 backdrop-blur-md px-4 py-5 flex justify-center border-b-2 border-white/10">
                             <div className="w-full max-w-md relative">
-                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <Search size={18} className="text-white/50" />
-                                </div>
-                                <input
-                                    type="text"
-                                    aria-label="Search posts"
-                                    placeholder="search"
-                                    className="input input-bordered w-full rounded-full pl-12 h-10 bg-white/5 focus:bg-white/10 transition-colors"
-                                />
+                                <form onSubmit={handleSearch}>
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <Search size={18} className="text-white/50" />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        aria-label="Search posts"
+                                        placeholder="search"
+                                        value={searchInput}
+                                        onChange={(e) => setSearchInput(e.target.value)}
+                                        className="input input-bordered w-full rounded-full pl-12 pr-10 h-10 bg-white/5 focus:bg-white/10 transition-colors"
+                                    />
+                                    {searchInput && (
+                                        <button
+                                            type="button"
+                                            onClick={handleClearSearch}
+                                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-white/50 hover:text-white/80 transition-colors"
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    )}
+                                </form>
                             </div>
                         </header>
                         <Posts userId={null} posts={posts} deletePost={deletePost} observerRef={observerRef} isLoading={isLoading}/>

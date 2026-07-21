@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDate,
   IsEmail,
   IsInt,
@@ -35,4 +36,8 @@ export class RegisterDto {
   @Type(() => Date)
   @IsDate()
   birthday: Date;
+
+  @IsOptional()
+  @IsBoolean()
+  isGoogleUser?: boolean;
 }

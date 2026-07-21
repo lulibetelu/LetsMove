@@ -9,7 +9,7 @@ export function useMessages(groupId: number){
     const { data: messages = [] } = useQuery<Message[]>({
         queryKey: ['messages', groupId],
         queryFn: () => findAllMessages(groupId),
-        staleTime: Infinity,
+        staleTime: 0,
 
     });
 

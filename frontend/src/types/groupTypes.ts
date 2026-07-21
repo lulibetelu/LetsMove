@@ -1,8 +1,10 @@
 import type {ImageInput} from "./imageType.ts";
 
 export interface Member {
-    memberId: number,
+    memberId?: number,
+    userId?: number,
     isAdmin: boolean,
+    lastReadMessageId?: number | null,
 }
 export interface CreateGroup {
     image?: ImageInput;
@@ -24,5 +26,5 @@ export interface Group {
     description: string;
     imageId: number;
     groupMembers: Member[];
-
+    unreadCount: number;
 }
