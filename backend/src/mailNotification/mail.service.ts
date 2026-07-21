@@ -61,13 +61,18 @@ export class MailService {
       userName: username,
       verificationUrl,
     });
-
-    await this.resend.emails.send({
-      from: this.fromEmail,
-      to: email,
-      subject: "Verify your email - Let's Move",
-      html,
-    });
+    this.logger.log('Attempting to send email:');
+    try {
+      await this.resend.emails.send({
+        from: this.fromEmail,
+        to: email,
+        subject: "Verify your email - Let's Move",
+        html,
+      });
+      this.logger.log('email sent');
+    } catch (err) {
+      this.logger.error('Email send failded: ' + err);
+    }
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_5PM)
