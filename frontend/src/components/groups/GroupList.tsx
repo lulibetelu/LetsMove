@@ -7,6 +7,7 @@ interface GroupListProps {
         name: string;
         description: string;
         imageId: number | null;
+        unreadCount: number;
     }[];
     selectedGroupId: number | null;
     onSelectGroup: (id: number) => void;

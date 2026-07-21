@@ -85,4 +85,8 @@ export class GroupService {
       return false;
     }
   }
+
+  async markAsRead(userId: number, id: number) {
+    return this.groupRepository.markAsRead(userId, id);
+  }
 }

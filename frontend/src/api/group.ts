@@ -27,6 +27,7 @@ export async function createGroup(group: CreateGroup){
         handleApiError(error);
     }
 }
+
 export async function removeGroup(groupId: number){
     try {
         const { data } = await api.delete('groups/' + groupId);
@@ -35,9 +36,19 @@ export async function removeGroup(groupId: number){
         handleApiError(error);
     }
 }
+
 export async function updateGroup(groupId: number, group: UpdateGroup){
     try {
         const { data } = await api.patch('groups/' + groupId, group);
+        return data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export async function markGroupAsRead(groupId: number) {
+    try {
+        const { data } = await api.post('groups/' + groupId + '/read');
         return data;
     } catch (error) {
         handleApiError(error);
