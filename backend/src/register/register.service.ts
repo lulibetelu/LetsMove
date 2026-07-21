@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -47,8 +48,11 @@ export class RegisterService {
       );
     } catch (error) {
       console.error('Failed to send verification email:', error);
+      await this.userRepositoryService.removeById(user.id);
+      throw new BadRequestException(
+        'Could not send verification email. Please try again later.',
+      );
     }
-
     return user;
   }
 
