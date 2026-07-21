@@ -21,11 +21,8 @@ import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import CalendarPage from "./pages/CalendatPage.tsx";
 import SettingsPage from "./pages/SettingsPage.tsx";
 import {GoogleOAuthProvider} from "@react-oauth/google";
-import dns from 'node:dns';
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const queryClient = new QueryClient();
-
-dns.setDefaultResultOrder('ipv4first')
 
 //define a partir de donde le pegué en la URL qué componente va a renderizar react
 const router = createBrowserRouter([
