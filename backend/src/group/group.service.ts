@@ -87,6 +87,11 @@ export class GroupService {
   }
 
   async markAsRead(userId: number, id: number) {
+    const group = await this.groupRepository.findOne(id);
+    if (group == null) throw new NotFoundException('group not found');
+    const x = group.groupMembers.find(
+      (member) => member.userId == userId);
+    if (x == undefined) throw new UnauthorizedException('user is not member');
     return this.groupRepository.markAsRead(userId, id);
   }
 }
