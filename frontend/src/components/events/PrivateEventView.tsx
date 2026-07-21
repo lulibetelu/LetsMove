@@ -195,6 +195,12 @@ export default function PrivateEventView({event, onLeft, onEdit, onDelete}: Prop
                 </div>
             </div>
 
+            {/* Description */}
+            <div className="flex flex-col gap-2 mb-8">
+                <h2 className="text-xs font-bold uppercase tracking-widest text-white/30">Description</h2>
+                <p className="text-sm text-white/60 leading-relaxed">{event.description}</p>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                 {/* Feed de entradas */}
