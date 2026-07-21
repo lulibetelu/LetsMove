@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { MapPin, ChevronDown, ChevronUp, Sparkles } from "lucide-react";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import type { RecommendationUser } from "../../types/recommendationTypes.ts";
 import { useUserExplanation } from "../../hooks/recommendations/useExplanation.ts";
+import {getCurrentUserId} from "../../api/user.ts";
 
 const levelColors: Record<string, string> = {
   beginner: "#8A9A5B",
@@ -15,10 +16,14 @@ interface Props {
 }
 
 export default function UserRecommendationCard({ user }: Props) {
+  const currentUserId = getCurrentUserId();
+  const navigate = useNavigate()
+  if (currentUserId == null) navigate("/login")
   const [showExplanation, setShowExplanation] = useState(false);
   const { data: explanation, isLoading } = useUserExplanation(
     user.id,
     showExplanation,
+      currentUserId
   );
 
   return (
