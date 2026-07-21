@@ -288,13 +288,6 @@ async function main() {
       homeLocationName: 'Tigre',
     },
     {
-      username: 'sofia_k',
-      email: 'sofia@example.com',
-      password: 'pass1234',
-      birthday: new Date('1996-04-17'),
-      homeLocationName: 'Quilmes',
-    },
-    {
       username: 'federico_l',
       email: 'fede@example.com',
       password: 'pass1234',
@@ -343,6 +336,48 @@ async function main() {
       birthday: new Date('1993-11-01'),
       homeLocationName: 'Berazategui',
     },
+    {
+      username: 'tomas_b',
+      email: 'tomasb@example.com',
+      password: 'pass1234',
+      birthday: new Date('2002-03-10'),
+      homeLocationName: 'San Isidro',
+    },
+    {
+      username: 'julian_r',
+      email: 'julianr@example.com',
+      password: 'pass1234',
+      birthday: new Date('2000-08-22'),
+      homeLocationName: 'Vicente López',
+    },
+    {
+      username: 'lautaro_g',
+      email: 'lautarog@example.com',
+      password: 'pass1234',
+      birthday: new Date('1999-05-14'),
+      homeLocationName: 'Tigre',
+    },
+    {
+      username: 'benja_m',
+      email: 'benjam@example.com',
+      password: 'pass1234',
+      birthday: new Date('2003-11-30'),
+      homeLocationName: 'General San Martín',
+    },
+    {
+      username: 'rodrigo_p',
+      email: 'rodrigop@example.com',
+      password: 'pass1234',
+      birthday: new Date('2001-01-18'),
+      homeLocationName: 'San Isidro',
+    },
+    {
+      username: 'franco_d',
+      email: 'francod@example.com',
+      password: 'pass1234',
+      birthday: new Date('1996-07-05'),
+      homeLocationName: 'La Plata',
+    },
   ];
 
   for (const { homeLocationName, ...userData } of userInfo) {
@@ -368,7 +403,6 @@ async function main() {
     { username: 'mike_j', sports: ['Basketball', 'Cycling', 'Rugby'] },
     { username: 'lucia_g', sports: ['Running', 'Cycling'] },
     { username: 'martin_r', sports: ['Football', 'Swimming'] },
-    { username: 'sofia_k', sports: ['Tennis', 'Volleyball'] },
     { username: 'federico_l', sports: ['Cycling', 'Running'] },
     { username: 'valentina_m', sports: ['Basketball', 'Volleyball', 'Hockey'] },
     { username: 'agustin_p', sports: ['Football', 'Tennis'] },
@@ -376,6 +410,12 @@ async function main() {
     { username: 'diego_h', sports: ['Swimming', 'Cycling'] },
     { username: 'florencia_b', sports: ['Volleyball', 'Running'] },
     { username: 'nicolas_v', sports: ['Basketball', 'Tennis'] },
+    { username: 'tomas_b', sports: ['Tennis', 'Running'] },
+    { username: 'julian_r', sports: ['Basketball', 'Cycling'] },
+    { username: 'lautaro_g', sports: ['Tennis', 'Swimming'] },
+    { username: 'benja_m', sports: ['Basketball', 'Football'] },
+    { username: 'rodrigo_p', sports: ['Swimming', 'Cycling'] },
+    { username: 'franco_d', sports: ['Football', 'Rugby'] },
   ];
 
   for (const { username, sports } of preferences) {
@@ -719,42 +759,6 @@ async function main() {
       content: 'Football tournament next month, training starts now',
       sports: ['Football'],
     },
-    // sofia_k (Tennis, Volleyball) - 7 posts
-    {
-      username: 'sofia_k',
-      content: 'Tennis serve practice, working on my second serve',
-      sports: ['Tennis'],
-    },
-    {
-      username: 'sofia_k',
-      content: 'Volleyball team practice, defense drills all evening',
-      sports: ['Volleyball'],
-    },
-    {
-      username: 'sofia_k',
-      content: 'Tennis rally with a friend, 50 shots in a row',
-      sports: ['Tennis'],
-    },
-    {
-      username: 'sofia_k',
-      content: 'Beach volleyball tournament, sand is tough to play on',
-      sports: ['Volleyball'],
-    },
-    {
-      username: 'sofia_k',
-      content: 'Forehand technique improvement with the coach today',
-      sports: ['Tennis'],
-    },
-    {
-      username: 'sofia_k',
-      content: 'Volleyball league match, we won in three sets',
-      sports: ['Volleyball'],
-    },
-    {
-      username: 'sofia_k',
-      content: 'Tennis tournament next week, feeling confident',
-      sports: ['Tennis'],
-    },
     // federico_l (Cycling, Running) - 7 posts
     {
       username: 'federico_l',
@@ -1055,7 +1059,7 @@ async function main() {
       startingDate: new Date(now + 8 * day),
       isPrivate: false,
       coverDescription: 'Tennis court',
-      participants: ['sofia_k', 'nicolas_v'],
+      participants: ['nicolas_v'],
       galleryDescriptions: ['Court view', 'After match'],
     },
     {
@@ -1084,7 +1088,7 @@ async function main() {
       isPrivate: true,
       coverDescription: 'Volleyball net',
       participants: [],
-      pendingParticipants: ['sofia_k', 'valentina_m', 'florencia_b'],
+      pendingParticipants: ['valentina_m', 'florencia_b'],
     },
 
     {
@@ -1114,20 +1118,6 @@ async function main() {
       coverDescription: 'Cycling route',
       participants: ['lucia_g', 'mike_j', 'diego_h'],
       galleryDescriptions: ['Start point', 'Halfway stop'],
-    },
-    {
-      host: 'sofia_k',
-      title: 'Tennis singles match',
-      description:
-        'Looking for an opponent for a singles match in Quilmes. Intermediate-advanced level.',
-      sport: 'Tennis',
-      locationName: 'Quilmes',
-      eventType: 'InPerson' as const,
-      startingDate: new Date(now + 4 * day + 18 * 60 * 60 * 1000),
-      isPrivate: false,
-      coverDescription: 'Tennis singles',
-      participants: ['nicolas_v'],
-      galleryDescriptions: [],
     },
     {
       host: 'john_doe',
@@ -1245,6 +1235,95 @@ async function main() {
           daysAgo: 0,
         },
       ],
+    },
+    // --- Past events ---
+    {
+      host: 'tomas_b',
+      title: 'Tennis doubles at San Isidro Club',
+      description:
+        'Doubles match at the San Isidro tennis club. Clay courts, intermediate-advanced level. Come with a partner or we will pair you up.',
+      sport: 'Tennis',
+      locationName: 'San Isidro',
+      eventType: 'InPerson' as const,
+      startingDate: new Date(now - 7 * day),
+      isPrivate: false,
+      coverDescription: 'Tennis doubles match',
+      participants: ['lautaro_g', 'nicolas_v'],
+      galleryDescriptions: ['Doubles match in progress', 'Post-match group photo'],
+    },
+    {
+      host: 'julian_r',
+      title: '30-day Basketball Skills Challenge',
+      description:
+        'A month-long basketball skills challenge. Work on your dribbling, shooting, and footwork. Log your progress with photos or videos.',
+      sport: 'Basketball',
+      locationName: null,
+      eventType: 'Asynchronous' as const,
+      startingDate: new Date(now - 30 * day),
+      endingDate: new Date(now - 2 * day),
+      isPrivate: false,
+      coverDescription: 'Basketball skills challenge',
+      participants: ['benja_m', 'carlos_m'],
+      entries: [
+        {
+          username: 'julian_r',
+          content: 'Completed 100 free throws in a row. New personal record!',
+          daysAgo: 3,
+        },
+        {
+          username: 'benja_m',
+          content: 'Worked on crossover dribble drills for 45 minutes today.',
+          daysAgo: 5,
+        },
+        {
+          username: 'carlos_m',
+          content: 'Practiced three-point shooting. Made 15 out of 20.',
+          daysAgo: 4,
+        },
+      ],
+    },
+    // --- Future events near Vicente López ---
+    {
+      host: 'lautaro_g',
+      title: 'Tennis singles at Vicente López Club',
+      description:
+        'Looking for a competitive singles match at the Vicente López tennis club. Intermediate level, hard court. Bring your own racket.',
+      sport: 'Tennis',
+      locationName: 'Vicente López',
+      eventType: 'InPerson' as const,
+      startingDate: new Date(now + 5 * day),
+      isPrivate: false,
+      coverDescription: 'Tennis singles match',
+      participants: ['tomas_b'],
+      galleryDescriptions: [],
+    },
+    {
+      host: 'benja_m',
+      title: '3v3 Basketball at San Isidro',
+      description:
+        'Casual 3v3 basketball game at the San Isidro sports center. All skill levels welcome. We have a ball but bring water.',
+      sport: 'Basketball',
+      locationName: 'San Isidro',
+      eventType: 'InPerson' as const,
+      startingDate: new Date(now + 7 * day),
+      isPrivate: false,
+      coverDescription: '3v3 basketball game',
+      participants: ['julian_r', 'diego_h'],
+      galleryDescriptions: [],
+    },
+    {
+      host: 'tomas_b',
+      title: 'Weekend tennis practice in Tigre',
+      description:
+        'Relaxed tennis practice session at the Tigre courts. Great for warming up your game or just hitting some balls. Intermediate level.',
+      sport: 'Tennis',
+      locationName: 'Tigre',
+      eventType: 'InPerson' as const,
+      startingDate: new Date(now + 10 * day),
+      isPrivate: false,
+      coverDescription: 'Tennis practice session',
+      participants: ['martin_r'],
+      galleryDescriptions: [],
     },
   ];
 
