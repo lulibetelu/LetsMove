@@ -17,4 +17,6 @@ coverage/
 Thumbs.db
 node_modules/
 .env
+backend/.env
+frontend/.env
 *.tsbuildinfo

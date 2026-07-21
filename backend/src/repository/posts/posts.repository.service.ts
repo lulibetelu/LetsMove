@@ -52,7 +52,11 @@ export class PostsRepositoryService {
       ? {
           OR: [
             { content: { contains: search, mode: 'insensitive' as const } },
-            { user: { username: { contains: search, mode: 'insensitive' as const } } },
+            {
+              user: {
+                username: { contains: search, mode: 'insensitive' as const },
+              },
+            },
           ],
         }
       : {};

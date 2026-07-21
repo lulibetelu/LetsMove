@@ -14,7 +14,7 @@ import { CreateImageDto } from '../images/dto/create-image.dto';
 import { MessageService } from '../message/message.service';
 import { CreateMessageDto } from '../message/dto/create-message.dto';
 import { Message } from '../message/entities/message.entity';
-@WebSocketGateway(4000, {
+@WebSocketGateway({
   cors: { origin: '*' },
 })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {

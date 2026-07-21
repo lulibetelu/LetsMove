@@ -1,5 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
+import { Injectable, Logger } from '@nestjs/common';
+import { Resend } from 'resend';
+import * as Handlebars from 'handlebars';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { User } from 'backend/src/register/entities/register.entity';
 import type { Event } from 'backend/src/event/entities/event.entity';
 import { Cron, CronExpression } from '@nestjs/schedule';
@@ -7,22 +10,46 @@ import { EventService } from '../event/event.service';
 
 @Injectable()
 export class MailService {
+  private readonly logger = new Logger(MailService.name);
+  private readonly templateDir = join(
+    __dirname,
+    '..',
+    '..',
+    'mailNotification',
+    'templates',
+  );
+  private readonly fromEmail =
+    process.env.RESEND_FROM_EMAIL ?? 'onboarding@resend.dev';
+
   constructor(
-    private readonly mailerService: MailerService,
+    private readonly resend: Resend,
     private readonly eventService: EventService,
   ) {}
+
+  private renderTemplate(
+    name: string,
+    context: Record<string, unknown>,
+  ): string {
+    const filePath = join(this.templateDir, `${name}.hbs`);
+    const source = readFileSync(filePath, 'utf-8');
+    const template = Handlebars.compile(source);
+    return template(context);
+  }
+
   async sendPasswordResetEmail(email: string, username: string, token: string) {
     const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:3000';
     const resetUrl = `${backendUrl}/password-reset/reset?token=${token}`;
 
-    await this.mailerService.sendMail({
+    const html = this.renderTemplate('PasswordReset', {
+      userName: username,
+      resetUrl,
+    });
+
+    await this.resend.emails.send({
+      from: this.fromEmail,
       to: email,
       subject: "Reset your password - Let's Move",
-      template: 'PasswordReset',
-      context: {
-        userName: username,
-        resetUrl,
-      },
+      html,
     });
   }
 
@@ -30,14 +57,16 @@ export class MailService {
     const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:3000';
     const verificationUrl = `${backendUrl}/email-verification?token=${token}`;
 
-    await this.mailerService.sendMail({
+    const html = this.renderTemplate('EmailVerification', {
+      userName: username,
+      verificationUrl,
+    });
+
+    await this.resend.emails.send({
+      from: this.fromEmail,
       to: email,
       subject: "Verify your email - Let's Move",
-      template: 'EmailVerification',
-      context: {
-        userName: username,
-        verificationUrl,
-      },
+      html,
     });
   }
 
@@ -79,33 +108,31 @@ export class MailService {
       }
     }
   }
+
   async sendEventReminder(user: User, event: Event) {
+    let html: string;
+
     if (event.eventType === 'InPerson') {
-      await this.mailerService.sendMail({
-        to: user.email,
-        subject: `Reminder: ${event.title} is tomorrow!!!!!!!!!`,
-        template: 'InPersonMailReminderTemplate', // busca event-reminder.hbs en /templates
-        context: {
-          // variables disponibles en el templates
-          userName: user.username,
-          eventName: event.title,
-          eventDate: event.startingDate,
-          eventLocation: event.locationName,
-        },
+      html = this.renderTemplate('InPersonMailReminderTemplate', {
+        userName: user.username,
+        eventName: event.title,
+        eventDate: event.startingDate,
+        eventLocation: event.locationName,
       });
     } else {
-      await this.mailerService.sendMail({
-        to: user.email,
-        subject: `Reminder: ${event.title} is tomorrow!!!!!!!!!`,
-        template: 'AsyncMailReminderTemplate', // busca event-reminder.hbs en /templates
-        context: {
-          // variables disponibles en el templates
-          userName: user.username,
-          eventName: event.title,
-          startingDate: event.startingDate,
-          endDate: event.endingDate,
-        },
+      html = this.renderTemplate('AsyncMailReminderTemplate', {
+        userName: user.username,
+        eventName: event.title,
+        startingDate: event.startingDate,
+        endDate: event.eventType === 'Async' ? event.endingDate : undefined,
       });
     }
+
+    await this.resend.emails.send({
+      from: this.fromEmail,
+      to: user.email,
+      subject: `Reminder: ${event.title} is tomorrow!`,
+      html,
+    });
   }
 }
