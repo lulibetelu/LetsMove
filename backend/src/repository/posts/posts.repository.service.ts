@@ -47,12 +47,17 @@ export class PostsRepositoryService {
     return newPost;
   }
 
-  async findAll(currentUserId: number, page: number = 1) {
-    // el Promise.all hace que las queries corran en paralelo
-    // escrito de esta forma, lo que te dice es que el resultado de la primera query lo guarda
-    // en la variable posts y el resultado de la segunda en authorInteractions
+  async findAll(currentUserId: number, page: number = 1, search?: string) {
+    const where = search
+      ? {
+          OR: [
+            { content: { contains: search, mode: 'insensitive' as const } },
+            { user: { username: { contains: search, mode: 'insensitive' as const } } },
+          ],
+        }
+      : {};
+
     const [posts, authorInteractions] = await Promise.all([
-      // traigo todos los posteos y me fijo si el currentUser los likeo o dislikeo
       this.prismaService.post.findMany({
         include: {
           postScore: {
@@ -81,7 +86,7 @@ export class PostsRepositoryService {
             },
           },
         },
-        where: {},
+        where,
       }),
       // agrupo en base a cada usuario que creó un post y me fijo cuantos de esos posts el current id likeo o dislikeo
       this.prismaService.$queryRaw<

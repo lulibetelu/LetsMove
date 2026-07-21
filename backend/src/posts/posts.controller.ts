@@ -34,9 +34,10 @@ export class PostsController {
   async findAll(
     @Req() req: Request,
     @Query('page', new ParseIntPipe({ optional: true })) page: number = 1,
+    @Query('search') search?: string,
   ) {
     const userId = req.user.sub;
-    const promise = await this.postsService.findAll(userId, page);
+    const promise = await this.postsService.findAll(userId, page, search);
 
     if (!promise) throw new NotFoundException('posts not found');
     return promise;
