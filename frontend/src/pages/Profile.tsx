@@ -1,10 +1,11 @@
-import {MapPin, Users, Edit3, UserCircle, Activity, UserPlus, Hourglass, X, LogOut} from 'lucide-react';
+import {MapPin, Users, Edit3, UserCircle, Activity, UserPlus, Hourglass, X, LogOut, Trash2, Signature} from 'lucide-react';
 import Posts from "../components/posts/Posts.tsx";
 import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import {useEffect, useState} from "react";
+import {useQueryClient} from "@tanstack/react-query";
 import {createFriendRequest, findUniqueFriend, removeFriend} from "../api/friend.ts";
 import type { FriendRequestType } from '../types/friendRequestType.ts';
-import {getCurrentUserId} from "../api/user.ts";
+import {getCurrentUserId, deleteUser, updateUserProfile} from "../api/user.ts";
 import {useUserProfile} from "../hooks/useUserProfile.ts";
 import Sidebar from "../components/Sidebar.tsx";
 import ActivityTabBar from "../components/ActivityTabBar.tsx";
@@ -27,6 +28,9 @@ export default function Profile() {
     const [searchParams, setSearchParams] = useSearchParams();
     const [tab, setTab] = useState<'posts' | 'events'>(searchParams.get('tab') === 'events' ? 'events' : 'posts');
     const {events} = useProfileEvents(numericId);
+    const queryClient = useQueryClient();
+    const [editing, setEditing] = useState(false);
+    const [bioText, setBioText] = useState('');
 
 
     const logout = () => {
@@ -130,8 +134,14 @@ export default function Profile() {
                                         ))
                                     )    :
                                     <div className="flex items-center gap-2">
-                                        <button className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold border border-white/15 text-white/50 hover:border-[#8A9A5B] hover:text-[#8A9A5B] transition-all">
-                                            <Edit3 size={13} className="mr-1" /> Edit profile
+                                        <button
+                                            onClick={() => {
+                                                setEditing(!editing);
+                                                setBioText(profile.biography ?? '');
+                                            }}
+                                            className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold border border-white/15 text-white/50 hover:border-[#8A9A5B] hover:text-[#8A9A5B] transition-all"
+                                        >
+                                            <Edit3 size={13} className="mr-1" /> {editing ? 'Cancel' : 'Edit profile'}
                                         </button>
 
                                         <button className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold border border-white/15 text-white/50 hover:border-red-400/50 hover:text-red-400 transition-all"
@@ -157,11 +167,32 @@ export default function Profile() {
                                         <span className="text-white/80 font-medium">Lives in:</span> {location}
                                     </p>
                                 )}
-                                {profile.biography && (
-                                    <p className="mt-2">
-                                        <span className="text-white/80 font-medium block mb-0.5">Biography:</span>
-                                        "{profile.biography}"
+                                {profile.biography && !editing && (
+                                    <p className="flex items-center gap-2">
+                                        <Signature size={15} className="text-[#8A9A5B]" />
+                                        <span className="text-white/80 font-medium">Bio:</span> {profile.biography}
                                     </p>
+                                )}
+                                {editing && (
+                                    <div className="mt-2">
+                                        <label className="text-white/80 font-medium block mb-1">Biography:</label>
+                                        <textarea
+                                            value={bioText}
+                                            onChange={(e) => setBioText(e.target.value)}
+                                            rows={3}
+                                            className="w-full bg-[#1e1e1e] border border-white/10 rounded-lg px-3 py-2 text-sm text-white/80 focus:outline-none focus:border-[#8A9A5B] resize-none"
+                                        />
+                                        <button
+                                            onClick={async () => {
+                                                await updateUserProfile(numericId, bioText);
+                                                setEditing(false);
+                                                queryClient.invalidateQueries({ queryKey: ['userProfile', numericId] });
+                                            }}
+                                            className="mt-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-[#8A9A5B] text-white hover:bg-[#6b7a46] transition-all"
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
                                 )}
                             </div>
                         </div>
@@ -217,6 +248,23 @@ export default function Profile() {
                                     )}
                                 </div>
                             </div>
+
+                            {currentUserId == numericId && (
+                                <div className="bg-[#1e1e1e] rounded-xl p-5 border border-white/5">
+                                    <button
+                                        onClick={async () => {
+                                            if (!confirm("Are you sure you want to delete your account? This action cannot be undone.")) return;
+                                            await deleteUser(numericId);
+                                            localStorage.removeItem('token');
+                                            navigate("/login");
+                                        }}
+                                        className="flex items-center gap-2 text-sm text-red-400/70 hover:text-red-400 transition-all"
+                                    >
+                                        <Trash2 size={15} />
+                                        Delete account
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -80,6 +80,24 @@ export function getCurrentUsername(): string | null {
     return decodeToken()?.username ?? null;
 }
 
+export async function deleteUser(id: number) {
+    try {
+        const { data } = await api.delete('register/' + id);
+        return data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export async function updateUserProfile(id: number, biography: string) {
+    try {
+        const { data } = await api.patch('register/' + id, { biography });
+        return data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
 export async function googleLogin(token: string): Promise<GoogleAuthResponse> {
     try {
         const { data } = await api.post<GoogleAuthResponse>('auth', { token });
