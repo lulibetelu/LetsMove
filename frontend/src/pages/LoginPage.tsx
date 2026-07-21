@@ -1,6 +1,6 @@
 import {useState} from "react";
 import type {LoginCredentials} from "../types/userTypes.ts";
-import {loginUser} from "../api/user.ts";
+import {getCurrentUserId, getUserProfile, loginUser} from "../api/user.ts";
 import {Link, useNavigate} from "react-router-dom";
 import PopUpError from "../components/PopUpError.tsx";
 import CustomInput from "../components/create/CustomInput.tsx";
@@ -22,7 +22,13 @@ export default function LoginPage(){
         try {
             const token = await loginUser(credentials);
             localStorage.setItem('token', token)
-            navigate("/homepage")
+            const userId = getCurrentUserId();
+            if (userId) {
+                const profile = await getUserProfile(userId);
+                navigate(profile && profile.preferences.length > 0 ? "/homepage" : "/interests");
+            } else {
+                navigate("/homepage");
+            }
         } catch (e) {
             if (e instanceof Error) setError(e.message);
         }
@@ -31,10 +37,16 @@ export default function LoginPage(){
     const handleGoogleSuccess = (credentialResponse: { credential?: string }) => {
         if (!credentialResponse.credential) return;
         googleAuth.mutate(credentialResponse.credential, {
-            onSuccess: (data) => {
+            onSuccess: async (data) => {
                 if (data.exists && data.access_token) {
                     localStorage.setItem('token', data.access_token);
-                    navigate("/homepage");
+                    const userId = getCurrentUserId();
+                    if (userId) {
+                        const profile = await getUserProfile(userId);
+                        navigate(profile && profile.preferences.length > 0 ? "/homepage" : "/interests");
+                    } else {
+                        navigate("/homepage");
+                    }
                 } else if (!data.exists) {
                     sessionStorage.setItem('googleCredential', credentialResponse.credential!);
                     navigate("/register", { state: { email: data.email, name: data.name } });
